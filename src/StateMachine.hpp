@@ -18,6 +18,8 @@ class StateMachine
         void stop() {is_running = false;}
         bool isRunning() {return is_running;}
 
+        bool is_ending() {return is_ending;}
+
         //std::unique_ptr<GameState>& getCurrentState() const {return states_machine.top();}
     
     private:
