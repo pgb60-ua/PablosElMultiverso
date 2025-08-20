@@ -3,12 +3,11 @@
 
 MainMenuState::MainMenuState()
 {
-    this->entered_key = std::cin.get();
 }
 
 void MainMenuState::init()
 {
-    std::cout << "You are in theMain Menu State" << std::endl;
+    std::cout << "You are in the Main Menu State" << std::endl;
 }
 
 void MainMenuState::handleInput()

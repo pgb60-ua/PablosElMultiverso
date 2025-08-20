@@ -18,10 +18,8 @@ class GameState
         virtual void pause() = 0;
         virtual void resume() = 0;
 
-        const std::string& getName() const { return name; }
         void setStateMachine(StateMachine* stt_mch) {state_machine = stt_mch;}
 
     protected:
-        std::string name;
         StateMachine* state_machine;
 };

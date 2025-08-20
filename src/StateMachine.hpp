@@ -16,11 +16,11 @@ class StateMachine
         void handle_state_changes(float& deltaTime);
 
         void stop() {is_running = false;}
-        bool isRunning() {return is_running;}
+        bool isRunning() {return this->is_running;}
 
-        bool is_ending() {return is_ending;}
+        bool is_game_ending() {return this->is_ending;}
 
-        //std::unique_ptr<GameState>& getCurrentState() const {return states_machine.top();}
+        std::unique_ptr<GameState>& getCurrentState() {return this->states_machine.top();}
     
     private:
         std::stack<std::unique_ptr<GameState>> states_machine;
@@ -30,5 +30,5 @@ class StateMachine
         bool is_removing = false,
              is_Adding = false,
              is_Replacing = false,
-             is_ending = false
-}
+             is_ending = false;
+};

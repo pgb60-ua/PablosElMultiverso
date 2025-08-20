@@ -1,11 +1,16 @@
 #include <StateMachine.hpp>
+#include <iostream>
+
+StateMachine::StateMachine()
+{
+    this->new_state = nullptr;
+}
 
 void StateMachine::add_state(std::unique_ptr<GameState> newState, bool is_replacing)
 {
     is_Adding = true;
     is_replacing = is_replacing;
-    newState->init();
-    new_state = std::move(new_state);
+    this->new_state = std::move(newState);
 }
 
 void StateMachine::remove_state(bool value)
@@ -14,16 +19,16 @@ void StateMachine::remove_state(bool value)
     is_ending = value;
 }
 
-void StatesMachine::handle_state_changes(float& deltaTime)
+void StateMachine::handle_state_changes(float& deltaTime)
 {
-    if (this->is_removing && !this->states.empty())
+    if (this->is_removing && !this->states_machine.empty())
     {
-        this->states.pop();
+        this->states_machine.pop();
         this->is_removing = false;
 
         if (!this->is_Adding)
         {
-            this->states.top()->resume();
+            this->states_machine.top()->resume();
             deltaTime = 0.0f;
         }
     }
@@ -32,16 +37,16 @@ void StatesMachine::handle_state_changes(float& deltaTime)
     {
         if(!this->states_machine.empty())
         {
-            if (this->is_replacing)
+            if (this->is_Replacing)
             {
-                this->states.pop();
+                this->states_machine.pop();
             }
-
-            this->states.push(std::move(this->new_state));
-            this->states.top()->init();
-            this->is_Adding = false;
-            deltaTime = 0.0f;
         }
+
+        this->states_machine.push(std::move(this->new_state));
+        this->states_machine.top()->init();
+        this->is_Adding = false;
+        deltaTime = 0.0f;
     }
 }
 

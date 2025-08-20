@@ -11,7 +11,11 @@ class MainMenuState : public GameState
         void handleInput() override;
         void update(float deltaTime) override;
         void render() override;
+
+        void pause(){};
+        void resume(){};
+
     
     private:
         char entered_key;
-}
+};
