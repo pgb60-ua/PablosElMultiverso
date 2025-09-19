@@ -16,8 +16,8 @@ void StateMachine::add_state(std::unique_ptr<GameState> newState, bool is_replac
 
 void StateMachine::remove_state(bool value)
 {
-    is_removing = true;
-    is_ending = value;
+    this->is_removing = true;
+    this->is_ending = value;
 }
 
 void StateMachine::handle_state_changes(float& deltaTime)
