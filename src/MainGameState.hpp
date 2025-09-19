@@ -1,11 +1,11 @@
 #pragma once
 #include <GameState.hpp>
 
-class MainMenuState : public GameState
+class MainGameState : public GameState
 {
     public:
-        MainMenuState();
-        ~MainMenuState() = default;
+        MainGameState();
+        ~MainGameState() = default;
 
         void init() override;
         void handleInput() override;

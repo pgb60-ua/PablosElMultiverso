@@ -11,6 +11,7 @@ void StateMachine::add_state(std::unique_ptr<GameState> newState, bool is_replac
     is_Adding = true;
     is_replacing = is_replacing;
     this->new_state = std::move(newState);
+    this->new_state->setStateMachine(this);
 }
 
 void StateMachine::remove_state(bool value)
