@@ -127,7 +127,7 @@ El juego contará con varios estados principales que estructuran la experiencia:
 
 ## 9. Roles Definidos por Personas
 
-### Carlos Maria Casado Lopez
+### Carlos María Casado López
 **Rol principal**: Mecánicas jugables y ECS
 
 **Responsabilidades**:
@@ -191,7 +191,7 @@ El juego contará con varios estados principales que estructuran la experiencia:
   - Lógica de disparo
   - Colisiones
 
-### Alejandro Jimenez Martínez
+### Alejandro Jiménez Martínez
 **Rol principal**: Sonidos y ECS
 
 **Responsabilidades**:
