@@ -1,12 +1,11 @@
 # PablosElMultiverso
 
-##  Gestión de Ramas
+## Gestión de Ramas
 
 Nuestra estrategia para la gestión de ramas se basa en el modelo de **GitHub Flow**, utilizando Jira para el seguimiento de incidencias. Puedes consultar el proyecto en [este enlace de Jira](https://pablogarciabelando.atlassian.net/jira/software/projects/PEM).
+Cada nueva rama se crea a partir de una incidencia asignada en Jira. El nombre de la rama debe seguir la convención `PEM-X-descripcion-corta`, donde `X` es el número de la incidencia y `descripcion-corta` es un resumen breve del objetivo de la rama.
 
-Cada nueva rama se crea a partir de una incidencia asignada en Jira. El nombre de la rama debe seguir la convención `PEM-X`, donde `X` es el número de la incidencia.
-
-**Ejemplo:** `PEM-123`
+**Ejemplo:** `PEM-8-Inicializar-proyecto-base`
 
 ## 1. Mecánica Principal
 
@@ -43,7 +42,7 @@ Cada clase comparte un conjunto de atributos que determinan su desempeño en com
 - **Daño mágico**: potencia de las habilidades mágicas.
 - **Resistencia**: capacidad para reducir el daño recibido.
 - **Crítico**: probabilidad de infligir un golpe crítico con daño extra.
-- **Daño crítico**: daño adicional que se inflige al saltar el crítico.
+- **Daño crítico**: daño adicional que se inflige cuando se produce un crítico.
 - **Robo de vida**: porcentaje de vida recuperada al infligir daño.
 - **Regeneración de vida**: recuperación pasiva de salud a lo largo del tiempo.
 
@@ -65,7 +64,10 @@ Algunos ejemplos de jefes son:
 - Un jefe que tiene poca salud y escapa del jugador. A medida que huye va generando enemigos básicos.
 - Un jefe que dispara balas en un patrón concreto y tienes que ir esquivando mientras le disparas.
 - Un jefe que tiene mucha salud pero se dedica a aumentar las estadísticas de los enemigos actuales.
-- Un jefe que tiene poca vida y no tiene un patrón de movimiento determinado, simplemente se mueve de forma aleatoria. En caso de morir explota matando al jugador/es. La manera de ganar a este jefe es simplemente no pegarle durante la ronda y antes de que se acabe el tiempo se irá solo.
+- Un jefe que tiene poca vida y no tiene un patrón de movimiento determinado.
+  - Se mueve de forma aleatoria.
+  - En caso de morir, explota matando al jugador o jugadores.
+  - La manera de ganar a este jefe es no pegarle durante la ronda; si no se le ataca y se acaba el tiempo, se irá solo.
 
 ## 5. Armas, Objetos y Economía
 
@@ -99,7 +101,7 @@ El título ofrecerá un sistema de control adaptable con varias opciones de entr
 
 ## 7. Multijugador Local
 
-- El juego incluirá un modo de multijugador local para dos jugadores en la misma pantalla sin ser pantalla dividida a la hora de las rondas.
+- El juego incluirá un modo de multijugador local para dos jugadores en la misma pantalla sin ser pantalla dividida durante las rondas.
 - Cada jugador deberá utilizar un método de control diferente.
 - La acción se compartirá en un mismo espacio de juego, fomentando la cooperación.
 - Cada jugador tiene una tienda distinta, por tanto al entrar en la tienda la pantalla se divide en 2.
