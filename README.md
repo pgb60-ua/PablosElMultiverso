@@ -1,5 +1,14 @@
 # PablosElMultiverso
 
+
+## Licenses and Attributions
+
+This project incorporates code from multiple sources. Please see [NOTICES.md](NOTICES.md) for complete attribution and licensing information.
+
+- **Project License:** MIT License - See [LICENSE](LICENSE)
+- **DCAGII Game Template:** MIT License - See [LICENSE.DCAGII-Game-Template](LICENSE.DCAGII-Game-Template)
+- **raylib:** zlib/libpng License - See [LICENSE.raylib](LICENSE.raylib)
+
 ## Estrategia de gestión de ramas
 Nuestra estrategia para la gestión de ramas se basa en el modelo de **GitHub Flow**, utilizando Jira para el seguimiento de incidencias. Puedes consultar el proyecto en [este enlace de Jira](https://pablogarciabelando.atlassian.net/jira/software/projects/PEM).
 
