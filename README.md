@@ -1,11 +1,17 @@
 # PablosElMultiverso
 
-## Gestión de Ramas
-
+## Estrategia de gestión de ramas
 Nuestra estrategia para la gestión de ramas se basa en el modelo de **GitHub Flow**, utilizando Jira para el seguimiento de incidencias. Puedes consultar el proyecto en [este enlace de Jira](https://pablogarciabelando.atlassian.net/jira/software/projects/PEM).
+
 Cada nueva rama se crea a partir de una incidencia asignada en Jira. El nombre de la rama debe seguir la convención `PEM-X-descripcion-corta`, donde `X` es el número de la incidencia y `descripcion-corta` es un resumen breve del objetivo de la rama.
 
-**Ejemplo:** `PEM-8-Inicializar-proyecto-base`
+Las Pull Requests (PR) se nombrarán siguiendo el formato `PEM-X | descripcion-corta`.
+
+**Ejemplo:**
+- **Rama:** `PEM-8-Inicializar-proyecto-base`
+- **PR:** `PEM-8 | Inicializar proyecto base`
+
+Todas las Pull Requests se integrarán en la rama principal mediante un **squash merge**.
 
 ## 1. Mecánica Principal
 
