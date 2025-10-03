@@ -12,11 +12,11 @@ AEntity::AEntity(float health, float movementSpeed, float agility,
       lifeSteal(lifeSteal), healthRegeneration(healthRegeneration),
       attackCooldown(1.0f / attackSpeed), textures(textures) {
   // La vida como minimo es 1
-  if (health < MIN_HEALTH)
-    health = MIN_HEALTH;
+  if (this->health < MIN_HEALTH)
+    this->health = MIN_HEALTH;
   // La regeneracion de vida como minimo es 0
-  if (healthRegeneration < MIN_REGENERATION)
-    healthRegeneration = MIN_REGENERATION;
+  if (this->healthRegeneration < MIN_REGENERATION)
+    this->healthRegeneration = MIN_REGENERATION;
 };
 
 void AEntity::Render() {}

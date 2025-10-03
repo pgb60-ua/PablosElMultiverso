@@ -121,7 +121,10 @@ public:
 
   /// @brief Establece la velocidad de ataque y recalcula el tiempo de recarga
   void SetAttackSpeed(float newSpeed) {
-    attackSpeed = newSpeed;
+    if (newSpeed <= 0) {
+      attackSpeed = 0.1f;
+    } else
+      attackSpeed = newSpeed;
     attackCooldown = 1.0f / attackSpeed;
   }
 
