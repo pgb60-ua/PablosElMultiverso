@@ -304,15 +304,15 @@ public:
   };
 
   /// @brief Establece la hitbox de la entidad a un triangulo
-  void SetTriangleHitbox(float v1, float v2, float v3) {
-    hitbox.type = SHAPE_RECTANGLE;
+  void SetTriangleHitbox(Vector2 v1, Vector2 v2, Vector2 v3) {
+    hitbox.type = SHAPE_TRIANGLE;
     hitbox.data.triangle = {v1, v2, v3};
   };
 
   /// @brief Establece la hitbox de la entidad a un circulo
   void SetCircleHitbox(float x, float y, float radius) {
     hitbox.type = SHAPE_CIRCLE;
-    hitbox.data = {x, y, radius};
+    hitbox.data.circle = {x, y, radius};
   };
 
   void Render();
