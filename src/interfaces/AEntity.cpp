@@ -1,5 +1,4 @@
 #include "AEntity.hpp"
-#include "Geometry.hpp"
 
 AEntity::AEntity(float health, float movementSpeed, float agility,
                  float attackSpeed, float physicalDamage, float magicDamage,
