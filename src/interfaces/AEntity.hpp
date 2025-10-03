@@ -295,20 +295,29 @@ public:
   /*--------------------------*/
 
   /// @brief Devuelve la hitbox de la entidad
-  Shape GetHitbox();
+  Shape GetHitbox() { return hitbox; };
 
   /// @brief Establece la hitbox de la entidad a un rectangulo
-  void SetRectangleHitbox(Rectangle rectangle);
+  void SetRectangleHitbox(Rectangle rectangle) {
+    hitbox.type = SHAPE_RECTANGLE;
+    hitbox.data.rectangle = rectangle;
+  };
 
   /// @brief Establece la hitbox de la entidad a un triangulo
-  void SetTriangleHitbox(float v1, float v2, float v3);
+  void SetTriangleHitbox(float v1, float v2, float v3) {
+    hitbox.type = SHAPE_RECTANGLE;
+    hitbox.data.triangle = {v1, v2, v3};
+  };
 
   /// @brief Establece la hitbox de la entidad a un circulo
-  void SetCircleHitbox(float x, float y, float radius);
+  void SetCircleHitbox(float x, float y, float radius) {
+    hitbox.type = SHAPE_CIRCLE;
+    hitbox.data = {x, y, radius};
+  };
 
   void Render();
   virtual void TakeDamage(float amount) = 0;
   virtual void Update() = 0;
-  virtual bool IsAlive() = 0;
-  virtual ~AEntity();
+  virtual bool IsAlive();
+  virtual ~AEntity() { textures.clear(); };
 };
