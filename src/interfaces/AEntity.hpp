@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Geometry.hpp"
 #include <vector>
 extern "C" {
 #include "raylib.h"
@@ -16,9 +17,9 @@ private:
 protected:
   /// @brief Vector de texturas de una la entidad
   std::vector<Texture2D *> textures;
-  // hitbox
 
-  // items
+  /// @brief Hitbox de la entidad (rectangulo - circulo - triangulo)
+  Shape hitbox;
 
   /// @brief Puntos de vida de la entidad
   float health;
@@ -289,9 +290,25 @@ public:
     healthRegenerationModifier = newModifier;
   }
 
+  /*--------------------------*/
+  // Hitbox
+  /*--------------------------*/
+
+  /// @brief Devuelve la hitbox de la entidad
+  Shape GetHitbox();
+
+  /// @brief Establece la hitbox de la entidad a un rectangulo
+  void SetRectangleHitbox(Rectangle rectangle);
+
+  /// @brief Establece la hitbox de la entidad a un triangulo
+  void SetTriangleHitbox(float v1, float v2, float v3);
+
+  /// @brief Establece la hitbox de la entidad a un circulo
+  void SetCircleHitbox(float x, float y, float radius);
+
   void Render();
-  virtual void TakeDamage(int amount);
-  virtual void Update();
-  virtual bool IsAlive();
+  virtual void TakeDamage(float amount) = 0;
+  virtual void Update() = 0;
+  virtual bool IsAlive() = 0;
   virtual ~AEntity();
 };

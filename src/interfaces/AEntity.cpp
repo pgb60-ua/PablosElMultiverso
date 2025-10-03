@@ -1,4 +1,5 @@
 #include "AEntity.hpp"
+#include "Geometry.hpp"
 
 AEntity::AEntity(float health, float movementSpeed, float agility,
                  float attackSpeed, float physicalDamage, float magicDamage,
@@ -20,3 +21,26 @@ AEntity::AEntity(float health, float movementSpeed, float agility,
 };
 
 void AEntity::Render() {}
+
+void AEntity::SetTriangleHitbox(float v1, float v2, float v3) {
+  hitbox.type = SHAPE_RECTANGLE;
+  hitbox.data.triangle = {v1, v2, v3};
+}
+
+void AEntity::SetRectangleHitbox(Rectangle rectangle) {
+  hitbox.type = SHAPE_RECTANGLE;
+  hitbox.data.rectangle = rectangle;
+}
+
+void AEntity::SetCircleHitbox(float x, float y, float radius) {
+  hitbox.type = SHAPE_CIRCLE;
+  hitbox.data = {x, y, radius};
+}
+
+Shape AEntity::GetHitbox() { return hitbox; }
+
+AEntity::~AEntity() {
+  // Las texturas son compartidas y gestionadas externamente,
+  // solo limpiamos el vector de punteros
+  textures.clear();
+}
