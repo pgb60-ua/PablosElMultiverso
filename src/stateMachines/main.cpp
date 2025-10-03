@@ -16,7 +16,7 @@ int main()
     InitWindow(768, 768, "Pablos El Multiverso");
     InitAudioDevice();
 
-    while (!state_machine.is_game_ending() && IsKeyPressed(KEY_ESCAPE) == false && !WindowShouldClose())
+    while (!state_machine.is_game_ending() && !IsKeyDown(KEY_ESCAPE) && !WindowShouldClose())
     {
         state_machine.handle_state_changes(delta_time);
         state_machine.getCurrentState()->handleInput();
