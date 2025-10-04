@@ -41,3 +41,6 @@ game
 
 # debug information files
 *.dwo
+
+.vscode
+.clangd
