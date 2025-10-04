@@ -13,6 +13,7 @@ typedef struct {
 /// @brief Struct que representa las stats defensivas
 typedef struct {
   float health;
+  float healthMax;
   float movementSpeed;
   float agility;
   float armor;
@@ -25,6 +26,9 @@ class Stats {
 protected:
   /// @brief Puntos de vida de la entidad
   float health;
+
+  /// @brief Puntos de vida maximos de la entidad
+  float healthMax;
 
   /// @brief Cuantos pixeles se mueve por frame
   float movementSpeed;
@@ -61,16 +65,19 @@ protected:
   /// @brief Cantidad de puntos de vida que te curas cada segundo
   float healthRegeneration;
 
-  Stats(float health = 0, float movementSpeed = 0, float agility = 0,
-        float attackSpeed = 0, float physicalDamage = 0, float magicDamage = 0,
-        float armor = 0, float resistance = 0, float criticalChance = 0,
-        float criticalDamage = 0, float lifeSteal = 0,
+  Stats(float health = 0, float healthMax = 0, float movementSpeed = 0,
+        float agility = 0, float attackSpeed = 0, float physicalDamage = 0,
+        float magicDamage = 0, float armor = 0, float resistance = 0,
+        float criticalChance = 0, float criticalDamage = 0, float lifeSteal = 0,
         float healthRegeneration = 0);
 
 public:
   // Getters de stats
   /// @brief Obtiene los puntos de vida actuales
   float GetHealth() const { return health; }
+
+  /// @brief Obtiene los puntos de vida maxima
+  float GetHealthMax() const { return healthMax; };
 
   /// @brief Obtiene la velocidad de movimiento actual
   float GetMovementSpeed() const { return movementSpeed; }
@@ -109,6 +116,9 @@ public:
 
   /// @brief Establece los puntos de vida base
   void SetHealth(float newHealth) { health = newHealth; }
+
+  /// @brief Establece los puntos de vida maxima
+  void SetHealthMax(float newHealthMax) { healthMax = newHealthMax; };
 
   /// @brief Establece la velocidad de movimiento base
   void SetMovementSpeed(float newSpeed) { movementSpeed = newSpeed; }
