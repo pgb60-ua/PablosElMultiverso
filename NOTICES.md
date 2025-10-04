@@ -5,7 +5,7 @@ This project uses code and resources from the following open-source projects:
 ## DCAGII Game Template
 
 - **Author:** Antonio Ríos Vila
-- **Repository:** https://github.com/arv-ua/DCAGII-Game-Template
+- **Repository:** https://github.com/antoniorv6/DCAGII-Game-Template
 - **License:** MIT License
 - **License File:** [LICENSE.DCAGII-Game-Template](LICENSE.DCAGII-Game-Template)
 
