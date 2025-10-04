@@ -61,10 +61,11 @@ protected:
   /// @brief Cantidad de puntos de vida que te curas cada segundo
   float healthRegeneration;
 
-  Stats(float health, float movementSpeed, float agility, float attackSpeed,
-        float physicalDamage, float magicDamage, float armor, float resistance,
-        float criticalChance, float criticalDamage, float lifeSteal,
-        float healthRegeneration);
+  Stats(float health = 0, float movementSpeed = 0, float agility = 0,
+        float attackSpeed = 0, float physicalDamage = 0, float magicDamage = 0,
+        float armor = 0, float resistance = 0, float criticalChance = 0,
+        float criticalDamage = 0, float lifeSteal = 0,
+        float healthRegeneration = 0);
 
 public:
   // Getters de stats
@@ -157,7 +158,5 @@ public:
             armor,  resistance,    healthRegeneration};
   }
 
-  virtual ~Stats() {
-
-  };
+  virtual ~Stats() {};
 };
