@@ -138,7 +138,7 @@ class ShapeData{
 }
 class Shape{
     <<struct>>
-    ShapeType data
+    ShapeType type
     ShapeData data
 }
 
