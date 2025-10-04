@@ -11,15 +11,12 @@ extern "C" {
 // común
 class AEntity {
 private:
-  static constexpr float MIN_HEALTH = 1.0f;
-  static constexpr float MIN_REGENERATION = 0.0f;
+  static constexpr float MIN_HEALTH_BASE = 1.0f;
+  static constexpr float MIN_REGENERATION_BASE = 0.0f;
 
 protected:
   /// @brief Vector de texturas de una la entidad
   std::vector<Texture2D *> textures;
-
-  /// @brief La entidad puede disparar?
-  bool canShoot;
 
   /// @brief Hitbox de la entidad (rectangulo - circulo - triangulo)
   Shape hitbox;
@@ -30,8 +27,11 @@ protected:
   /// @brief Propiedad autocalculada, tiempo que ha de pasar para volver atacar
   float attackCooldown;
 
-  AEntity(Stats stats, bool canShoot, const Shape &hitbox,
-          std::vector<Texture2D *> textures);
+  /// @brief Variable que almacena la suma de deltaTime para comparar si ha de
+  /// atacar
+  float currentAttackCooldownTime;
+
+  AEntity(Stats stats, const Shape &hitbox, std::vector<Texture2D *> textures);
 
 public:
   /// @brief Obtiene el tiempo de recarga del ataque actual
@@ -41,7 +41,7 @@ public:
   /*--------------------------*/
 
   /// @brief Devuelve la hitbox de la entidad
-  Shape GetHitbox() { return hitbox; };
+  Shape GetHitbox() const { return hitbox; };
 
   /// @brief Establece la hitbox de la entidad a un rectangulo
   void SetRectangleHitbox(Rectangle rectangle) {
@@ -64,8 +64,6 @@ public:
   void Render();
   /// @brief Devuelve si la entidad tiene mas de 0 de vida
   bool IsAlive();
-  /// @brief Devuelve si la entidad tiene mas de 0 de velocidad de ataque
-  bool CanAttack();
   virtual void TakeDamage(float amount) = 0;
   virtual void Update() = 0;
   virtual ~AEntity() { textures.clear(); };
