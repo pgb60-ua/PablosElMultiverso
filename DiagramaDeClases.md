@@ -1,19 +1,13 @@
 ```mermaid
 classDiagram
 
-    subgraph Structs
-        Triangle
-        Circle
-        ShapeData
-        Shape
-    end
-
 AEntity <|-- Player
 AEntity <|-- AEnemy
 AEnemy <|-- ConcreteEnemy
 EnemyFactory ..> AEnemy
 Stats <.. AEntity
 Stats <.. AItem
+Stats <.. AProjectile
 AItem <|-- AWeapon
 AItem <|-- ConcreteItem
 AWeapon <|-- AMeleeWeapon
