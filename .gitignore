@@ -30,12 +30,14 @@
 *.lai
 *.la
 *.a
+!libraylib.a
 *.lib
 
 # Executables
 *.exe
 *.out
 *.app
+game
 
 # debug information files
 *.dwo

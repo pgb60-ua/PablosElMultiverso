@@ -22,11 +22,18 @@ Las Pull Requests (PR) se nombrarán siguiendo el formato `PEM-X | descripcion-c
 
 Todas las Pull Requests se integrarán en la rama principal mediante un **squash merge**.
 
-## 1. Mecánica Principal
+## Comando para instalar en Ubuntu
+```sudo apt install xorg-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev```
+
+## Como compilar
+```g++ -o game $(find src -name "*.cpp") $(find src -type d -exec printf -- "-I %s " {} \;) -I vendor/include -L vendor/lib -lraylib -lGL -lm -lpthread -lrt -lX11```
+
+## Juego
+### 1. Mecánica Principal
 
 El juego se desarrolla dentro de una sala cuadrada cerrada estática, donde el objetivo del jugador es sobrevivir y esquivar a los enemigos durante un número determinado de rondas. La acción se centra en la movilidad y la mejora progresiva del personaje.
 
-## 2. Rondas y Progresión
+### 2. Rondas y Progresión
 
 - El juego tendrá varias dificultades.
 - El juego está dividido en un total de **15 rondas**.
@@ -34,9 +41,9 @@ El juego se desarrolla dentro de una sala cuadrada cerrada estática, donde el o
 - A medida que avanzan las rondas, los enemigos incrementan su cantidad, fuerza y complejidad en función de la dificultad.
 - En las rondas **5, 10 y 15** aparecerán **jefes especiales**, que supondrán un desafío mayor y darán mejor botín.
 
-## 3. Personajes Jugables y Estadísticas
+### 3. Personajes Jugables y Estadísticas
 
-### 3.1. Clases Disponibles
+#### 3.1. Clases Disponibles
 
 El jugador podrá elegir entre cuatro clases principales, cada una con un estilo de juego diferenciado:
 
@@ -45,25 +52,26 @@ El jugador podrá elegir entre cuatro clases principales, cada una con un estilo
 - **Mago**: centrado en el daño mágico y habilidades especiales.
 - **Curandero**: personaje de apoyo con capacidad de regeneración y sanación.
 
-### 3.2. Estadísticas del Personaje
+#### 3.2. Estadísticas del Personaje
 
 Cada clase comparte un conjunto de atributos que determinan su desempeño en combate:
 
 - **Vida**: cantidad de daño que puede resistir antes de morir.
 - **Velocidad de movimiento**: rapidez con la que se desplaza por el escenario.
-- **Probabilidad de esquivar**: probabilidad de que al ser atacado no recibas daño.
+- **Agilidad**: probabilidad de que al ser atacado no recibas daño.
 - **Velocidad de ataque**: frecuencia con la que puede efectuar ataques.
-- **Daño de ataque**: potencia de los ataques físicos.
+- **Daño físico**: potencia de los ataques físicos.
 - **Daño mágico**: potencia de las habilidades mágicas.
-- **Resistencia**: capacidad para reducir el daño recibido.
+- **Resistencia**: capacidad para reducir el daño mágico recibido.
+- **Armadura**: Capacidad para reducir el daño físico recibido.
 - **Crítico**: probabilidad de infligir un golpe crítico con daño extra.
 - **Daño crítico**: daño adicional que se inflige cuando se produce un crítico.
 - **Robo de vida**: porcentaje de vida recuperada al infligir daño.
 - **Regeneración de vida**: recuperación pasiva de salud a lo largo del tiempo.
 
-## 4. Enemigos
+### 4. Enemigos
 
-### 4.1. Tipos de Enemigos Básicos
+#### 4.1. Tipos de Enemigos Básicos
 
 Algunos ejemplos de enemigos comunes son:
 
@@ -71,7 +79,7 @@ Algunos ejemplos de enemigos comunes son:
 - **Colocador de torretas**: enemigo más avanzado que evita al jugador mientras instala torretas ofensivas. Su comportamiento integra un algoritmo de machine learning, lo que le permite esquivar y adaptarse al movimiento del jugador.
 - **Enemigos de botín**: enemigos que están diferenciados e intentan huir del jugador. Soltarán más botín que de normal al morir.
 
-### 4.2. Jefes Principales
+#### 4.2. Jefes Principales
 
 Algunos ejemplos de jefes son:
 
@@ -84,13 +92,13 @@ Algunos ejemplos de jefes son:
   - En caso de morir, explota matando al jugador o jugadores.
   - La manera de ganar a este jefe es no pegarle durante la ronda; si no se le ataca y se acaba el tiempo, se irá solo.
 
-## 5. Armas, Objetos y Economía
+### 5. Armas, Objetos y Economía
 
-### 5.1. Armas
+#### 5.1. Armas
 
 El sistema de armas se basa en apuntado y disparo automático en un rango determinado por la clase, de manera que el jugador puede centrarse en esquivar enemigos y gestionar su posición dentro del escenario.
 
-### 5.2. Objetos
+#### 5.2. Objetos
 
 Durante el transcurso del juego, el jugador podrá adquirir objetos que mejoren sus estadísticas mediante la tienda.
 
@@ -101,11 +109,11 @@ Durante el transcurso del juego, el jugador podrá adquirir objetos que mejoren 
 - Estas monedas son el recurso principal para realizar compras dentro de la tienda.
 - La tienda se abrirá después de cada ronda.
 
-### 5.3. Tienda
+#### 5.3. Tienda
 
 La tienda es un menú que se abrirá después de cada ronda. Esta permite comprar objetos con Pablo Coins. Permitirá bloquear objetos entre tiendas para que no desaparezcan y permitirá actualizar la tienda con un coste de monedas.
 
-## 6. Controles
+### 6. Controles
 
 El título ofrecerá un sistema de control adaptable con varias opciones de entrada:
 
@@ -114,7 +122,7 @@ El título ofrecerá un sistema de control adaptable con varias opciones de entr
 - **Puntero del ratón**: + Clic izquierdo para comprar + Clic derecho para bloquear tienda.
 - **Mando**: + Botón de abajo comprar + Botón de la izquierda para bloquear tienda.
 
-## 7. Multijugador Local
+### 7. Multijugador Local
 
 - El juego incluirá un modo de multijugador local para dos jugadores en la misma pantalla sin ser pantalla dividida durante las rondas.
 - Cada jugador deberá utilizar un método de control diferente.
@@ -123,7 +131,7 @@ El título ofrecerá un sistema de control adaptable con varias opciones de entr
 - Cada jugador tiene unas estadísticas personales independientes del otro jugador y un inventario independiente.
 - La dificultad aumenta en modo cooperativo además de la elegida. La dificultad elegida será la misma para ambos jugadores.
 
-## 8. Gestión de Estados
+### 8. Gestión de Estados
 
 El juego contará con varios estados principales que estructuran la experiencia:
 
@@ -134,9 +142,9 @@ El juego contará con varios estados principales que estructuran la experiencia:
 - **Pantalla de estadísticas**: permite ver el inventario y las estadísticas de cada jugador en la partida.
 - **Pantalla de Game Over**: aparece al perder la partida, mostrando estadísticas y resultados.
 
-## 9. Roles Definidos por Personas
+### 9. Roles Definidos por Personas
 
-### Carlos María Casado López
+#### Carlos María Casado López
 **Rol principal**: Mecánicas jugables y ECS
 
 **Responsabilidades**:
@@ -156,7 +164,7 @@ El juego contará con varios estados principales que estructuran la experiencia:
   - Stats
   - Rareza - probabilidad
 
-### Pablo García Belando
+#### Pablo García Belando
 **Rol principal**: Gráficos
 
 **Responsabilidades**:
@@ -183,7 +191,7 @@ El juego contará con varios estados principales que estructuran la experiencia:
 - **Dinero**:
   - Sprite
 
-### Manuel José Tornero Fuster
+#### Manuel José Tornero Fuster
 **Rol principal**: IA (comportamiento de los NPCs u obstáculos) y Físicas
 
 **Responsabilidades**:
@@ -200,7 +208,7 @@ El juego contará con varios estados principales que estructuran la experiencia:
   - Lógica de disparo
   - Colisiones
 
-### Alejandro Jiménez Martínez
+#### Alejandro Jiménez Martínez
 **Rol principal**: Sonidos y ECS
 
 **Responsabilidades**:
