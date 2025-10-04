@@ -22,7 +22,6 @@ typedef struct {
 
 // Clase que almacena estatisticas
 class Stats {
-private:
 protected:
   /// @brief Puntos de vida de la entidad
   float health;
@@ -105,47 +104,44 @@ public:
   /// @brief Obtiene la regeneración de vida por segundo actual
   float GetHealthRegeneration() const { return healthRegeneration; }
 
-  /**/
-  // Setters de stats (aplican modificador automáticamente)
+  // Setters de stats
 
-  /// @brief Establece los puntos de vida base y aplica modificador
+  /// @brief Establece los puntos de vida base
   void SetHealth(float newHealth) { health = newHealth; }
 
-  /// @brief Establece la velocidad de movimiento base y aplica modificador
+  /// @brief Establece la velocidad de movimiento base
   void SetMovementSpeed(float newSpeed) { movementSpeed = newSpeed; }
 
-  /// @brief Establece la agilidad base y aplica modificador
+  /// @brief Establece la agilidad base
   void SetAgility(float newAgility) { agility = newAgility; }
 
-  /// @brief Establece la velocidad de ataque base, aplica modificador y
-  /// recalcula el tiempo de recarga
+  /// @brief Establece la velocidad de ataque base
   void SetAttackSpeed(float newSpeed) { attackSpeed = newSpeed; }
 
-  /// @brief Establece el daño físico base y aplica modificador
+  /// @brief Establece el daño físico base
   void SetPhysicalDamage(float newDamage) { physicalDamage = newDamage; }
 
-  /// @brief Establece el daño mágico base y aplica modificador
+  /// @brief Establece el daño mágico base
   void SetMagicDamage(float newDamage) { magicDamage = newDamage; }
 
-  /// @brief Establece la armadura base y aplica modificador
+  /// @brief Establece la armadura base
   void SetArmor(float newArmor) { armor = newArmor; }
 
-  /// @brief Establece la resistencia mágica base y aplica modificador
+  /// @brief Establece la resistencia mágica base
   void SetResistance(float newResistance) { resistance = newResistance; }
 
-  /// @brief Establece la probabilidad de crítico base y aplica modificador
+  /// @brief Establece la probabilidad de crítico base
   void SetCriticalChance(float newChance) { criticalChance = newChance; }
 
-  /// @brief Establece el multiplicador de daño crítico base y aplica
-  /// modificador
+  /// @brief Establece el multiplicador de daño crítico base
   void SetCriticalDamage(float newMultiplier) {
     criticalDamage = newMultiplier;
   }
 
-  /// @brief Establece el porcentaje de robo de vida base y aplica modificador
+  /// @brief Establece el porcentaje de robo de vida base
   void SetLifeSteal(float newLifeSteal) { lifeSteal = newLifeSteal; }
 
-  /// @brief Establece la regeneración de vida base y aplica modificador
+  /// @brief Establece la regeneración de vida base
   void SetHealthRegeneration(float newRegeneration) {
     healthRegeneration = newRegeneration;
   }
