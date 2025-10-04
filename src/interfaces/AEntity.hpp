@@ -176,9 +176,9 @@ public:
   };
 
   /// @brief Establece la hitbox de la entidad a un circulo
-  void SetCircleHitbox(float x, float y, float radius) {
+  void SetCircleHitbox(Vector2 center, float radius) {
     hitbox.type = SHAPE_CIRCLE;
-    hitbox.data.circle = {x, y, radius};
+    hitbox.data.circle = {center, radius};
   };
 
   void Render();

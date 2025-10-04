@@ -7,7 +7,8 @@ typedef enum { SHAPE_RECTANGLE, SHAPE_CIRCLE, SHAPE_TRIANGLE } ShapeType;
 
 /// @brief Struct que representa un circulo
 typedef struct {
-  float x, y, radius;
+  Vector2 center;
+  float radius;
 } Circle;
 
 /// @brief Struct que representa un triangulo
