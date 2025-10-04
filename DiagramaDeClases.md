@@ -157,7 +157,7 @@ class LaserRayProjectile{
 class SniperProjectile{
 
 }
-class WingWeapon{
+class WingProjectile{
 
 }
 ```
