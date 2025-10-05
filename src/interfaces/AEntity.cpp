@@ -23,3 +23,16 @@ AEntity::AEntity(Stats stats, const Shape &hitbox,
 void AEntity::Render() {}
 
 bool AEntity::IsAlive() { return stats.GetHealth() > 0; }
+
+void AEntity::SetHealthMax(float newHealthMax) {
+  if (newHealthMax <= 0)
+    newHealthMax = 1;
+  this->stats->SetMaxHealth(newHealthMax);
+}
+
+void AEntity::SetAttackSpeed(float newAttackSpeed) {
+  if (newAttackSpeed <= 0) {
+    this->attackCooldown = 0;
+    this->stats.SetAttackSpeed(0);
+  }
+}

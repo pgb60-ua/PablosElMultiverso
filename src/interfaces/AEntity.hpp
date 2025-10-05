@@ -34,6 +34,12 @@ protected:
   AEntity(Stats stats, const Shape &hitbox, std::vector<Texture2D *> textures);
 
 public:
+  /// @brief Establece la estadistica de vida maxima con logica previa
+  void SetHealthMax(float newHealtMax);
+
+  /// @brief Establece la estadistica de attackSpeed con logica previa
+  void SetAttackSpeed(float newAttackSpeed);
+
   /// @brief Obtiene el tiempo de recarga del ataque actual
   float GetAttackCooldown() const { return attackCooldown; }
   /*--------------------------*/
