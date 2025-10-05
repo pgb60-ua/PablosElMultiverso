@@ -9,9 +9,6 @@ AEntity::AEntity(Stats stats, const Shape &hitbox,
   // Ha de tener la misma vida maxima que la actual para que empiece full vida
   if (this->stats.GetMaxHealth() != this->stats.GetHealth())
     this->stats.SetMaxHealth(this->stats.GetHealth());
-  // No se puede crear a una entidad con regeneracion negativa
-  if (this->stats.GetHealthRegeneration() < 0)
-    this->stats.SetHealthRegeneration(MIN_REGENERATION_BASE);
   // No se puede tener menos de 0 de attack speed
   if (this->stats.GetAttackSpeed() <= 0) {
     this->stats.SetAttackSpeed(0);

@@ -12,7 +12,6 @@ extern "C" {
 class AEntity {
 private:
   static constexpr float MIN_HEALTH_BASE = 1.0f;
-  static constexpr float MIN_REGENERATION_BASE = 0.0f;
 
 protected:
   /// @brief Vector de texturas de una la entidad
