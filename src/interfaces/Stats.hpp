@@ -1,6 +1,6 @@
 #pragma once
 
-// @brief Struct que representa las stats ofensivas
+/// @brief Struct que representa las stats ofensivas
 typedef struct {
   float physicalDamage;
   float magicDamage;
@@ -167,5 +167,5 @@ public:
             armor,  resistance, healthRegeneration};
   }
 
-  virtual ~Stats() {};
+  ~Stats() {};
 };
