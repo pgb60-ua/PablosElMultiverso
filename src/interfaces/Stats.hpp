@@ -163,8 +163,8 @@ public:
   }
   /// @brief Devuelve las estadísticas defensivas agrupadas
   DefensiveStats GetDefensiveStats() const {
-    return {health, movementSpeed, agility,
-            armor,  resistance,    healthRegeneration};
+    return {health, healthMax,  movementSpeed,     agility,
+            armor,  resistance, healthRegeneration};
   }
 
   virtual ~Stats() {};
