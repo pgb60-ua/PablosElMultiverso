@@ -1,6 +1,5 @@
 #pragma once
-#include <Stats.hpp>
-#include <string>
+#include "Stats.hpp"
 extern "C"
 {
 #include <raylib.h>
@@ -15,7 +14,7 @@ private:
 
 public:
     AProjectile() = default;
-    ~AProjectile();
+    ~AProjectile() = default;
 
     virtual void update(float deltaTime) = 0;
     Vector2 getPosition() const;

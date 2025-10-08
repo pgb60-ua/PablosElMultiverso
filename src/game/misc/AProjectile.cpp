@@ -1,8 +1,4 @@
-#include <AProjectile.hpp>
-
-AProjectile::~AProjectile()
-{
-}
+#include "AProjectile.hpp"
 
 Vector2 AProjectile::getPosition() const
 {
