@@ -1,4 +1,4 @@
-#include "common/DataFileManager.hpp"
+#include <DataFileManager.hpp>
 #include <stdexcept>
 #include <fstream>
 #include <sstream>
@@ -7,7 +7,7 @@
 
 using json = nlohmann::json;
 
-// Implementación de getFilePath para PLAYER
+// Implementación de GetFilePath para PLAYER
 std::string DataFileManager::GetFilePath(PLAYER type) const
 {
     switch (type)
