@@ -21,5 +21,5 @@ public:
     Stats getStats() const;
     bool isActive() const;
     void deactivate();
-    void activate(Vector2 pos, const Stats &stats);
+    void activate(Vector2 position, const Stats &stats);
 };
