@@ -3,22 +3,8 @@
 #include <unordered_map>
 #include <vector>
 #include <variant>
+#include "Types.hpp"
 
-enum class PLAYER
-{
-    WARRIOR,
-    MAGE,
-    RANGE,
-    HEALER
-};
-
-enum class ITEM
-{
-    ITEM1,
-    ITEM2,
-    ITEM3,
-    WEAPON
-};
 
 // Tipo para los valores que puede contener el diccionario
 using DataValue = std::variant<std::string, int, float, bool>;
