@@ -3,11 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <nlohmann/json.hpp>
-#include <iostream>
 
-using json = nlohmann::json;
-
-// Implementación de GetFilePath para PLAYER
 std::string DataFileManager::GetFilePath(PLAYER type) const
 {
     switch (type)
@@ -25,7 +21,6 @@ std::string DataFileManager::GetFilePath(PLAYER type) const
     }
 }
 
-// Implementación de getFilePath para ITEM
 std::string DataFileManager::GetFilePath(ITEM type) const
 {
     switch (type)
@@ -43,7 +38,6 @@ std::string DataFileManager::GetFilePath(ITEM type) const
     }
 }
 
-// GetData para PLAYER con caché
 const DataMap &DataFileManager::GetData(PLAYER type)
 {
     // Buscar en caché
@@ -62,7 +56,6 @@ const DataMap &DataFileManager::GetData(PLAYER type)
     return playerCache[type];
 }
 
-// GetData para ITEM con caché
 const DataMap &DataFileManager::GetData(ITEM type)
 {
     // Buscar en caché
@@ -81,7 +74,7 @@ const DataMap &DataFileManager::GetData(ITEM type)
     return itemCache[type];
 }
 
-// Métodos para limpiar caché
+
 void DataFileManager::ClearCache()
 {
     playerCache.clear();
@@ -121,7 +114,7 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
     try
     {
         // Parsear el archivo JSON
-        json j;
+        nlohmann::json j;
         file >> j;
 
         // Convertir cada elemento del JSON al DataMap
@@ -146,7 +139,7 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
             // Si es otro tipo (objeto, array), se ignora por ahora
         }
     }
-    catch (const json::exception &e)
+    catch (const nlohmann::json::exception &e)
     {
         throw std::runtime_error("Error parsing JSON file " + path + ": " + e.what());
     }

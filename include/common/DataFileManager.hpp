@@ -23,11 +23,9 @@ public:
         return instance;
     }
 
-    // Obtener datos como diccionario (con caché)
     const DataMap &GetData(PLAYER type);
     const DataMap &GetData(ITEM type);
 
-    // Limpiar caché
     void ClearCache();
     void ClearCachePlayers();
     void ClearCacheItems();
@@ -43,14 +41,11 @@ private:
     DataFileManager(DataFileManager &&) = delete;
     DataFileManager &operator=(DataFileManager &&) = delete;
 
-    // Métodos auxiliares
     std::string GetFilePath(PLAYER type) const;
     std::string GetFilePath(ITEM type) const;
 
-    // Cargar y parsear archivo a diccionario
     DataMap LoadFromFile(const std::string &path);
 
-    // Cachés para cada tipo de enum
     std::unordered_map<PLAYER, DataMap> playerCache;
     std::unordered_map<ITEM, DataMap> itemCache;
 };
