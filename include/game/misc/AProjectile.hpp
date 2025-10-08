@@ -14,12 +14,13 @@ private:
     bool active;
 
 public:
-    AProjectile(Vector2 pos, Stats stats);
+    AProjectile();
     ~AProjectile();
 
     void update(float deltaTime);
     Vector2 getPosition() const;
     Stats getStats() const;
-    bool isActive() const = 0;
-    void deactivate() = 0;
+    bool isActive() const;
+    void deactivate();
+    void activate(Vector2 pos, Stats stats);
 };
