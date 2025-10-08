@@ -1,7 +1,7 @@
-#include "../../game/entities/base/item.hpp"
+#include <item.hpp>
 
 
-Item::Item(string name, string description, Stats stats, ItemRarity itemRarity){
+Item::Item(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity){
     this->name = name;
     this->description = description;
     this->stats = stats;

@@ -5,7 +5,6 @@ extern "C" {
     #include <raylib.h>
 }
 
-using namespace std;
 enum class ItemRarity
 {
     Common,
@@ -17,9 +16,9 @@ enum class ItemRarity
 class Item {
     protected:
         /// @brief nombre del objeto
-        string name;
-        /// @brief  Descripcion del objeto
-        string description;
+        std::string name;
+        /// @brief  Descripción del objeto
+        std::string description;
         /// @brief Estadisticas del objeto
         Stats stats;
         /// @brief Rareza del objeto
@@ -28,13 +27,13 @@ class Item {
     public:
         /// @brief Constructor de la clase Item
 
-        Item(string name, string description, Stats stats, ItemRarity itemRarity);
+        Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity);
 
         /// @brief Getter del nombre del objeto
-        string getName() const { return name; }
+        std::string getName() const { return name; }
 
         /// @brief Getter de la descripcion del objeto
-        string getDescription() const { return description; }
+        std::string getDescription() const { return description; }
 
         /// @brief Getter de las estadisticas del objeto
         Stats getStats() const { return stats; }
@@ -44,10 +43,10 @@ class Item {
 
         // Setters
         /// @brief Setter del nombre del objeto
-        void setName(const string& newName) { name = newName; }
+        void setName(const std::string& newName) { name = newName; }
 
         /// @brief Setter de la descripcion del objeto
-        void setDescription(const string& newDescription) { description = newDescription; }
+        void setDescription(const std::string& newDescription) { description = newDescription; }
 
         /// @brief Setter de las estadisticas del objeto
         void setStats(const Stats& newStats) { stats = newStats; }
