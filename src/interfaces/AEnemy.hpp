@@ -16,12 +16,13 @@ protected:
     int pabloCoinsAtDeath;
 
     /// @brief Objetivo actual del enemigo (posición del jugador)
-    std::vector<Player> objectives;
+    std::vector<Player> &objectives;
 
     /// @brief Constructor protegido para clases derivadas
     AEnemy(Stats stats, const Shape &hitbox,
            std::vector<Texture2D *> textures,
-           int pabloCoinsAtDeath);
+           int pabloCoinsAtDeath,
+           std::vector<Player> &objectives);
 
 public:
     /*--------------------------*/
@@ -34,17 +35,10 @@ public:
 
     /// @brief Establece la posición objetivo del enemigo (generalmente el jugador)
     /// @param nuevoObjetivo Posición hacia donde debe moverse el enemigo
-    void SetObjective(const std::vector<Player> &newObjectives)
-    {
-        objectives = newObjectives;
-    }
+    void SetObjective(const std::vector<Player> &newObjectives);
 
     /// @brief Obtiene el objetivo actual del enemigo
-    std::vector<Player> GetObjective() const { return objectives; }
-
-    /*--------------------------*/
-    // Combate
-    /*--------------------------*/
+    std::vector<Player> GetObjective() const;
 
     /*--------------------------*/
     // Botín y Economía
@@ -55,10 +49,10 @@ public:
     virtual int DropLoot() const = 0;
 
     /// @brief Establece la cantidad de Pablo Coins que suelta al morir
-    void SetPabloCoinsAtDeath(int cantidad) { pabloCoinsAtDeath = cantidad; }
+    void SetPabloCoinsAtDeath(int cantidad);
 
     /// @brief Obtiene la cantidad de Pablo Coins que suelta al morir
-    int GetPabloCoinsAtDeath() const { return pabloCoinsAtDeath; }
+    int GetPabloCoinsAtDeath() const;
 
     /*--------------------------*/
     // Estado y Propiedades
