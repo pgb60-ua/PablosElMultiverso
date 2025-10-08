@@ -74,12 +74,12 @@ const DataMap &DataFileManager::GetData(ITEM type)
     return itemCache[type];
 }
 
-
 void DataFileManager::ClearCache()
 {
     playerCache.clear();
     itemCache.clear();
 }
+
 void DataFileManager::ClearCachePlayers()
 {
     playerCache.clear();
