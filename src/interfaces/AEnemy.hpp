@@ -1,0 +1,74 @@
+#pragma once
+
+#include "AEntity.hpp"
+extern "C" {
+	#include "raylib.h"
+}
+
+/// @brief Interfaz que representa el comportamiento de un enemigo en el juego.
+/// Los enemigos son entidades que atacan al jugador, se mueven con IA y
+/// sueltan botín al morir
+class AEnemy : public AEntity {
+protected:
+
+	/// @brief Cantidad de Pablo Coins que suelta al morir
+	int pabloCoinsAtDeath;
+
+	/// @brief Objetivo actual del enemigo (posición del jugador)
+	std::vector<Vector2> objectives;
+
+	/// @brief Contador de tiempo para actualizar la IA
+	float updateTimeCounter;
+
+	/// @brief Constructor protegido para clases derivadas
+	AEnemy(Stats stats, const Shape &hitbox,
+		std::vector<Texture2D *> textures,
+		int pabloCoinsAtDeath);
+public:
+	/*--------------------------*/
+	// Movimiento e IA
+	/*--------------------------*/
+
+	/// @brief Mueve el enemigo hacia su objetivo
+	/// @param deltaTime Tiempo transcurrido desde el último frame
+	virtual void Move(float deltaTime) = 0;
+
+	/// @brief Establece la posición objetivo del enemigo (generalmente el jugador)
+	/// @param nuevoObjetivo Posición hacia donde debe moverse el enemigo
+	void SetObjetive(std::vector<Vector2> newObjectives) { 
+        objectives.clear();
+        objectives = newObjectives; 
+    }
+
+	/// @brief Obtiene el objetivo actual del enemigo
+	std::vector<Vector2> GetObjetive() const { return objectives; }
+
+	/*--------------------------*/
+	// Combate
+	/*--------------------------*/
+
+	/// @brief Realiza un ataque al jugador
+	/// @return Daño infligido por el ataque
+	virtual float DealDamage() = 0;
+
+	/*--------------------------*/
+	// Botín y Economía
+	/*--------------------------*/
+
+	/// @brief Suelta Pablo Coins al morir
+	/// @return Cantidad de Pablo Coins que suelta
+	virtual int DropLoot() const = 0;
+
+	/// @brief Establece la cantidad de Pablo Coins que suelta al morir
+	void SetPabloCoinsAtDeath(int cantidad) { pabloCoinsAtDeath = cantidad; }
+
+	/// @brief Obtiene la cantidad de Pablo Coins que suelta al morir
+	int GetPabloCoinsAtDeath() const { return pabloCoinsAtDeath; }
+
+	/*--------------------------*/
+	// Estado y Propiedades
+	/*--------------------------*/
+
+	/// @brief Destructor virtual
+	virtual ~AEnemy() = default;
+};
