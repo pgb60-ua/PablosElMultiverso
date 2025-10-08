@@ -8,6 +8,7 @@ This project incorporates code from multiple sources. Please see [NOTICES.md](NO
 - **Project License:** MIT License - See [LICENSE](LICENSE)
 - **DCAGII Game Template:** MIT License - See [LICENSE.DCAGII-Game-Template](LICENSE.DCAGII-Game-Template)
 - **raylib:** zlib/libpng License - See [LICENSE.raylib](LICENSE.raylib)
+- **nlohmann/json:** MIT License - See [LICENSE.nlohmann-json](LICENSE.nlohmann-json)
 
 ## Estrategia de gestión de ramas
 Nuestra estrategia para la gestión de ramas se basa en el modelo de **GitHub Flow**, utilizando Jira para el seguimiento de incidencias. Puedes consultar el proyecto en [este enlace de Jira](https://pablogarciabelando.atlassian.net/jira/software/projects/PEM).
