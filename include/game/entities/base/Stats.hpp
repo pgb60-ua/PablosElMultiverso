@@ -47,7 +47,7 @@ protected:
     DefensiveStats defensiveStats;
 
 public:
-    Stats(OffensiveStats &offensiveStats, DefensiveStats &defensiveStats);
+    Stats(const OffensiveStats &offensiveStats, const DefensiveStats &defensiveStats);
 
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
