@@ -1,9 +1,4 @@
 #include <item.hpp>
 
-
-Item::Item(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity){
-    this->name = name;
-    this->description = description;
-    this->stats = stats;
-    this->itemRarity = itemRarity;
-}
+Item::Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity)
+    : name(name), description(description), stats(stats), itemRarity(itemRarity) {}

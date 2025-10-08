@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "stats.hpp"
+#include <stats.hpp>
 extern "C" {
     #include <raylib.h>
 }
@@ -30,29 +30,29 @@ class Item {
         Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity);
 
         /// @brief Getter del nombre del objeto
-        std::string getName() const { return name; }
+        std::string GetName() const { return name; }
 
         /// @brief Getter de la descripcion del objeto
-        std::string getDescription() const { return description; }
+        std::string GetDescription() const { return description; }
 
         /// @brief Getter de las estadisticas del objeto
-        Stats getStats() const { return stats; }
+        Stats GetStats() const { return stats; }
 
         /// @brief Getter de la rareza del objeto
-        ItemRarity getItemRarity() const { return itemRarity; }
+        ItemRarity GetItemRarity() const { return itemRarity; }
 
         // Setters
         /// @brief Setter del nombre del objeto
-        void setName(const std::string& newName) { name = newName; }
+        void SetName(const std::string& newName) { name = newName; }
 
         /// @brief Setter de la descripcion del objeto
-        void setDescription(const std::string& newDescription) { description = newDescription; }
+        void SetDescription(const std::string& newDescription) { description = newDescription; }
 
         /// @brief Setter de las estadisticas del objeto
-        void setStats(const Stats& newStats) { stats = newStats; }
+        void SetStats(const Stats& newStats) { stats = newStats; }
 
         /// @brief Setter de la rareza del objeto
-        void setItemRarity(ItemRarity newRarity) { itemRarity = newRarity; }
+        void SetItemRarity(ItemRarity newRarity) { itemRarity = newRarity; }
 
         virtual ~Item() {}
 };
