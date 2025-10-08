@@ -31,7 +31,7 @@ class DataFileManager
     const std::string BASE_PATH_ITEM = "assets/data/items/";
 
 public:
-    static DataFileManager &getInstance()
+    static DataFileManager &GetInstance()
     {
         static DataFileManager instance;
         return instance;
@@ -42,9 +42,9 @@ public:
     const DataMap &GetData(ITEM type);
 
     // Limpiar caché
-    void clearCache();
-    void clearCache(PLAYER type);
-    void clearCache(ITEM type);
+    void ClearCache();
+    void ClearCache(PLAYER type);
+    void ClearCache(ITEM type);
 
 private:
     DataFileManager() = default;
@@ -56,11 +56,11 @@ private:
     DataFileManager &operator=(DataFileManager &&) = delete;
 
     // Métodos auxiliares
-    std::string getFilePath(PLAYER type) const;
-    std::string getFilePath(ITEM type) const;
+    std::string GetFilePath(PLAYER type) const;
+    std::string GetFilePath(ITEM type) const;
 
     // Cargar y parsear archivo a diccionario
-    DataMap loadFromFile(const std::string &path);
+    DataMap LoadFromFile(const std::string &path);
 
     // Cachés para cada tipo de enum
     std::unordered_map<PLAYER, DataMap> playerCache;

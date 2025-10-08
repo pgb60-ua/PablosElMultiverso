@@ -8,7 +8,7 @@
 using json = nlohmann::json;
 
 // Implementación de getFilePath para PLAYER
-std::string DataFileManager::getFilePath(PLAYER type) const
+std::string DataFileManager::GetFilePath(PLAYER type) const
 {
     switch (type)
     {
@@ -26,7 +26,7 @@ std::string DataFileManager::getFilePath(PLAYER type) const
 }
 
 // Implementación de getFilePath para ITEM
-std::string DataFileManager::getFilePath(ITEM type) const
+std::string DataFileManager::GetFilePath(ITEM type) const
 {
     switch (type)
     {
@@ -54,8 +54,8 @@ const DataMap &DataFileManager::GetData(PLAYER type)
     }
 
     // No está en caché, cargar desde archivo
-    std::string path = getFilePath(type);
-    DataMap data = loadFromFile(path);
+    std::string path = GetFilePath(type);
+    DataMap data = LoadFromFile(path);
 
     // Guardar en caché y devolver referencia
     playerCache[type] = std::move(data);
@@ -73,8 +73,8 @@ const DataMap &DataFileManager::GetData(ITEM type)
     }
 
     // No está en caché, cargar desde archivo
-    std::string path = getFilePath(type);
-    DataMap data = loadFromFile(path);
+    std::string path = GetFilePath(type);
+    DataMap data = LoadFromFile(path);
 
     // Guardar en caché y devolver referencia
     itemCache[type] = std::move(data);
@@ -82,24 +82,24 @@ const DataMap &DataFileManager::GetData(ITEM type)
 }
 
 // Métodos para limpiar caché
-void DataFileManager::clearCache()
+void DataFileManager::ClearCache()
 {
     playerCache.clear();
     itemCache.clear();
 }
 
-void DataFileManager::clearCache(PLAYER type)
+void DataFileManager::ClearCache(PLAYER type)
 {
     playerCache.erase(type);
 }
 
-void DataFileManager::clearCache(ITEM type)
+void DataFileManager::ClearCache(ITEM type)
 {
     itemCache.erase(type);
 }
 
 // Cargar y parsear archivo a diccionario
-DataMap DataFileManager::loadFromFile(const std::string &path)
+DataMap DataFileManager::LoadFromFile(const std::string &path)
 {
     std::ifstream file(path);
     if (!file.is_open())
