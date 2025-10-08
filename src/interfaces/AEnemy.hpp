@@ -37,7 +37,7 @@ public:
 
     /// @brief Establece la posición objetivo del enemigo (generalmente el jugador)
     /// @param nuevoObjetivo Posición hacia donde debe moverse el enemigo
-    void SetObjective(std::vector<Vector2> newObjectives)
+    void SetObjective(const std::vector<Vector2> &newObjectives)
     {
         objectives = newObjectives;
     }
