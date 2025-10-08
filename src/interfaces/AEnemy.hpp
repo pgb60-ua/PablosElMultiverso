@@ -1,9 +1,9 @@
 #pragma once
 
-#include "AEntity.hpp"
+#include <AEntity.hpp>
 extern "C"
 {
-#include "raylib.h"
+#include <raylib.h>
 }
 
 /// @brief Interfaz que representa el comportamiento de un enemigo en el juego.
@@ -16,10 +16,7 @@ protected:
     int pabloCoinsAtDeath;
 
     /// @brief Objetivo actual del enemigo (posición del jugador)
-    std::vector<Vector2> objectives;
-
-    /// @brief Contador de tiempo para actualizar la IA
-    float updateTimeCounter;
+    std::vector<Player> objectives;
 
     /// @brief Constructor protegido para clases derivadas
     AEnemy(Stats stats, const Shape &hitbox,
@@ -37,21 +34,17 @@ public:
 
     /// @brief Establece la posición objetivo del enemigo (generalmente el jugador)
     /// @param nuevoObjetivo Posición hacia donde debe moverse el enemigo
-    void SetObjective(const std::vector<Vector2> &newObjectives)
+    void SetObjective(const std::vector<Player> &newObjectives)
     {
         objectives = newObjectives;
     }
 
     /// @brief Obtiene el objetivo actual del enemigo
-    std::vector<Vector2> GetObjective() const { return objectives; }
+    std::vector<Player> GetObjective() const { return objectives; }
 
     /*--------------------------*/
     // Combate
     /*--------------------------*/
-
-    /// @brief Realiza un ataque al jugador
-    /// @return Daño infligido por el ataque
-    virtual float DealDamage() = 0;
 
     /*--------------------------*/
     // Botín y Economía
