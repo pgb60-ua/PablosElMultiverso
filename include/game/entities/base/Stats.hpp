@@ -142,5 +142,5 @@ Stats::Stats(const OffensiveStats& offensiveStats, const DefensiveStats& defensi
     return defensiveStats;
   }
 
-  ~Stats() {};
+  ~Stats() = default;
 };
