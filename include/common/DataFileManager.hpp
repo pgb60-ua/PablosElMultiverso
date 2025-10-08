@@ -43,6 +43,8 @@ public:
 
     // Limpiar caché
     void ClearCache();
+    void ClearCachePlayers();
+    void ClearCacheItems();
     void ClearCache(PLAYER type);
     void ClearCache(ITEM type);
 

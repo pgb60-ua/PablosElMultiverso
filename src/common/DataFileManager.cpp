@@ -87,6 +87,22 @@ void DataFileManager::ClearCache()
     playerCache.clear();
     itemCache.clear();
 }
+void DataFileManager::ClearCachePlayers()
+{
+    playerCache.clear();
+}
+
+void DataFileManager::ClearCacheItems()
+{
+    itemCache.clear();
+}
+
+void DataFileManager::ClearCache()
+{
+    playerCache.clear();
+    itemCache.clear();
+}
+
 
 void DataFileManager::ClearCache(PLAYER type)
 {
