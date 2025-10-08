@@ -1,6 +1,6 @@
 #pragma once
 
-#include <AEntity.hpp>
+#include "AEntity.hpp"
 extern "C"
 {
 #include <raylib.h>
@@ -36,9 +36,6 @@ public:
     /// @brief Establece la posición objetivo del enemigo (generalmente el jugador)
     /// @param nuevoObjetivo Posición hacia donde debe moverse el enemigo
     void SetObjective(const std::vector<Player> &newObjectives);
-
-    /// @brief Obtiene el objetivo actual del enemigo
-    std::vector<Player> GetObjective() const;
 
     /*--------------------------*/
     // Botín y Economía
