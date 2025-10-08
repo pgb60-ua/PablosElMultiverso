@@ -1,9 +1,5 @@
 #include <AProjectile.hpp>
 
-AProjectile::AProjectile()
-{
-}
-
 AProjectile::~AProjectile()
 {
 }
@@ -28,7 +24,7 @@ void AProjectile::deactivate()
     active = false;
 }
 
-void AProjectile::activate(Vector2 pos, Stats stats)
+void AProjectile::activate(Vector2 pos, const Stats &stats)
 {
     position = pos;
     this->stats = stats;

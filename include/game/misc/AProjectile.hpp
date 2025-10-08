@@ -11,16 +11,16 @@ class AProjectile
 private:
     Stats stats;
     Vector2 position;
-    bool active;
+    bool active = false;
 
 public:
-    AProjectile();
+    AProjectile() = default;
     ~AProjectile();
 
-    void update(float deltaTime);
+    virtual void update(float deltaTime) = 0;
     Vector2 getPosition() const;
     Stats getStats() const;
     bool isActive() const;
     void deactivate();
-    void activate(Vector2 pos, Stats stats);
+    void activate(Vector2 pos, const Stats &stats);
 };
