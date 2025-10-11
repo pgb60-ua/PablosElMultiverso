@@ -23,14 +23,14 @@ public:
         return instance;
     }
 
-    const DataMap &GetData(PLAYER type);
-    const DataMap &GetData(ITEM type);
+    const DataMap &GetData(PLAYER_TYPE type);
+    const DataMap &GetData(ITEM_TYPE type);
 
     void ClearCache();
     void ClearCachePlayers();
     void ClearCacheItems();
-    void ClearCache(PLAYER type);
-    void ClearCache(ITEM type);
+    void ClearCache(PLAYER_TYPE type);
+    void ClearCache(ITEM_TYPE type);
 
 private:
     DataFileManager() = default;
@@ -41,11 +41,11 @@ private:
     DataFileManager(DataFileManager &&) = delete;
     DataFileManager &operator=(DataFileManager &&) = delete;
 
-    std::string GetFilePath(PLAYER type) const;
-    std::string GetFilePath(ITEM type) const;
+    std::string GetFilePath(PLAYER_TYPE type) const;
+    std::string GetFilePath(ITEM_TYPE type) const;
 
     DataMap LoadFromFile(const std::string &path);
 
-    std::unordered_map<PLAYER, DataMap> playerCache;
-    std::unordered_map<ITEM, DataMap> itemCache;
+    std::unordered_map<PLAYER_TYPE, DataMap> playerCache;
+    std::unordered_map<ITEM_TYPE, DataMap> itemCache;
 };
