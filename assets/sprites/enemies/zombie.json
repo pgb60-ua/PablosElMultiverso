@@ -1,0 +1,53 @@
+{
+  "texture": "zombie-Sheet.png",
+  "frames": [
+    {
+      "x": 12,
+      "y": 6,
+      "width":40,
+      "height": 67
+    },
+    {
+      "x": 76,
+      "y": 6,
+      "width":40,
+      "height": 67
+    },
+    {
+      "x": 140,
+      "y": 6,
+      "width":40,
+      "height": 67
+    },
+    {
+      "x": 204,
+      "y": 6,
+      "width":40,
+      "height": 67
+    },
+    {
+      "x": 268,
+      "y": 6,
+      "width":40,
+      "height": 67
+    },
+    {
+      "x": 332,
+      "y": 6,
+      "width":40,
+      "height": 67
+    },
+    {
+      "x": 396,
+      "y": 6,
+      "width":40,
+      "height": 67
+    },
+    {
+      "x": 460,
+      "y": 6,
+      "width":40,
+      "height": 67
+    }
+  ]
+}
