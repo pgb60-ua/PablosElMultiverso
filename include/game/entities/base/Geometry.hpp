@@ -3,28 +3,29 @@
 #include "raylib.h"
 
 /// @brief Enumeracion del tipo de figuras disponibles para una entidad
-typedef enum { SHAPE_RECTANGLE, SHAPE_CIRCLE, SHAPE_TRIANGLE } ShapeType;
+typedef enum
+{
+    SHAPE_RECTANGLE,
+    SHAPE_CIRCLE
+} ShapeType;
 
 /// @brief Struct que representa un circulo
-typedef struct {
-  Vector2 center;
-  float radius;
+typedef struct
+{
+    Vector2 center;
+    float radius;
 } Circle;
 
-/// @brief Struct que representa un triangulo
-typedef struct {
-  Vector2 v1, v2, v3;
-} Triangle;
-
 /// @brief Union para almacenar el tipo de figura
-typedef union {
-  Rectangle rectangle;
-  Circle circle;
-  Triangle triangle;
+typedef union
+{
+    Rectangle rectangle;
+    Circle circle;
 } ShapeData;
 
 /// @brief Struct que representa una figura
-typedef struct {
-  ShapeType type;
-  ShapeData data;
+typedef struct
+{
+    ShapeType type;
+    ShapeData data;
 } Shape;

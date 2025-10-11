@@ -2,7 +2,6 @@
 
 #include "Geometry.hpp"
 #include "Stats.hpp"
-#include <vector>
 extern "C"
 {
 #include "raylib.h"
@@ -22,9 +21,6 @@ protected:
     /// @brief Hitbox de la entidad (rectangulo - circulo - triangulo)
     Shape hitbox;
 
-    /// @brief Vector para almacenar la posicion de la entidad
-    Vector2 position;
-
     /// @brief Propiedad autocalculada, tiempo que ha de pasar para volver atacar
     float attackCooldown;
 
@@ -32,7 +28,7 @@ protected:
     /// atacar
     float currentAttackCooldownTime;
 
-    AEntity(Stats stats, const Shape &hitbox, Vector2 position);
+    AEntity(Stats stats, const Shape &hitbox);
 
 public:
     /// @brief Establece la estadistica de vida maxima con logica previa
@@ -44,9 +40,33 @@ public:
     /// @brief Obtiene el tiempo de recarga del ataque actual
     float GetAttackCooldown() const { return attackCooldown; }
 
-    Vector2 GetPosition() const { return position; }
+    Vector2 GetPosition() const
+    {
+        switch (hitbox.type)
+        {
+        case SHAPE_RECTANGLE:
+            return Vector2{hitbox.data.rectangle.x, hitbox.data.rectangle.y};
+        case SHAPE_CIRCLE:
+            return hitbox.data.circle.center;
+        default:
+            return Vector2{0, 0};
+        }
+    }
 
-    void SetPosition(Vector2 newPosition) { position = newPosition; }
+    void Setposition(Vector2 newPosition)
+    {
+        switch (hitbox.type)
+        {
+        case SHAPE_RECTANGLE:
+            hitbox.data.rectangle.x = newPosition.x;
+            hitbox.data.rectangle.y = newPosition.y;
+        case SHAPE_CIRCLE:
+            hitbox.data.circle.center = newPosition;
+        default:
+            break;
+        }
+    }
+
     /*--------------------------*/
     // Hitbox
     /*--------------------------*/
@@ -61,13 +81,6 @@ public:
         hitbox.data.rectangle = rectangle;
     };
 
-    /// @brief Establece la hitbox de la entidad a un triangulo
-    void SetTriangleHitbox(Vector2 v1, Vector2 v2, Vector2 v3)
-    {
-        hitbox.type = SHAPE_TRIANGLE;
-        hitbox.data.triangle = {v1, v2, v3};
-    };
-
     /// @brief Establece la hitbox de la entidad a un circulo
     void SetCircleHitbox(Vector2 center, float radius)
     {
@@ -80,5 +93,5 @@ public:
     bool IsAlive();
     virtual void TakeDamage(float amount) = 0;
     virtual void Update() = 0;
-    virtual ~AEntity() { textures.clear(); };
+    virtual ~AEntity() {};
 };
