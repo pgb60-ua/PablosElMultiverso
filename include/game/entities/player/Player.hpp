@@ -220,8 +220,8 @@ public:
     void TakeDamage(float amount) override;
     void Update(float deltaTime) override;
     void HandleInput(Vector2 inputDirection);
-    void AddItem(std::shared_ptr<Weapon> item);
-    void AddWeapon(std::unique_ptr<Item> newWeapon);
+    void AddItem(std::shared_ptr<Item> item);
+    void AddWeapon(std::unique_ptr<Weapon> newWeapon);
 
     ~Player();
 };
