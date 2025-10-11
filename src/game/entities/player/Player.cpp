@@ -1,10 +1,43 @@
 #include "Player.hpp"
+#include "DataFileManager.hpp"
 #include <cstdlib>
 
 Player::Player(PLAYER player, Vector2 position)
     : AEntity(DataFileManager::GetInstance().GetPlayerStats(player),
               SpriteLoaderManager::GetSpriteHitbox(player, position))
 {
+    const DataMap &data = DataFileManager::GetInstance().GetData(player);
+
+    auto getModifier = [&data](const std::string &key) -> float
+    {
+        auto it = data.find(key);
+        if (it != data.end())
+        {
+            if (const float *val = std::get_if<float>(&it->second))
+            {
+                return *val;
+            }
+            if (const int *val = std::get_if<int>(&it->second))
+            {
+                return static_cast<float>(*val);
+            }
+        }
+        return BASE_MULTIPLIER; // Default: 1.0f
+    };
+
+    // Cargar todos los modificadores desde el JSON
+    healthModifier = getModifier("health_modifier");
+    movementSpeedModifier = getModifier("movement_speed_modifier");
+    agilityModifier = getModifier("agility_modifier");
+    attackSpeedModifier = getModifier("attack_speed_modifier");
+    physicalDamageModifier = getModifier("physical_damage_modifier");
+    magicDamageModifier = getModifier("magic_damage_modifier");
+    armorModifier = getModifier("armor_modifier");
+    resistanceModifier = getModifier("resistance_modifier");
+    criticalChanceModifier = getModifier("critical_chance_modifier");
+    criticalDamageModifier = getModifier("critical_damage_modifier");
+    lifeStealModifier = getModifier("life_steal_modifier");
+    healthRegenerationModifier = getModifier("health_regeneration_modifier");
 }
 
 void Player::SetOffensiveStatsWithModifiers(const OffensiveStats &itemStats)
