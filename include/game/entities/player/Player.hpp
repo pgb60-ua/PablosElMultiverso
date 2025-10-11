@@ -14,7 +14,7 @@ class Player : public AEntity
 private:
     static constexpr float BASE_MULTIPLIER = 1.0f;
     std::vector<std::shared_ptr<Item>> inventory;
-    std::vector<std::unique_ptr<Item>> weapons;
+    std::vector<std::unique_ptr<Weapon>> weapons;
     static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
 
@@ -220,7 +220,7 @@ public:
     void TakeDamage(float amount) override;
     void Update(float deltaTime) override;
     void HandleInput(Vector2 inputDirection);
-    void AddItem(std::shared_ptr<Item> item);
+    void AddItem(std::shared_ptr<Weapon> item);
     void AddWeapon(std::unique_ptr<Item> newWeapon);
 
     ~Player();

@@ -32,7 +32,7 @@ protected:
 
 public:
     /// @brief Establece la estadistica de vida maxima con logica previa
-    void SetHealthMax(float newHealtMax);
+    void SetHealthMax(float newHealhtMax);
 
     /// @brief Establece la estadistica de attackSpeed con logica previa
     void SetAttackSpeed(float newAttackSpeed);
@@ -60,8 +60,10 @@ public:
         case SHAPE_RECTANGLE:
             hitbox.data.rectangle.x = newPosition.x;
             hitbox.data.rectangle.y = newPosition.y;
+            break;
         case SHAPE_CIRCLE:
             hitbox.data.circle.center = newPosition;
+            break;
         default:
             break;
         }
@@ -97,5 +99,4 @@ public:
     virtual void TakeDamage(float amount) = 0;
     virtual void Update(float deltaTime) = 0;
     virtual ~AEntity() {};
-
 };

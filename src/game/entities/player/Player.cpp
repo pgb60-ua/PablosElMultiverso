@@ -80,7 +80,7 @@ void Player::AddItem(std::shared_ptr<Item> item)
     inventory.push_back(item);
 }
 
-void Player::AddWeapon(std::unique_ptr<Item> newWeapon)
+void Player::AddWeapon(std::unique_ptr<Weapon> newWeapon)
 {
     // Si tengo menos de 4
     if (weapons.size() < WEAPON_MAX)
