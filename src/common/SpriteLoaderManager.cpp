@@ -8,80 +8,175 @@ SpriteLoaderManager::~SpriteLoaderManager()
     ClearCache();
 }   
 
-std::string SpriteLoaderManager::GetMetadataPath(PLAYER type) const
+std::string SpriteLoaderManager::GetMetadataPath(PLAYER_TYPE type) const
 {
     switch (type)
     {
-    case PLAYER::WARRIOR:
+    case PLAYER_TYPE::WARRIOR:
         return BASE_PATH_PLAYER + "warrior.json";
-    case PLAYER::MAGE:
+    case PLAYER_TYPE::MAGE:
         return BASE_PATH_PLAYER + "mage.json";
-    case PLAYER::RANGE:
+    case PLAYER_TYPE::RANGE:
         return BASE_PATH_PLAYER + "range.json";
-    case PLAYER::HEALER:
+    case PLAYER_TYPE::HEALER:
         return BASE_PATH_PLAYER + "healer.json";
     default:
         throw std::runtime_error("Unknown PLAYER type");
     }
 }
 
-std::string SpriteLoaderManager::GetMetadataPath(ITEM type) const
+std::string SpriteLoaderManager::GetMetadataPath(ITEM_TYPE type) const
 {
     switch (type)
     {
-    case ITEM::WEAPON:
+    case ITEM_TYPE::WEAPON:
         return BASE_PATH_ITEM + "weapon.json";
-    case ITEM::ITEM1:
+    case ITEM_TYPE::ITEM1:
         return BASE_PATH_ITEM + "item1.json";
-    case ITEM::ITEM2:
+    case ITEM_TYPE::ITEM2:
         return BASE_PATH_ITEM + "item2.json";
-    case ITEM::ITEM3:
+    case ITEM_TYPE::ITEM3:
         return BASE_PATH_ITEM + "item3.json";
     default:
         throw std::runtime_error("Unknown ITEM type");
     }
 }
 
-const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(PLAYER type)
+std::string SpriteLoaderManager::GetMetadataPath(ENEMY_TYPE type) const
 {
-    // Buscar en caché
+    const std::string BASE_PATH_ENEMY = "assets/sprites/enemies/";
+    switch (type)
+    {
+    case ENEMY_TYPE::ZOMBIE:
+        return BASE_PATH_ENEMY + "zombie.json";
+    case ENEMY_TYPE::ENEMY2:
+        return BASE_PATH_ENEMY + "enemy2.json";
+    case ENEMY_TYPE::ENEMY3:
+        return BASE_PATH_ENEMY + "enemy3.json";
+    case ENEMY_TYPE::ENEMY4:
+        return BASE_PATH_ENEMY + "enemy4.json";
+    default:
+        throw std::runtime_error("Unknown ENEMY type");
+    }
+}
+
+std::string SpriteLoaderManager::GetMetadataPath(PROJECTILE_TYPE type) const
+{
+    const std::string BASE_PATH_PROJECTILE = "assets/sprites/projectiles/";
+    switch (type)
+    {
+    case PROJECTILE_TYPE::WAND:
+        return BASE_PATH_PROJECTILE + "wand.json";
+    case PROJECTILE_TYPE::EGGPLOSIVE:
+        return BASE_PATH_PROJECTILE + "eggplosive.json";
+    case PROJECTILE_TYPE::LASER_RAY:
+        return BASE_PATH_PROJECTILE + "laser_ray.json";
+    case PROJECTILE_TYPE::SNIPER:
+        return BASE_PATH_PROJECTILE + "sniper.json";
+    case PROJECTILE_TYPE::WING:
+        return BASE_PATH_PROJECTILE + "wing.json";
+    default:
+        throw std::runtime_error("Unknown PROJECTILE type");
+    }
+}
+
+std::string SpriteLoaderManager::GetMetadataPath(WEAPON_TYPE type) const
+{
+    const std::string BASE_PATH_WEAPON = "assets/sprites/weapons/";
+    switch (type)
+    {
+    case WEAPON_TYPE::AXE:
+        return BASE_PATH_WEAPON + "axe.json";
+    case WEAPON_TYPE::SWORD:
+        return BASE_PATH_WEAPON + "sword.json";
+    case WEAPON_TYPE::SCYTHE:
+        return BASE_PATH_WEAPON + "scythe.json";
+    case WEAPON_TYPE::WAND:
+        return BASE_PATH_WEAPON + "wand.json";
+    case WEAPON_TYPE::EGGPLOSIVE:
+        return BASE_PATH_WEAPON + "eggplosive.json";
+    case WEAPON_TYPE::LASER_RAY:
+        return BASE_PATH_WEAPON + "laser_ray.json";
+    case WEAPON_TYPE::SNIPER:
+        return BASE_PATH_WEAPON + "sniper.json";
+    case WEAPON_TYPE::WING:
+        return BASE_PATH_WEAPON + "wing.json";
+    default:
+        throw std::runtime_error("Unknown WEAPON type");
+    }
+}
+
+const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(PLAYER_TYPE type)
+{
     auto it = playerSpriteCache.find(type);
     if (it != playerSpriteCache.end())
-    {
         return it->second;
-    }
-
-    // No está en caché, cargar desde archivo de metadatos
     std::string metadataPath = GetMetadataPath(type);
     SpriteSheet spriteSheet = LoadSpriteSheetFromMetadata(metadataPath);
-
-    // Guardar en caché y devolver referencia
     playerSpriteCache[type] = std::move(spriteSheet);
     return playerSpriteCache[type];
 }
 
-const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(ITEM type)
+const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(ITEM_TYPE type)
 {
-    // Buscar en caché
     auto it = itemSpriteCache.find(type);
     if (it != itemSpriteCache.end())
-    {
         return it->second;
-    }
-
-    // No está en caché, cargar desde archivo de metadatos
     std::string metadataPath = GetMetadataPath(type);
     SpriteSheet spriteSheet = LoadSpriteSheetFromMetadata(metadataPath);
-
-    // Guardar en caché y devolver referencia
     itemSpriteCache[type] = std::move(spriteSheet);
     return itemSpriteCache[type];
 }
 
+const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(ENEMY_TYPE type)
+{
+    auto it = enemySpriteCache.find(type);
+    if (it != enemySpriteCache.end())
+        return it->second;
+    std::string metadataPath = GetMetadataPath(type);
+    SpriteSheet spriteSheet = LoadSpriteSheetFromMetadata(metadataPath);
+    enemySpriteCache[type] = std::move(spriteSheet);
+    return enemySpriteCache[type];
+}
+
+const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(PROJECTILE_TYPE type)
+{
+    auto it = projectileSpriteCache.find(type);
+    if (it != projectileSpriteCache.end())
+        return it->second;
+    std::string metadataPath = GetMetadataPath(type);
+    SpriteSheet spriteSheet = LoadSpriteSheetFromMetadata(metadataPath);
+    projectileSpriteCache[type] = std::move(spriteSheet);
+    return projectileSpriteCache[type];
+}
+
+const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(WEAPON_TYPE type)
+{
+    auto it = weaponSpriteCache.find(type);
+    if (it != weaponSpriteCache.end())
+        return it->second;
+    std::string metadataPath = GetMetadataPath(type);
+    SpriteSheet spriteSheet = LoadSpriteSheetFromMetadata(metadataPath);
+    weaponSpriteCache[type] = std::move(spriteSheet);
+    return weaponSpriteCache[type];
+}
+
+const Shape& SpriteLoaderManager::GetSpriteHitbox(PLAYER_TYPE type, Vector2 position)
+{
+    const SpriteSheet &spriteSheet = GetSpriteSheet(type);
+    const Rectangle &frame = spriteSheet.frames[0];
+    static Shape hitbox;
+    hitbox.type = SHAPE_RECTANGLE;
+    hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
+    return hitbox;
+}
 void SpriteLoaderManager::ClearCache()
 {
     ClearCachePlayers();
     ClearCacheItems();
+    ClearCacheEnemies();
+    ClearCacheProjectiles();
+    ClearCacheWeapons();
 }
 
 void SpriteLoaderManager::ClearCachePlayers()
@@ -93,6 +188,33 @@ void SpriteLoaderManager::ClearCachePlayers()
     playerSpriteCache.clear();
 }
 
+void SpriteLoaderManager::ClearCacheEnemies()
+{
+    for (auto &[type, spriteSheet] : enemySpriteCache)
+    {
+        UnloadSpriteSheet(spriteSheet);
+    }
+    enemySpriteCache.clear();
+}
+
+void SpriteLoaderManager::ClearCacheProjectiles()
+{
+    for (auto &[type, spriteSheet] : projectileSpriteCache)
+    {
+        UnloadSpriteSheet(spriteSheet);
+    }
+    projectileSpriteCache.clear();
+}
+
+void SpriteLoaderManager::ClearCacheWeapons()
+{
+    for (auto &[type, spriteSheet] : weaponSpriteCache)
+    {
+        UnloadSpriteSheet(spriteSheet);
+    }
+    weaponSpriteCache.clear();
+}
+
 void SpriteLoaderManager::ClearCacheItems()
 {
     for (auto &[type, spriteSheet] : itemSpriteCache)
@@ -102,7 +224,7 @@ void SpriteLoaderManager::ClearCacheItems()
     itemSpriteCache.clear();
 }
 
-void SpriteLoaderManager::ClearCache(PLAYER type)
+void SpriteLoaderManager::ClearCache(PLAYER_TYPE type)
 {
     auto it = playerSpriteCache.find(type);
     if (it != playerSpriteCache.end())
@@ -112,7 +234,37 @@ void SpriteLoaderManager::ClearCache(PLAYER type)
     }
 }
 
-void SpriteLoaderManager::ClearCache(ITEM type)
+void SpriteLoaderManager::ClearCache(ENEMY_TYPE type)
+{
+    auto it = enemySpriteCache.find(type);
+    if (it != enemySpriteCache.end())
+    {
+        UnloadSpriteSheet(it->second);
+        enemySpriteCache.erase(it);
+    }
+}
+
+void SpriteLoaderManager::ClearCache(PROJECTILE_TYPE type)
+{
+    auto it = projectileSpriteCache.find(type);
+    if (it != projectileSpriteCache.end())
+    {
+        UnloadSpriteSheet(it->second);
+        projectileSpriteCache.erase(it);
+    }
+}
+
+void SpriteLoaderManager::ClearCache(WEAPON_TYPE type)
+{
+    auto it = weaponSpriteCache.find(type);
+    if (it != weaponSpriteCache.end())
+    {
+        UnloadSpriteSheet(it->second);
+        weaponSpriteCache.erase(it);
+    }
+}
+
+void SpriteLoaderManager::ClearCache(ITEM_TYPE type)
 {
     auto it = itemSpriteCache.find(type);
     if (it != itemSpriteCache.end())
