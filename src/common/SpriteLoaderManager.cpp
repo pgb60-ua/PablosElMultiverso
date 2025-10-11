@@ -180,11 +180,11 @@ const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(MAP_TYPE type)
     return mapSpriteCache[type];
 }
 
-const Shape& SpriteLoaderManager::GetSpriteHitbox(PLAYER_TYPE type, Vector2 position)
+Shape SpriteLoaderManager::GetSpriteHitbox(PLAYER_TYPE type, Vector2 position)
 {
     const SpriteSheet &spriteSheet = GetSpriteSheet(type);
     const Rectangle &frame = spriteSheet.frames[0];
-    static Shape hitbox;
+    Shape hitbox;
     hitbox.type = SHAPE_RECTANGLE;
     hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
     return hitbox;

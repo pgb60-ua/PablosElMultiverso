@@ -36,8 +36,8 @@ public:
     const SpriteSheet &GetSpriteSheet(WEAPON_TYPE type);
     // Obtiene el sprite-sheet para un tipo de mapa
     const SpriteSheet &GetSpriteSheet(MAP_TYPE type);
-
-    const Shape& GetSpriteHitbox(PLAYER_TYPE type, Vector2 position);
+    // Obtiene el hitbox del sprite de un jugador en una posición dada
+    Shape GetSpriteHitbox(PLAYER_TYPE type, Vector2 position);
 
     // Limpia toda la caché
     void ClearCache();
