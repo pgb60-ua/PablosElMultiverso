@@ -43,3 +43,8 @@ enum class PROJECTILE_TYPE
     SNIPER,
     WING
 };
+
+enum class MAP_TYPE
+{
+    DEFAULT
+};

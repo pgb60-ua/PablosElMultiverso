@@ -5,7 +5,7 @@
 #include <raylib.h>
 #include "Types.hpp"
 #include "FrameAnimation.hpp"
-#include <Geometry.hpp>
+#include "Geometry.hpp"
 #include "SpriteSheet.hpp"
 
 class SpriteLoaderManager
@@ -30,6 +30,8 @@ public:
     const SpriteSheet &GetSpriteSheet(PROJECTILE_TYPE type);
     // Obtiene el sprite-sheet para un tipo de arma
     const SpriteSheet &GetSpriteSheet(WEAPON_TYPE type);
+    // Obtiene el sprite-sheet para un tipo de mapa
+    const SpriteSheet &GetSpriteSheet(MAP_TYPE type);
 
     const Shape& GetSpriteHitbox(PLAYER_TYPE type, Vector2 position);
 
@@ -46,6 +48,8 @@ public:
     void ClearCacheProjectiles();
     // Limpia la caché de armas
     void ClearCacheWeapons();
+    // Limpia la caché de mapas
+    void ClearCacheMaps();
 
     // Limpia la caché de un jugador específico
     void ClearCache(PLAYER_TYPE type);
@@ -57,6 +61,8 @@ public:
     void ClearCache(PROJECTILE_TYPE type);
     // Limpia la caché de un arma específica
     void ClearCache(WEAPON_TYPE type);
+    // Limpia la caché de un mapa específico
+    void ClearCache(MAP_TYPE type);
 
 private:
     SpriteLoaderManager() = default;
@@ -77,6 +83,8 @@ private:
     std::string GetMetadataPath(PROJECTILE_TYPE type) const;
     // Obtiene la ruta del archivo de metadatos para un tipo de arma
     std::string GetMetadataPath(WEAPON_TYPE type) const;
+    // Obtiene la ruta del archivo de metadatos para un tipo de mapa
+    std::string GetMetadataPath(MAP_TYPE type) const;
 
     // Carga un sprite-sheet desde un archivo de metadatos JSON
     SpriteSheet LoadSpriteSheetFromMetadata(const std::string &metadataPath);
@@ -90,4 +98,5 @@ private:
     std::unordered_map<ENEMY_TYPE, SpriteSheet> enemySpriteCache;
     std::unordered_map<PROJECTILE_TYPE, SpriteSheet> projectileSpriteCache;
     std::unordered_map<WEAPON_TYPE, SpriteSheet> weaponSpriteCache;
+    std::unordered_map<MAP_TYPE, SpriteSheet> mapSpriteCache;
 };

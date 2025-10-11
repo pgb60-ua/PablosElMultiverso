@@ -106,6 +106,18 @@ std::string SpriteLoaderManager::GetMetadataPath(WEAPON_TYPE type) const
     }
 }
 
+std::string SpriteLoaderManager::GetMetadataPath(MAP_TYPE type) const
+{
+    const std::string BASE_PATH_MAP = "assets/sprites/maps/";
+    switch (type)
+    {
+    case MAP_TYPE::DEFAULT:
+        return BASE_PATH_MAP + "default.json";
+    default:
+        throw std::runtime_error("Unknown MAP type");
+    }
+}
+
 const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(PLAYER_TYPE type)
 {
     auto it = playerSpriteCache.find(type);
@@ -161,6 +173,17 @@ const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(WEAPON_TYPE type)
     return weaponSpriteCache[type];
 }
 
+const SpriteSheet &SpriteLoaderManager::GetSpriteSheet(MAP_TYPE type)
+{
+    auto it = mapSpriteCache.find(type);
+    if (it != mapSpriteCache.end())
+        return it->second;
+    std::string metadataPath = GetMetadataPath(type);
+    SpriteSheet spriteSheet = LoadSpriteSheetFromMetadata(metadataPath);
+    mapSpriteCache[type] = std::move(spriteSheet);
+    return mapSpriteCache[type];
+}
+
 const Shape& SpriteLoaderManager::GetSpriteHitbox(PLAYER_TYPE type, Vector2 position)
 {
     const SpriteSheet &spriteSheet = GetSpriteSheet(type);
@@ -177,6 +200,7 @@ void SpriteLoaderManager::ClearCache()
     ClearCacheEnemies();
     ClearCacheProjectiles();
     ClearCacheWeapons();
+    ClearCacheMaps();
 }
 
 void SpriteLoaderManager::ClearCachePlayers()
@@ -213,6 +237,15 @@ void SpriteLoaderManager::ClearCacheWeapons()
         UnloadSpriteSheet(spriteSheet);
     }
     weaponSpriteCache.clear();
+}
+
+void SpriteLoaderManager::ClearCacheMaps()
+{
+    for (auto &[type, spriteSheet] : mapSpriteCache)
+    {
+        UnloadSpriteSheet(spriteSheet);
+    }
+    mapSpriteCache.clear();
 }
 
 void SpriteLoaderManager::ClearCacheItems()
@@ -261,6 +294,16 @@ void SpriteLoaderManager::ClearCache(WEAPON_TYPE type)
     {
         UnloadSpriteSheet(it->second);
         weaponSpriteCache.erase(it);
+    }
+}
+
+void SpriteLoaderManager::ClearCache(MAP_TYPE type)
+{
+    auto it = mapSpriteCache.find(type);
+    if (it != mapSpriteCache.end())
+    {
+        UnloadSpriteSheet(it->second);
+        mapSpriteCache.erase(it);
     }
 }
 
