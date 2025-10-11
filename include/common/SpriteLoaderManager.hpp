@@ -6,14 +6,18 @@
 #include "Types.hpp"
 #include "FrameAnimation.hpp"
 #include "Geometry.hpp"
-#include "SpriteSheet.hpp"
+#include "SpriteSheet.hpp"  
 
 class SpriteLoaderManager
 {
-    const std::string BASE_PATH_PLAYER = "assets/sprites/players/";
-    const std::string BASE_PATH_ITEM = "assets/sprites/items/";
-
 public:
+    inline static const std::string BASE_PATH_PLAYER = "assets/sprites/players/";
+    inline static const std::string BASE_PATH_ITEM = "assets/sprites/items/";
+    inline static const std::string BASE_PATH_ENEMY = "assets/sprites/enemies/";
+    inline static const std::string BASE_PATH_PROJECTILE = "assets/sprites/projectiles/";
+    inline static const std::string BASE_PATH_WEAPON = "assets/sprites/weapons/";
+    inline static const std::string BASE_PATH_MAP = "assets/sprites/maps/";
+
     static SpriteLoaderManager &GetInstance()
     {
         static SpriteLoaderManager instance;

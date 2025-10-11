@@ -44,7 +44,6 @@ std::string SpriteLoaderManager::GetMetadataPath(ITEM_TYPE type) const
 
 std::string SpriteLoaderManager::GetMetadataPath(ENEMY_TYPE type) const
 {
-    const std::string BASE_PATH_ENEMY = "assets/sprites/enemies/";
     switch (type)
     {
     case ENEMY_TYPE::ZOMBIE:
@@ -62,7 +61,6 @@ std::string SpriteLoaderManager::GetMetadataPath(ENEMY_TYPE type) const
 
 std::string SpriteLoaderManager::GetMetadataPath(PROJECTILE_TYPE type) const
 {
-    const std::string BASE_PATH_PROJECTILE = "assets/sprites/projectiles/";
     switch (type)
     {
     case PROJECTILE_TYPE::WAND:
@@ -82,7 +80,6 @@ std::string SpriteLoaderManager::GetMetadataPath(PROJECTILE_TYPE type) const
 
 std::string SpriteLoaderManager::GetMetadataPath(WEAPON_TYPE type) const
 {
-    const std::string BASE_PATH_WEAPON = "assets/sprites/weapons/";
     switch (type)
     {
     case WEAPON_TYPE::AXE:
@@ -108,7 +105,6 @@ std::string SpriteLoaderManager::GetMetadataPath(WEAPON_TYPE type) const
 
 std::string SpriteLoaderManager::GetMetadataPath(MAP_TYPE type) const
 {
-    const std::string BASE_PATH_MAP = "assets/sprites/maps/";
     switch (type)
     {
     case MAP_TYPE::DEFAULT:
