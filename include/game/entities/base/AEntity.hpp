@@ -25,9 +25,6 @@ protected:
     /// @brief Vector para almacenar la posicion de la entidad
     Vector2 position;
 
-    /// @brief Vector de texturas de una la entidad
-    std::vector<Texture2D *> textures;
-
     /// @brief Propiedad autocalculada, tiempo que ha de pasar para volver atacar
     float attackCooldown;
 
@@ -35,7 +32,7 @@ protected:
     /// atacar
     float currentAttackCooldownTime;
 
-    AEntity(Stats stats, const Shape &hitbox, Vector2 position, std::vector<Texture2D *> textures);
+    AEntity(Stats stats, const Shape &hitbox, Vector2 position);
 
 public:
     /// @brief Establece la estadistica de vida maxima con logica previa
