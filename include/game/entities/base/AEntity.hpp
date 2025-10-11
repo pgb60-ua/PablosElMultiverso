@@ -4,7 +4,7 @@
 #include "Stats.hpp"
 extern "C"
 {
-#include "raylib.h"
+#include <raylib.h>
 }
 
 // Clase que representa lo mas abstracto de un personaje y enemigo que tienen
