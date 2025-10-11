@@ -1,5 +1,4 @@
 #include "Player.hpp"
-#include "raylib.h"
 #include <cstdlib>
 
 Player::Player(PLAYER player, Vector2 position)
