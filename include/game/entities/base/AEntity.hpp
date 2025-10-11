@@ -92,6 +92,6 @@ public:
     /// @brief Devuelve si la entidad tiene mas de 0 de vida
     bool IsAlive();
     virtual void TakeDamage(float amount) = 0;
-    virtual void Update() = 0;
+    virtual void Update(float deltaTime) = 0;
     virtual ~AEntity() {};
 };
