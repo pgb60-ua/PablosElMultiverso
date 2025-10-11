@@ -53,7 +53,7 @@ public:
         }
     }
 
-    void Setposition(Vector2 newPosition)
+    void SetPosition(Vector2 newPosition)
     {
         switch (hitbox.type)
         {

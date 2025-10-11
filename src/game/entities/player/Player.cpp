@@ -35,7 +35,7 @@ void Player::Move(Vector2 newDirection, float deltaTime)
 {
     float speed = GetMovementSpeed();
     Vector2 position = GetPosition();
-    Setposition(
+    SetPosition(
         Vector2{position.x + newDirection.x * deltaTime * speed, position.y + newDirection.y * deltaTime * speed});
 }
 
