@@ -1,6 +1,9 @@
 #pragma once
 
-#include "raylib.h"
+extern "C"
+{
+#include <raylib.h>
+}
 
 /// @brief Enumeracion del tipo de figuras disponibles para una entidad
 typedef enum

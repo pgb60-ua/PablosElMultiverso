@@ -1,6 +1,7 @@
 #pragma once
 #include "stats.hpp"
 #include <string>
+#include "Stats.hpp"
 extern "C"
 {
 #include <raylib.h>

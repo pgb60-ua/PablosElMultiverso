@@ -91,7 +91,11 @@ public:
     void Render();
     /// @brief Devuelve si la entidad tiene mas de 0 de vida
     bool IsAlive();
+    /// @brief Realiza un ataque al jugador
+    /// @return Daño infligido por el ataque
+    virtual float Attack() = 0;
     virtual void TakeDamage(float amount) = 0;
     virtual void Update(float deltaTime) = 0;
     virtual ~AEntity() {};
+
 };
