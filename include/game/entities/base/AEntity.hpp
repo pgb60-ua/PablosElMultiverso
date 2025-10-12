@@ -28,8 +28,7 @@ protected:
     /// @brief Propiedad autocalculada, tiempo que ha de pasar para volver atacar
     float attackCooldown;
 
-    /// @brief Variable que almacena la suma de deltaTime para comparar si ha de
-    /// atacar
+    /// @brief Variable que almacena la suma de deltaTime para comparar si ha de atacar
     float currentAttackCooldownTime;
 
     AEntity(Stats stats, const Shape &hitbox, std::vector<Texture2D *> textures);
@@ -75,9 +74,10 @@ public:
     /// @brief Devuelve si la entidad tiene mas de 0 de vida
     bool IsAlive();
     virtual void TakeDamage(float amount) = 0;
+
     /// @brief Realiza un ataque al jugador
-    /// @return Daño infligido por el ataque
-    virtual float Attack() = 0;
-    virtual void Update() = 0;
+    virtual bool Attack() = 0;
+
+    virtual void Update(float deltaTime) = 0;
     virtual ~AEntity() { textures.clear(); };
 };
