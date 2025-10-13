@@ -28,11 +28,9 @@ typedef struct
     float movementSpeed;
     /// @brief Probabilidad entre 0 - 30 de esquivar un golpe
     float agility;
-    /// @brief Porcentaje entre 0 - 30 que reduce el daño recibido de tipo
-    /// físico
+    /// @brief Porcentaje entre 0 - 30 que reduce el daño recibido de tipo físico
     float armor;
-    /// @brief Porcentaje entre 0 - 30 que reduce el daño recibido de tipo
-    /// mágico
+    /// @brief Porcentaje entre 0 - 30 que reduce el daño recibido de tipo mágico
     float resistance;
     /// @brief Cantidad de puntos de vida que te curas cada segundo
     float healthRegeneration;
