@@ -1,8 +1,6 @@
 #include "AEntity.hpp"
 
-AEntity::AEntity(Stats stats, const Shape &hitbox,
-                 std::vector<Texture2D *> textures)
-    : stats(std::move(stats)), hitbox(hitbox), textures(textures)
+AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hitbox(hitbox)
 {
     // No se puede crear a una entidad con 0 de vida
     if (this->stats.GetHealth() <= 0)

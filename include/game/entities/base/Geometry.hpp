@@ -9,8 +9,7 @@ extern "C"
 typedef enum
 {
     SHAPE_RECTANGLE,
-    SHAPE_CIRCLE,
-    SHAPE_TRIANGLE
+    SHAPE_CIRCLE
 } ShapeType;
 
 /// @brief Struct que representa un circulo
@@ -20,18 +19,11 @@ typedef struct
     float radius;
 } Circle;
 
-/// @brief Struct que representa un triangulo
-typedef struct
-{
-    Vector2 v1, v2, v3;
-} Triangle;
-
 /// @brief Union para almacenar el tipo de figura
 typedef union
 {
     Rectangle rectangle;
     Circle circle;
-    Triangle triangle;
 } ShapeData;
 
 /// @brief Struct que representa una figura

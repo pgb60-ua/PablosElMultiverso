@@ -120,30 +120,21 @@ public:
     void SetCriticalChance(float newChance) { offensiveStats.criticalChance = newChance; }
 
     /// @brief Establece el multiplicador de daño crítico base
-    void SetCriticalDamage(float newMultiplier)
-    {
-        offensiveStats.criticalDamage = newMultiplier;
-    }
+    void SetCriticalDamage(float newMultiplier) { offensiveStats.criticalDamage = newMultiplier; }
 
     /// @brief Establece el porcentaje de robo de vida base
     void SetLifeSteal(float newLifeSteal) { offensiveStats.lifeSteal = newLifeSteal; }
 
     /// @brief Establece la regeneración de vida base
-    void SetHealthRegeneration(float newRegeneration)
-    {
-        defensiveStats.healthRegeneration = newRegeneration;
-    }
+    void SetHealthRegeneration(float newRegeneration) { defensiveStats.healthRegeneration = newRegeneration; }
 
     /// @brief Devuelve las estadísticas ofensivas agrupadas
-    OffensiveStats GetOffensiveStats() const
-    {
-        return offensiveStats;
-    }
+    OffensiveStats GetOffensiveStats() const { return offensiveStats; }
     /// @brief Devuelve las estadísticas defensivas agrupadas
-    DefensiveStats GetDefensiveStats() const
-    {
-        return defensiveStats;
-    }
+    DefensiveStats GetDefensiveStats() const { return defensiveStats; }
+
+    void SetOffensiveStats(const OffensiveStats &offensiveStats);
+    void SetDefensiveStats(const DefensiveStats &defensiveStats);
 
     ~Stats() = default;
 };
