@@ -12,6 +12,7 @@
 class Player : public AEntity
 {
 private:
+    void ImportModifiers();
     static constexpr float BASE_MULTIPLIER = 1.0f;
     std::vector<std::shared_ptr<Item>> inventory;
     std::vector<std::unique_ptr<Weapon>> weapons;
