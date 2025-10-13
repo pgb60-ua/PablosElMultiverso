@@ -10,14 +10,6 @@ enum class WeaponType
 };
 
 class Weapon : public Item {
-protected:
-    /// @brief Tipo de arma
-    WeaponType weaponType;
-    /// @brief Nivel del arma
-    int level;
-    /// @brief Nivel máximo del arma
-    const int MAXLEVEL = 4;
-
 private:
     /// @brief Máxima probabilidad de crítico
     const float MAX_CRITICAL_CHANCE = 30.0f;
@@ -25,6 +17,14 @@ private:
     const float MAX_CRITICAL_DAMAGE = 10.0f;
     /// @brief Máximo porcentaje de robo de vida
     const float MAX_LIFE_STEAL = 50.0f;
+
+protected:
+    /// @brief Tipo de arma
+    WeaponType weaponType;
+    /// @brief Nivel del arma
+    int level;
+    /// @brief Nivel máximo del arma
+    const int MAXLEVEL = 4;
 
 public:
     /// @brief Constructor de la clase Weapon
