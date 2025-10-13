@@ -1,9 +1,8 @@
 #pragma once
-#include "Stats.hpp"
 #include <string>
-extern "C"
-{
-#include <raylib.h>
+#include "Stats.hpp"
+extern "C" {
+    #include <raylib.h>
 }
 
 enum class ItemRarity
