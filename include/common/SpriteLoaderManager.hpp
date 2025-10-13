@@ -2,11 +2,15 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <raylib.h>
 #include "Types.hpp"
 #include "FrameAnimation.hpp"
 #include "Geometry.hpp"
 #include "SpriteSheet.hpp"  
+
+extern "C"
+{
+    #include <raylib.h>
+}
 
 class SpriteLoaderManager
 {
@@ -38,6 +42,12 @@ public:
     const SpriteSheet &GetSpriteSheet(MAP_TYPE type);
     // Obtiene el hitbox del sprite de un jugador en una posición dada
     Shape GetSpriteHitbox(PLAYER_TYPE type, Vector2 position);
+    // Obtiene el hitbox del sprite de un enemigo en una posición dada
+    Shape GetSpriteHitbox(ENEMY_TYPE type, Vector2 position);
+    // Obtiene el hitbox del sprite de un proyectil en una posición dada
+    Shape GetSpriteHitbox(PROJECTILE_TYPE type, Vector2 position);
+    // Obtiene el hitbox del sprite de un arma en una posición dada
+    Shape GetSpriteHitbox(WEAPON_TYPE type, Vector2 position);
 
     // Limpia toda la caché
     void ClearCache();

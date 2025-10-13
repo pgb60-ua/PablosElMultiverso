@@ -189,6 +189,33 @@ Shape SpriteLoaderManager::GetSpriteHitbox(PLAYER_TYPE type, Vector2 position)
     hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
     return hitbox;
 }
+Shape SpriteLoaderManager::GetSpriteHitbox(ENEMY_TYPE type, Vector2 position)
+{
+    const SpriteSheet &spriteSheet = GetSpriteSheet(type);
+    const Rectangle &frame = spriteSheet.frames[0];
+    Shape hitbox;
+    hitbox.type = SHAPE_RECTANGLE;
+    hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
+    return hitbox;
+}
+Shape SpriteLoaderManager::GetSpriteHitbox(PROJECTILE_TYPE type, Vector2 position)
+{
+    const SpriteSheet &spriteSheet = GetSpriteSheet(type);
+    const Rectangle &frame = spriteSheet.frames[0];
+    Shape hitbox;
+    hitbox.type = SHAPE_RECTANGLE;
+    hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
+    return hitbox;
+}
+Shape SpriteLoaderManager::GetSpriteHitbox(WEAPON_TYPE type, Vector2 position)
+{
+    const SpriteSheet &spriteSheet = GetSpriteSheet(type);
+    const Rectangle &frame = spriteSheet.frames[0];
+    Shape hitbox;
+    hitbox.type = SHAPE_RECTANGLE;
+    hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
+    return hitbox;
+}
 void SpriteLoaderManager::ClearCache()
 {
     ClearCachePlayers();
