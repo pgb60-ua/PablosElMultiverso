@@ -1,5 +1,4 @@
 #pragma once
-#include "Stats.hpp"
 #include <string>
 #include <Stats.hpp>
 extern "C" {
