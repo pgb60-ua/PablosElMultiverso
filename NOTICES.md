@@ -21,6 +21,15 @@ This project is based on the DCAGII Game Template, which provides the initial st
 
 This project uses raylib, a simple and easy-to-use library to enjoy videogames programming.
 
+## nlohmann/json
+
+- **Author:** Niels Lohmann
+- **Repository:** https://github.com/nlohmann/json
+- **License:** MIT License
+- **License File:** [LICENSE.nlohmann-json](LICENSE.nlohmann-json)
+
+This project uses nlohmann/json for JSON parsing and serialization.
+
 ---
 
 ## Project License
