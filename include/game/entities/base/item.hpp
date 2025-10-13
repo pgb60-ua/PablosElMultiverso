@@ -25,13 +25,11 @@ protected:
     Stats stats;
     /// @brief Rareza del objeto
     ItemRarity itemRarity;
-    /// @brief Textura del item
-    Texture2D sprite;
 
 public:
     /// @brief Constructor de la clase Item
 
-    Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity, Texture2D sprite);
+    Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity);
 
     /// @brief Getter del nombre del objeto
     std::string GetName() const { return name; }
