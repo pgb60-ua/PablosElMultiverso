@@ -16,7 +16,13 @@ protected:
     /// @brief Nivel del arma
     int level;
     /// @brief Nivel máximo del arma
-    const int maxLevel = 4;
+    const int MAXLEVEL = 4;
+    /// @brief Máxima probabilidad de crítico
+    const float MAX_CRITICAL_CHANCE = 30.0f;
+    /// @brief Máximo multiplicador de daño crítico
+    const float MAX_CRITICAL_DAMAGE = 10.0f;
+    /// @brief Máximo porcentaje de robo de vida
+    const float MAX_LIFE_STEAL = 50.0f;
 
 public:
     /// @brief Constructor de la clase Weapon
@@ -26,13 +32,13 @@ public:
     /// @brief Getter del nivel del arma
     int GetLevel() const { return level; }
     /// @brief Getter del nivel máximo del arma
-    int GetMaxLevel() const { return maxLevel; }
+    int GetMaxLevel() const { return MAXLEVEL; }
     /// @brief Sube de nivel el arma
-    virtual bool Upgrade(const OffensiveStats& newOffensiveStats);
+    bool Upgrade(const OffensiveStats& newOffensiveStats);
 
 
     /// @brief Método para atacar
     virtual void Attack() = 0;
-    virtual ~Weapon() override = default;
+    virtual ~Weapon() {}
 
 };

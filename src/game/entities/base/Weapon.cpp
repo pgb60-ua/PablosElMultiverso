@@ -1,15 +1,13 @@
 #include <Weapon.hpp>
 
-const float MAX_CRITICAL_CHANCE = 30.0f;
-const float MAX_CRITICAL_DAMAGE = 10.0f;
-const float MAX_LIFE_STEAL = 50.0f;
+
 
 Weapon::Weapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level)
     : Item(name, description, stats, itemRarity), weaponType(weaponType), level(level) {}
 
 
 bool Weapon::Upgrade(const OffensiveStats& newOffensiveStats) {
-    if (level >= maxLevel) {
+    if (level >= MAXLEVEL) {
         return false;
     }
     level++;
