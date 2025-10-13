@@ -1,8 +1,9 @@
 #include <DataFileManager.hpp>
-#include <stdexcept>
 #include <fstream>
-#include <sstream>
 #include <nlohmann/json.hpp>
+#include <sstream>
+#include <stdexcept>
+#include <variant>
 
 std::string DataFileManager::GetFilePath(PLAYER_TYPE type) const
 {
@@ -80,15 +81,9 @@ void DataFileManager::ClearCache()
     itemCache.clear();
 }
 
-void DataFileManager::ClearCachePlayers()
-{
-    playerCache.clear();
-}
+void DataFileManager::ClearCachePlayers() { playerCache.clear(); }
 
-void DataFileManager::ClearCacheItems()
-{
-    itemCache.clear();
-}
+void DataFileManager::ClearCacheItems() { itemCache.clear(); }
 
 void DataFileManager::ClearCache(PLAYER_TYPE type)
 {
@@ -145,4 +140,55 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
     }
 
     return data;
+}
+
+// ============================================================================
+// Métodos de conveniencia para obtener datos específicos de jugadores
+// ============================================================================
+
+Stats DataFileManager::GetPlayerStats(PLAYER type)
+{
+    const DataMap &data = GetData(type);
+
+    // Helper lambda optimizada - usa get_if que es más rápido
+    auto getFloat = [&data](const std::string &key, float defaultValue = 0.0f) -> float
+    {
+        auto it = data.find(key);
+        if (it != data.end())
+        {
+            // std::get_if es más eficiente que holds_alternative + get
+            if (const float *val = std::get_if<float>(&it->second))
+            {
+                return *val;
+            }
+            if (const int *val = std::get_if<int>(&it->second))
+            {
+                return static_cast<float>(*val);
+            }
+        }
+        return defaultValue;
+    };
+
+    // Crear OffensiveStats desde el JSON (todas las keys coinciden con el JSON)
+    OffensiveStats offensiveStats = {
+        getFloat("physical_damage"),         // physicalDamage
+        getFloat("magical_damage"),          // magicDamage
+        getFloat("attack_speed", 1.0f),      // attackSpeed
+        getFloat("critical_chance"),         // criticalChance
+        getFloat("critical_damage", 100.0f), // criticalDamage
+        getFloat("life_steal")               // lifeSteal
+    };
+
+    // Crear DefensiveStats desde el JSON (todas las keys coinciden con el JSON)
+    DefensiveStats defensiveStats = {
+        getFloat("health", 100.0f),       // health
+        getFloat("max_health", 100.0f),   // healthMax
+        getFloat("movement_speed", 5.0f), // movementSpeed
+        getFloat("agility"),              // agility
+        getFloat("armor"),                // armor
+        getFloat("resistance"),           // resistance
+        getFloat("health_regeneration")   // healthRegeneration
+    };
+
+    return Stats(offensiveStats, defensiveStats);
 }

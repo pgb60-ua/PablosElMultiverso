@@ -1,10 +1,10 @@
 #pragma once
+#include "Stats.hpp"
+#include "Types.hpp"
 #include <string>
 #include <unordered_map>
-#include <vector>
 #include <variant>
-#include "Types.hpp"
-
+#include <vector>
 
 // Tipo para los valores que puede contener el diccionario
 using DataValue = std::variant<std::string, int, float, bool>;
@@ -31,6 +31,9 @@ public:
     void ClearCacheItems();
     void ClearCache(PLAYER_TYPE type);
     void ClearCache(ITEM_TYPE type);
+  
+    Stats GetPlayerStats(PLAYER_TYPE type);
+
 
 private:
     DataFileManager() = default;
