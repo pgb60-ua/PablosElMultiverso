@@ -22,7 +22,7 @@ bool Zombie::Attack()
 {
     if (currentAttackCooldownTime >= attackCooldown)
     {
-        currentAttackCooldownTime = 0.0f;
+        currentAttackCooldownTime -= attackCooldown;
         return true;
     }
 
