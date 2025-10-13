@@ -17,6 +17,8 @@ protected:
     int level;
     /// @brief Nivel máximo del arma
     const int MAXLEVEL = 4;
+
+private:
     /// @brief Máxima probabilidad de crítico
     const float MAX_CRITICAL_CHANCE = 30.0f;
     /// @brief Máximo multiplicador de daño crítico
