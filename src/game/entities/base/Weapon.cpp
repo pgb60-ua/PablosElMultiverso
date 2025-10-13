@@ -1,6 +1,6 @@
 #include <Weapon.hpp>
 
-Weapon::Weapon(std::string name, std::string description, Stats stats, ItemRarity itemRarity, WeaponType weaponType, int level)
+Weapon::Weapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level)
     : Item(name, description, stats, itemRarity), weaponType(weaponType), level(level) {}
 
 

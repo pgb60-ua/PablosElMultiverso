@@ -20,7 +20,7 @@ protected:
 
 public:
     /// @brief Constructor de la clase Weapon
-    Weapon(const std::string name, const std::string description, const Stats stats, ItemRarity itemRarity, WeaponType weaponType, int level);
+    Weapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level);
     /// @brief Getter del tipo de arma
     WeaponType GetWeaponType() const { return weaponType; }
     /// @brief Getter del nivel del arma
