@@ -10,7 +10,7 @@ protected:
     /// @brief Pool de proyectiles
     std::vector<std::unique_ptr<AProjectile>> projectilePool;
     /// @brief Tamaño del pool de proyectiles
-    const size_t POOL_SIZE = 50;
+    const size_t POOL_SIZE;
     /// @brief Indice que indica en que proyectil del pool estamos
     size_t currentProjectileIndex = 0;
 
