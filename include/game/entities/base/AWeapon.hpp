@@ -25,6 +25,8 @@ protected:
     int level;
     /// @brief Nivel máximo del arma
     const int MAXLEVEL = 4;
+    /// @brief Posición del arma
+    Vector2 position;
 
 public:
     /// @brief Constructor de la clase Weapon
@@ -38,6 +40,10 @@ public:
     /// @brief Sube de nivel el arma
     bool Upgrade(const OffensiveStats& newOffensiveStats);
 
+    /// @brief Getter de la posición del arma
+    Vector2 GetPosition() const { return position; }
+    /// @brief Setter de la posición del arma
+    void SetPosition(const Vector2& newPosition) { position = newPosition; }
 
     /// @brief Método para atacar
     virtual void Attack() = 0;
