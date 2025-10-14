@@ -152,7 +152,6 @@ void Player::Render()
     {
         Rectangle rect = playerHitbox.data.rectangle;
         DrawRectangleRec(rect, BLUE);
-        // Opcional: dibujar borde para mejor visibilidad
         DrawRectangleLinesEx(rect, 2.0f, DARKBLUE);
         break;
     }
@@ -160,7 +159,6 @@ void Player::Render()
     {
         Circle circle = playerHitbox.data.circle;
         DrawCircleV(circle.center, circle.radius, BLUE);
-        // Opcional: dibujar borde para mejor visibilidad
         DrawCircleLines(circle.center.x, circle.center.y, circle.radius, DARKBLUE);
         break;
     }

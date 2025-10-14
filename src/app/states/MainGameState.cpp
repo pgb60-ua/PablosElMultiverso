@@ -13,7 +13,7 @@ MainGameState::MainGameState() : direction{0, 0} {}
 
 void MainGameState::init()
 {
-    // Crear el jugador en una posición inicial (ajusta según necesites)
+    // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     player = std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition);
 }
