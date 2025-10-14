@@ -82,5 +82,5 @@ Player *Zombie::GetClosestPlayer()
         }
     }
 
-    return closestIndex != -1 ? objectives[closestIndex] : nullptr;
+    return objectives[closestIndex];
 }
