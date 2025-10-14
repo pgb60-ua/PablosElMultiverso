@@ -3,8 +3,8 @@
 class WingProjectile : public AProjectile
 {
 private:
-    /* data */
 public:
-    WingProjectile(/* args */);
+    WingProjectile();
     ~WingProjectile();
+    void render() const override;
 };
