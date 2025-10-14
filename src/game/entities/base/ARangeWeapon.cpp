@@ -13,7 +13,7 @@ ARangeWeapon::~ARangeWeapon() {
 void ARangeWeapon::ShootProjectile(const Vector2& position, const Vector2& direction) {
     AProjectile* projectile = GetProjectileFromPool();
     if (projectile) {
-        projectile->activate(position, stats);
+        projectile->activate(position, direction, stats);
     }
 }
 
