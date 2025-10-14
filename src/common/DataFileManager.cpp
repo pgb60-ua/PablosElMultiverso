@@ -1,3 +1,4 @@
+#include "Types.hpp"
 #include <DataFileManager.hpp>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -5,41 +6,41 @@
 #include <stdexcept>
 #include <variant>
 
-std::string DataFileManager::GetFilePath(PLAYER type) const
+std::string DataFileManager::GetFilePath(PLAYER_TYPE type) const
 {
     switch (type)
     {
-    case PLAYER::WARRIOR:
+    case PLAYER_TYPE::WARRIOR:
         return BASE_PATH_PLAYER + "warrior.json";
-    case PLAYER::MAGE:
+    case PLAYER_TYPE::MAGE:
         return BASE_PATH_PLAYER + "mage.json";
-    case PLAYER::RANGE:
+    case PLAYER_TYPE::RANGE:
         return BASE_PATH_PLAYER + "range.json";
-    case PLAYER::HEALER:
+    case PLAYER_TYPE::HEALER:
         return BASE_PATH_PLAYER + "healer.json";
     default:
         throw std::runtime_error("Unknown PLAYER type");
     }
 }
 
-std::string DataFileManager::GetFilePath(ITEM type) const
+std::string DataFileManager::GetFilePath(ITEM_TYPE type) const
 {
     switch (type)
     {
-    case ITEM::WEAPON:
+    case ITEM_TYPE::WEAPON:
         return BASE_PATH_ITEM + "weapon.json";
-    case ITEM::ITEM1:
+    case ITEM_TYPE::ITEM1:
         return BASE_PATH_ITEM + "item1.json";
-    case ITEM::ITEM2:
+    case ITEM_TYPE::ITEM2:
         return BASE_PATH_ITEM + "item2.json";
-    case ITEM::ITEM3:
+    case ITEM_TYPE::ITEM3:
         return BASE_PATH_ITEM + "item3.json";
     default:
         throw std::runtime_error("Unknown ITEM type");
     }
 }
 
-const DataMap &DataFileManager::GetData(PLAYER type)
+const DataMap &DataFileManager::GetData(PLAYER_TYPE type)
 {
     // Buscar en caché
     auto it = playerCache.find(type);
@@ -57,7 +58,7 @@ const DataMap &DataFileManager::GetData(PLAYER type)
     return playerCache[type];
 }
 
-const DataMap &DataFileManager::GetData(ITEM type)
+const DataMap &DataFileManager::GetData(ITEM_TYPE type)
 {
     // Buscar en caché
     auto it = itemCache.find(type);
@@ -85,9 +86,9 @@ void DataFileManager::ClearCachePlayers() { playerCache.clear(); }
 
 void DataFileManager::ClearCacheItems() { itemCache.clear(); }
 
-void DataFileManager::ClearCache(PLAYER type) { playerCache.erase(type); }
+void DataFileManager::ClearCache(PLAYER_TYPE type) { playerCache.erase(type); }
 
-void DataFileManager::ClearCache(ITEM type) { itemCache.erase(type); }
+void DataFileManager::ClearCache(ITEM_TYPE type) { itemCache.erase(type); }
 
 // Cargar y parsear archivo a diccionario
 DataMap DataFileManager::LoadFromFile(const std::string &path)
@@ -140,7 +141,7 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
 // Métodos de conveniencia para obtener datos específicos de jugadores
 // ============================================================================
 
-Stats DataFileManager::GetPlayerStats(PLAYER type)
+Stats DataFileManager::GetPlayerStats(PLAYER_TYPE type)
 {
     const DataMap &data = GetData(type);
 

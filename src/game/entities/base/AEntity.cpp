@@ -1,4 +1,5 @@
 #include "AEntity.hpp"
+#include <utility>
 
 AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hitbox(hitbox)
 {

@@ -1,13 +1,15 @@
 #include "AWeapon.hpp"
 
+AWeapon::AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
+                 WeaponType weaponType, int level)
+    : Item(name, description, stats, itemRarity), weaponType(weaponType), level(level)
+{
+}
 
-
-AWeapon::AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level)
-    : Item(name, description, stats, itemRarity), weaponType(weaponType), level(level) {}
-
-
-bool AWeapon::Upgrade(const OffensiveStats& newOffensiveStats) {
-    if (level >= MAXLEVEL) {
+bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
+{
+    if (level >= MAXLEVEL)
+    {
         return false;
     }
     level++;
