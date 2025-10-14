@@ -1,12 +1,13 @@
 #include "Player.hpp"
-#include "DataFileManager.hpp"
+#include "Types.hpp"
 #include <cstdlib>
 
-Player::Player(PLAYER player, Vector2 position)
+Player::Player(PLAYER_TYPE player, Vector2 position)
     : AEntity(DataFileManager::GetInstance().GetPlayerStats(player),
-              SpriteLoaderManager::GetSpriteHitbox(player, position))
+              SpriteLoaderManager::GetInstance().GetSpriteHitbox(player, position))
 {
-    ImportModifiers();
+    SetPlayerType(player);
+    ImportModifiers(player);
 }
 
 void Player::SetOffensiveStatsWithModifiers(const OffensiveStats &itemStats)
@@ -82,7 +83,7 @@ void Player::AddItem(std::shared_ptr<Item> item)
     inventory.push_back(item);
 }
 
-void Player::AddWeapon(std::unique_ptr<Weapon> newWeapon)
+void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
 {
     // Si tengo menos de 4
     if (weapons.size() < WEAPON_MAX)
@@ -93,7 +94,7 @@ void Player::AddWeapon(std::unique_ptr<Weapon> newWeapon)
     else
     {
         int index = std::rand() % 4;
-        weapons[index].Upgrade(newWeapon);
+        weapons[index]->Upgrade(newWeapon->GetStats().GetOffensiveStats());
     }
 }
 
@@ -103,7 +104,7 @@ Player::~Player()
     weapons.clear();
 }
 
-void Player::ImportModifiers()
+void Player::ImportModifiers(PLAYER_TYPE player)
 {
     const DataMap &data = DataFileManager::GetInstance().GetData(player);
 

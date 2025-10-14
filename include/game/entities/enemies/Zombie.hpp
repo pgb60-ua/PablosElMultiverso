@@ -19,10 +19,7 @@ public:
     /// @param textures Vector de texturas para la animación
     /// @param pabloCoinsAtDeath Cantidad de Pablo Coins que suelta al morir
     /// @param objectives Referencia al vector de jugadores (objetivos)
-    Zombie(Stats stats, const Shape &hitbox,
-           std::vector<Texture2D *> textures,
-           int pabloCoinsAtDeath,
-           std::vector<Player> &objectives);
+    Zombie(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
 
     /*--------------------------*/
     // Métodos Heredados de AEntity

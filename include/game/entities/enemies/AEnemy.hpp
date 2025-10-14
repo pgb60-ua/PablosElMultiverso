@@ -1,6 +1,8 @@
 #pragma once
 
 #include "AEntity.hpp"
+#include "Player.hpp"
+#include <vector>
 extern "C"
 {
 #include <raylib.h>
@@ -12,17 +14,14 @@ extern "C"
 class AEnemy : public AEntity
 {
 protected:
+    /// @brief Objetivo actual del enemigo (posición del jugador)
+    std::vector<Player *> objectives;
+
     /// @brief Cantidad de Pablo Coins que suelta al morir
     int pabloCoinsAtDeath;
 
-    /// @brief Objetivo actual del enemigo (posición del jugador)
-    std::vector<Player> &objectives;
-
     /// @brief Constructor protegido para clases derivadas
-    AEnemy(Stats stats, const Shape &hitbox,
-           std::vector<Texture2D *> textures,
-           int pabloCoinsAtDeath,
-           std::vector<Player> &objectives);
+    AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
 
 public:
     /*--------------------------*/
@@ -35,7 +34,7 @@ public:
 
     /// @brief Establece la posición objetivo del enemigo (generalmente el jugador)
     /// @param nuevoObjetivo Posición hacia donde debe moverse el enemigo
-    void SetObjective(const std::vector<Player> &newObjectives);
+    void SetObjective(const std::vector<Player *> newObjectives);
 
     /*--------------------------*/
     // Botín y Economía

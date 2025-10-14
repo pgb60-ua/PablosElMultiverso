@@ -1,6 +1,5 @@
 # PablosElMultiverso
 
-
 ## Licenses and Attributions
 
 This project incorporates code from multiple sources. Please see [NOTICES.md](NOTICES.md) for complete attribution and licensing information.
@@ -11,25 +10,30 @@ This project incorporates code from multiple sources. Please see [NOTICES.md](NO
 - **nlohmann/json:** MIT License - See [LICENSE.nlohmann-json](LICENSE.nlohmann-json)
 
 ## Estrategia de gestión de ramas
-Nuestra estrategia para la gestión de ramas se basa en el modelo de **GitHub Flow**, utilizando Jira para el seguimiento de incidencias. Puedes consultar el proyecto en [este enlace de Jira](https://pablogarciabelando.atlassian.net/jira/software/projects/PEM).
+
+Nuestra estrategia para la gestión de ramas se basa en el modelo de **GitHub Flow**, utilizando Jira para el seguimiento de incidencias. Puedes consultar el proyecto en [este enlace de Jira](https://pablogarciabelando.atlassian.net/jira/software/projects/PEM/boards/1). Necesitas iniciar sesión para acceder.
 
 Cada nueva rama se crea a partir de una incidencia asignada en Jira. El nombre de la rama debe seguir la convención `PEM-X-descripcion-corta`, donde `X` es el número de la incidencia y `descripcion-corta` es un resumen breve del objetivo de la rama.
 
 Las Pull Requests (PR) se nombrarán siguiendo el formato `PEM-X | descripcion-corta`.
 
 **Ejemplo:**
+
 - **Rama:** `PEM-8-Inicializar-proyecto-base`
 - **PR:** `PEM-8 | Inicializar proyecto base`
 
 Todas las Pull Requests se integrarán en la rama principal mediante un **squash merge**.
 
 ## Comando para instalar en Ubuntu
-```sudo apt install xorg-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev```
+
+`sudo apt install xorg-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev`
 
 ## Como compilar
-```g++ -o game $(find src -name "*.cpp") $(find src -type d -exec printf -- "-I %s " {} \;) -I vendor/include -L vendor/lib -lraylib -lGL -lm -lpthread -lrt -lX11```
+
+`g++ -o game-dev $(find src -name "*.cpp") $(find include -type d -exec printf -- "-I %s " {} \;) -I vendor/include -L vendor/lib -lraylib -lGL -lm -lpthread -lrt -lX11`
 
 ## Juego
+
 ### 1. Mecánica Principal
 
 El juego se desarrolla dentro de una sala cuadrada cerrada estática, donde el objetivo del jugador es sobrevivir y esquivar a los enemigos durante un número determinado de rondas. La acción se centra en la movilidad y la mejora progresiva del personaje.
@@ -89,9 +93,9 @@ Algunos ejemplos de jefes son:
 - Un jefe que dispara balas en un patrón concreto y tienes que ir esquivando mientras le disparas.
 - Un jefe que tiene mucha salud pero se dedica a aumentar las estadísticas de los enemigos actuales.
 - Un jefe que tiene poca vida y no tiene un patrón de movimiento determinado.
-  - Se mueve de forma aleatoria.
-  - En caso de morir, explota matando al jugador o jugadores.
-  - La manera de ganar a este jefe es no pegarle durante la ronda; si no se le ataca y se acaba el tiempo, se irá solo.
+    - Se mueve de forma aleatoria.
+    - En caso de morir, explota matando al jugador o jugadores.
+    - La manera de ganar a este jefe es no pegarle durante la ronda; si no se le ataca y se acaba el tiempo, se irá solo.
 
 ### 5. Armas, Objetos y Economía
 
@@ -146,85 +150,89 @@ El juego contará con varios estados principales que estructuran la experiencia:
 ### 9. Roles Definidos por Personas
 
 #### Carlos María Casado López
+
 **Rol principal**: Mecánicas jugables y ECS
 
 **Responsabilidades**:
 
 - **Personaje**:
-  - Movimiento
-  - Inventario de armas
-  - Estadísticas
-  - Hitbox
-  
+    - Movimiento
+    - Inventario de armas
+    - Estadísticas
+    - Hitbox
+
 - **Tienda**:
-  - Mecánica de compra
-  - Mecánica de reroll
-  - Mecánica de bloqueo de ítem
-  
+    - Mecánica de compra
+    - Mecánica de reroll
+    - Mecánica de bloqueo de ítem
+
 - **Items**:
-  - Stats
-  - Rareza - probabilidad
+    - Stats
+    - Rareza - probabilidad
 
 #### Pablo García Belando
+
 **Rol principal**: Gráficos
 
 **Responsabilidades**:
 
 - **Personaje**:
-  - Sprite y animaciones
-  - Sprite de estadísticas
-  
+    - Sprite y animaciones
+    - Sprite de estadísticas
+
 - **Bala**:
-  - Sprite y animaciones
-  
+    - Sprite y animaciones
+
 - **Menús**:
-  - Sprite y animaciones
-  
+    - Sprite y animaciones
+
 - **Enemigos**:
-  - Sprite y animaciones
-  
+    - Sprite y animaciones
+
 - **Tienda**:
-  - Sprite
-  
+    - Sprite
+
 - **Items**:
-  - Sprite
-  
+    - Sprite
+
 - **Dinero**:
-  - Sprite
+    - Sprite
 
 #### Manuel José Tornero Fuster
+
 **Rol principal**: IA (comportamiento de los NPCs u obstáculos) y Físicas
 
 **Responsabilidades**:
 
 - **Enemigos**:
-  - Movimiento
-  - IA
-  - Stats
-  - Drops de dinero
-  - Colisiones
-  
+    - Movimiento
+    - IA
+    - Stats
+    - Drops de dinero
+    - Colisiones
+
 - **Balas**:
-  - Movimiento
-  - Lógica de disparo
-  - Colisiones
+    - Movimiento
+    - Lógica de disparo
+    - Colisiones
 
 #### Alejandro Jiménez Martínez
+
 **Rol principal**: Sonidos y ECS
 
 **Responsabilidades**:
 
 - **Personaje**:
-  - Efectos de sonido
-  
+    - Efectos de sonido
+
 - **Enemigo**:
-  - Efectos de sonido
-  
+    - Efectos de sonido
+
 - **Balas**:
-  - Efectos de sonido
-  
+    - Efectos de sonido
+
 - **Tienda**:
-  - Efectos de sonido
-  
+    - Efectos de sonido
+
 - **Menús y pantallas**:
-  - Música y efectos de sonido
+    - Música y efectos de sonido
