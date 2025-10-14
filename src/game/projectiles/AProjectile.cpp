@@ -1,18 +1,27 @@
 #include "AProjectile.hpp"
 
-Vector2 AProjectile::getPosition() const
+AProjectile::AProjectile()
 {
-    return position;
+    position = {-110, -110};
+    direction = {-110, -110};
+    stats = Stats();
+    speed = 180.0f;
 }
 
-Stats AProjectile::getStats() const
+AProjectile::~AProjectile()
 {
-    return stats;
 }
 
-bool AProjectile::isActive() const
+void AProjectile::update(float deltaTime)
 {
-    return active;
+
+    position.x += direction.x * speed * deltaTime;
+    position.y += direction.y * speed * deltaTime;
+
+    if (position.x < 0 || position.x > GetScreenWidth() || position.y < 0 || position.y > GetScreenHeight())
+    {
+        deactivate();
+    }
 }
 
 void AProjectile::deactivate()
@@ -22,8 +31,8 @@ void AProjectile::deactivate()
 
 void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
 {
+    this->active = true;
     this->position = position;
     this->direction = direction;
     this->stats = stats;
-    active = true;
 }
