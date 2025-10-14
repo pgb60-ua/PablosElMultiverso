@@ -1,6 +1,5 @@
 #pragma once
-
-enum class PLAYER
+enum class PLAYER_TYPE
 {
     WARRIOR,
     MAGE,
@@ -8,10 +7,44 @@ enum class PLAYER
     HEALER
 };
 
-enum class ITEM
+enum class ENEMY_TYPE
+{
+    ZOMBIE,
+    ENEMY2,
+    ENEMY3,
+    ENEMY4
+};
+
+enum class ITEM_TYPE
 {
     ITEM1,
     ITEM2,
     ITEM3,
     WEAPON
+};
+
+enum class WEAPON_TYPE
+{
+    AXE,
+    SWORD,
+    SCYTHE,
+    WAND,
+    EGGPLOSIVE,
+    LASER_RAY,
+    SNIPER,
+    WING
+};
+
+enum class PROJECTILE_TYPE
+{
+    WAND,
+    EGGPLOSIVE,
+    LASER_RAY,
+    SNIPER,
+    WING
+};
+
+enum class MAP_TYPE
+{
+    DEFAULT
 };
