@@ -1,3 +1,4 @@
+#include "Types.hpp"
 #include <DataFileManager.hpp>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -85,15 +86,9 @@ void DataFileManager::ClearCachePlayers() { playerCache.clear(); }
 
 void DataFileManager::ClearCacheItems() { itemCache.clear(); }
 
-void DataFileManager::ClearCache(PLAYER_TYPE type)
-{
-    playerCache.erase(type);
-}
+void DataFileManager::ClearCache(PLAYER_TYPE type) { playerCache.erase(type); }
 
-void DataFileManager::ClearCache(ITEM_TYPE type)
-{
-    itemCache.erase(type);
-}
+void DataFileManager::ClearCache(ITEM_TYPE type) { itemCache.erase(type); }
 
 // Cargar y parsear archivo a diccionario
 DataMap DataFileManager::LoadFromFile(const std::string &path)
@@ -146,7 +141,7 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
 // Métodos de conveniencia para obtener datos específicos de jugadores
 // ============================================================================
 
-Stats DataFileManager::GetPlayerStats(PLAYER type)
+Stats DataFileManager::GetPlayerStats(PLAYER_TYPE type)
 {
     const DataMap &data = GetData(type);
 
