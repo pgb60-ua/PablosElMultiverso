@@ -20,9 +20,10 @@ void AProjectile::deactivate()
     active = false;
 }
 
-void AProjectile::activate(Vector2 position, const Stats &stats)
+void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
 {
     this->position = position;
+    this->direction = direction;
     this->stats = stats;
     active = true;
 }

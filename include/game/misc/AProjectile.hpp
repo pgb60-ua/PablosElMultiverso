@@ -10,6 +10,7 @@ class AProjectile
 private:
     Stats stats;
     Vector2 position;
+    Vector2 direction;
     bool active = false;
 
 public:
@@ -21,5 +22,5 @@ public:
     Stats getStats() const;
     bool isActive() const;
     void deactivate();
-    void activate(Vector2 position, const Stats &stats);
+    void activate(Vector2 position, Vector2 direction, const Stats &stats);
 };

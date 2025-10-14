@@ -21,7 +21,8 @@ bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
         currentStats.attackSpeed + newOffensiveStats.attackSpeed,
         std::min(currentStats.criticalChance + newOffensiveStats.criticalChance, MAX_CRITICAL_CHANCE),
         std::min(currentStats.criticalDamage + newOffensiveStats.criticalDamage, MAX_CRITICAL_DAMAGE),
-        std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal, MAX_LIFE_STEAL)};
+        std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal, MAX_LIFE_STEAL)
+    };
 
     stats.SetOffensiveStats(upgradedStats);
 
