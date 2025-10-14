@@ -11,7 +11,7 @@ private:
     Stats stats;
     Vector2 position;
     Vector2 direction;
-    bool active;
+    bool active = false;
     float speed;
 
 public:
