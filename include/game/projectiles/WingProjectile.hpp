@@ -1,3 +1,5 @@
+#pragma once
+
 #include "AProjectile.hpp"
 
 class WingProjectile : public AProjectile
