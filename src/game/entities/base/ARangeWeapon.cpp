@@ -1,23 +1,23 @@
-#include <RangeWeapon.hpp>
+#include "ARangeWeapon.hpp"
 
-RangeWeapon::RangeWeapon(const std::string& name, const std::string& description, 
+ARangeWeapon::ARangeWeapon(const std::string& name, const std::string& description, 
     const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize)
-    : Weapon(name, description, stats, itemRarity, WeaponType::Ranged, level), POOL_SIZE(poolSize) {
+    : AWeapon(name, description, stats, itemRarity, WeaponType::Ranged, level), POOL_SIZE(poolSize) {
     InitializeProjectilePool();
 }
 
-RangeWeapon::~RangeWeapon() {
+ARangeWeapon::~ARangeWeapon() {
 }
 
 // AQUI CONSIDERO QUE ACTIVATE DEBERIA LLEVAR TAMBIÉN UNA DIRECCIÓN HACIA DONDE SE DISPARA, PERO MANUEL NO LO HIZO ASÍ, EN LA PR QUE SE REVISE
-void RangeWeapon::ShootProjectile(const Vector2& position, const Vector2& direction) {
+void ARangeWeapon::ShootProjectile(const Vector2& position, const Vector2& direction) {
     AProjectile* projectile = GetProjectileFromPool();
     if (projectile) {
         projectile->activate(position, stats);
     }
 }
 
-void RangeWeapon::UpdateProjectiles(float deltaTime) {
+void ARangeWeapon::UpdateProjectiles(float deltaTime) {
     for (const auto& projectile : projectilePool) {
         if (projectile->isActive()) {
             projectile->update(deltaTime);
@@ -25,7 +25,7 @@ void RangeWeapon::UpdateProjectiles(float deltaTime) {
     }
 }
 
-std::vector<AProjectile*> RangeWeapon::GetActiveProjectiles() const {
+std::vector<AProjectile*> ARangeWeapon::GetActiveProjectiles() const {
     std::vector<AProjectile*> activeProjectiles;
     for (const auto& projectile : projectilePool) {
         if (projectile->isActive()) {
@@ -35,14 +35,14 @@ std::vector<AProjectile*> RangeWeapon::GetActiveProjectiles() const {
     return activeProjectiles;
 }
 
-void RangeWeapon::InitializeProjectilePool() {
+void ARangeWeapon::InitializeProjectilePool() {
     projectilePool.reserve(POOL_SIZE);
     for (size_t i = 0; i < POOL_SIZE; ++i) {
         projectilePool.push_back(CreateProjectile());
     }
 }
 
-AProjectile* RangeWeapon::GetProjectileFromPool() {
+AProjectile* ARangeWeapon::GetProjectileFromPool() {
     for (size_t i = 0; i < POOL_SIZE; ++i) {
         size_t index = (currentProjectileIndex + i) % POOL_SIZE;
         if (!projectilePool[index]->isActive()) {

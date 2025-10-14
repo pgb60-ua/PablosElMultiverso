@@ -9,7 +9,7 @@ enum class WeaponType
     Ranged
 };
 
-class Weapon : public Item {
+class AWeapon : public Item {
 private:
     /// @brief Máxima probabilidad de crítico
     const float MAX_CRITICAL_CHANCE = 30.0f;
@@ -28,7 +28,7 @@ protected:
 
 public:
     /// @brief Constructor de la clase Weapon
-    Weapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level);
+    AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level);
     /// @brief Getter del tipo de arma
     WeaponType GetWeaponType() const { return weaponType; }
     /// @brief Getter del nivel del arma
@@ -41,6 +41,6 @@ public:
 
     /// @brief Método para atacar
     virtual void Attack() = 0;
-    virtual ~Weapon() {}
+    virtual ~AWeapon() {}
 
 };

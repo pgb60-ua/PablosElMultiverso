@@ -1,12 +1,12 @@
-#include "Weapon.hpp"
+#include "AWeapon.hpp"
 
 
 
-Weapon::Weapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level)
+AWeapon::AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level)
     : Item(name, description, stats, itemRarity), weaponType(weaponType), level(level) {}
 
 
-bool Weapon::Upgrade(const OffensiveStats& newOffensiveStats) {
+bool AWeapon::Upgrade(const OffensiveStats& newOffensiveStats) {
     if (level >= MAXLEVEL) {
         return false;
     }
