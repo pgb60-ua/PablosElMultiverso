@@ -28,6 +28,9 @@ public:
     Vector2 getDirection() const { return direction; }
     Stats getStats() const { return stats; }
 
+    /// @brief Funcion para renderizar el proyectil
+    virtual void render() const = 0;
+
     void deactivate();
     bool isActive() const { return active; }
     void activate(Vector2 position, Vector2 direction, const Stats &stats);
