@@ -1,13 +1,15 @@
-#include "Weapon.hpp"
+#include "AWeapon.hpp"
 
+AWeapon::AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
+                 WeaponType weaponType, int level)
+    : Item(name, description, stats, itemRarity), weaponType(weaponType), level(level)
+{
+}
 
-
-Weapon::Weapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level)
-    : Item(name, description, stats, itemRarity), weaponType(weaponType), level(level) {}
-
-
-bool Weapon::Upgrade(const OffensiveStats& newOffensiveStats) {
-    if (level >= MAXLEVEL) {
+bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
+{
+    if (level >= MAXLEVEL)
+    {
         return false;
     }
     level++;
@@ -19,8 +21,7 @@ bool Weapon::Upgrade(const OffensiveStats& newOffensiveStats) {
         currentStats.attackSpeed + newOffensiveStats.attackSpeed,
         std::min(currentStats.criticalChance + newOffensiveStats.criticalChance, MAX_CRITICAL_CHANCE),
         std::min(currentStats.criticalDamage + newOffensiveStats.criticalDamage, MAX_CRITICAL_DAMAGE),
-        std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal, MAX_LIFE_STEAL)
-    };
+        std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal, MAX_LIFE_STEAL)};
 
     stats.SetOffensiveStats(upgradedStats);
 
