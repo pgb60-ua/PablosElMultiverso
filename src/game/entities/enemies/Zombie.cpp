@@ -2,11 +2,8 @@
 #include <cmath>
 #include <limits>
 
-Zombie::Zombie(Stats stats, const Shape &hitbox,
-               std::vector<Texture2D *> textures,
-               int pabloCoinsAtDeath,
-               std::vector<Player> &objectives)
-    : AEnemy(stats, hitbox, textures, pabloCoinsAtDeath, objectives)
+Zombie::Zombie(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
+    : AEnemy(stats, hitbox, objectives, pabloCoinsAtDeath)
 {
 }
 
@@ -57,10 +54,7 @@ void Zombie::Move(float deltaTime)
     // TODO: Implementar cuando se tenga acceso a la posición del jugador
 }
 
-int Zombie::DropLoot() const
-{
-    return pabloCoinsAtDeath;
-}
+int Zombie::DropLoot() const { return pabloCoinsAtDeath; }
 
 Player *Zombie::GetClosestPlayer()
 {
@@ -69,5 +63,5 @@ Player *Zombie::GetClosestPlayer()
 
     // TODO: Implementar cuando Player tenga método GetPosition()
     // Por ahora retorna el primer jugador
-    return &objectives[0];
+    return objectives[0];
 }
