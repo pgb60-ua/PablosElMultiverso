@@ -1,9 +1,11 @@
 #pragma once
 #include "AEntity.hpp"
+#include "AWeapon.hpp"
 #include "DataFileManager.hpp"
+#include "Item.hpp"
+#include "SpriteLoaderManager.hpp"
 #include "Stats.hpp"
 #include "Types.hpp"
-#include "item.hpp"
 #include "raylib.h"
 #include <memory>
 #include <vector>
@@ -12,12 +14,13 @@
 class Player : public AEntity
 {
 private:
-    void ImportModifiers();
+    void ImportModifiers(PLAYER_TYPE player);
     static constexpr float BASE_MULTIPLIER = 1.0f;
     std::vector<std::shared_ptr<Item>> inventory;
-    std::vector<std::unique_ptr<Weapon>> weapons;
+    std::vector<std::unique_ptr<AWeapon>> weapons;
     static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
+    PLAYER_TYPE player;
 
 protected:
     /// @brief Modificador multiplicativo de vida
@@ -57,7 +60,7 @@ protected:
     float healthRegenerationModifier = BASE_MULTIPLIER;
 
 public:
-    Player(PLAYER player, Vector2 position);
+    Player(PLAYER_TYPE player, Vector2 position);
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
     float GetHealth() const { return stats.GetHealth(); }
@@ -217,12 +220,15 @@ public:
     void SetOffensiveStatsWithModifiers(const OffensiveStats &offensiveStats);
     void SetDefensiveStatsWithModifiers(const DefensiveStats &defensiveStats);
 
+    PLAYER_TYPE GetPlayerType() { return player; }
+    void SetPlayerType(PLAYER_TYPE player) { this->player = player; }
+
     void Move(Vector2 newDirection, float deltaTime);
     void TakeDamage(float amount) override;
     void Update(float deltaTime) override;
     void HandleInput(Vector2 inputDirection);
     void AddItem(std::shared_ptr<Item> item);
-    void AddWeapon(std::unique_ptr<Weapon> newWeapon);
+    void AddWeapon(std::unique_ptr<AWeapon> newWeapon);
 
     ~Player();
 };
