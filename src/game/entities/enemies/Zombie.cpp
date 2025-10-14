@@ -1,6 +1,7 @@
 #include "Zombie.hpp"
 #include <cmath>
 #include <limits>
+#include <raymath.h>
 
 Zombie::Zombie(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
     : AEnemy(stats, hitbox, objectives, pabloCoinsAtDeath)
@@ -50,8 +51,13 @@ void Zombie::Move(float deltaTime)
     // Si no hay jugadores, no se mueve
     if (closestPlayer == nullptr)
         return;
-    // TODO: Obtener posición del jugador más cercano
-    // TODO: Implementar cuando se tenga acceso a la posición del jugador
+
+    Vector2 playerPos = closestPlayer->GetPosition();
+    Vector2 zombiePos = GetPosition();
+
+    // Moverse hacia el jugador más cercano
+    Vector2 direction = Vector2Normalize(Vector2Subtract(playerPos, zombiePos));
+    SetPosition(Vector2Add(zombiePos, Vector2Scale(direction, stats.GetMovementSpeed() * deltaTime)));
 }
 
 int Zombie::DropLoot() const { return pabloCoinsAtDeath; }
@@ -61,7 +67,20 @@ Player *Zombie::GetClosestPlayer()
     if (objectives.empty())
         return nullptr;
 
-    // TODO: Implementar cuando Player tenga método GetPosition()
-    // Por ahora retorna el primer jugador
-    return objectives[0];
+    // Búsqueda del jugador más cercano
+    float minDistance = std::numeric_limits<float>::max();
+    int closestIndex = -1;
+
+    for (size_t i = 0; i < objectives.size(); ++i)
+    {
+        Vector2 playerPos = objectives[i]->GetPosition();
+        float distance = Vector2Distance(GetPosition(), playerPos);
+        if (distance < minDistance)
+        {
+            minDistance = distance;
+            closestIndex = static_cast<int>(i);
+        }
+    }
+
+    return objectives[closestIndex];
 }
