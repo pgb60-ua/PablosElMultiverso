@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "Types.hpp"
+#include "raylib.h"
 #include <cstdlib>
 
 Player::Player(PLAYER_TYPE player, Vector2 position)
@@ -138,4 +139,37 @@ void Player::ImportModifiers(PLAYER_TYPE player)
     criticalDamageModifier = getModifier("critical_damage_modifier");
     lifeStealModifier = getModifier("life_steal_modifier");
     healthRegenerationModifier = getModifier("health_regeneration_modifier");
+}
+
+void Player::Render()
+{
+    Shape playerHitbox = GetHitbox();
+
+    // Dibujar según el tipo de hitbox
+    switch (playerHitbox.type)
+    {
+    case SHAPE_RECTANGLE:
+    {
+        Rectangle rect = playerHitbox.data.rectangle;
+        DrawRectangleRec(rect, BLUE);
+        DrawRectangleLinesEx(rect, 2.0f, DARKBLUE);
+        break;
+    }
+    case SHAPE_CIRCLE:
+    {
+        Circle circle = playerHitbox.data.circle;
+        DrawCircleV(circle.center, circle.radius, BLUE);
+        DrawCircleLines(circle.center.x, circle.center.y, circle.radius, DARKBLUE);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+bool Player::Attack()
+{
+    // TODO: Implementar lógica de ataque con las armas disponibles
+    // Por ahora retorna false indicando que no se realizó ataque
+    return false;
 }

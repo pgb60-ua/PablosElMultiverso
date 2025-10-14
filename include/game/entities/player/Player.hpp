@@ -229,6 +229,8 @@ public:
     void HandleInput(Vector2 inputDirection);
     void AddItem(std::shared_ptr<Item> item);
     void AddWeapon(std::unique_ptr<AWeapon> newWeapon);
+    void Render() override;
+    bool Attack() override;
 
     ~Player();
 };

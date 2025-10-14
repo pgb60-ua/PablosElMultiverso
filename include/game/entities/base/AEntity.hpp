@@ -89,7 +89,7 @@ public:
         hitbox.data.circle = {center, radius};
     };
 
-    void Render();
+    virtual void Render() = 0;
     /// @brief Devuelve si la entidad tiene mas de 0 de vida
     bool IsAlive();
     virtual void TakeDamage(float amount) = 0;
