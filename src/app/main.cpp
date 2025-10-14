@@ -9,24 +9,32 @@ extern "C"
 
 int main()
 {
-    // Obtener el monitor actual ANTES de crear la ventana
-    int currentMonitor = GetCurrentMonitor();
-
-    // Obtener dimensiones del monitor
-    int monitorAncho = GetMonitorWidth(currentMonitor);
-    int monitorAlto = GetMonitorHeight(currentMonitor);
 
     // Configurar flags ANTES de InitWindow
     SetConfigFlags(FLAG_WINDOW_UNDECORATED); // Sin bordes ni barra de título
 
+    int monitorIndex = 0;
+
+    // Obtener dimensiones del monitor
+    int monitorAncho = GetMonitorWidth(monitorIndex);
+    int monitorAlto = GetMonitorHeight(monitorIndex);
+
     // Crear ventana con el tamaño del monitor
     InitWindow(monitorAncho, monitorAlto, "Pablos, El Multivero");
 
-    // Mover al monitor actual y posicionar en (0,0)
-    SetWindowMonitor(currentMonitor);
-    SetWindowPosition(0, 0);
+    // Obtener el monitor actual ANTES de crear la ventana
+    int currentMonitor = GetCurrentMonitor();
 
-    SetTargetFPS(60);
+    // Ahora sí, obtener las dimensiones correctas del monitor actual
+    monitorAncho = GetMonitorWidth(currentMonitor);
+    monitorAlto = GetMonitorHeight(currentMonitor);
+
+    if (currentMonitor != monitorIndex)
+    {
+        SetWindowSize(monitorAncho, monitorAlto);
+        SetWindowMonitor(currentMonitor);
+        SetWindowPosition(0, 0);
+    }
 
     float delta_time = 0.0f;
 
