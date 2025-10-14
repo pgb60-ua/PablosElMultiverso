@@ -20,9 +20,9 @@ int main()
     int monitorAlto = GetMonitorHeight(monitorIndex);
 
     // Crear ventana con el tamaño del monitor
-    InitWindow(monitorAncho, monitorAlto, "Pablos, El Multivero");
+    InitWindow(monitorAncho, monitorAlto, "Pablos, El Multiverso");
 
-    // Obtener el monitor actual ANTES de crear la ventana
+    // Obtener el monitor actual
     int currentMonitor = GetCurrentMonitor();
 
     // Ahora sí, obtener las dimensiones correctas del monitor actual
