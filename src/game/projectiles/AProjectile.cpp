@@ -14,7 +14,6 @@ AProjectile::~AProjectile()
 
 void AProjectile::update(float deltaTime)
 {
-
     position.x += direction.x * speed * deltaTime;
     position.y += direction.y * speed * deltaTime;
 
