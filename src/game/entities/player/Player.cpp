@@ -176,7 +176,7 @@ bool Player::Attack()
     return false;
 }
 
-bool Player::UpdatePlayerAnimation(float deltaTime)
+void Player::UpdatePlayerAnimation(float deltaTime)
 {
     animation.timeAccumulator += deltaTime;
 
@@ -185,7 +185,5 @@ bool Player::UpdatePlayerAnimation(float deltaTime)
         animation.timeAccumulator = 0.0f;
         animation.frameIndex++;
         animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(player).spriteFrameCount;
-        return true;
     }
-    return false;
 }

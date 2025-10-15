@@ -6,10 +6,14 @@
 #include "SpriteLoaderManager.hpp"
 #include "Stats.hpp"
 #include "Types.hpp"
-#include "raylib.h"
+#include "SpriteAnimation.hpp"
 #include <memory>
 #include <vector>
-#include <SpriteAnimation.hpp>
+
+extern "C"
+{
+    #include "raylib.h"
+}
 
 // Clase que representa el player
 class Player : public AEntity
@@ -23,7 +27,7 @@ private:
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
     SpriteAnimation animation;
-    bool UpdatePlayerAnimation(float deltaTime);
+    void UpdatePlayerAnimation(float deltaTime);
 
 protected:
     /// @brief Modificador multiplicativo de vida
