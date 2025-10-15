@@ -57,6 +57,8 @@ public:
     /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
     Player *GetClosestPlayer();
 
+    /// @brief Renderiza el zombie
+    void Render() override;
     /// @brief Destructor
     ~Zombie() override = default;
 };

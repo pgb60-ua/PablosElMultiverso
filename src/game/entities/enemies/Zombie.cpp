@@ -42,6 +42,7 @@ void Zombie::Update(float deltaTime)
             newHealth = stats.GetMaxHealth();
         stats.SetHealth(newHealth);
     }
+    UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::ZOMBIE);
 }
 
 void Zombie::Move(float deltaTime)
@@ -83,4 +84,22 @@ Player *Zombie::GetClosestPlayer()
     }
 
     return objectives[closestIndex];
+}
+
+void Zombie::Render(){
+    
+    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);
+    if (sheet.frames.empty()) return;
+    animation.frameIndex %= sheet.spriteFrameCount;
+
+    Rectangle src = sheet.frames[animation.frameIndex];
+
+
+    Vector2 origin = { src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
+                       src.height > 0 ? src.height * 0.5f : -src.height * 0.5f };
+
+    Rectangle dest = { hitbox.data.rectangle.x, hitbox.data.rectangle.y,
+                       src.width, src.height};
+
+    DrawTexturePro(sheet.texture, src, dest, origin, 0, WHITE);
 }

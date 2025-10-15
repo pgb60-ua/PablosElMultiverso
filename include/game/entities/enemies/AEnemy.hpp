@@ -22,6 +22,10 @@ protected:
 
     /// @brief Constructor protegido para clases derivadas
     AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
+    /// @brief Animación del enemigo
+    SpriteAnimation animation;
+    /// @brief Actualiza la animación del enemigo
+    void UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType);
 
 public:
     /*--------------------------*/

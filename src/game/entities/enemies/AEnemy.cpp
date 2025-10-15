@@ -10,3 +10,15 @@ void AEnemy::SetObjective(const std::vector<Player *> newObjectives) { objective
 void AEnemy::SetPabloCoinsAtDeath(int cantidad) { pabloCoinsAtDeath = cantidad; }
 
 int AEnemy::GetPabloCoinsAtDeath() const { return pabloCoinsAtDeath; }
+
+void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
+{
+    animation.timeAccumulator += deltaTime;
+
+    if (animation.timeAccumulator >= animation.FRAME_DURATION)
+    {
+        animation.timeAccumulator = 0.0f;
+        animation.frameIndex++;
+        animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(enemyType).spriteFrameCount;
+    }
+}
