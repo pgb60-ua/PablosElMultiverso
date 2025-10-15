@@ -17,7 +17,7 @@ void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
 
     if (animation.timeAccumulator >= animation.FRAME_DURATION)
     {
-        animation.timeAccumulator = 0.0f;
+        animation.timeAccumulator -= animation.FRAME_DURATION;
         animation.frameIndex++;
         animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(enemyType).spriteFrameCount;
     }
