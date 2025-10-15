@@ -2,51 +2,51 @@
   "texture": "Range-Sheet.png",
   "frames": [
     {
-      "x": 8,
+      "x": 2,
       "y": 10,
-      "width": 50,
+      "width": 56,
       "height": 54
     },
     {
-      "x": 72,
-      "y": 5,
-      "width":50,
+      "x": 66,
+      "y": 10,
+      "width":56,
       "height": 54
     },
     {
-      "x": 136,
-      "y": 5,
-      "width":50,
+      "x": 130,
+      "y": 10,
+      "width":56,
       "height": 54
     },
     {
-      "x": 200,
-      "y": 5,
-      "width":50,
+      "x": 194,
+      "y": 10,
+      "width":56,
       "height": 54
     },
     {
-      "x": 264,
-      "y": 5,
-      "width":50,
+      "x": 258,
+      "y": 10,
+      "width":56,
       "height": 54
     },
     {
-      "x": 328,
-      "y": 5,
-      "width":50,
+      "x": 322,
+      "y": 10,
+      "width":56,
       "height": 54
     },
     {
-      "x": 392,
-      "y": 5,
-      "width":50,
+      "x": 386,
+      "y": 10,
+      "width":56,
       "height": 54
     },
     {
-      "x": 456,
-      "y": 5,
-      "width":50,
+      "x": 450,
+      "y": 10,
+      "width":56,
       "height": 54
     }
   ]
