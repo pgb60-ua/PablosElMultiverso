@@ -4,8 +4,11 @@
 
 class WingWeapon : public ARangeWeapon {
 private:
-    /// @brief tiempo desde el ultimo ataque
+    /// @brief tiempo desde el último ataque
     float timeSinceLastAttack = 0.0f;
+
+    /// @brief Minimo de attack speed para evitar divisiones por 0
+    const float MIN_ATTACK_SPEED = 0.1f;
 
     /// @brief Cadencia de disparo (ataques por segundo)
     const float FIRE_RATE; // ataques por segundo

@@ -28,8 +28,8 @@ public:
     virtual void Attack() override = 0;
 
     /// @brief Sobrecarga del ataque para armas a distancia
-    virtual void Attack(const Vector2& position, const Vector2& direction) { (void)position; (void)direction; }
-    
+    virtual void Attack(const Vector2& position, const Vector2& direction) = 0;
+
     /// @brief Método para crear proyectiles
     virtual std::unique_ptr<AProjectile> CreateProjectile() = 0;
 
