@@ -420,6 +420,7 @@ SpriteSheet SpriteLoaderManager::LoadSpriteSheetFromMetadata(const std::string &
             UnloadTexture(spriteSheet.texture);
             throw std::runtime_error("No frames defined in metadata file: " + metadataPath);
         }
+        spriteSheet.spriteFrameCount = static_cast<int>(spriteSheet.frames.size());
     }
     catch (const nlohmann::json::exception &e)
     {

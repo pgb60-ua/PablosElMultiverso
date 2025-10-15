@@ -6,9 +6,14 @@
 #include "SpriteLoaderManager.hpp"
 #include "Stats.hpp"
 #include "Types.hpp"
-#include "raylib.h"
+#include "SpriteAnimation.hpp"
 #include <memory>
 #include <vector>
+
+extern "C"
+{
+    #include "raylib.h"
+}
 
 // Clase que representa el player
 class Player : public AEntity
@@ -21,6 +26,8 @@ private:
     static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
+    SpriteAnimation animation;
+    void UpdatePlayerAnimation(float deltaTime);
 
 protected:
     /// @brief Modificador multiplicativo de vida
