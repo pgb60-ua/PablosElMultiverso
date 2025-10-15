@@ -165,11 +165,7 @@ void Player::Render()
                        src.height > 0 ? src.height * 0.5f : -src.height * 0.5f };
 
     Rectangle dest = { hitbox.data.rectangle.x, hitbox.data.rectangle.y,
-                       (animation.flipped ? -src.width : src.width),
-                       (src.height)};
-
-    if (dest.width < 0) dest.width = -dest.width;
-    if (dest.height < 0) dest.height = -dest.height;
+                       src.width, src.height};
 
     DrawTexturePro(sheet.texture, src, dest, origin, 0, WHITE);
 }
