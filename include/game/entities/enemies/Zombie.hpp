@@ -1,0 +1,64 @@
+#pragma once
+
+#include "AEnemy.hpp"
+extern "C"
+{
+#include <raylib.h>
+}
+
+/// @brief Clase que representa un enemigo de tipo Zombie
+/// El zombie es un enemigo básico que se mueve lentamente hacia el jugador
+/// y realiza ataques cuerpo a cuerpo
+class Zombie : public AEnemy
+{
+private:
+public:
+    /// @brief Constructor del Zombie
+    /// @param stats Estadísticas del zombie
+    /// @param hitbox Hitbox del zombie
+    /// @param textures Vector de texturas para la animación
+    /// @param pabloCoinsAtDeath Cantidad de Pablo Coins que suelta al morir
+    /// @param objectives Referencia al vector de jugadores (objetivos)
+    Zombie(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
+
+    /*--------------------------*/
+    // Métodos Heredados de AEntity
+    /*--------------------------*/
+
+    /// @brief Recibe daño y actualiza la salud del zombie
+    /// Función utilizada por balas y otras fuentes de daño
+    /// @param amount Cantidad de daño recibido
+    void TakeDamage(float amount) override;
+
+    /// @brief Realiza un ataque al jugador
+    /// @return true si el ataque se realizó, false si está en cooldown
+    bool Attack() override;
+
+    /// @brief Actualiza el estado del zombie (animación, cooldowns, etc.)
+    void Update(float deltaTime) override;
+
+    /*--------------------------*/
+    // Métodos Heredados de AEnemy
+    /*--------------------------*/
+
+    /// @brief Mueve el zombie hacia el jugador más cercano
+    /// @param deltaTime Tiempo transcurrido desde el último frame
+    void Move(float deltaTime) override;
+
+    /// @brief Suelta Pablo Coins al morir
+    /// @return Cantidad de Pablo Coins que suelta
+    int DropLoot() const override;
+
+    /*--------------------------*/
+    // Métodos Específicos del Zombie
+    /*--------------------------*/
+
+    /// @brief Obtiene el jugador más cercano al zombie
+    /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
+    Player *GetClosestPlayer();
+
+    /// @brief Renderiza el zombie
+    void Render() override;
+    /// @brief Destructor
+    ~Zombie() override = default;
+};

@@ -1,0 +1,21 @@
+{
+  "name": "Mage",
+  "class": "Magic User",
+  "level": 1,
+  "health": 80,
+  "max_health": 80,
+  "mana": 150,
+  "max_mana": 150,
+  "movement_speed": 90.0,
+  "attack_speed": 1.2,
+  "physical_damage": 10,
+  "magical_damage": 45,
+  "resistance": 25,
+  "armor": 15,
+  "critical_chance": 10,
+  "critical_damage": 150,
+  "life_steal": 0,
+  "health_regeneration": 2.5,
+  "is_ranged": true,
+  "description": "A powerful spellcaster who wields the forces of magic"
+}

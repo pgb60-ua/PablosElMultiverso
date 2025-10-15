@@ -30,12 +30,17 @@
 *.lai
 *.la
 *.a
+!libraylib.a
 *.lib
 
 # Executables
 *.exe
 *.out
 *.app
+game-dev
 
 # debug information files
 *.dwo
+
+.vscode
+.clangd
