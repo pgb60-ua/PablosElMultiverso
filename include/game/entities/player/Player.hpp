@@ -9,6 +9,7 @@
 #include "raylib.h"
 #include <memory>
 #include <vector>
+#include <SpriteAnimation.hpp>
 
 // Clase que representa el player
 class Player : public AEntity
@@ -21,7 +22,7 @@ private:
     static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
-    int animationFrameIndex = 0;
+    SpriteAnimation animation;
     bool UpdatePlayerAnimation(float deltaTime);
 
 protected:

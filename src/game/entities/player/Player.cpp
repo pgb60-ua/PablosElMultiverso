@@ -148,16 +148,15 @@ void Player::Render()
 
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player);
     if (sheet.frames.empty()) return;
-    if (animationFrameIndex < 0) animationFrameIndex = 0;
-    animationFrameIndex %= static_cast<int>(sheet.frames.size());
+    if (animation.frameIndex < 0) animation.frameIndex = 0;
+    animation.frameIndex %= static_cast<int>(sheet.frames.size());
 
-    Rectangle src = sheet.frames[animationFrameIndex];
-    static bool flipped = false;
+    Rectangle src = sheet.frames[animation.frameIndex];
     if (inputDirection.x != 0)
     {
-        flipped = (inputDirection.x < 0);
+        animation.flipped = (inputDirection.x < 0);
     }
-    if (flipped)
+    if (animation.flipped)
     {
         src.width *= -1.0f;
     }
@@ -166,7 +165,7 @@ void Player::Render()
                        src.height > 0 ? src.height * 0.5f : -src.height * 0.5f };
 
     Rectangle dest = { hitbox.data.rectangle.x, hitbox.data.rectangle.y,
-                       (flipped ? -src.width : src.width),
+                       (animation.flipped ? -src.width : src.width),
                        (src.height)};
 
     if (dest.width < 0) dest.width = -dest.width;
@@ -184,14 +183,13 @@ bool Player::Attack()
 
 bool Player::UpdatePlayerAnimation(float deltaTime)
 {
-    static float timeAccumulator = 0.0f;
-    timeAccumulator += deltaTime;
+    animation.timeAccumulator += deltaTime;
 
-    if (timeAccumulator >= 0.075f)
+    if (animation.timeAccumulator >= animation.FRAME_DURATION)
     {
-        timeAccumulator = 0.0f;
-        animationFrameIndex++;
-        animationFrameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(player).spriteFrameCount;
+        animation.timeAccumulator = 0.0f;
+        animation.frameIndex++;
+        animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(player).spriteFrameCount;
         return true;
     }
     return false;
