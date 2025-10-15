@@ -21,6 +21,8 @@ private:
     static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
+    int animationFrameIndex = 0;
+    bool UpdatePlayerAnimation(float deltaTime);
 
 protected:
     /// @brief Modificador multiplicativo de vida

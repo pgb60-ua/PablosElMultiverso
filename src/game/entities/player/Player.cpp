@@ -50,6 +50,7 @@ void Player::Update(float deltaTime)
     {
         Move(inputDirection, deltaTime);
     }
+    UpdatePlayerAnimation(deltaTime);
 }
 
 void Player::HandleInput(Vector2 newInputDirection)
@@ -145,31 +146,53 @@ void Player::Render()
 {
     Shape playerHitbox = GetHitbox();
 
-    // Dibujar según el tipo de hitbox
-    switch (playerHitbox.type)
+    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player);
+    if (sheet.frames.empty()) return;
+    if (animationFrameIndex < 0) animationFrameIndex = 0;
+    animationFrameIndex %= static_cast<int>(sheet.frames.size());
+
+    Rectangle src = sheet.frames[animationFrameIndex];
+    static bool flipped = false;
+    if (inputDirection.x != 0)
     {
-    case SHAPE_RECTANGLE:
+        flipped = (inputDirection.x < 0);
+    }
+    if (flipped)
     {
-        Rectangle rect = playerHitbox.data.rectangle;
-        DrawRectangleRec(rect, BLUE);
-        DrawRectangleLinesEx(rect, 2.0f, DARKBLUE);
-        break;
+        src.width *= -1.0f;
     }
-    case SHAPE_CIRCLE:
-    {
-        Circle circle = playerHitbox.data.circle;
-        DrawCircleV(circle.center, circle.radius, BLUE);
-        DrawCircleLines(circle.center.x, circle.center.y, circle.radius, DARKBLUE);
-        break;
-    }
-    default:
-        break;
-    }
+
+    Vector2 origin = { src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
+                       src.height > 0 ? src.height * 0.5f : -src.height * 0.5f };
+
+    Rectangle dest = { hitbox.data.rectangle.x, hitbox.data.rectangle.y,
+                       (flipped ? -src.width : src.width),
+                       (src.height)};
+
+    if (dest.width < 0) dest.width = -dest.width;
+    if (dest.height < 0) dest.height = -dest.height;
+
+    DrawTexturePro(sheet.texture, src, dest, origin, 0, WHITE);
 }
 
 bool Player::Attack()
 {
     // TODO: Implementar lógica de ataque con las armas disponibles
     // Por ahora retorna false indicando que no se realizó ataque
+    return false;
+}
+
+bool Player::UpdatePlayerAnimation(float deltaTime)
+{
+    static float timeAccumulator = 0.0f;
+    timeAccumulator += deltaTime;
+
+    if (timeAccumulator >= 0.075f)
+    {
+        timeAccumulator = 0.0f;
+        animationFrameIndex++;
+        animationFrameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(player).spriteFrameCount;
+        return true;
+    }
     return false;
 }
