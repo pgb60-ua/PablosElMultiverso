@@ -1,5 +1,6 @@
 #pragma once
 #include "Stats.hpp"
+#include "Geometry.hpp"
 extern "C"
 {
 #include <raylib.h>
@@ -9,7 +10,7 @@ class AProjectile
 {
 private:
     Stats stats;
-    Vector2 position;
+    Shape shape;
     Vector2 direction;
     bool active = false;
     float speed;
@@ -24,7 +25,7 @@ public:
     /// @param deltaTime
     virtual void update(float deltaTime);
 
-    Vector2 getPosition() const { return position; }
+    Vector2 getPosition() const;
     Vector2 getDirection() const { return direction; }
     Stats getStats() const { return stats; }
 
