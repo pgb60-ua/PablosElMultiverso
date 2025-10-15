@@ -148,8 +148,7 @@ void Player::Render()
 
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player);
     if (sheet.frames.empty()) return;
-    if (animation.frameIndex < 0) animation.frameIndex = 0;
-    animation.frameIndex %= static_cast<int>(sheet.frames.size());
+    animation.frameIndex %= sheet.spriteFrameCount;
 
     Rectangle src = sheet.frames[animation.frameIndex];
     if (inputDirection.x != 0)
