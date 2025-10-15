@@ -1,8 +1,13 @@
 #pragma once
 #include "Player.hpp"
-#include "raylib.h"
+#include "AEnemy.hpp"
 #include <GameState.hpp>
 #include <memory>
+
+extern "C"
+{
+    #include "raylib.h"
+}
 
 class MainGameState : public GameState
 {
@@ -21,5 +26,7 @@ public:
 private:
     char entered_key;
     Vector2 direction;
-    std::unique_ptr<Player> player;
+    Vector2 direction2;
+    std::vector<std::unique_ptr<Player>> players;
+    std::vector<std::unique_ptr<AEnemy>> enemies;
 };
