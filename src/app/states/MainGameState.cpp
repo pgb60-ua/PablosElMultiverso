@@ -23,7 +23,6 @@ void MainGameState::init()
     for (int i = 0; i < 200; i++)
     {
         enemies.push_back(std::make_unique<Zombie>(
-            SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE, Vector2{(float)(std::rand() % 800), (float)(std::rand() % 600)}),
             std::vector<Player *>{players[0].get(), players[1].get()}));
     }
 }
