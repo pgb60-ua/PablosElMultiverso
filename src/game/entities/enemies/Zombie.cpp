@@ -3,8 +3,8 @@
 #include <limits>
 #include <raymath.h>
 
-Zombie::Zombie(const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
-    : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE), hitbox, objectives, pabloCoinsAtDeath)
+Zombie::Zombie(const Shape &hitbox, std::vector<Player *> objectives)
+    : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE), hitbox, objectives, 50)
 {
     // Las stats se cargan automáticamente desde zombie.json en la lista de inicialización
 }

@@ -18,7 +18,7 @@ public:
     /// @param objectives Referencia al vector de jugadores (objetivos)
     /// @param pabloCoinsAtDeath Cantidad de Pablo Coins que suelta al morir
     /// Las estadísticas se cargan automáticamente desde el archivo zombie.json
-    Zombie(const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
+    Zombie(const Shape &hitbox, std::vector<Player *> objectives);
 
     /*--------------------------*/
     // Métodos Heredados de AEntity
