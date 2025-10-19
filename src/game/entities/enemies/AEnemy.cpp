@@ -48,3 +48,21 @@ void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
         animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(enemyType).spriteFrameCount;
     }
 }
+
+void AEnemy::Update(float deltaTime)
+{
+    // Actualiza el cooldown de ataque
+    currentAttackCooldownTime += deltaTime;
+
+    Move(deltaTime);
+
+    // Regeneración de vida
+    if (stats.GetHealthRegeneration() > 0 && IsAlive())
+    {
+        float newHealth = stats.GetHealth() + (stats.GetHealthRegeneration() * deltaTime);
+        if (newHealth > stats.GetMaxHealth())
+            newHealth = stats.GetMaxHealth();
+        stats.SetHealth(newHealth);
+    }
+    UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::ZOMBIE);
+}

@@ -28,24 +28,6 @@ bool Zombie::Attack()
     return false; // Los zombies solo hacen daño al colisionar
 }
 
-void Zombie::Update(float deltaTime)
-{
-    // Actualiza el cooldown de ataque
-    currentAttackCooldownTime += deltaTime;
-
-    Move(deltaTime);
-
-    // Regeneración de vida
-    if (stats.GetHealthRegeneration() > 0 && IsAlive())
-    {
-        float newHealth = stats.GetHealth() + (stats.GetHealthRegeneration() * deltaTime);
-        if (newHealth > stats.GetMaxHealth())
-            newHealth = stats.GetMaxHealth();
-        stats.SetHealth(newHealth);
-    }
-    UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::ZOMBIE);
-}
-
 void Zombie::Move(float deltaTime)
 {
     Player *closestPlayer = GetClosestPlayer();
@@ -66,7 +48,6 @@ int Zombie::DropLoot() const { return pabloCoinsAtDeath; }
 
 void Zombie::Render()
 {
-
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);
     if (sheet.frames.empty())
         return;

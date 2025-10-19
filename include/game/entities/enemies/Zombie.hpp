@@ -33,9 +33,6 @@ public:
     /// @return true si el ataque se realizó, false si está en cooldown
     bool Attack() override;
 
-    /// @brief Actualiza el estado del zombie (animación, cooldowns, etc.)
-    void Update(float deltaTime) override;
-
     /*--------------------------*/
     // Métodos Heredados de AEnemy
     /*--------------------------*/

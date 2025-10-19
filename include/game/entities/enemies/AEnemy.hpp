@@ -32,6 +32,9 @@ public:
     // Movimiento e IA
     /*--------------------------*/
 
+    /// @brief Actualiza el estado del enemigo (animación, cooldowns, etc.)
+    void Update(float deltaTime);
+
     /// @brief Mueve el enemigo hacia su objetivo
     /// @param deltaTime Tiempo transcurrido desde el último frame
     virtual void Move(float deltaTime) = 0;
