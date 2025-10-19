@@ -19,16 +19,14 @@ void MainGameState::init()
     Vector2 secondPosition = {600.0f, 700.0f};
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition));
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition));
-    Stats enemyStats = Stats(
-        OffensiveStats{10.0f, 0.0f, 1.0f, 0.1f, 0.0f},
-        DefensiveStats{50.0f, 50.0f, 37.0f, 5.0f, 0.5f, 1.0f});
-    for (int i = 0; i < 200; i++){
-        enemies.push_back(std::make_unique<Zombie>(enemyStats,
-                                           SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE, Vector2{(float)(std::rand() % 800), (float)(std::rand() % 600)}),
-                                           std::vector<Player*>{players[0].get(), players[1].get()},
-                                           10));
+
+    for (int i = 0; i < 200; i++)
+    {
+        enemies.push_back(std::make_unique<Zombie>(
+            SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE, Vector2{(float)(std::rand() % 800), (float)(std::rand() % 600)}),
+            std::vector<Player *>{players[0].get(), players[1].get()},
+            10));
     }
-    
 }
 
 void MainGameState::handleInput()

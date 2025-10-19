@@ -3,9 +3,10 @@
 #include <limits>
 #include <raymath.h>
 
-Zombie::Zombie(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
-    : AEnemy(stats, hitbox, objectives, pabloCoinsAtDeath)
+Zombie::Zombie(const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
+    : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE), hitbox, objectives, pabloCoinsAtDeath)
 {
+    // Las stats se cargan automáticamente desde zombie.json en la lista de inicialización
 }
 
 void Zombie::TakeDamage(float amount)
@@ -86,20 +87,21 @@ Player *Zombie::GetClosestPlayer()
     return objectives[closestIndex];
 }
 
-void Zombie::Render(){
-    
+void Zombie::Render()
+{
+
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);
-    if (sheet.frames.empty()) return;
+    if (sheet.frames.empty())
+        return;
     animation.frameIndex %= sheet.spriteFrameCount;
 
     Rectangle src = sheet.frames[animation.frameIndex];
 
+    Vector2 origin = {src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
+                      src.height > 0 ? src.height * 0.5f : -src.height * 0.5f};
 
-    Vector2 origin = { src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
-                       src.height > 0 ? src.height * 0.5f : -src.height * 0.5f };
-
-    Rectangle dest = { hitbox.data.rectangle.x, hitbox.data.rectangle.y,
-                       src.width, src.height};
+    Rectangle dest = {hitbox.data.rectangle.x, hitbox.data.rectangle.y,
+                      src.width, src.height};
 
     DrawTexturePro(sheet.texture, src, dest, origin, 0, WHITE);
 }

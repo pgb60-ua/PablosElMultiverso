@@ -14,12 +14,11 @@ class Zombie : public AEnemy
 private:
 public:
     /// @brief Constructor del Zombie
-    /// @param stats Estadísticas del zombie
     /// @param hitbox Hitbox del zombie
-    /// @param textures Vector de texturas para la animación
-    /// @param pabloCoinsAtDeath Cantidad de Pablo Coins que suelta al morir
     /// @param objectives Referencia al vector de jugadores (objetivos)
-    Zombie(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
+    /// @param pabloCoinsAtDeath Cantidad de Pablo Coins que suelta al morir
+    /// Las estadísticas se cargan automáticamente desde el archivo zombie.json
+    Zombie(const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
 
     /*--------------------------*/
     // Métodos Heredados de AEntity
