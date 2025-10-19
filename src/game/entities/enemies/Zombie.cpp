@@ -44,8 +44,6 @@ void Zombie::Move(float deltaTime)
     SetPosition(Vector2Add(zombiePos, Vector2Scale(direction, stats.GetMovementSpeed() * deltaTime)));
 }
 
-int Zombie::DropLoot() const { return pabloCoinsAtDeath; }
-
 void Zombie::Render()
 {
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);

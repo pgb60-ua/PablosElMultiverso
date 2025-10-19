@@ -49,7 +49,7 @@ public:
 
     /// @brief Suelta Pablo Coins al morir
     /// @return Cantidad de Pablo Coins que suelta
-    virtual int DropLoot() const = 0;
+    virtual int DropLoot() { return pabloCoinsAtDeath; };
 
     /// @brief Establece la cantidad de Pablo Coins que suelta al morir
     void SetPabloCoinsAtDeath(int cantidad);

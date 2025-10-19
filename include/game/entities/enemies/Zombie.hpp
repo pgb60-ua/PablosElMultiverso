@@ -41,10 +41,6 @@ public:
     /// @param deltaTime Tiempo transcurrido desde el último frame
     void Move(float deltaTime) override;
 
-    /// @brief Suelta Pablo Coins al morir
-    /// @return Cantidad de Pablo Coins que suelta
-    int DropLoot() const override;
-
     /// @brief Renderiza el zombie
     void Render() override;
     /// @brief Destructor
