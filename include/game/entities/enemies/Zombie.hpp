@@ -48,14 +48,6 @@ public:
     /// @return Cantidad de Pablo Coins que suelta
     int DropLoot() const override;
 
-    /*--------------------------*/
-    // Métodos Específicos del Zombie
-    /*--------------------------*/
-
-    /// @brief Obtiene el jugador más cercano al zombie
-    /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
-    Player *GetClosestPlayer();
-
     /// @brief Renderiza el zombie
     void Render() override;
     /// @brief Destructor

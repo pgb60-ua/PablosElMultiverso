@@ -58,6 +58,10 @@ public:
     // Estado y Propiedades
     /*--------------------------*/
 
+    /// @brief Obtiene el jugador más cercano al zombie
+    /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
+    Player *GetClosestPlayer();
+
     /// @brief Destructor virtual
     virtual ~AEnemy() = default;
 };

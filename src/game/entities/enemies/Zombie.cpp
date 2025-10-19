@@ -64,29 +64,6 @@ void Zombie::Move(float deltaTime)
 
 int Zombie::DropLoot() const { return pabloCoinsAtDeath; }
 
-Player *Zombie::GetClosestPlayer()
-{
-    if (objectives.empty())
-        return nullptr;
-
-    // Búsqueda del jugador más cercano
-    float minDistance = std::numeric_limits<float>::max();
-    int closestIndex = -1;
-
-    for (size_t i = 0; i < objectives.size(); ++i)
-    {
-        Vector2 playerPos = objectives[i]->GetPosition();
-        float distance = Vector2Distance(GetPosition(), playerPos);
-        if (distance < minDistance)
-        {
-            minDistance = distance;
-            closestIndex = static_cast<int>(i);
-        }
-    }
-
-    return objectives[closestIndex];
-}
-
 void Zombie::Render()
 {
 

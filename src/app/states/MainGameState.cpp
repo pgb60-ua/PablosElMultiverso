@@ -22,8 +22,7 @@ void MainGameState::init()
 
     for (int i = 0; i < 200; i++)
     {
-        enemies.push_back(std::make_unique<Zombie>(
-            std::vector<Player *>{players[0].get(), players[1].get()}));
+        enemies.push_back(std::make_unique<Zombie>(std::vector<Player *>{players[0].get(), players[1].get()}));
     }
 }
 
