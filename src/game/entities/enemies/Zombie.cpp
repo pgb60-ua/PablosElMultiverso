@@ -1,4 +1,5 @@
 #include "Zombie.hpp"
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <raymath.h>
@@ -7,6 +8,17 @@ Zombie::Zombie(std::vector<Player *> objectives)
     : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE), SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE, Vector2{(float)(std::rand() % 2000), (float)(std::rand() % 2000)}), objectives, 50)
 {
     // Las stats se cargan automáticamente desde zombie.json en la lista de inicialización
+    s_allZombies.push_back(this);
+
+    const float baseSpeed = stats.GetMovementSpeed();
+    Vector2 randomDir = {((float)std::rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+                         ((float)std::rand() / (float)RAND_MAX) * 2.0f - 1.0f};
+    if (Vector2Length(randomDir) <= 0.001f)
+    {
+        randomDir = Vector2{1.0f, 0.0f};
+    }
+
+    velocity = Vector2Scale(Vector2Normalize(randomDir), baseSpeed * 0.5f);
 }
 
 void Zombie::TakeDamage(float amount)
@@ -36,12 +48,88 @@ void Zombie::Move(float deltaTime)
     if (closestPlayer == nullptr)
         return;
 
-    Vector2 playerPos = closestPlayer->GetPosition();
     Vector2 zombiePos = GetPosition();
 
-    // Moverse hacia el jugador más cercano
-    Vector2 direction = Vector2Normalize(Vector2Subtract(playerPos, zombiePos));
-    SetPosition(Vector2Add(zombiePos, Vector2Scale(direction, stats.GetMovementSpeed() * deltaTime)));
+    Vector2 separationForce = Vector2Zero();
+    Vector2 alignmentForce = Vector2Zero();
+    Vector2 cohesionForce = Vector2Zero();
+
+    int neighborCount = 0;
+
+    for (Zombie *other : s_allZombies)
+    {
+        if (other == this)
+            continue;
+
+        Vector2 offset = Vector2Subtract(other->GetPosition(), zombiePos);
+        float distance = Vector2Length(offset);
+
+        if (distance <= 0.0f || distance > PERCEPTION_RADIUS)
+            continue;
+
+        neighborCount++;
+        cohesionForce = Vector2Add(cohesionForce, other->GetPosition());
+        alignmentForce = Vector2Add(alignmentForce, other->velocity);
+
+        if (distance < SEPARATION_RADIUS)
+        {
+            Vector2 away = Vector2Scale(Vector2Normalize(offset), -1.0f);
+            float falloff = (SEPARATION_RADIUS - distance) / SEPARATION_RADIUS;
+            separationForce = Vector2Add(separationForce, Vector2Scale(away, falloff));
+        }
+    }
+
+    Vector2 acceleration = Vector2Zero();
+    const float baseSpeed = stats.GetMovementSpeed();
+
+    if (neighborCount > 0)
+    {
+        cohesionForce = Vector2Scale(cohesionForce, 1.0f / neighborCount);
+        cohesionForce = Vector2Subtract(cohesionForce, zombiePos);
+        if (Vector2Length(cohesionForce) > 0.0f)
+        {
+            cohesionForce = Vector2Scale(Vector2Normalize(cohesionForce), baseSpeed * COHESION_WEIGHT);
+            acceleration = Vector2Add(acceleration, cohesionForce);
+        }
+
+        alignmentForce = Vector2Scale(alignmentForce, 1.0f / neighborCount);
+        if (Vector2Length(alignmentForce) > 0.0f)
+        {
+            alignmentForce = Vector2Scale(Vector2Normalize(alignmentForce), baseSpeed * ALIGNMENT_WEIGHT);
+            acceleration = Vector2Add(acceleration, alignmentForce);
+        }
+    }
+
+    if (Vector2Length(separationForce) > 0.0f)
+    {
+        separationForce = Vector2Scale(Vector2Normalize(separationForce), baseSpeed * SEPARATION_WEIGHT);
+        acceleration = Vector2Add(acceleration, separationForce);
+    }
+
+    Vector2 toPlayer = Vector2Subtract(closestPlayer->GetPosition(), zombiePos);
+    if (Vector2Length(toPlayer) > 0.0f)
+    {
+        toPlayer = Vector2Scale(Vector2Normalize(toPlayer), baseSpeed * TARGET_WEIGHT);
+        acceleration = Vector2Add(acceleration, toPlayer);
+    }
+
+    const float maxForce = baseSpeed * MAX_FORCE_MULTIPLIER;
+    if (Vector2Length(acceleration) > maxForce)
+    {
+        acceleration = Vector2Scale(Vector2Normalize(acceleration), maxForce);
+    }
+
+    velocity = Vector2Add(velocity, Vector2Scale(acceleration, deltaTime));
+
+    const float maxSpeed = baseSpeed;
+    float currentSpeed = Vector2Length(velocity);
+    if (currentSpeed > maxSpeed)
+    {
+        velocity = Vector2Scale(Vector2Normalize(velocity), maxSpeed);
+    }
+
+    Vector2 newPos = Vector2Add(zombiePos, Vector2Scale(velocity, deltaTime));
+    SetPosition(newPos);
 }
 
 void Zombie::Render()
@@ -60,4 +148,15 @@ void Zombie::Render()
                       src.width, src.height};
 
     DrawTexturePro(sheet.texture, src, dest, origin, 0, WHITE);
+}
+
+std::vector<Zombie *> Zombie::s_allZombies;
+
+Zombie::~Zombie()
+{
+    auto it = std::find(s_allZombies.begin(), s_allZombies.end(), this);
+    if (it != s_allZombies.end())
+    {
+        s_allZombies.erase(it);
+    }
 }
