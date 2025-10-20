@@ -9,8 +9,8 @@ WingWeapon::WingWeapon(const std::string& name, const std::string& description,
 WingWeapon::~WingWeapon() {
 }
 
-void WingWeapon::Attack(const Vector2& position, const Vector2& direction) {
-    timeSinceLastAttack += GetFrameTime();
+void WingWeapon::Attack(const Vector2& position, const Vector2& direction, float deltaTime) {
+    timeSinceLastAttack += deltaTime;
     float attackInterval = FIRE_RATE / std::max(MIN_ATTACK_SPEED,stats.GetAttackSpeed());
 
     if (timeSinceLastAttack >= attackInterval) {

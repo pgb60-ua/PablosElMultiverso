@@ -20,7 +20,7 @@ public:
     virtual ~WingWeapon();  
 
     /// @brief Método para atacar
-    void Attack(const Vector2& position, const Vector2& direction);
+    void Attack(const Vector2& position, const Vector2& direction, float deltaTime);
 
     /// @brief Método para crear proyectiles
     virtual std::unique_ptr<AProjectile> CreateProjectile() override;
