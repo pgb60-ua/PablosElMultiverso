@@ -61,7 +61,7 @@ public:
     // Estado y Propiedades
     /*--------------------------*/
 
-    /// @brief Obtiene el jugador más cercano al zombie
+    /// @brief Obtiene el jugador más cercano al enemigo
     /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
     Player *GetClosestPlayer();
 
