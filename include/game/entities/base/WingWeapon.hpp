@@ -10,9 +10,6 @@ private:
     /// @brief Minimo de attack speed para evitar divisiones por 0
     const float MIN_ATTACK_SPEED = 0.1f;
 
-    /// @brief Cadencia de disparo (ataques por segundo)
-    const float FIRE_RATE; // ataques por segundo
-
 public:
     /// @brief Constructor de la clase WingWeapon
     WingWeapon(const std::string& name, const std::string& description, 
@@ -23,5 +20,5 @@ public:
     void Attack(const Vector2& position, const Vector2& direction, float deltaTime);
 
     /// @brief Método para crear proyectiles
-    virtual std::unique_ptr<AProjectile> CreateProjectile() override;
+    std::unique_ptr<AProjectile> CreateProjectile() override;
 };
