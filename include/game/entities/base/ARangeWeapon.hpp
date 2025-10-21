@@ -13,6 +13,12 @@ protected:
     const size_t POOL_SIZE;
     /// @brief Indice que indica en que proyectil del pool estamos
     size_t currentProjectileIndex = 0;
+    /// @brief Actualiza el intervalo de ataque basado en la velocidad de ataque
+    float attackInterval;
+    /// @brief Velocidad de ataque mínima
+    static constexpr float MIN_ATTACK_SPEED = 0.1f;
+
+    void UpdateAttackInterval();
 
     /// @brief Inicializa el pool de proyectiles
     virtual void InitializeProjectilePool();
@@ -27,6 +33,9 @@ public:
     /// @brief Método para atacar
     virtual void Attack() override = 0;
 
+    /// @brief Sobrecarga del ataque para armas a distancia
+    virtual void Attack(const Vector2& position, const Vector2& direction, float deltaTime) = 0;
+
     /// @brief Método para crear proyectiles
     virtual std::unique_ptr<AProjectile> CreateProjectile() = 0;
 
@@ -38,6 +47,10 @@ public:
 
     /// @brief Getter de los proyectiles activos
     std::vector<AProjectile*> GetActiveProjectiles() const;
+
+    void SetStats(const Stats& newStats);
+
+    float GetAttackInterval() const { return attackInterval; }
     
 
 
