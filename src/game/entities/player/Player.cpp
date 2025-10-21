@@ -144,8 +144,6 @@ void Player::ImportModifiers(PLAYER_TYPE player)
 
 void Player::Render()
 {
-    Shape playerHitbox = GetHitbox();
-
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player);
     if (sheet.frames.empty()) return;
     animation.frameIndex %= sheet.spriteFrameCount;
