@@ -1,6 +1,5 @@
 {
 	"name": "Zombie",
-	"class": "Undead",
 	"level": 1,
 	"health": 50,
 	"max_health": 50,
