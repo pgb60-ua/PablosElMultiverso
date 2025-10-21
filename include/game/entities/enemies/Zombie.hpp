@@ -16,7 +16,6 @@ private:
     static std::vector<Zombie *> s_allZombies;
 
     /// @brief Velocidad actual acumulada del zombie para suavizar el movimiento
-    /// @brief Velocidad actual acumulada del zombie para suavizar el movimiento
     Vector2 velocity;
 
     /// @brief Radio de percepción para detectar otros zombies cercanos
