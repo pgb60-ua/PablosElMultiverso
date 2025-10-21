@@ -52,7 +52,7 @@ public:
 
     float GetAttackInterval() const { return attackInterval; }
     
+    virtual void render();
 
-
-
+    void update(float deltaTime, const Vector2& position) override;
 };

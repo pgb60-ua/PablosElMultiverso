@@ -2,6 +2,7 @@
 #include "SpriteLoaderManager.hpp"
 #include "Types.hpp"
 #include "Zombie.hpp"
+#include "WingWeapon.hpp"
 #include <MainGameState.hpp>
 #include <iostream>
 
@@ -24,6 +25,9 @@ void MainGameState::init()
     {
         enemies.push_back(std::make_unique<Zombie>(std::vector<Player *>{players[0].get(), players[1].get()}));
     }
+
+    // Crear el arma desde JSON automáticamente en el constructor
+    currentWeapon = new WingWeapon( Vector2{400.0f, 300.0f});
 }
 
 void MainGameState::handleInput()
@@ -90,6 +94,12 @@ void MainGameState::update(float deltaTime)
     {
         enemy->Update(deltaTime);
     }
+    if(currentWeapon)
+    {
+        // Asumimos que el arma sigue al primer jugador
+        Vector2 playerPos = players[0]->GetPosition();
+        currentWeapon->update(deltaTime, playerPos);
+    }
 }
 
 void MainGameState::render()
@@ -107,6 +117,10 @@ void MainGameState::render()
     for (auto &enemy : enemies)
     {
         enemy->Render();
+    }
+    if(currentWeapon)
+    {
+        currentWeapon->render();
     }
     DrawFPS(GetScreenWidth() - 100, 10);
     EndDrawing();

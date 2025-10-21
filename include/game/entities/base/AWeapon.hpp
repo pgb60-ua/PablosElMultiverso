@@ -1,13 +1,20 @@
 #pragma once
 #include "Item.hpp"
+#include "DataFileManager.hpp"
 #include <string>
+#include <SpriteAnimation.hpp>
 
-enum class WeaponType
+
+
+/// @brief Helper struct para obtener datos de armas desde JSON
+struct WeaponData
 {
-    Melee,
-    Ranged
+    std::string name;
+    std::string description;
+    Stats stats;
+    ItemRarity rarity;
+    int level;
 };
-
 
 class AWeapon : public Item
 {
@@ -18,10 +25,12 @@ private:
     const float MAX_CRITICAL_DAMAGE = 10.0f;
     /// @brief Máximo porcentaje de robo de vida
     const float MAX_LIFE_STEAL = 50.0f;
+    /// @brief Animación del sprite del arma
+    SpriteAnimation animation;
 
 protected:
     /// @brief Tipo de arma
-    WeaponType weaponType;
+    WEAPON_TYPE weaponType;
     /// @brief Nivel del arma
     int level;
     /// @brief Nivel máximo del arma
@@ -29,12 +38,19 @@ protected:
     /// @brief Posición del arma
     Vector2 position;
 
+    /// @brief Obtiene un string del JSON
+    static std::string GetStringFromJSON(const std::string &key, WEAPON_TYPE type, const std::string &defaultValue);
+    /// @brief Obtiene un int del JSON
+    static int GetIntFromJSON(const std::string &key, WEAPON_TYPE type, int defaultValue);
+    /// @brief Obtiene la rareza del JSON
+    static ItemRarity GetRarityFromJSON(WEAPON_TYPE type);
+
 public:
     /// @brief Constructor de la clase Weapon
-    AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level);
+    AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, int level, const Vector2& position = {0.0f, 0.0f});
 
     /// @brief Getter del tipo de arma
-    WeaponType GetWeaponType() const { return weaponType; }
+    WEAPON_TYPE GetWeaponType() const { return weaponType; }
     /// @brief Getter del nivel del arma
     int GetLevel() const { return level; }
     /// @brief Getter del nivel máximo del arma
@@ -45,9 +61,13 @@ public:
     Vector2 GetPosition() const { return position; }
     /// @brief Setter de la posición del arma
     void SetPosition(const Vector2& newPosition) { position = newPosition; }
+    /// @brief Setter del tipo de arma
+    void SetWeaponType(WEAPON_TYPE newType) { weaponType = newType; }
 
     /// @brief Método para atacar
     virtual void Attack() = 0;
+    virtual void render();
+    virtual void update(float deltaTime, const Vector2& position) = 0;
     virtual ~AWeapon() {}
 };
 

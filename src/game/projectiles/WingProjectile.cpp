@@ -1,4 +1,5 @@
 #include "WingProjectile.hpp"
+#include <cstdio>
 
 WingProjectile::WingProjectile()
 {
@@ -10,5 +11,6 @@ WingProjectile::~WingProjectile()
 
 void WingProjectile::render() const
 {
-    // TODO: Renderizar el proyectil de ala
+    printf("Rendering WingProjectile at position (%f, %f)\n", getPosition().x, getPosition().y);
+    
 }
