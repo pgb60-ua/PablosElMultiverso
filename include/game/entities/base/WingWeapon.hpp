@@ -6,10 +6,6 @@ class WingWeapon : public ARangeWeapon {
 private:
     /// @brief tiempo desde el último ataque
     float timeSinceLastAttack = 0.0f;
-
-    /// @brief Minimo de attack speed para evitar divisiones por 0
-    const float MIN_ATTACK_SPEED = 0.1f;
-
 public:
     /// @brief Constructor de la clase WingWeapon
     WingWeapon(const std::string& name, const std::string& description, 
