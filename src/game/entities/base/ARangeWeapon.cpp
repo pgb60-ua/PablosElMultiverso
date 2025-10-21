@@ -4,6 +4,7 @@ ARangeWeapon::ARangeWeapon(const std::string& name, const std::string& descripti
     const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize)
     : AWeapon(name, description, stats, itemRarity, WeaponType::Ranged, level), POOL_SIZE(poolSize) {
     InitializeProjectilePool();
+    UpdateAttackInterval();
 }
 
 ARangeWeapon::~ARangeWeapon() {
