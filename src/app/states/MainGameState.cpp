@@ -97,7 +97,7 @@ void MainGameState::update(float deltaTime)
     if(currentWeapon)
     {
         // Asumimos que el arma sigue al primer jugador
-        Vector2 playerPos = players[0]->GetPosition();
+        Vector2 playerPos = {players[0]->GetPosition().x + 32 + 16, players[0]->GetPosition().y - 32 - 16};
         currentWeapon->update(deltaTime, playerPos);
     }
 }
