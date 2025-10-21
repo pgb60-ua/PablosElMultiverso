@@ -33,7 +33,7 @@ public:
     /*--------------------------*/
 
     /// @brief Actualiza el estado del enemigo (animación, cooldowns, etc.)
-    void Update(float deltaTime);
+    virtual void Update(float deltaTime) = 0;
 
     /// @brief Mueve el enemigo hacia su objetivo
     /// @param deltaTime Tiempo transcurrido desde el último frame

@@ -5,7 +5,12 @@
 #include <raymath.h>
 
 Zombie::Zombie(std::vector<Player *> objectives)
-    : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE), SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE, Vector2{(float)(std::rand() % 2000), (float)(std::rand() % 2000)}), objectives, 50)
+    : AEnemy(
+            DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE),
+            SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE,
+            Vector2{(float)(std::rand() % 2000), (float)(std::rand() % 2000)}),
+            objectives,
+            50)
 {
     // Las stats se cargan automáticamente desde zombie.json en la lista de inicialización
     s_allZombies.push_back(this);
@@ -159,4 +164,22 @@ Zombie::~Zombie()
     {
         s_allZombies.erase(it);
     }
+}
+
+void Zombie::Update(float deltaTime)
+{
+    // Actualiza el cooldown de ataque
+    currentAttackCooldownTime += deltaTime;
+
+    Move(deltaTime);
+
+    // Regeneración de vida
+    if (stats.GetHealthRegeneration() > 0 && IsAlive())
+    {
+        float newHealth = stats.GetHealth() + (stats.GetHealthRegeneration() * deltaTime);
+        if (newHealth > stats.GetMaxHealth())
+            newHealth = stats.GetMaxHealth();
+        stats.SetHealth(newHealth);
+    }
+    UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::ZOMBIE);
 }
