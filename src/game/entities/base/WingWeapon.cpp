@@ -1,7 +1,7 @@
 #include "WingWeapon.hpp"
 
 WingWeapon::WingWeapon(const std::string& name, const std::string& description, 
-    const Stats& stats, ItemRarity itemRarity, int level, float fireRate, size_t poolSize)
+    const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize)
     : ARangeWeapon(name, description, stats, itemRarity, level, poolSize) {}
 
 WingWeapon::~WingWeapon() {
