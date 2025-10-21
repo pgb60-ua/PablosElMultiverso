@@ -32,6 +32,9 @@ public:
     // Movimiento e IA
     /*--------------------------*/
 
+    /// @brief Actualiza el estado del enemigo (animación, cooldowns, etc.)
+    virtual void Update(float deltaTime) = 0;
+
     /// @brief Mueve el enemigo hacia su objetivo
     /// @param deltaTime Tiempo transcurrido desde el último frame
     virtual void Move(float deltaTime) = 0;
@@ -46,7 +49,7 @@ public:
 
     /// @brief Suelta Pablo Coins al morir
     /// @return Cantidad de Pablo Coins que suelta
-    virtual int DropLoot() const = 0;
+    virtual int DropLoot() { return pabloCoinsAtDeath; };
 
     /// @brief Establece la cantidad de Pablo Coins que suelta al morir
     void SetPabloCoinsAtDeath(int cantidad);
@@ -57,6 +60,10 @@ public:
     /*--------------------------*/
     // Estado y Propiedades
     /*--------------------------*/
+
+    /// @brief Obtiene el jugador más cercano al enemigo
+    /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
+    Player *GetClosestPlayer();
 
     /// @brief Destructor virtual
     virtual ~AEnemy() = default;
