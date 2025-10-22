@@ -15,6 +15,10 @@ MainGameState::MainGameState() : direction{0, 0} {}
 
 void MainGameState::init()
 {
+    // Reservar capacidad para el máximo de jugadores (4) para evitar reallocaciones
+    // Esto garantiza que los punteros a Player (&players[i]) permanezcan válidos
+    players.reserve(4);
+
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     Vector2 secondPosition = {600.0f, 700.0f};
