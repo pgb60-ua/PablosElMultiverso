@@ -101,19 +101,25 @@ void AWeapon::render()
 }
 
 Vector2 AWeapon::CalculateDirection() {
-    float closestDistance = std::numeric_limits<float>::max();
-    Vector2 closestDirection = { 0.0f, 1.0f };
+ float closestDistanceSquared = std::numeric_limits<float>::max();
+    Vector2 closestToEnemy = { 0.0f, 1.0f };
     
     for (const AEnemy* enemy : enemiesInRange) {
         Vector2 toEnemy = { enemy->GetPosition().x - position.x, enemy->GetPosition().y - position.y };
-        float distance = sqrt(toEnemy.x * toEnemy.x + toEnemy.y * toEnemy.y);
-        if (distance > 0.0f && distance < closestDistance) {
-            closestDistance = distance;
-            closestDirection = { toEnemy.x / distance, toEnemy.y / distance };
+        float distanceSquared = toEnemy.x * toEnemy.x + toEnemy.y * toEnemy.y;
+        if (distanceSquared > 0.0f && distanceSquared < closestDistanceSquared) {
+            closestDistanceSquared = distanceSquared;
+            closestToEnemy = toEnemy;
         }
     }
     
-    return closestDirection;
+    if (closestDistanceSquared < std::numeric_limits<float>::max()) {
+        float distance = sqrt(closestDistanceSquared);
+        if (distance > 0.0f) {
+            return { closestToEnemy.x / distance, closestToEnemy.y / distance };
+        }
+    }
+    return { 0.0f, 1.0f };
 }
 void AWeapon::update(float deltaTime, const Vector2& position) {
     SetPosition(position);
