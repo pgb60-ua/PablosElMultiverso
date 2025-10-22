@@ -1,10 +1,11 @@
 #pragma once
 #include "Item.hpp"
 #include "DataFileManager.hpp"
+#include "AEnemy.hpp"
 #include <string>
 #include <SpriteAnimation.hpp>
 
-
+class AEnemy;
 
 /// @brief Helper struct para obtener datos de armas desde JSON
 struct WeaponData
@@ -39,6 +40,8 @@ protected:
     Vector2 position;
     /// @brief Dirección del arma
     Vector2 direction;
+    /// @brief Enemigos en rango del arma
+    const std::vector<AEnemy*>& enemiesInRange;
 
     /// @brief Obtiene un string del JSON
     static std::string GetStringFromJSON(const std::string &key, WEAPON_TYPE type, const std::string &defaultValue);
@@ -51,7 +54,7 @@ protected:
 
 public:
     /// @brief Constructor de la clase Weapon
-    AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, int level, const Vector2& position = {0.0f, 0.0f});
+    AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, int level, const Vector2& position = {0.0f, 0.0f}, const std::vector<AEnemy*>& enemiesInRange = {});
 
     /// @brief Getter del tipo de arma
     WEAPON_TYPE GetWeaponType() const { return weaponType; }

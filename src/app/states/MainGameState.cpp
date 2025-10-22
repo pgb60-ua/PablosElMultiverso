@@ -21,13 +21,13 @@ void MainGameState::init()
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition));
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition));
 
-    for (int i = 0; i < 200; i++)
+    for (int i = 0; i < 10; i++)
     {
-        enemies.push_back(std::make_unique<Zombie>(std::vector<Player *>{players[0].get(), players[1].get()}));
+        enemies.push_back(new Zombie(std::vector<Player *>{players[0].get(), players[1].get()}));
     }
 
     // Crear el arma desde JSON automáticamente en el constructor
-    currentWeapon = new WingWeapon( Vector2{400.0f, 300.0f});
+    currentWeapon = new WingWeapon(Vector2{400.0f, 300.0f}, enemies);
 }
 
 void MainGameState::handleInput()

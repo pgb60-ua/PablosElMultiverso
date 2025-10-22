@@ -10,6 +10,7 @@
 #include <memory>
 #include <vector>
 
+class AWeapon;
 extern "C"
 {
     #include "raylib.h"

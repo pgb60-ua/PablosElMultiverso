@@ -9,11 +9,11 @@ private:
 
 public:
     /// @brief Constructor de la clase WingWeapon que carga desde JSON
-    WingWeapon(const Vector2& position = {0.0f, 0.0f});
+    WingWeapon(const Vector2& position = {0.0f, 0.0f}, const std::vector<AEnemy*>& enemiesInRange = {});
     virtual ~WingWeapon();  
 
     /// @brief Método para atacar
-    void Attack(const Vector2& position,  float deltaTime) override;
+    void Attack(const Vector2& position, float deltaTime) override;
 
     void Attack() override {}
 

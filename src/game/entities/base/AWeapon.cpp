@@ -3,9 +3,11 @@
 #include <SpriteSheet.hpp>
 #include <cmath>
 
+class AEnemy;
+
 AWeapon::AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
-                 int level, const Vector2 &position)
-    : Item(name, description, stats, itemRarity), level(level), position(position)
+                 int level, const Vector2 &position, const std::vector<AEnemy*>& enemiesInRange)
+    : Item(name, description, stats, itemRarity), level(level), position(position), enemiesInRange(enemiesInRange)
 {
 }
 
@@ -99,9 +101,19 @@ void AWeapon::render()
 }
 
 Vector2 AWeapon::CalculateDirection() {
-    Vector2 dir = {0.0f, 1.0f};
+    float closestDistance = std::numeric_limits<float>::max();
+    Vector2 closestDirection = { 0.0f, 1.0f };
     
-    return dir;
+    for (const AEnemy* enemy : enemiesInRange) {
+        Vector2 toEnemy = { enemy->GetPosition().x - position.x, enemy->GetPosition().y - position.y };
+        float distance = sqrt(toEnemy.x * toEnemy.x + toEnemy.y * toEnemy.y);
+        if (distance > 0.0f && distance < closestDistance) {
+            closestDistance = distance;
+            closestDirection = { toEnemy.x / distance, toEnemy.y / distance };
+        }
+    }
+    
+    return closestDirection;
 }
 void AWeapon::update(float deltaTime, const Vector2& position) {
     SetPosition(position);

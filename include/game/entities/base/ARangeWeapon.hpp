@@ -29,7 +29,7 @@ protected:
 public:
     /// @brief Constructor de la clase RangeWeapon
     ARangeWeapon(const std::string& name, const std::string& description, 
-        const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize = 50);
+        const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize = 50, const Vector2& position = {0.0f, 0.0f}, const std::vector<AEnemy*>& enemiesInRange = {});
     virtual ~ARangeWeapon();
 
     /// @brief Método para atacar

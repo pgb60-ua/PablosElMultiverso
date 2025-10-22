@@ -28,6 +28,6 @@ private:
     Vector2 direction;
     Vector2 direction2;
     std::vector<std::unique_ptr<Player>> players;
-    std::vector<std::unique_ptr<AEnemy>> enemies;
+    std::vector<AEnemy*> enemies;
     AWeapon* currentWeapon;
 };

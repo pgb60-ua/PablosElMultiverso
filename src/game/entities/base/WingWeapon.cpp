@@ -1,14 +1,16 @@
 #include <cmath>
 #include "WingWeapon.hpp"
 
-WingWeapon::WingWeapon(const Vector2& position)
+WingWeapon::WingWeapon(const Vector2& position, const std::vector<AEnemy*>& enemiesInRange)
     : ARangeWeapon(
         GetStringFromJSON("name", WEAPON_TYPE::WING, "Unknown Weapon"),
         GetStringFromJSON("description", WEAPON_TYPE::WING, ""),
         DataFileManager::GetInstance().GetWeaponStats(WEAPON_TYPE::WING),
         GetRarityFromJSON(WEAPON_TYPE::WING),
         GetIntFromJSON("level", WEAPON_TYPE::WING, 1),
-        GetIntFromJSON("pool_size", WEAPON_TYPE::WING, 50)
+        GetIntFromJSON("pool_size", WEAPON_TYPE::WING, 50),
+        position,
+        enemiesInRange
     )
 {
     InitializeProjectilePool();

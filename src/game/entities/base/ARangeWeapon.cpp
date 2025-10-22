@@ -1,8 +1,8 @@
 #include "ARangeWeapon.hpp"
 
 ARangeWeapon::ARangeWeapon(const std::string& name, const std::string& description, 
-    const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize)
-    : AWeapon(name, description, stats, itemRarity, level), POOL_SIZE(poolSize) {
+    const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2& position = {0.0f, 0.0f}, const std::vector<AEnemy*>& enemiesInRange = {})
+    : AWeapon(name, description, stats, itemRarity, level, position, enemiesInRange), POOL_SIZE(poolSize) {
     UpdateAttackInterval();
 }
 
