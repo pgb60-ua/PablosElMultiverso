@@ -133,4 +133,8 @@ MainGameState::~MainGameState()
         delete currentWeapon;
         currentWeapon = nullptr;
     }
+    for (auto &enemy : enemies)
+    {
+        delete enemy;
+    }
 }
