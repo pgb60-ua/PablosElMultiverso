@@ -72,7 +72,7 @@ void ARangeWeapon::render() {
 }
 
 void ARangeWeapon::update(float deltaTime, const Vector2& position) {
-    SetPosition(position);
-    Attack(position, Vector2{1.0f, 0.0f}, deltaTime); // TODO : La dirección debería de ser calculada
+    AWeapon::update(deltaTime, position);
+    Attack(position, deltaTime); // TODO : La dirección debería de ser calculada
     UpdateProjectiles(deltaTime);
 }

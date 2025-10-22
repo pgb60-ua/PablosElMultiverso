@@ -13,7 +13,7 @@ class MainGameState : public GameState
 {
 public:
     MainGameState();
-    ~MainGameState() = default;
+    ~MainGameState();
 
     void init() override;
     void handleInput() override;

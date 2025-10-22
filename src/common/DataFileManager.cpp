@@ -146,12 +146,12 @@ const DataMap &DataFileManager::GetData(WEAPON_TYPE type)
     }
 
     // No está en caché, cargar desde archivo
-    std::string path = GetFilePath(static_cast<WEAPON_TYPE>(type));
+    std::string path = GetFilePath(type);
     DataMap data = LoadFromFile(path);
 
     // Guardar en caché y devolver referencia
-    weaponCache[static_cast<WEAPON_TYPE>(type)] = std::move(data);
-    return weaponCache[static_cast<WEAPON_TYPE>(type)];
+    weaponCache[type] = std::move(data);
+    return weaponCache[type];
 }
 
 void DataFileManager::ClearCache()

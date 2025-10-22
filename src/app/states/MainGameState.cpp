@@ -125,3 +125,12 @@ void MainGameState::render()
     DrawFPS(GetScreenWidth() - 100, 10);
     EndDrawing();
 }
+
+MainGameState::~MainGameState()
+{
+    if(currentWeapon)
+    {
+        delete currentWeapon;
+        currentWeapon = nullptr;
+    }
+}

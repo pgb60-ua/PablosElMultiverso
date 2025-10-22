@@ -17,6 +17,8 @@ protected:
     float attackInterval;
     /// @brief Velocidad de ataque mínima
     static constexpr float MIN_ATTACK_SPEED = 0.1f;
+    /// @brief tiempo desde el último ataque
+    float timeSinceLastAttack = 0.0f;
 
     void UpdateAttackInterval();
 
@@ -34,7 +36,7 @@ public:
     virtual void Attack() override = 0;
 
     /// @brief Sobrecarga del ataque para armas a distancia
-    virtual void Attack(const Vector2& position, const Vector2& direction, float deltaTime) = 0;
+    virtual void Attack(const Vector2& position, float deltaTime) = 0;
 
     /// @brief Método para crear proyectiles
     virtual std::unique_ptr<AProjectile> CreateProjectile() = 0;

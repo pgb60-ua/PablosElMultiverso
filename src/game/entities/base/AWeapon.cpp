@@ -1,6 +1,7 @@
 #include "AWeapon.hpp"
 #include "SpriteLoaderManager.hpp"
 #include <SpriteSheet.hpp>
+#include <cmath>
 
 AWeapon::AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
                  int level, const Vector2 &position)
@@ -88,11 +89,21 @@ void AWeapon::render()
 
     Rectangle src = sheet.frames[animation.frameIndex];
 
-    Vector2 origin = { src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
-                       src.height > 0 ? src.height * 0.5f : -src.height * 0.5f };
+    Vector2 origin = { src.width * 0.5f, src.height * 0.5f };
 
-    Rectangle dest = { position.x, position.y,
-                       src.width, src.height};
+    Rectangle dest = { position.x, position.y, src.width, src.height };
 
-    DrawTexturePro(sheet.texture, src, dest, origin, 0, WHITE);
+    float angle = atan2(direction.y, direction.x) * RAD2DEG + 45.0f;
+
+    DrawTexturePro(sheet.texture, src, dest, origin, angle, WHITE);
+}
+
+Vector2 AWeapon::CalculateDirection() {
+    Vector2 dir = {0.0f, 1.0f};
+    
+    return dir;
+}
+void AWeapon::update(float deltaTime, const Vector2& position) {
+    SetPosition(position);
+    SetDirection(CalculateDirection());
 }

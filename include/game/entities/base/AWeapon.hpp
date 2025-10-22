@@ -37,6 +37,8 @@ protected:
     const int MAXLEVEL = 4;
     /// @brief Posición del arma
     Vector2 position;
+    /// @brief Dirección del arma
+    Vector2 direction;
 
     /// @brief Obtiene un string del JSON
     static std::string GetStringFromJSON(const std::string &key, WEAPON_TYPE type, const std::string &defaultValue);
@@ -44,6 +46,8 @@ protected:
     static int GetIntFromJSON(const std::string &key, WEAPON_TYPE type, int defaultValue);
     /// @brief Obtiene la rareza del JSON
     static ItemRarity GetRarityFromJSON(WEAPON_TYPE type);
+    /// @brief Calcula la dirección de ataque normalizada
+    Vector2 CalculateDirection();
 
 public:
     /// @brief Constructor de la clase Weapon
@@ -63,11 +67,13 @@ public:
     void SetPosition(const Vector2& newPosition) { position = newPosition; }
     /// @brief Setter del tipo de arma
     void SetWeaponType(WEAPON_TYPE newType) { weaponType = newType; }
+    /// @brief Setter de la dirección del arma
+    void SetDirection(const Vector2& newDirection) { direction = newDirection; }
 
     /// @brief Método para atacar
     virtual void Attack() = 0;
     virtual void render();
-    virtual void update(float deltaTime, const Vector2& position) = 0;
+    virtual void update(float deltaTime, const Vector2& position);
     virtual ~AWeapon() {}
 };
 

@@ -1,9 +1,6 @@
 #include <cmath>
 #include "WingWeapon.hpp"
 
-// Helper lambdas para obtener datos del JSON
-
-
 WingWeapon::WingWeapon(const Vector2& position)
     : ARangeWeapon(
         GetStringFromJSON("name", WEAPON_TYPE::WING, "Unknown Weapon"),
@@ -22,15 +19,14 @@ WingWeapon::WingWeapon(const Vector2& position)
 WingWeapon::~WingWeapon() {
 }
 
-void WingWeapon::Attack(const Vector2& position, const Vector2& direction, float deltaTime) {
+void WingWeapon::Attack(const Vector2& position, float deltaTime) {
     timeSinceLastAttack += deltaTime;
     if (timeSinceLastAttack >= attackInterval) {
         // Disparo central
         ShootProjectile(position, direction);
 
-        // Rotaciones ±45 grados
-        constexpr float DEG_TO_RAD = 3.14159265358979323846f / 180.0f;
-        const float angle = 45.0f * DEG_TO_RAD;
+        
+        const float angle = 30.0f * DEG2RAD;
         const float cosA = std::cos(angle);
         const float sinA = std::sin(angle);
 
@@ -40,7 +36,7 @@ void WingWeapon::Attack(const Vector2& position, const Vector2& direction, float
         };
         Vector2 dirMinus{
             direction.x * cosA + direction.y * sinA,
-            -direction.x * sinA + direction.y * cosA
+            direction.x * -sinA + direction.y * cosA
         };
 
         ShootProjectile(position, dirPlus);

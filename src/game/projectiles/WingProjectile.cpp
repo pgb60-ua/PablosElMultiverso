@@ -33,10 +33,7 @@ void WingProjectile::render()
     float angleDeg = 0.0f;
     if (dir.x != 0.0f || dir.y != 0.0f) {
         angleDeg = atan2f(dir.y, dir.x) * RAD2DEG;
-        // Si la punta de la flecha en el sprite apunta hacia ARRIBA,
-        // resta 90 grados para que coincida con la dirección.
         angleDeg += 90.0f;
-        // Si gira en sentido contrario, prueba angleDeg += 90.0f;
     }
 
     DrawTexturePro(sheet.texture, src, dest, origin, angleDeg, WHITE);
