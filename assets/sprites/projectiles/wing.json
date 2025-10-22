@@ -1,0 +1,11 @@
+{
+  "texture": "Wing-Sheet.png",
+  "frames": [
+    {
+      "x": 3,
+      "y": 0,
+      "width": 12,
+      "height": 16
+    }
+  ]
+}

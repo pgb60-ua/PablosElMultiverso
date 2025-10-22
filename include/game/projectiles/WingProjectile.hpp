@@ -8,5 +8,5 @@ private:
 public:
     WingProjectile();
     ~WingProjectile();
-    void render() const override;
+    void render() override;
 };

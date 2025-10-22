@@ -2,12 +2,14 @@
 
 #include "AEntity.hpp"
 #include "Player.hpp"
+#include "SpriteAnimation.hpp"
 #include <vector>
 extern "C"
 {
 #include <raylib.h>
 }
 
+class Player;
 /// @brief Interfaz que representa el comportamiento de un enemigo en el juego.
 /// Los enemigos son entidades que atacan al jugador, se mueven con IA y
 /// sueltan botín al morir
