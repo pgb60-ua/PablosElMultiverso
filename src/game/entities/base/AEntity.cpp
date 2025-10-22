@@ -1,5 +1,6 @@
 #include "AEntity.hpp"
 #include <utility>
+#include <cstdlib>
 
 AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hitbox(hitbox)
 {
@@ -42,4 +43,37 @@ void AEntity::SetAttackSpeed(float newAttackSpeed)
         this->stats.SetAttackSpeed(newAttackSpeed);
         this->attackCooldown = 1.0f / newAttackSpeed;
     }
+}
+
+void AEntity::TakeDamage(const Stats& stats)
+{
+    // Reduce la salud basándose en las estadísticas de ataque recibidas
+    float physicalDamage = stats.GetOffensiveStats().physicalDamage;
+    float magicalDamage = stats.GetOffensiveStats().magicDamage;
+
+    // Aplicar crítico
+    float critChance = stats.GetOffensiveStats().criticalChance;
+    float critMultiplier = 1.0f;
+    if (rand() % 100 < critChance)
+        critMultiplier = stats.GetOffensiveStats().criticalDamage;
+
+    physicalDamage *= critMultiplier;
+    magicalDamage *= critMultiplier;
+
+    // Aplicar evasión
+    float evasion = this->stats.GetDefensiveStats().agility;
+    if (rand() % 100 < evasion)
+        return; // Se esquiva el ataque
+
+    // Aplicar reducción de daño basada en la armadura
+    float armor = this->stats.GetDefensiveStats().armor;
+    float physicalDamageAfterArmor = physicalDamage * (100.0f / (100.0f + armor));
+
+    // Aplicar reducción de daño basada en la resistencia mágica
+    float magicResistance = this->stats.GetDefensiveStats().resistance;
+    float magicalDamageAfterResistance = magicalDamage * (100.0f / (100.0f + magicResistance));
+
+    float totalDamage = physicalDamageAfterArmor + magicalDamageAfterResistance;
+    float newHealth = this->stats.GetHealth() - totalDamage;
+    this->stats.SetHealth(newHealth > 0 ? newHealth : 0);
 }

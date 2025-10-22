@@ -2,13 +2,41 @@
 #include "Types.hpp"
 #include "raylib.h"
 #include <cstdlib>
+#include <raymath.h>
 
 Player::Player(PLAYER_TYPE player, Vector2 position)
     : AEntity(DataFileManager::GetInstance().GetPlayerStats(player),
-              SpriteLoaderManager::GetInstance().GetSpriteHitbox(player, position))
+              SpriteLoaderManager::GetInstance().GetSpriteHitbox(player, position)),
+      allEnemies(nullptr)
 {
     SetPlayerType(player);
     ImportModifiers(player);
+}
+
+Player::Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEnemies)
+    : AEntity(DataFileManager::GetInstance().GetPlayerStats(player),
+              SpriteLoaderManager::GetInstance().GetSpriteHitbox(player, position)),
+      allEnemies(&allEnemies)
+{
+    SetPlayerType(player);
+    ImportModifiers(player);
+    UpdateEnemiesInRange();
+}
+
+void Player::UpdateEnemiesInRange()
+{
+    enemiesInRange.clear();
+    if (allEnemies == nullptr) return;
+    for (AEnemy* enemy : *allEnemies)
+    {
+        Vector2 playerPos = GetPosition();
+        Vector2 enemyPos = enemy->GetPosition();
+        float distance = Vector2Distance(playerPos, enemyPos);
+        if (distance <= DISTANCE_RANGE)
+        {
+            enemiesInRange.push_back(enemy);
+        }
+    }
 }
 
 void Player::SetOffensiveStatsWithModifiers(const OffensiveStats &itemStats)
@@ -50,6 +78,7 @@ void Player::Update(float deltaTime)
     {
         Move(inputDirection, deltaTime);
     }
+    UpdateEnemiesInRange();
     UpdatePlayerAnimation(deltaTime);
 }
 
@@ -59,19 +88,6 @@ void Player::HandleInput(Vector2 newInputDirection)
     inputDirection = newInputDirection;
 }
 
-void Player::TakeDamage(float amount)
-{
-    float currentHealth = GetHealth();
-    float newHealth = currentHealth - amount;
-
-    // Asegurarse de que la vida no sea negativa
-    if (newHealth < 0.0f)
-    {
-        newHealth = 0.0f;
-    }
-
-    stats.SetHealth(newHealth);
-}
 
 void Player::AddItem(std::shared_ptr<Item> item)
 {
@@ -164,7 +180,7 @@ void Player::Render()
     Rectangle dest = { hitbox.data.rectangle.x, hitbox.data.rectangle.y,
                        src.width, src.height};
 
-    DrawTexturePro(sheet.texture, src, dest, origin, 0, WHITE);
+    DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
 }
 
 bool Player::Attack()
@@ -183,5 +199,32 @@ void Player::UpdatePlayerAnimation(float deltaTime)
         animation.timeAccumulator = 0.0f;
         animation.frameIndex++;
         animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(player).spriteFrameCount;
+    }
+}
+
+void Player::CheckCollisions(float deltaTime)
+{
+    if (allEnemies == nullptr) return;
+    
+    if( receiveDamageCooldownTime < COOLDOWN_DAMAGE_TIME)
+    {
+        receiveDamageCooldownTime += deltaTime;
+        return;
+    }
+    receiveDamageCooldownTime -= COOLDOWN_DAMAGE_TIME;
+    animation.color = WHITE;
+    for(auto& enemy : enemiesInRange)
+    {
+        // Obtener las hitboxes
+        Shape playerHitbox = GetHitbox();
+        Shape enemyHitbox = enemy->GetHitbox();
+
+        // Comprobar colisión (asumiendo que existe una función CheckCollisionShapes)
+        if (CheckCollisionRecs(playerHitbox.data.rectangle, enemyHitbox.data.rectangle))
+        {
+            TakeDamage(enemy->GetStats());
+            animation.color = RED;
+            return;
+        }
     }
 }
