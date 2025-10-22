@@ -3,17 +3,17 @@
 #include "AWeapon.hpp"
 #include "DataFileManager.hpp"
 #include "Item.hpp"
+#include "SpriteAnimation.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "Stats.hpp"
 #include "Types.hpp"
-#include "SpriteAnimation.hpp"
 #include <memory>
 #include <vector>
 
 class AWeapon;
 extern "C"
 {
-    #include "raylib.h"
+#include "raylib.h"
 }
 
 // Clase que representa el player
@@ -69,6 +69,15 @@ protected:
 
 public:
     Player(PLAYER_TYPE player, Vector2 position);
+
+    // Eliminar constructor de copia y operador de asignación de copia
+    Player(const Player &) = delete;
+    Player &operator=(const Player &) = delete;
+
+    // Permitir constructor de movimiento y operador de asignación de movimiento
+    Player(Player &&) = default;
+    Player &operator=(Player &&) = default;
+
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
     float GetHealth() const { return stats.GetHealth(); }

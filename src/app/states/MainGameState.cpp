@@ -1,8 +1,8 @@
 #include "Player.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "Types.hpp"
-#include "Zombie.hpp"
 #include "WingWeapon.hpp"
+#include "Zombie.hpp"
 #include <MainGameState.hpp>
 #include <iostream>
 
@@ -18,12 +18,12 @@ void MainGameState::init()
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     Vector2 secondPosition = {600.0f, 700.0f};
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition));
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition));
+    players.emplace_back(PLAYER_TYPE::RANGE, initialPosition);
+    players.emplace_back(PLAYER_TYPE::MAGE, secondPosition);
 
     for (int i = 0; i < 10; i++)
     {
-        enemies.push_back(new Zombie(std::vector<Player *>{players[0].get(), players[1].get()}));
+        enemies.push_back(new Zombie(std::vector<Player *>{&players[0], &players[1]}));
     }
 
     // Crear el arma desde JSON automáticamente en el constructor
@@ -76,10 +76,10 @@ void MainGameState::handleInput()
     // Pasar la dirección a todos los jugadores para que la procesen
     /*for (auto &player : players)
     {
-        player->HandleInput(direction);
+        player.HandleInput(direction);
     }*/
-    players[0]->HandleInput(direction);
-    players[1]->HandleInput(direction2);
+    players[0].HandleInput(direction);
+    players[1].HandleInput(direction2);
 }
 
 void MainGameState::update(float deltaTime)
@@ -87,17 +87,17 @@ void MainGameState::update(float deltaTime)
     // Actualizar todos los jugadores (esto llamará internamente a Move si hay dirección)
     for (auto &player : players)
     {
-        player->Update(deltaTime);
+        player.Update(deltaTime);
     }
     // Actualizar todos los enemigos
     for (auto &enemy : enemies)
     {
         enemy->Update(deltaTime);
     }
-    if(currentWeapon)
+    if (currentWeapon)
     {
         // Asumimos que el arma sigue al primer jugador
-        Vector2 playerPos = {players[0]->GetPosition().x + 32 + 16, players[0]->GetPosition().y - 32 - 16};
+        Vector2 playerPos = {players[0].GetPosition().x + 32 + 16, players[0].GetPosition().y - 32 - 16};
         currentWeapon->update(deltaTime, playerPos);
     }
 }
@@ -111,14 +111,14 @@ void MainGameState::render()
     // Renderizar todos los jugadores
     for (auto &player : players)
     {
-        player->Render();
+        player.Render();
     }
     // Renderizar todos los enemigos
     for (auto &enemy : enemies)
     {
         enemy->Render();
     }
-    if(currentWeapon)
+    if (currentWeapon)
     {
         currentWeapon->render();
     }
@@ -128,7 +128,7 @@ void MainGameState::render()
 
 MainGameState::~MainGameState()
 {
-    if(currentWeapon)
+    if (currentWeapon)
     {
         delete currentWeapon;
         currentWeapon = nullptr;
