@@ -113,7 +113,7 @@ Vector2 AWeapon::CalculateDirection()
     {
         Vector2 toEnemy = {enemy->GetPosition().x - position.x, enemy->GetPosition().y - position.y};
         float distanceSquared = toEnemy.x * toEnemy.x + toEnemy.y * toEnemy.y;
-        if (distanceSquared > 0.0f && distanceSquared < closestDistanceSquared)
+        if (distanceSquared > 0.0f && distanceSquared < closestDistanceSquared && enemy->IsAlive())
         {
             closestDistanceSquared = distanceSquared;
             closestToEnemy = toEnemy;

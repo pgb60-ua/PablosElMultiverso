@@ -7,7 +7,7 @@ AProjectile::AProjectile()
     setShapePosition(shape, {-110, -110});
     direction = {-110, -110};
     stats = Stats();
-    speed = 180.0f;
+    speed = 280.0f;
     enemiesInScene = nullptr;
 }
 
@@ -34,7 +34,7 @@ void AProjectile::update(float deltaTime)
     {
         for (auto &enemy : *enemiesInScene)
         {
-            if (CheckCollisionRecs(shape.data.rectangle, enemy->GetHitbox().data.rectangle))
+            if (enemy->IsAlive() && CheckCollisionRecs(shape.data.rectangle, enemy->GetHitbox().data.rectangle))
             {
                 // std::cout << "Projectile hit an enemy!" << std::endl;
                 enemy->TakeDamage(stats.GetPhysicalDamage());

@@ -26,14 +26,6 @@ Zombie::Zombie(std::vector<Player *> objectives)
     velocity = Vector2Scale(Vector2Normalize(randomDir), baseSpeed * 0.5f);
 }
 
-void Zombie::TakeDamage(float amount)
-{
-    // Reduce la salud
-    // TODO:
-    // float newHealth = stats.GetHealth() - amount;
-    // stats.SetHealth(newHealth > 0 ? newHealth : 0);
-}
-
 bool Zombie::Attack()
 {
     if (currentAttackCooldownTime >= attackCooldown)
@@ -47,6 +39,8 @@ bool Zombie::Attack()
 
 void Zombie::Move(float deltaTime)
 {
+    if (!alive)
+        return;
     Player *closestPlayer = GetClosestPlayer();
 
     // Si no hay jugadores, no se mueve
@@ -139,6 +133,8 @@ void Zombie::Move(float deltaTime)
 
 void Zombie::Render()
 {
+    if (!alive)
+        return;
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);
     if (sheet.frames.empty())
         return;

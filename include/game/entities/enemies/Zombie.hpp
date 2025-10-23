@@ -45,11 +45,6 @@ public:
     // Métodos Heredados de AEntity
     /*--------------------------*/
 
-    /// @brief Recibe daño y actualiza la salud del zombie
-    /// Función utilizada por balas y otras fuentes de daño
-    /// @param amount Cantidad de daño recibido
-    void TakeDamage(float amount) override;
-
     /// @brief Realiza un ataque al jugador
     /// @return true si el ataque se realizó, false si está en cooldown
     bool Attack() override;
