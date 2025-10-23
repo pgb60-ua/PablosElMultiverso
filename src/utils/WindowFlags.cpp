@@ -1,4 +1,3 @@
-
 #include "WindowFlags.hpp"
 #include "raylib.h"
 
