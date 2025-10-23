@@ -50,6 +50,14 @@ void AEntity::TakeDamage(const Stats& stats)
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, 99);
+
+    // Aplicar evasión
+    float evasion = this->stats.GetDefensiveStats().agility;
+    if (dis(gen) < evasion){
+        animation.color = GRAY;
+        return; // Se esquiva el ataque
+    }
+
     // Reduce la salud basándose en las estadísticas de ataque recibidas
     float physicalDamage = stats.GetOffensiveStats().physicalDamage;
     float magicalDamage = stats.GetOffensiveStats().magicDamage;
@@ -59,16 +67,14 @@ void AEntity::TakeDamage(const Stats& stats)
     float critMultiplier = 1.0f;
 
     
-    if (dis(gen) < critChance)
+    if (dis(gen) < critChance){
         critMultiplier = stats.GetOffensiveStats().criticalDamage;
+        animation.color = ORANGE;
+    }
+        
 
     physicalDamage *= critMultiplier;
     magicalDamage *= critMultiplier;
-
-    // Aplicar evasión
-    float evasion = this->stats.GetDefensiveStats().agility;
-    if (dis(gen) < evasion)
-        return; // Se esquiva el ataque
 
     // Aplicar reducción de daño basada en la armadura
     float armor = this->stats.GetDefensiveStats().armor;
@@ -80,5 +86,7 @@ void AEntity::TakeDamage(const Stats& stats)
 
     float totalDamage = physicalDamageAfterArmor + magicalDamageAfterResistance;
     float newHealth = this->stats.GetHealth() - totalDamage;
+    if (animation.color.r == WHITE.r && animation.color.g == WHITE.g && animation.color.b == WHITE.b && animation.color.a == WHITE.a) 
+        animation.color = RED;
     this->stats.SetHealth(newHealth > 0 ? newHealth : 0);
 }

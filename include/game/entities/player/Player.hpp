@@ -7,7 +7,6 @@
 #include "SpriteLoaderManager.hpp"
 #include "Stats.hpp"
 #include "Types.hpp"
-#include "SpriteAnimation.hpp"
 #include <memory>
 #include <vector>
 
@@ -29,10 +28,9 @@ private:
     static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
-    SpriteAnimation animation;
     void UpdatePlayerAnimation(float deltaTime);
     std::vector<AEnemy*> enemiesInRange;
-    std::vector<AEnemy*>* allEnemies;
+    std::vector<AEnemy*> &allEnemies;
     void UpdateEnemiesInRange();
     inline const static float DISTANCE_RANGE = 800.0f;
     inline const static float COOLDOWN_DAMAGE_TIME = 0.5f;

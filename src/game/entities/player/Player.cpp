@@ -7,7 +7,7 @@
 Player::Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEnemies)
     : AEntity(DataFileManager::GetInstance().GetPlayerStats(player),
               SpriteLoaderManager::GetInstance().GetSpriteHitbox(player, position)),
-      allEnemies(&allEnemies)
+      allEnemies(allEnemies)
 {
     SetPlayerType(player);
     ImportModifiers(player);
@@ -17,8 +17,8 @@ Player::Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEn
 void Player::UpdateEnemiesInRange()
 {
     enemiesInRange.clear();
-    if (allEnemies == nullptr) return;
-    for (AEnemy* enemy : *allEnemies)
+
+    for (AEnemy* enemy : allEnemies)
     {
         Vector2 playerPos = GetPosition();
         Vector2 enemyPos = enemy->GetPosition();
@@ -195,8 +195,6 @@ void Player::UpdatePlayerAnimation(float deltaTime)
 
 void Player::CheckCollisions(float deltaTime)
 {
-    if (allEnemies == nullptr) return;
-    
     if( receiveDamageCooldownTime < COOLDOWN_DAMAGE_TIME)
     {
         receiveDamageCooldownTime += deltaTime;
@@ -214,7 +212,6 @@ void Player::CheckCollisions(float deltaTime)
         if (CheckCollisionRecs(playerHitbox.data.rectangle, enemyHitbox.data.rectangle))
         {
             TakeDamage(enemy->GetStats());
-            animation.color = RED;
             return;
         }
     }

@@ -2,9 +2,11 @@
 
 #include "Geometry.hpp"
 #include "Stats.hpp"
+#include "SpriteAnimation.hpp"
 extern "C"
 {
 #include <raylib.h>
+
 }
 
 // Clase que representa lo mas abstracto de un personaje y enemigo que tienen
@@ -28,6 +30,8 @@ protected:
     float currentAttackCooldownTime;
 
     float receiveDamageCooldownTime = 0.0f;
+
+    SpriteAnimation animation;
 
     AEntity(Stats stats, const Shape &hitbox);
 
