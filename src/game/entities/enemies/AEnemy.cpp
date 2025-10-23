@@ -48,3 +48,8 @@ void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
         animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(enemyType).spriteFrameCount;
     }
 }
+
+void AEnemy::CheckCollisions(float deltaTime)
+{
+}
+
