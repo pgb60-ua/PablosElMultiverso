@@ -27,7 +27,7 @@ void MainGameState::init()
     }
 
     // Crear el arma desde JSON automáticamente en el constructor
-    currentWeapon = new WingWeapon(Vector2{400.0f, 300.0f}, enemies);
+    currentWeapon = new WingWeapon(Vector2{400.0f, 300.0f}, enemies, enemies);
 }
 
 void MainGameState::handleInput()
@@ -94,7 +94,7 @@ void MainGameState::update(float deltaTime)
     {
         enemy->Update(deltaTime);
     }
-    if(currentWeapon)
+    if (currentWeapon)
     {
         // Asumimos que el arma sigue al primer jugador
         Vector2 playerPos = {players[0]->GetPosition().x + 32 + 16, players[0]->GetPosition().y - 32 - 16};
@@ -118,7 +118,7 @@ void MainGameState::render()
     {
         enemy->Render();
     }
-    if(currentWeapon)
+    if (currentWeapon)
     {
         currentWeapon->render();
     }
@@ -128,7 +128,7 @@ void MainGameState::render()
 
 MainGameState::~MainGameState()
 {
-    if(currentWeapon)
+    if (currentWeapon)
     {
         delete currentWeapon;
         currentWeapon = nullptr;
