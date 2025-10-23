@@ -114,7 +114,7 @@ void MainGameState::render()
     {
         player->Render();
         std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
-        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x - 16), static_cast<int>(player->GetPosition().y) + 32, 10, GREEN);
+        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x - healthText.length() * 2.5f), static_cast<int>(player->GetPosition().y) + 32, 10, GREEN);
     }
     // Renderizar todos los enemigos
     for (auto &enemy : enemies)
