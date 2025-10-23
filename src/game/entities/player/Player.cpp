@@ -4,15 +4,6 @@
 #include <cstdlib>
 #include <raymath.h>
 
-Player::Player(PLAYER_TYPE player, Vector2 position)
-    : AEntity(DataFileManager::GetInstance().GetPlayerStats(player),
-              SpriteLoaderManager::GetInstance().GetSpriteHitbox(player, position)),
-      allEnemies(nullptr)
-{
-    SetPlayerType(player);
-    ImportModifiers(player);
-}
-
 Player::Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEnemies)
     : AEntity(DataFileManager::GetInstance().GetPlayerStats(player),
               SpriteLoaderManager::GetInstance().GetSpriteHitbox(player, position)),

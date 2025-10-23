@@ -1,6 +1,6 @@
 #include "AEntity.hpp"
 #include <utility>
-#include <cstdlib>
+#include <random>
 
 AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hitbox(hitbox)
 {
@@ -47,6 +47,9 @@ void AEntity::SetAttackSpeed(float newAttackSpeed)
 
 void AEntity::TakeDamage(const Stats& stats)
 {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 99);
     // Reduce la salud basándose en las estadísticas de ataque recibidas
     float physicalDamage = stats.GetOffensiveStats().physicalDamage;
     float magicalDamage = stats.GetOffensiveStats().magicDamage;
@@ -54,7 +57,9 @@ void AEntity::TakeDamage(const Stats& stats)
     // Aplicar crítico
     float critChance = stats.GetOffensiveStats().criticalChance;
     float critMultiplier = 1.0f;
-    if (rand() % 100 < critChance)
+
+    
+    if (dis(gen) < critChance)
         critMultiplier = stats.GetOffensiveStats().criticalDamage;
 
     physicalDamage *= critMultiplier;
@@ -62,7 +67,7 @@ void AEntity::TakeDamage(const Stats& stats)
 
     // Aplicar evasión
     float evasion = this->stats.GetDefensiveStats().agility;
-    if (rand() % 100 < evasion)
+    if (dis(gen) < evasion)
         return; // Se esquiva el ataque
 
     // Aplicar reducción de daño basada en la armadura

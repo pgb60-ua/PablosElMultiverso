@@ -75,7 +75,6 @@ protected:
     float healthRegenerationModifier = BASE_MULTIPLIER;
 
 public:
-    Player(PLAYER_TYPE player, Vector2 position);
     Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEnemies);
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
