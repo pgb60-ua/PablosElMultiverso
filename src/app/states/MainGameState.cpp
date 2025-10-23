@@ -122,7 +122,7 @@ void MainGameState::render()
     {
         currentWeapon->render();
     }
-    DrawFPS(GetScreenWidth() - 100, 10);
+    DrawFPS(GetScreenWidth() / 2, GetScreenHeight() / 2);
     EndDrawing();
 }
 

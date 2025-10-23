@@ -1,4 +1,5 @@
 #include "AProjectile.hpp"
+#include <iostream>
 
 AProjectile::AProjectile()
 {
@@ -16,6 +17,9 @@ AProjectile::~AProjectile()
 
 void AProjectile::update(float deltaTime)
 {
+    if (!active)
+        return;
+
     Vector2 position = getShapePosition(shape);
     position.x += direction.x * speed * deltaTime;
     position.y += direction.y * speed * deltaTime;
@@ -24,6 +28,20 @@ void AProjectile::update(float deltaTime)
     if (position.x < 0 || position.x > GetScreenWidth() || position.y < 0 || position.y > GetScreenHeight())
     {
         deactivate();
+    }
+
+    if (enemiesInScene != nullptr)
+    {
+        for (auto &enemy : *enemiesInScene)
+        {
+            if (CheckCollisionRecs(shape.data.rectangle, enemy->GetHitbox().data.rectangle))
+            {
+                // std::cout << "Projectile hit an enemy!" << std::endl;
+                enemy->TakeDamage(stats.GetPhysicalDamage());
+                deactivate();
+                break;
+            }
+        }
     }
 }
 

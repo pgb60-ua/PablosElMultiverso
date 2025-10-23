@@ -6,11 +6,11 @@
 
 Zombie::Zombie(std::vector<Player *> objectives)
     : AEnemy(
-            DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE),
-            SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE,
-            Vector2{(float)(std::rand() % 2000), (float)(std::rand() % 2000)}),
-            objectives,
-            50)
+          DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE),
+          SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE,
+                                                             Vector2{(float)(std::rand() % 2000), (float)(std::rand() % 2000)}),
+          objectives,
+          50)
 {
     // Las stats se cargan automáticamente desde zombie.json en la lista de inicialización
     s_allZombies.push_back(this);
@@ -30,8 +30,8 @@ void Zombie::TakeDamage(float amount)
 {
     // Reduce la salud
     // TODO:
-    float newHealth = stats.GetHealth() - amount;
-    stats.SetHealth(newHealth > 0 ? newHealth : 0);
+    // float newHealth = stats.GetHealth() - amount;
+    // stats.SetHealth(newHealth > 0 ? newHealth : 0);
 }
 
 bool Zombie::Attack()
