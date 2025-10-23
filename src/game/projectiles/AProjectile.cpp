@@ -1,5 +1,4 @@
 #include "AProjectile.hpp"
-#include <iostream>
 
 AProjectile::AProjectile()
 {
@@ -7,7 +6,6 @@ AProjectile::AProjectile()
     setShapePosition(shape, {-110, -110});
     direction = {-110, -110};
     stats = Stats();
-    enemiesInScene = nullptr;
 }
 
 AProjectile::~AProjectile()
@@ -29,17 +27,14 @@ void AProjectile::update(float deltaTime)
         deactivate();
     }
 
-    if (enemiesInScene != nullptr)
+    for (auto &enemy : *enemiesInScene)
     {
-        for (auto &enemy : *enemiesInScene)
+        if (enemy->IsAlive() && CheckCollisionRecs(shape.data.rectangle, enemy->GetHitbox().data.rectangle))
         {
-            if (enemy->IsAlive() && CheckCollisionRecs(shape.data.rectangle, enemy->GetHitbox().data.rectangle))
-            {
-                // std::cout << "Projectile hit an enemy!" << std::endl;
-                enemy->TakeDamage(stats.GetPhysicalDamage());
-                deactivate();
-                break;
-            }
+            // std::cout << "Projectile hit an enemy!" << std::endl;
+            enemy->TakeDamage(stats.GetPhysicalDamage());
+            deactivate();
+            break;
         }
     }
 }
@@ -51,7 +46,6 @@ Vector2 AProjectile::getPosition() const
 void AProjectile::deactivate()
 {
     active = false;
-    enemiesInScene = nullptr;
 }
 
 void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats, const std::vector<AEnemy *> &allEnemies)

@@ -68,7 +68,7 @@ public:
     // Estado y Propiedades
     /*--------------------------*/
 
-    /// @brief Recibe daño y actualiza la salud del zombie
+    /// @brief Recibe daño y actualiza la salud del enemigo
     /// Función utilizada por balas y otras fuentes de daño
     /// @param amount Cantidad de daño recibido
     void TakeDamage(float amount) override;
