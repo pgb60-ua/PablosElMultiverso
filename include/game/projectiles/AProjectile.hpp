@@ -1,4 +1,5 @@
 #pragma once
+#include "AEnemy.hpp"
 #include "Stats.hpp"
 #include "Geometry.hpp"
 #include "SpriteAnimation.hpp"
@@ -15,6 +16,7 @@ private:
     Vector2 direction;
     bool active = false;
     float speed;
+    const std::vector<AEnemy *> *enemiesInScene;
 
 protected:
     SpriteAnimation animation;
@@ -38,5 +40,5 @@ public:
 
     void deactivate();
     bool isActive() const { return active; }
-    void activate(Vector2 position, Vector2 direction, const Stats &stats);
+    void activate(Vector2 position, Vector2 direction, const Stats &stats, const std::vector<AEnemy *> &allEnemies);
 };

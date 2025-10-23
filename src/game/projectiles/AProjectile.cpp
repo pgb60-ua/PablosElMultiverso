@@ -7,6 +7,7 @@ AProjectile::AProjectile()
     direction = {-110, -110};
     stats = Stats();
     speed = 180.0f;
+    enemiesInScene = nullptr;
 }
 
 AProjectile::~AProjectile()
@@ -33,12 +34,14 @@ Vector2 AProjectile::getPosition() const
 void AProjectile::deactivate()
 {
     active = false;
+    enemiesInScene = nullptr;
 }
 
-void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
+void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats, const std::vector<AEnemy *> &allEnemies)
 {
     this->active = true;
     setShapePosition(shape, position);
     this->direction = direction;
     this->stats = stats;
+    this->enemiesInScene = &allEnemies;
 }

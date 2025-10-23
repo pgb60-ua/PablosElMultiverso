@@ -44,7 +44,7 @@ public:
     virtual std::unique_ptr<AProjectile> CreateProjectile() = 0;
 
     /// @brief Dispara un proyectil desde la posición dada y hacia una dirección dada
-    void ShootProjectile(const Vector2 &position, const Vector2 &direction);
+    void ShootProjectile(const Vector2 &position, const Vector2 &direction, const std::vector<AEnemy *> &allEnemies);
 
     /// @brief Actualiza todos los proyectiles del pool
     void UpdateProjectiles(float deltaTime);

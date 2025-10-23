@@ -28,7 +28,7 @@ void WingWeapon::Attack(const Vector2 &position, float deltaTime)
     if (timeSinceLastAttack >= attackInterval)
     {
         // Disparo central
-        ShootProjectile(position, direction);
+        ShootProjectile(position, direction, allEnemies);
 
         const float angle = 30.0f * DEG2RAD;
         const float cosA = std::cos(angle);
@@ -41,8 +41,8 @@ void WingWeapon::Attack(const Vector2 &position, float deltaTime)
             direction.x * cosA + direction.y * sinA,
             direction.x * -sinA + direction.y * cosA};
 
-        ShootProjectile(position, dirPlus);
-        ShootProjectile(position, dirMinus);
+        ShootProjectile(position, dirPlus, allEnemies);
+        ShootProjectile(position, dirMinus, allEnemies);
 
         timeSinceLastAttack -= attackInterval;
     }

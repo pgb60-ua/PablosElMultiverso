@@ -13,12 +13,13 @@ ARangeWeapon::~ARangeWeapon()
 }
 
 // AQUI CONSIDERO QUE ACTIVATE DEBERIA LLEVAR TAMBIÉN UNA DIRECCIÓN HACIA DONDE SE DISPARA, PERO MANUEL NO LO HIZO ASÍ, EN LA PR QUE SE REVISE
-void ARangeWeapon::ShootProjectile(const Vector2 &position, const Vector2 &direction)
+// Le dijo la sarten al cazo
+void ARangeWeapon::ShootProjectile(const Vector2 &position, const Vector2 &direction, const std::vector<AEnemy *> &allEnemies)
 {
     AProjectile *projectile = GetProjectileFromPool();
     if (projectile)
     {
-        projectile->activate(position, direction, stats);
+        projectile->activate(position, direction, stats, allEnemies);
     }
 }
 
