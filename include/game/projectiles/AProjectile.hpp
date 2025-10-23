@@ -15,7 +15,6 @@ private:
     Shape shape;
     Vector2 direction;
     bool active = false;
-    float speed;
     const std::vector<AEnemy *> *enemiesInScene;
 
 protected:

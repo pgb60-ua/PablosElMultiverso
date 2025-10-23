@@ -7,7 +7,6 @@ AProjectile::AProjectile()
     setShapePosition(shape, {-110, -110});
     direction = {-110, -110};
     stats = Stats();
-    speed = 280.0f;
     enemiesInScene = nullptr;
 }
 
@@ -21,8 +20,8 @@ void AProjectile::update(float deltaTime)
         return;
 
     Vector2 position = getShapePosition(shape);
-    position.x += direction.x * speed * deltaTime;
-    position.y += direction.y * speed * deltaTime;
+    position.x += direction.x * stats.GetMovementSpeed() * deltaTime;
+    position.y += direction.y * stats.GetMovementSpeed() * deltaTime;
     setShapePosition(shape, position);
 
     if (position.x < 0 || position.x > GetScreenWidth() || position.y < 0 || position.y > GetScreenHeight())
