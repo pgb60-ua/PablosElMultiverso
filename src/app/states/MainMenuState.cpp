@@ -14,10 +14,10 @@ void MainMenuState::init() {}
 void MainMenuState::handleInput() {
 
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
-        selectedOption = (selectedOption + 1) % optionCount;
+        selectedOption = (selectedOption + 1) % OPTION_COUNT;
     }
     if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) {
-        selectedOption = (selectedOption - 1 + optionCount) % optionCount;
+        selectedOption = (selectedOption - 1 + OPTION_COUNT) % OPTION_COUNT;
     }
 
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
@@ -49,7 +49,7 @@ void MainMenuState::render() {
     int startY = screenHeight/2;
     
     const char* options[] = { "Jugar", "Salir" };
-    for (int i = 0; i < optionCount; i++) {
+    for (int i = 0; i < OPTION_COUNT; i++) {
         Vector2 textSize = MeasureTextEx(GetFontDefault(), options[i], 30, 1);
         int boxX = (screenWidth - boxWidth)/2;
         int boxY = startY + i * (boxHeight + boxSpacing);
