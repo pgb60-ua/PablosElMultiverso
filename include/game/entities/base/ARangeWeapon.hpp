@@ -29,12 +29,12 @@ protected:
 public:
     /// @brief Constructor de la clase RangeWeapon
     ARangeWeapon(const std::string& name, const std::string& description, 
-        const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize = 50, const Vector2& position = {0.0f, 0.0f}, const std::vector<AEnemy*>& enemiesInRange = {});
+        const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2& position,  std::vector<AEnemy*>& enemiesInRange);
     virtual ~ARangeWeapon();
 
     /// @brief Método para atacar
     virtual void Attack() override = 0;
-
+        
     /// @brief Sobrecarga del ataque para armas a distancia
     virtual void Attack(const Vector2& position, float deltaTime) = 0;
 

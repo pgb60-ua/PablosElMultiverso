@@ -9,7 +9,7 @@ private:
 
 public:
     /// @brief Constructor de la clase WingWeapon que carga desde JSON
-    WingWeapon(const Vector2& position = {0.0f, 0.0f}, const std::vector<AEnemy*>& enemiesInRange = {});
+    WingWeapon(const Vector2& position, std::vector<AEnemy*>& enemiesInRange);
     virtual ~WingWeapon();  
 
     /// @brief Método para atacar
