@@ -1,4 +1,4 @@
-#include "StartGameState.hpp"
+#include "MainMenuState.hpp"
 #include <string>
 #include <MainGameState.hpp>
 #include <StateMachine.hpp>
@@ -7,20 +7,19 @@ extern "C" {
 }
 
 
-StartGameState::StartGameState() {}
-StartGameState::~StartGameState() {}
+MainMenuState::MainMenuState() {}
+MainMenuState::~MainMenuState() {}
 
-void StartGameState::init() {}
-void StartGameState::handleInput() {
+void MainMenuState::init() {}
+void MainMenuState::handleInput() {
 
-    const int optionCount = 2; // Should match the number of options in render()
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
         selectedOption = (selectedOption + 1) % optionCount;
     }
     if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) {
         selectedOption = (selectedOption - 1 + optionCount) % optionCount;
     }
-    
+
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
         if (selectedOption == 0) {
             state_machine->add_state(std::make_unique<MainGameState>(), true);
@@ -30,9 +29,9 @@ void StartGameState::handleInput() {
     }
 
 }
-void StartGameState::update(float deltaTime) {}
+void MainMenuState::update(float deltaTime) {}
 
-void StartGameState::render() {
+void MainMenuState::render() {
     BeginDrawing();
     ClearBackground(BLACK);
 
@@ -50,13 +49,12 @@ void StartGameState::render() {
     int startY = screenHeight/2;
     
     const char* options[] = { "Jugar", "Salir" };
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < sizeof(options)/sizeof(options[0]); i++) {
         Vector2 textSize = MeasureTextEx(GetFontDefault(), options[i], 30, 1);
         int boxX = (screenWidth - boxWidth)/2;
         int boxY = startY + i * (boxHeight + boxSpacing);
         
-        Color boxColor = (selectedOption == i) ? (Color){150, 30, 30, 255} : (Color){60, 60, 60, 255};
-        DrawRectangle(boxX, boxY, boxWidth, boxHeight, boxColor);
+        Color boxColor = (selectedOption == i) ? SELECTED_BOX_COLOR : UNSELECTED_BOX_COLOR;        DrawRectangle(boxX, boxY, boxWidth, boxHeight, boxColor);
         DrawRectangleLinesEx((Rectangle){(float)boxX, (float)boxY, (float)boxWidth, (float)boxHeight}, 2, 
                             (selectedOption == i) ? RED : GRAY);
         
@@ -70,5 +68,5 @@ void StartGameState::render() {
     EndDrawing();
 
 }
-void StartGameState::pause() {}
-void StartGameState::resume() {}
+void MainMenuState::pause() {}
+void MainMenuState::resume() {}

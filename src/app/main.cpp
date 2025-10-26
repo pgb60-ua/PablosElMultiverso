@@ -1,6 +1,6 @@
 #include <MainGameState.hpp>
 #include <StateMachine.hpp>
-#include <StartGameState.hpp>
+#include <MainMenuState.hpp>
 #include <chrono>
 #include <memory>
 extern "C"
@@ -40,7 +40,7 @@ int main()
     float delta_time = 0.0f;
 
     StateMachine state_machine = StateMachine();
-    state_machine.add_state(std::make_unique<StartGameState>(), false);
+    state_machine.add_state(std::make_unique<MainMenuState>(), false);
     state_machine.handle_state_changes(delta_time);
     SetTargetFPS(120);
     InitAudioDevice();
