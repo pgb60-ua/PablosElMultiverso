@@ -53,8 +53,7 @@ int main()
         state_machine.getCurrentState()->update(delta_time);
         state_machine.getCurrentState()->render();
     }
-
     CloseAudioDevice();
-    CloseWindow();
+
     return 0;
 }

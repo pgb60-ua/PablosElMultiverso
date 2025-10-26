@@ -6,6 +6,8 @@ extern "C" {
 }
 class StartGameState : public GameState {
 
+    protected:
+        int selectedOption;
     public:
         StartGameState();
         ~StartGameState();
@@ -16,6 +18,4 @@ class StartGameState : public GameState {
 
         virtual void pause() override;
         virtual void resume() override;
-
-        Texture2D titleTexture;
 };

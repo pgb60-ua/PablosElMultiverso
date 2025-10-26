@@ -12,20 +12,7 @@ StartGameState::~StartGameState() {}
 
 void StartGameState::init() {}
 void StartGameState::handleInput() {
-    if (IsKeyPressed(KEY_SPACE)){
-        this->state_machine->add_state(std::make_unique<MainGameState>(), true);
-    }
-}
-void StartGameState::update(float deltaTime) {}
 
-void StartGameState::render() {
-    BeginDrawing();
-    ClearBackground(BLACK);
-    static int selectedOption = 0; 
-    
-    int screenWidth = GetScreenWidth();
-    int screenHeight = GetScreenHeight();
-    
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
         selectedOption = 1;
     }
@@ -33,13 +20,23 @@ void StartGameState::render() {
         selectedOption = 0;
     }
     
-    // Handle selection
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
         if (selectedOption == 0) {
+            state_machine->add_state(std::make_unique<MainGameState>(), true);
         } else {
             state_machine->remove_state(true);
         }
     }
+
+}
+void StartGameState::update(float deltaTime) {}
+
+void StartGameState::render() {
+    BeginDrawing();
+    ClearBackground(BLACK);
+
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
     
     const char* title = "PABLOS, EL MULTIVERSO";
     int titleFontSize = 50;
