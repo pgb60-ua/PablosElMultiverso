@@ -208,7 +208,7 @@ void Player::CheckCollisions(float deltaTime)
         Shape playerHitbox = GetHitbox();
         Shape enemyHitbox = enemy->GetHitbox();
 
-        // Comprobar colisión (asumiendo que existe una función CheckCollisionShapes)
+        // Comprobar colisión entre las hitboxes usando CheckCollisionRecs de raylib
         if (CheckCollisionRecs(playerHitbox.data.rectangle, enemyHitbox.data.rectangle))
         {
             TakeDamage(enemy->GetStats());
