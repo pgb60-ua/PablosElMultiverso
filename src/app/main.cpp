@@ -1,3 +1,4 @@
+#include "WindowFlags.hpp"
 #include <MainGameState.hpp>
 #include <StateMachine.hpp>
 #include <chrono>
@@ -9,32 +10,8 @@ extern "C"
 
 int main()
 {
-
-    // Configurar flags ANTES de InitWindow
-    SetConfigFlags(FLAG_WINDOW_UNDECORATED); // Sin bordes ni barra de título
-
-    int monitorIndex = 0;
-
-    // Obtener dimensiones del monitor
-    int monitorAncho = GetMonitorWidth(monitorIndex);
-    int monitorAlto = GetMonitorHeight(monitorIndex);
-
     // Crear ventana con el tamaño del monitor
-    InitWindow(monitorAncho, monitorAlto, "Pablos, El Multiverso");
-
-    // Obtener el monitor actual
-    int currentMonitor = GetCurrentMonitor();
-
-    // Ahora sí, obtener las dimensiones correctas del monitor actual
-    monitorAncho = GetMonitorWidth(currentMonitor);
-    monitorAlto = GetMonitorHeight(currentMonitor);
-
-    if (currentMonitor != monitorIndex)
-    {
-        SetWindowSize(monitorAncho, monitorAlto);
-        SetWindowMonitor(currentMonitor);
-        SetWindowPosition(0, 0);
-    }
+    InitWindow(1200, 800, "Pablos, El Multiverso");
 
     float delta_time = 0.0f;
 
@@ -44,8 +21,9 @@ int main()
     SetTargetFPS(120);
     InitAudioDevice();
 
-    while (!state_machine.is_game_ending() && !IsKeyDown(KEY_ESCAPE) && !WindowShouldClose())
+    while (!state_machine.is_game_ending() && !WindowShouldClose())
     {
+        HandleWindowFlags();
         delta_time = GetFrameTime();
         state_machine.handle_state_changes(delta_time);
         state_machine.getCurrentState()->handleInput();
