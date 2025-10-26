@@ -54,6 +54,7 @@ int main()
         state_machine.getCurrentState()->render();
     }
     CloseAudioDevice();
+    
 
     return 0;
 }

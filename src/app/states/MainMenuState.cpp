@@ -49,12 +49,13 @@ void MainMenuState::render() {
     int startY = screenHeight/2;
     
     const char* options[] = { "Jugar", "Salir" };
-    for (int i = 0; i < sizeof(options)/sizeof(options[0]); i++) {
+    for (int i = 0; i < optionCount; i++) {
         Vector2 textSize = MeasureTextEx(GetFontDefault(), options[i], 30, 1);
         int boxX = (screenWidth - boxWidth)/2;
         int boxY = startY + i * (boxHeight + boxSpacing);
         
-        Color boxColor = (selectedOption == i) ? SELECTED_BOX_COLOR : UNSELECTED_BOX_COLOR;        DrawRectangle(boxX, boxY, boxWidth, boxHeight, boxColor);
+        Color boxColor = (selectedOption == i) ? SELECTED_BOX_COLOR : UNSELECTED_BOX_COLOR;        
+        DrawRectangle(boxX, boxY, boxWidth, boxHeight, boxColor);
         DrawRectangleLinesEx((Rectangle){(float)boxX, (float)boxY, (float)boxWidth, (float)boxHeight}, 2, 
                             (selectedOption == i) ? RED : GRAY);
         
