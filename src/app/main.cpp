@@ -21,7 +21,7 @@ int main()
     SetTargetFPS(120);
     InitAudioDevice();
 
-    while (!state_machine.is_game_ending() && !IsKeyDown(KEY_ESCAPE) && !WindowShouldClose())
+    while (!state_machine.is_game_ending() && !WindowShouldClose())
     {
         HandleWindowFlags();
         delta_time = GetFrameTime();
