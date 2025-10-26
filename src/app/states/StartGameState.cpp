@@ -13,11 +13,12 @@ StartGameState::~StartGameState() {}
 void StartGameState::init() {}
 void StartGameState::handleInput() {
 
+    const int optionCount = 2; // Should match the number of options in render()
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
-        selectedOption = 1;
+        selectedOption = (selectedOption + 1) % optionCount;
     }
     if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) {
-        selectedOption = 0;
+        selectedOption = (selectedOption - 1 + optionCount) % optionCount;
     }
     
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
