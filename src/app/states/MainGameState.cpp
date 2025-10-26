@@ -18,8 +18,8 @@ void MainGameState::init()
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     Vector2 secondPosition = {600.0f, 700.0f};
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition));
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition));
+    players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
+    players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition, enemies));
 
     for (int i = 0; i < 10; i++)
     {
@@ -88,6 +88,7 @@ void MainGameState::update(float deltaTime)
     for (auto &player : players)
     {
         player->Update(deltaTime);
+        player->CheckCollisions(deltaTime);
     }
     // Actualizar todos los enemigos
     for (auto &enemy : enemies)
@@ -112,6 +113,8 @@ void MainGameState::render()
     for (auto &player : players)
     {
         player->Render();
+        std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
+        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x - healthText.length() * 2.5f), static_cast<int>(player->GetPosition().y) + 32, 10, GREEN);
     }
     // Renderizar todos los enemigos
     for (auto &enemy : enemies)
