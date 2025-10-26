@@ -7,7 +7,7 @@ extern "C" {
 class StartGameState : public GameState {
 
     protected:
-        int selectedOption;
+        int selectedOption = 0;
     public:
         StartGameState();
         ~StartGameState();
