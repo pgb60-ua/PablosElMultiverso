@@ -41,9 +41,9 @@ protected:
     /// @brief Dirección del arma
     Vector2 direction;
     /// @brief Enemigos en rango del arma
-    const std::vector<AEnemy *> &enemiesInRange;
+    std::vector<AEnemy *> &enemiesInRange;
     /// @brief Todos los enemigos del nivel
-    const std::vector<AEnemy *> &allEnemies;
+    std::vector<AEnemy *> &allEnemies;
 
     /// @brief Obtiene un string del JSON
     static std::string GetStringFromJSON(const std::string &key, WEAPON_TYPE type, const std::string &defaultValue);
@@ -56,7 +56,7 @@ protected:
 
 public:
     /// @brief Constructor de la clase Weapon
-    AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity, int level, Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);
+    AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity, int level,const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);
 
     /// @brief Getter del tipo de arma
     WEAPON_TYPE GetWeaponType() const { return weaponType; }

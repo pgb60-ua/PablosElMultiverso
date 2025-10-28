@@ -21,12 +21,9 @@ protected:
 
     /// @brief Cantidad de Pablo Coins que suelta al morir
     int pabloCoinsAtDeath;
-    bool alive = true;
 
     /// @brief Constructor protegido para clases derivadas
     AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
-    /// @brief Animación del enemigo
-    SpriteAnimation animation;
     /// @brief Actualiza la animación del enemigo
     void UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType);
 
@@ -48,7 +45,7 @@ public:
 
     /// @brief Verifica si el enemigo está vivo
     /// @return true si está vivo, false si está muerto
-    bool IsAlive() const { return alive; }
+    bool IsAlive() const { return this->stats.GetHealth() > 0; }
 
     /*--------------------------*/
     // Botín y Economía
@@ -67,11 +64,6 @@ public:
     /*--------------------------*/
     // Estado y Propiedades
     /*--------------------------*/
-
-    /// @brief Recibe daño y actualiza la salud del enemigo
-    /// Función utilizada por balas y otras fuentes de daño
-    /// @param amount Cantidad de daño recibido
-    void TakeDamage(float amount) override;
 
     /// @brief Obtiene el jugador más cercano al enemigo
     /// @return Puntero al jugador más cercano, nullptr si no hay jugadores

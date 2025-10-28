@@ -111,7 +111,11 @@ Vector2 AWeapon::CalculateDirection()
 
     for (const AEnemy *enemy : enemiesInRange)
     {
-        Vector2 toEnemy = {enemy->GetPosition().x - position.x, enemy->GetPosition().y - position.y};
+        Vector2 enemyCenter = {
+            enemy->GetPosition().x + enemy->GetHitbox().data.rectangle.width * 0.5f,
+            enemy->GetPosition().y + enemy->GetHitbox().data.rectangle.height * 0.5f
+        };
+        Vector2 toEnemy = {enemyCenter.x - position.x, enemyCenter.y - position.y};
         float distanceSquared = toEnemy.x * toEnemy.x + toEnemy.y * toEnemy.y;
         if (distanceSquared > 0.0f && distanceSquared < closestDistanceSquared && enemy->IsAlive())
         {

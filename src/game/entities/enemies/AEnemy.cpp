@@ -14,18 +14,6 @@ void AEnemy::SetPabloCoinsAtDeath(int cantidad) { pabloCoinsAtDeath = cantidad; 
 
 int AEnemy::GetPabloCoinsAtDeath() const { return pabloCoinsAtDeath; }
 
-void AEnemy::TakeDamage(float amount)
-{
-    // Reduce la salud
-    float newHealth = stats.GetHealth() - amount;
-    stats.SetHealth(newHealth > 0 ? newHealth : 0);
-    // Verifica si está muerto
-    if (stats.GetHealth() <= 0)
-    {
-        alive = false;
-    }
-}
-
 Player *AEnemy::GetClosestPlayer()
 {
     if (objectives.empty())
@@ -51,8 +39,7 @@ Player *AEnemy::GetClosestPlayer()
 
 void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
 {
-    if (!alive)
-        return;
+
     animation.timeAccumulator += deltaTime;
 
     if (animation.timeAccumulator >= animation.FRAME_DURATION)
