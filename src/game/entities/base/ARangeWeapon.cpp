@@ -1,9 +1,9 @@
 #include "ARangeWeapon.hpp"
 
 ARangeWeapon::ARangeWeapon(const std::string& name, const std::string& description, 
-    const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize)
-    : AWeapon(name, description, stats, itemRarity, WeaponType::Ranged, level), POOL_SIZE(poolSize) {
-    InitializeProjectilePool();
+    const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2& position, std::vector<AEnemy*>& enemiesInRange)
+    : AWeapon(name, description, stats, itemRarity, level, position, enemiesInRange), POOL_SIZE(poolSize) {
+    UpdateAttackInterval();
 }
 
 ARangeWeapon::~ARangeWeapon() {
@@ -51,4 +51,28 @@ AProjectile* ARangeWeapon::GetProjectileFromPool() {
         }
     }
     return nullptr; // No hay proyectiles disponibles
+}
+
+void ARangeWeapon::SetStats(const Stats& newStats) {
+    stats = newStats;
+    UpdateAttackInterval(); 
+}
+
+void ARangeWeapon::UpdateAttackInterval() {
+    float attackSpeed = stats.GetOffensiveStats().attackSpeed;
+    attackSpeed = std::max(MIN_ATTACK_SPEED, attackSpeed); 
+    attackInterval = 1.0f / attackSpeed;
+}
+
+void ARangeWeapon::render() {
+    AWeapon::render();
+    for (const auto &projectile : GetActiveProjectiles()) {
+        projectile->render();
+    }
+}
+
+void ARangeWeapon::update(float deltaTime, const Vector2& position) {
+    AWeapon::update(deltaTime, position);
+    Attack(position, deltaTime); // TODO : La dirección debería de ser calculada
+    UpdateProjectiles(deltaTime);
 }

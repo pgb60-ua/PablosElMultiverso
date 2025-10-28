@@ -1,12 +1,12 @@
 #pragma once
 #include "AEntity.hpp"
 #include "AWeapon.hpp"
+#include "AEnemy.hpp"
 #include "DataFileManager.hpp"
 #include "Item.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "Stats.hpp"
 #include "Types.hpp"
-#include "SpriteAnimation.hpp"
 #include <memory>
 #include <vector>
 
@@ -14,6 +14,8 @@ extern "C"
 {
     #include "raylib.h"
 }
+class AWeapon;
+class AEnemy;
 
 // Clase que representa el player
 class Player : public AEntity
@@ -26,8 +28,12 @@ private:
     static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
-    SpriteAnimation animation;
     void UpdatePlayerAnimation(float deltaTime);
+    std::vector<AEnemy*> enemiesInRange;
+    std::vector<AEnemy*> &allEnemies;
+    void UpdateEnemiesInRange();
+    inline const static float DISTANCE_RANGE = 800.0f;
+    inline const static float COOLDOWN_DAMAGE_TIME = 0.5f;
 
 protected:
     /// @brief Modificador multiplicativo de vida
@@ -67,7 +73,7 @@ protected:
     float healthRegenerationModifier = BASE_MULTIPLIER;
 
 public:
-    Player(PLAYER_TYPE player, Vector2 position);
+    Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEnemies);
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
     float GetHealth() const { return stats.GetHealth(); }
@@ -231,11 +237,11 @@ public:
     void SetPlayerType(PLAYER_TYPE player) { this->player = player; }
 
     void Move(Vector2 newDirection, float deltaTime);
-    void TakeDamage(float amount) override;
     void Update(float deltaTime) override;
     void HandleInput(Vector2 inputDirection);
     void AddItem(std::shared_ptr<Item> item);
     void AddWeapon(std::unique_ptr<AWeapon> newWeapon);
+    void CheckCollisions(float deltaTime) override;
     void Render() override;
     bool Attack() override;
 
