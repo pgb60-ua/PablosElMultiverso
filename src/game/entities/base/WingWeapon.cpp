@@ -1,53 +1,54 @@
 #include <cmath>
 #include "WingWeapon.hpp"
 
-WingWeapon::WingWeapon(const Vector2& position, std::vector<AEnemy*>& enemiesInRange)
+WingWeapon::WingWeapon(const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : ARangeWeapon(
-        GetStringFromJSON("name", WEAPON_TYPE::WING, "Unknown Weapon"),
-        GetStringFromJSON("description", WEAPON_TYPE::WING, ""),
-        DataFileManager::GetInstance().GetWeaponStats(WEAPON_TYPE::WING),
-        GetRarityFromJSON(WEAPON_TYPE::WING),
-        GetIntFromJSON("level", WEAPON_TYPE::WING, 1),
-        GetIntFromJSON("pool_size", WEAPON_TYPE::WING, 50),
-        position,
-        enemiesInRange
-    )
+          GetStringFromJSON("name", WEAPON_TYPE::WING, "Unknown Weapon"),
+          GetStringFromJSON("description", WEAPON_TYPE::WING, ""),
+          DataFileManager::GetInstance().GetWeaponStats(WEAPON_TYPE::WING),
+          GetRarityFromJSON(WEAPON_TYPE::WING),
+          GetIntFromJSON("level", WEAPON_TYPE::WING, 1),
+          GetIntFromJSON("pool_size", WEAPON_TYPE::WING, 50),
+          position,
+          enemiesInRange,
+          allEnemies)
 {
     InitializeProjectilePool();
     SetPosition(position);
     SetWeaponType(WEAPON_TYPE::WING);
 }
 
-WingWeapon::~WingWeapon() {
+WingWeapon::~WingWeapon()
+{
 }
 
-void WingWeapon::Attack(const Vector2& position, float deltaTime) {
+void WingWeapon::Attack(const Vector2 &position, float deltaTime)
+{
     timeSinceLastAttack += deltaTime;
-    if (timeSinceLastAttack >= attackInterval) {
+    if (timeSinceLastAttack >= attackInterval)
+    {
         // Disparo central
-        ShootProjectile(position, direction);
+        ShootProjectile(position, direction, allEnemies);
 
-        
         const float angle = 30.0f * DEG2RAD;
         const float cosA = std::cos(angle);
         const float sinA = std::sin(angle);
 
         Vector2 dirPlus{
             direction.x * cosA - direction.y * sinA,
-            direction.x * sinA + direction.y * cosA
-        };
+            direction.x * sinA + direction.y * cosA};
         Vector2 dirMinus{
             direction.x * cosA + direction.y * sinA,
-            direction.x * -sinA + direction.y * cosA
-        };
+            direction.x * -sinA + direction.y * cosA};
 
-        ShootProjectile(position, dirPlus);
-        ShootProjectile(position, dirMinus);
+        ShootProjectile(position, dirPlus, allEnemies);
+        ShootProjectile(position, dirMinus, allEnemies);
 
         timeSinceLastAttack -= attackInterval;
     }
 }
 
-std::unique_ptr<AProjectile> WingWeapon::CreateProjectile() {
+std::unique_ptr<AProjectile> WingWeapon::CreateProjectile()
+{
     return std::make_unique<WingProjectile>();
 }

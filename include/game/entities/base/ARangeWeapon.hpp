@@ -4,7 +4,8 @@
 #include <vector>
 #include <memory>
 
-class ARangeWeapon : public AWeapon {
+class ARangeWeapon : public AWeapon
+{
 
 protected:
     /// @brief Pool de proyectiles
@@ -25,36 +26,37 @@ protected:
     /// @brief Inicializa el pool de proyectiles
     virtual void InitializeProjectilePool();
     /// @brief Obtiene un proyectil inactivo del pool
-    AProjectile* GetProjectileFromPool();
+    AProjectile *GetProjectileFromPool();
+
 public:
     /// @brief Constructor de la clase RangeWeapon
-    ARangeWeapon(const std::string& name, const std::string& description, 
-        const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2& position,  std::vector<AEnemy*>& enemiesInRange);
+    ARangeWeapon(const std::string &name, const std::string &description,
+                 const Stats &stats, ItemRarity itemRarity, int level, size_t poolSize = 50, const Vector2 &position , std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);
     virtual ~ARangeWeapon();
 
     /// @brief Método para atacar
     virtual void Attack() override = 0;
         
     /// @brief Sobrecarga del ataque para armas a distancia
-    virtual void Attack(const Vector2& position, float deltaTime) = 0;
+    virtual void Attack(const Vector2 &position, float deltaTime) = 0;
 
     /// @brief Método para crear proyectiles
     virtual std::unique_ptr<AProjectile> CreateProjectile() = 0;
 
     /// @brief Dispara un proyectil desde la posición dada y hacia una dirección dada
-    void ShootProjectile(const Vector2& position, const Vector2& direction);
+    void ShootProjectile(const Vector2 &position, const Vector2 &direction, const std::vector<AEnemy *> &allEnemies);
 
     /// @brief Actualiza todos los proyectiles del pool
     void UpdateProjectiles(float deltaTime);
 
     /// @brief Getter de los proyectiles activos
-    std::vector<AProjectile*> GetActiveProjectiles() const;
+    std::vector<AProjectile *> GetActiveProjectiles() const;
 
-    void SetStats(const Stats& newStats);
+    void SetStats(const Stats &newStats);
 
     float GetAttackInterval() const { return attackInterval; }
-    
+
     virtual void render();
 
-    void update(float deltaTime, const Vector2& position) override;
+    void update(float deltaTime, const Vector2 &position) override;
 };

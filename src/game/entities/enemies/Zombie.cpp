@@ -6,11 +6,11 @@
 
 Zombie::Zombie(std::vector<Player *> objectives)
     : AEnemy(
-            DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE),
-            SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE,
-            Vector2{(float)(std::rand() % 2000), (float)(std::rand() % 2000)}),
-            objectives,
-            50)
+          DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE),
+          SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE,
+                                                             Vector2{(float)(std::rand() % 2000), (float)(std::rand() % 2000)}),
+          objectives,
+          50)
 {
     // Las stats se cargan automáticamente desde zombie.json en la lista de inicialización
     s_allZombies.push_back(this);
@@ -26,7 +26,6 @@ Zombie::Zombie(std::vector<Player *> objectives)
     velocity = Vector2Scale(Vector2Normalize(randomDir), baseSpeed * 0.5f);
 }
 
-
 bool Zombie::Attack()
 {
     if (currentAttackCooldownTime >= attackCooldown)
@@ -40,6 +39,8 @@ bool Zombie::Attack()
 
 void Zombie::Move(float deltaTime)
 {
+    if (!alive)
+        return;
     Player *closestPlayer = GetClosestPlayer();
 
     // Si no hay jugadores, no se mueve
@@ -132,6 +133,8 @@ void Zombie::Move(float deltaTime)
 
 void Zombie::Render()
 {
+    if (!alive)
+        return;
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);
     if (sheet.frames.empty())
         return;

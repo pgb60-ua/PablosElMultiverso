@@ -41,7 +41,9 @@ protected:
     /// @brief Dirección del arma
     Vector2 direction;
     /// @brief Enemigos en rango del arma
-    const std::vector<AEnemy*>& enemiesInRange;
+    const std::vector<AEnemy *> &enemiesInRange;
+    /// @brief Todos los enemigos del nivel
+    const std::vector<AEnemy *> &allEnemies;
 
     /// @brief Obtiene un string del JSON
     static std::string GetStringFromJSON(const std::string &key, WEAPON_TYPE type, const std::string &defaultValue);
@@ -54,7 +56,7 @@ protected:
 
 public:
     /// @brief Constructor de la clase Weapon
-    AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, int level, const Vector2& position, std::vector<AEnemy*>& enemiesInRange);
+    AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity, int level, Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);
 
     /// @brief Getter del tipo de arma
     WEAPON_TYPE GetWeaponType() const { return weaponType; }
@@ -63,20 +65,19 @@ public:
     /// @brief Getter del nivel máximo del arma
     int GetMaxLevel() const { return MAXLEVEL; }
     /// @brief Sube de nivel el arma
-    bool Upgrade(const OffensiveStats& newOffensiveStats);
+    bool Upgrade(const OffensiveStats &newOffensiveStats);
     /// @brief Getter de la posición del arma
     Vector2 GetPosition() const { return position; }
     /// @brief Setter de la posición del arma
-    void SetPosition(const Vector2& newPosition) { position = newPosition; }
+    void SetPosition(const Vector2 &newPosition) { position = newPosition; }
     /// @brief Setter del tipo de arma
     void SetWeaponType(WEAPON_TYPE newType) { weaponType = newType; }
     /// @brief Setter de la dirección del arma
-    void SetDirection(const Vector2& newDirection) { direction = newDirection; }
+    void SetDirection(const Vector2 &newDirection) { direction = newDirection; }
 
     /// @brief Método para atacar
     virtual void Attack() = 0;
     virtual void render();
-    virtual void update(float deltaTime, const Vector2& position);
+    virtual void update(float deltaTime, const Vector2 &position);
     virtual ~AWeapon() {}
 };
-

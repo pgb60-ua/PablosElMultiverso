@@ -6,7 +6,7 @@
 	"pool_size": 50,
 	"health": 0,
 	"max_health": 0,
-	"movement_speed": 0,
+	"movement_speed": 250,
 	"agility": 0,
 	"attack_speed": 2.0,
 	"physical_damage": 25,
