@@ -1,7 +1,7 @@
 #pragma once
+#include "AEnemy.hpp"
 #include "AEntity.hpp"
 #include "AWeapon.hpp"
-#include "AEnemy.hpp"
 #include "DataFileManager.hpp"
 #include "Item.hpp"
 #include "SpriteLoaderManager.hpp"
@@ -12,7 +12,7 @@
 
 extern "C"
 {
-    #include "raylib.h"
+#include "raylib.h"
 }
 class AWeapon;
 class AEnemy;
@@ -29,9 +29,16 @@ private:
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
     void UpdatePlayerAnimation(float deltaTime);
-    std::vector<AEnemy*> enemiesInRange;
-    std::vector<AEnemy*> &allEnemies;
+    std::vector<AEnemy *> enemiesInRange;
+    std::vector<AEnemy *> &allEnemies;
     void UpdateEnemiesInRange();
+    // En la sección private de Player.hpp
+    static constexpr Vector2 WEAPON_OFFSETS[WEAPON_MAX] = {
+        {0.0f, 0.0f},   // índice 0 - Arriba Izquierda
+        {80.0f, 0.0f},  // índice 1 - Arriba Derecha
+        {0.0f, -80.0f}, // índice 2 - Debajo Izquierda
+        {80.0f, -80.0f} // índice 3 - Debajo Derecha
+    };
     inline const static float DISTANCE_RANGE = 800.0f;
     inline const static float COOLDOWN_DAMAGE_TIME = 0.5f;
 
@@ -73,7 +80,7 @@ protected:
     float healthRegenerationModifier = BASE_MULTIPLIER;
 
 public:
-    Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEnemies);
+    Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy *> &allEnemies);
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
     float GetHealth() const { return stats.GetHealth(); }

@@ -72,10 +72,11 @@ void Player::Update(float deltaTime)
     UpdateEnemiesInRange();
     UpdatePlayerAnimation(deltaTime);
 
-    for (const auto &weapon : weapons)
+    for (unsigned i = 0; i < weapons.size(); i++)
     {
         // Asumimos que el arma sigue al primer jugador
-        weapon->update(deltaTime, Vector2{GetPosition().x + 80, GetPosition().y + 80});
+        weapons[i]->update(deltaTime,
+                           Vector2{GetPosition().x + WEAPON_OFFSETS[i].x, GetPosition().y + WEAPON_OFFSETS[i].y});
     }
 }
 
