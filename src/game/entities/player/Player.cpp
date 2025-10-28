@@ -1,6 +1,7 @@
 #include "Player.hpp"
 #include "Types.hpp"
 #include "raylib.h"
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <raymath.h>
@@ -28,6 +29,39 @@ void Player::UpdateEnemiesInRange()
         {
             enemiesInRange.push_back(enemy);
         }
+    }
+}
+
+Vector2 Player::CalculateWeaponOffset(size_t weaponIndex, float playerSpriteWidth, float playerSpriteHeight,
+                                      float weaponSpriteWidth, float weaponSpriteHeight) const
+{
+    // Calcular el centro del sprite del jugador
+    float playerCenterX = playerSpriteWidth * 0.5f;
+    float playerCenterY = playerSpriteHeight * 0.5f;
+
+    // Calcular mitad del tamaño del arma para usarlo como offset base
+    float weaponHalfWidth = weaponSpriteWidth * 0.5f;
+    float weaponHalfHeight = weaponSpriteHeight * 0.5f;
+
+    // Calcular offsets basándose en el índice del arma y su tamaño
+    // Las armas se distribuyen en un patrón de 2x2 alrededor del centro del jugador
+    // Cada arma se posiciona teniendo en cuenta su propio tamaño
+    switch (weaponIndex)
+    {
+    case 0: // Arriba-Izquierda
+        return {playerCenterX - weaponHalfWidth - WEAPON_OFFSET_DISTANCE,
+                playerCenterY - weaponHalfHeight - WEAPON_OFFSET_DISTANCE};
+    case 1: // Arriba-Derecha
+        return {playerCenterX + weaponHalfWidth + WEAPON_OFFSET_DISTANCE,
+                playerCenterY - weaponHalfHeight - WEAPON_OFFSET_DISTANCE};
+    case 2: // Abajo-Izquierda
+        return {playerCenterX - weaponHalfWidth - WEAPON_OFFSET_DISTANCE,
+                playerCenterY + weaponHalfHeight + WEAPON_OFFSET_DISTANCE};
+    case 3: // Abajo-Derecha
+        return {playerCenterX + weaponHalfWidth + WEAPON_OFFSET_DISTANCE,
+                playerCenterY + weaponHalfHeight + WEAPON_OFFSET_DISTANCE};
+    default:
+        return {playerCenterX, playerCenterY};
     }
 }
 
@@ -73,11 +107,12 @@ void Player::Update(float deltaTime)
     UpdateEnemiesInRange();
     UpdatePlayerAnimation(deltaTime);
 
+    // Actualizar posición de las armas usando los offsets almacenados
+    Vector2 playerPos = GetPosition();
     for (size_t i = 0; i < weapons.size(); i++)
     {
-        // Asumimos que el arma sigue al primer jugador
-        weapons[i]->update(deltaTime,
-                           Vector2{GetPosition().x + WEAPON_OFFSETS[i].x, GetPosition().y + WEAPON_OFFSETS[i].y});
+        Vector2 weaponPos = {playerPos.x + weaponOffsets[i].x, playerPos.y + weaponOffsets[i].y};
+        weapons[i]->update(deltaTime, weaponPos);
     }
 }
 
@@ -104,7 +139,38 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
     // Si tengo menos de 4
     if (weapons.size() < WEAPON_MAX)
     {
+        // Obtener el tamaño del sprite del jugador para calcular el offset
+        const SpriteSheet &playerSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player);
+        Vector2 offset = {0.0f, 0.0f};
+
+        if (!playerSheet.frames.empty())
+        {
+            // Obtener dimensiones del sprite del jugador
+            Rectangle playerFrame = playerSheet.frames[0]; // Usar el primer frame como referencia
+            float playerSpriteWidth = std::abs(playerFrame.width);
+            float playerSpriteHeight = std::abs(playerFrame.height);
+
+            // Obtener dimensiones del sprite del arma
+            const SpriteSheet &weaponSheet =
+                SpriteLoaderManager::GetInstance().GetSpriteSheet(newWeapon->GetWeaponType());
+            float weaponSpriteWidth = 0.0f;
+            float weaponSpriteHeight = 0.0f;
+
+            if (!weaponSheet.frames.empty())
+            {
+                Rectangle weaponFrame = weaponSheet.frames[0];
+                weaponSpriteWidth = std::abs(weaponFrame.width);
+                weaponSpriteHeight = std::abs(weaponFrame.height);
+            }
+
+            // Calcular offset para esta arma basándose en su índice y tamaños
+            size_t weaponIndex = weapons.size();
+            offset = CalculateWeaponOffset(weaponIndex, playerSpriteWidth, playerSpriteHeight, weaponSpriteWidth,
+                                           weaponSpriteHeight);
+        }
+
         weapons.push_back(std::move(newWeapon)); // std::move transfiere ownership
+        weaponOffsets.push_back(offset);         // Guardar el offset para esta arma
     }
     // Si tengo 4, sumo las stats
     else
@@ -118,6 +184,7 @@ Player::~Player()
 {
     inventory.clear();
     weapons.clear();
+    weaponOffsets.clear();
 }
 
 void Player::ImportModifiers(PLAYER_TYPE player)
@@ -178,9 +245,10 @@ void Player::Render()
 
     Rectangle dest = {hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
                       hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f, src.width, src.height};
-
+    DrawRectanglePro(dest, origin, 0, RED);
     DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
 
+    // Renderizar armas (la posición ya se actualiza en Update())
     for (const auto &weapon : weapons)
     {
         weapon->render();
