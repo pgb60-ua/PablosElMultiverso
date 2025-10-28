@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <raymath.h>
 
-Player::Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEnemies)
+Player::Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy *> &allEnemies)
     : AEntity(DataFileManager::GetInstance().GetPlayerStats(player),
               SpriteLoaderManager::GetInstance().GetSpriteHitbox(player, position)),
       allEnemies(allEnemies)
@@ -18,7 +18,7 @@ void Player::UpdateEnemiesInRange()
 {
     enemiesInRange.clear();
 
-    for (AEnemy* enemy : allEnemies)
+    for (AEnemy *enemy : allEnemies)
     {
         Vector2 playerPos = GetPosition();
         Vector2 enemyPos = enemy->GetPosition();
@@ -71,6 +71,12 @@ void Player::Update(float deltaTime)
     }
     UpdateEnemiesInRange();
     UpdatePlayerAnimation(deltaTime);
+
+    for (const auto &weapon : weapons)
+    {
+        // Asumimos que el arma sigue al primer jugador
+        weapon->update(deltaTime, Vector2{GetPosition().x + 80, GetPosition().y + 80});
+    }
 }
 
 void Player::HandleInput(Vector2 newInputDirection)
@@ -78,7 +84,6 @@ void Player::HandleInput(Vector2 newInputDirection)
     // Guardar la dirección del input para usarla en Update
     inputDirection = newInputDirection;
 }
-
 
 void Player::AddItem(std::shared_ptr<Item> item)
 {
@@ -152,7 +157,8 @@ void Player::ImportModifiers(PLAYER_TYPE player)
 void Player::Render()
 {
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player);
-    if (sheet.frames.empty()) return;
+    if (sheet.frames.empty())
+        return;
     animation.frameIndex %= sheet.spriteFrameCount;
 
     Rectangle src = sheet.frames[animation.frameIndex];
@@ -165,14 +171,18 @@ void Player::Render()
         src.width *= -1.0f;
     }
 
-    Vector2 origin = { src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
-                       src.height > 0 ? src.height * 0.5f : -src.height * 0.5f };
+    Vector2 origin = {src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
+                      src.height > 0 ? src.height * 0.5f : -src.height * 0.5f};
 
     Rectangle dest = {hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
-                      hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f,
-                      src.width, src.height};
+                      hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f, src.width, src.height};
 
     DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
+
+    for (const auto &weapon : weapons)
+    {
+        weapon->render();
+    }
 }
 
 bool Player::Attack()
@@ -196,14 +206,14 @@ void Player::UpdatePlayerAnimation(float deltaTime)
 
 void Player::CheckCollisions(float deltaTime)
 {
-    if( receiveDamageCooldownTime < COOLDOWN_DAMAGE_TIME)
+    if (receiveDamageCooldownTime < COOLDOWN_DAMAGE_TIME)
     {
         receiveDamageCooldownTime += deltaTime;
         return;
     }
     receiveDamageCooldownTime -= COOLDOWN_DAMAGE_TIME;
     animation.color = WHITE;
-    for(auto& enemy : enemiesInRange)
+    for (auto &enemy : enemiesInRange)
     {
         // Obtener las hitboxes
         Shape playerHitbox = GetHitbox();
