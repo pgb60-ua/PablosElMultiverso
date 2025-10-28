@@ -66,7 +66,7 @@ void GameOverState::render() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
     
-    const char* title = "HAS PERDIDO!";
+    const char* title = "¡HAS PERDIDO!";
     int titleFontSize = 50;
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
     Vector2 titlePos = { (screenWidth - titleSize.x) / 2.0f, (float)screenHeight / 4.0f - titleSize.y / 2.0f };
