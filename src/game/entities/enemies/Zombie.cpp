@@ -148,9 +148,8 @@ void Zombie::Render()
                       hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f,
                       src.width, src.height};
 
-    DrawRectangle(hitbox.data.rectangle.x, hitbox.data.rectangle.y,
-                  hitbox.data.rectangle.width, hitbox.data.rectangle.height, RED); // Draw hitbox for debugging
     DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
+    animation.color = WHITE;
 }
 
 std::vector<Zombie *> Zombie::s_allZombies;

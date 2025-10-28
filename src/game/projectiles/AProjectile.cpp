@@ -42,7 +42,6 @@ void AProjectile::update(float deltaTime)
     {
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
-            // std::cout << "Projectile hit an enemy!" << std::endl;
             enemy->TakeDamage(stats);
             if(!enemy->IsAlive())
             {

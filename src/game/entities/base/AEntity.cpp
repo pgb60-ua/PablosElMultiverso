@@ -90,5 +90,4 @@ void AEntity::TakeDamage(const Stats &stats)
     if (animation.color.r == WHITE.r && animation.color.g == WHITE.g && animation.color.b == WHITE.b && animation.color.a == WHITE.a)
         animation.color = RED;
     this->stats.SetHealth(newHealth > 0 ? newHealth : 0);
-    std::cout <<"color r: " << (int)animation.color.r << " g: " << (int)animation.color.g << " b: " << (int)animation.color.b << " a: " << (int)animation.color.a << std::endl;
 }

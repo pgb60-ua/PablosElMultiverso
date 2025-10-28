@@ -21,7 +21,9 @@ void MainGameState::init()
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition, enemies));
 
-    for (int i = 0; i < 1; i++)
+    int numZombies = 100;
+    enemies.reserve(numZombies);
+    for (int i = 0; i < numZombies; i++)
     {
         enemies.push_back(new Zombie(std::vector<Player *>{players[0].get(), players[1].get()}));
     }

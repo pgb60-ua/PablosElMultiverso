@@ -19,7 +19,7 @@ int main()
     StateMachine state_machine = StateMachine();
     state_machine.add_state(std::make_unique<MainMenuState>(), false);
     state_machine.handle_state_changes(delta_time);
-    SetTargetFPS(1000);
+    SetTargetFPS(120);
     InitAudioDevice();
 
     while (!state_machine.is_game_ending() && !WindowShouldClose())

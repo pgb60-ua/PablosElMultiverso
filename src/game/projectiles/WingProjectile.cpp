@@ -47,6 +47,5 @@ void WingProjectile::render()
         angleDeg += 90.0f;
     }
 
-    DrawCircle(getPosition().x, getPosition().y, this->shape.data.circle.radius, RED);
     DrawTexturePro(sheet.texture, src, dest, origin, angleDeg, WHITE);
 }

@@ -56,8 +56,8 @@ void MainMenuState::render() {
         
         Color boxColor = (selectedOption == i) ? SELECTED_BOX_COLOR : UNSELECTED_BOX_COLOR;        
         DrawRectangle(boxX, boxY, boxWidth, boxHeight, boxColor);
-        DrawRectangleLinesEx((Rectangle){(float)boxX, (float)boxY, (float)boxWidth, (float)boxHeight}, 2, 
-                            (selectedOption == i) ? RED : GRAY);
+        Rectangle rect = {(float)boxX, (float)boxY, (float)boxWidth, (float)boxHeight};
+        DrawRectangleLinesEx(rect, 2, (selectedOption == i) ? RED : GRAY);
         
         DrawText(options[i], 
                 boxX + (boxWidth - textSize.x)/2, 
