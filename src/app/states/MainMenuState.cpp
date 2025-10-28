@@ -67,7 +67,8 @@ void MainMenuState::render() {
     const char* title = "PABLOS, EL MULTIVERSO";
     int titleFontSize = 50;
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
-    DrawText(title, (screenWidth - titleSize.x)/2, screenHeight/4, titleFontSize, RAYWHITE);
+    Vector2 titlePos = { (screenWidth - titleSize.x) / 2.0f, (float)screenHeight / 4.0f - titleSize.y / 2.0f };
+    DrawTextEx(GetFontDefault(), title, titlePos, (float)titleFontSize, 1.0f, RAYWHITE);
 
     for (int i = 0; i < MENU_OPTIONS_COUNT; i++) {
         Rectangle btn = getButtonRect(i, screenWidth, screenHeight);

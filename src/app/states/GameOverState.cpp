@@ -1,12 +1,13 @@
 #include "GameOverState.hpp"
 #include <string>
 #include <MainGameState.hpp>
+#include <MainMenuState.hpp>
 #include <StateMachine.hpp>
 extern "C" {
     #include <raylib.h>
 }
 
-static const char* MENU_OPTIONS[] = { "Volver a jugar", "Salir" };
+static const char* MENU_OPTIONS[] = { "Volver a jugar", "Volver al menú principal" };
 static const int OPTION_COUNT = sizeof(MENU_OPTIONS) / sizeof(MENU_OPTIONS[0]);
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
@@ -33,7 +34,7 @@ void GameOverState::handleInput() {
         if (selectedOption == 0) {
             state_machine->add_state(std::make_unique<MainGameState>(), true);
         } else {
-            state_machine->remove_state(true);
+            state_machine->add_state(std::make_unique<MainMenuState>(), true);
         }
     }
 
@@ -68,7 +69,8 @@ void GameOverState::render() {
     const char* title = "HAS PERDIDO!";
     int titleFontSize = 50;
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
-    DrawText(title, (screenWidth - titleSize.x)/2, screenHeight/4, titleFontSize, RAYWHITE);
+    Vector2 titlePos = { (screenWidth - titleSize.x) / 2.0f, (float)screenHeight / 4.0f - titleSize.y / 2.0f };
+    DrawTextEx(GetFontDefault(), title, titlePos, (float)titleFontSize, 1.0f, RAYWHITE);
 
     for (int i = 0; i < OPTION_COUNT; i++) {
         Rectangle btn = getButtonRect(i, screenWidth, screenHeight);

@@ -26,7 +26,7 @@ class GameOverState : public GameState {
         virtual void pause() override;
         virtual void resume() override;
 
-        static const int BOX_WIDTH = 300;
+        static const int BOX_WIDTH = 400;
         static const int BOX_HEIGHT = 60;
         static const int BOX_SPACING = 40;
 };

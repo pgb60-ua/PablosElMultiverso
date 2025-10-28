@@ -108,12 +108,6 @@ void MainGameState::update(float deltaTime)
     {
         enemy->Update(deltaTime);
     }
-    if (currentWeapon)
-    {
-        // Asumimos que el arma sigue al primer jugador
-        Vector2 playerPos = {players[0]->GetPosition().x + 80, players[0]->GetPosition().y - 24};
-        currentWeapon->update(deltaTime, playerPos);
-    }
     if (numero_vivo == players.size())
     {
         // Todos los jugadores están muertos, reiniciar el estado del juego
