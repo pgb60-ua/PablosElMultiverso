@@ -80,12 +80,9 @@ void GameOverState::render() {
         DrawRectangleRec(btn, boxColor);
         DrawRectangleLinesEx(btn, 2, outlineColor);
         Vector2 textSize = MeasureTextEx(GetFontDefault(), MENU_OPTIONS[i], 30, 1);
-
-        DrawText(MENU_OPTIONS[i],
-                 (int)btn.x + (btn.width - textSize.x)/2,
-                 (int)btn.y + (btn.height - textSize.y)/2,
-                 30,
-                 textColor);
+        Vector2 textPos = { btn.x + (btn.width - textSize.x) / 2.0f,
+                    btn.y + (btn.height - textSize.y) / 2.0f };
+        DrawTextEx(GetFontDefault(), MENU_OPTIONS[i], textPos, 30.0f, 1.0f, textColor);
     }
     
     EndDrawing();
