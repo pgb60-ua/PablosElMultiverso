@@ -29,10 +29,10 @@ void MainGameState::init()
     }
 
     // Crear el arma desde JSON automáticamente en el constructor
-    players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    for (int i = 0; i < 4; ++i)
+    {
+        players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    }
 }
 
 void MainGameState::handleInput()

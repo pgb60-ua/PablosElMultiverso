@@ -1,6 +1,7 @@
 #include "Player.hpp"
 #include "Types.hpp"
 #include "raylib.h"
+#include <cstddef>
 #include <cstdlib>
 #include <raymath.h>
 
@@ -72,7 +73,7 @@ void Player::Update(float deltaTime)
     UpdateEnemiesInRange();
     UpdatePlayerAnimation(deltaTime);
 
-    for (unsigned i = 0; i < weapons.size(); i++)
+    for (size_t i = 0; i < weapons.size(); i++)
     {
         // Asumimos que el arma sigue al primer jugador
         weapons[i]->update(deltaTime,
