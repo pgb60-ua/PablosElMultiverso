@@ -112,8 +112,6 @@ void MainGameState::update(float deltaTime)
     if (numero_vivo == players.size())
     {
         // Todos los jugadores están muertos, reiniciar el estado del juego
-        enemies.clear();
-        players.clear();
         state_machine->add_state(std::make_unique<GameOverState>(), true);
     }
 }
