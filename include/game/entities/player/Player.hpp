@@ -34,10 +34,10 @@ private:
     void UpdateEnemiesInRange();
     // En la sección private de Player.hpp
     static constexpr Vector2 WEAPON_OFFSETS[WEAPON_MAX] = {
-        {0.0f, 0.0f},   // índice 0 - Arriba Izquierda
-        {80.0f, 0.0f},  // índice 1 - Arriba Derecha
-        {0.0f, -80.0f}, // índice 2 - Debajo Izquierda
-        {80.0f, -80.0f} // índice 3 - Debajo Derecha
+        {0.0f, 0.0f},  // índice 0 - Arriba Izquierda
+        {80.0f, 0.0f}, // índice 1 - Arriba Derecha
+        {0.0f, 80.0f}, // índice 2 - Debajo Izquierda
+        {80.0f, 80.0f} // índice 3 - Debajo Derecha
     };
     inline const static float DISTANCE_RANGE = 800.0f;
     inline const static float COOLDOWN_DAMAGE_TIME = 0.5f;
