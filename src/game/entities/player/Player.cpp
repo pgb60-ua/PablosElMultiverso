@@ -245,7 +245,7 @@ void Player::Render()
 
     Rectangle dest = {hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
                       hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f, src.width, src.height};
-    DrawRectanglePro(dest, origin, 0, RED);
+
     DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
 
     // Renderizar armas (la posición ya se actualiza en Update())
