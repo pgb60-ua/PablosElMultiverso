@@ -3,6 +3,8 @@
 #include "Types.hpp"
 #include "Zombie.hpp"
 #include "WingWeapon.hpp"
+#include "GameOverState.hpp"
+#include "StateMachine.hpp"
 #include <MainGameState.hpp>
 #include <iostream>
 
@@ -84,11 +86,17 @@ void MainGameState::handleInput()
 
 void MainGameState::update(float deltaTime)
 {
+    int numero_vivo = 0;
     // Actualizar todos los jugadores (esto llamará internamente a Move si hay dirección)
     for (auto &player : players)
     {
         player->Update(deltaTime);
         player->CheckCollisions(deltaTime);
+        if (!player->IsAlive())
+        {
+            numero_vivo++;
+        }
+        
     }
     // Actualizar todos los enemigos
     for (auto &enemy : enemies)
@@ -100,6 +108,13 @@ void MainGameState::update(float deltaTime)
         // Asumimos que el arma sigue al primer jugador
         Vector2 playerPos = {players[0]->GetPosition().x + 32 + 16, players[0]->GetPosition().y - 32 - 16};
         currentWeapon->update(deltaTime, playerPos);
+    }
+    if (numero_vivo == players.size())
+    {
+        // Todos los jugadores están muertos, reiniciar el estado del juego
+        enemies.clear();
+        players.clear();
+        state_machine->add_state(std::make_unique<GameOverState>(), true);
     }
 }
 
