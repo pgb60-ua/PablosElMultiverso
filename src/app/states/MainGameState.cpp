@@ -2,6 +2,8 @@
 #include "SpriteLoaderManager.hpp"
 #include "Types.hpp"
 #include "WingWeapon.hpp"
+#include "GameOverState.hpp"
+#include "StateMachine.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
 #include <iostream>
@@ -89,16 +91,27 @@ void MainGameState::handleInput()
 
 void MainGameState::update(float deltaTime)
 {
+    int numero_vivo = 0;
     // Actualizar todos los jugadores (esto llamará internamente a Move si hay dirección)
     for (auto &player : players)
     {
         player->Update(deltaTime);
         player->CheckCollisions(deltaTime);
+        if (!player->IsAlive())
+        {
+            numero_vivo++;
+        }
+        
     }
     // Actualizar todos los enemigos
     for (auto &enemy : enemies)
     {
         enemy->Update(deltaTime);
+    }
+    if (numero_vivo == players.size())
+    {
+        // Todos los jugadores están muertos, reiniciar el estado del juego
+        state_machine->add_state(std::make_unique<GameOverState>(), true);
     }
 }
 
