@@ -168,9 +168,12 @@ void Player::Render()
     Vector2 origin = { src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
                        src.height > 0 ? src.height * 0.5f : -src.height * 0.5f };
 
-    Rectangle dest = { hitbox.data.rectangle.x, hitbox.data.rectangle.y,
-                       src.width, src.height};
+    Rectangle dest = {hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
+                      hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f,
+                      src.width, src.height};
 
+    DrawRectangle(hitbox.data.rectangle.x, hitbox.data.rectangle.y,
+                  hitbox.data.rectangle.width, hitbox.data.rectangle.height, RED); // Draw hitbox for debugging
     DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
 }
 

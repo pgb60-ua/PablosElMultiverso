@@ -2,7 +2,8 @@
 
 AProjectile::AProjectile()
 {
-    shape.type = ShapeType::SHAPE_RECTANGLE;
+    shape.type = ShapeType::SHAPE_CIRCLE;
+    shape.data.circle.radius = 5.0f; // Radio por defecto
     setShapePosition(shape, {-110, -110});
     direction = {-110, -110};
     stats = Stats();
@@ -10,6 +11,14 @@ AProjectile::AProjectile()
 
 AProjectile::~AProjectile()
 {
+}
+
+void AProjectile::setRadius(float radius)
+{
+    if (shape.type == ShapeType::SHAPE_CIRCLE)
+    {
+        shape.data.circle.radius = radius;
+    }
 }
 
 void AProjectile::update(float deltaTime)
@@ -29,7 +38,7 @@ void AProjectile::update(float deltaTime)
 
     for (auto &enemy : *enemiesInScene)
     {
-        if (enemy->IsAlive() && CheckCollisionRecs(shape.data.rectangle, enemy->GetHitbox().data.rectangle))
+        if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
             // std::cout << "Projectile hit an enemy!" << std::endl;
             enemy->TakeDamage(stats);

@@ -12,13 +12,13 @@ class AProjectile
 {
 private:
     Stats stats;
-    Shape shape;
     Vector2 direction;
     bool active = false;
     const std::vector<AEnemy *> *enemiesInScene;
 
 protected:
     SpriteAnimation animation;
+    Shape shape;
 
 public:
     AProjectile();
@@ -40,4 +40,8 @@ public:
     void deactivate();
     bool isActive() const { return active; }
     void activate(Vector2 position, Vector2 direction, const Stats &stats, const std::vector<AEnemy *> &allEnemies);
+    
+    /// @brief Establece el radio de la hitbox circular del proyectil
+    /// @param radius El radio en píxeles
+    void setRadius(float radius);
 };
