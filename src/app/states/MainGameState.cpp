@@ -1,8 +1,8 @@
 #include "Player.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "Types.hpp"
-#include "Zombie.hpp"
 #include "WingWeapon.hpp"
+#include "Zombie.hpp"
 #include <MainGameState.hpp>
 #include <iostream>
 
@@ -29,7 +29,10 @@ void MainGameState::init()
     }
 
     // Crear el arma desde JSON automáticamente en el constructor
-    currentWeapon = new WingWeapon(Vector2{400.0f, 300.0f}, enemies, enemies);
+    for (int i = 0; i < 4; ++i)
+    {
+        players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    }
 }
 
 void MainGameState::handleInput()
@@ -97,12 +100,6 @@ void MainGameState::update(float deltaTime)
     {
         enemy->Update(deltaTime);
     }
-    if (currentWeapon)
-    {
-        // Asumimos que el arma sigue al primer jugador
-        Vector2 playerPos = {players[0]->GetPosition().x + 80, players[0]->GetPosition().y - 24};
-        currentWeapon->update(deltaTime, playerPos);
-    }
 }
 
 void MainGameState::render()
@@ -116,16 +113,13 @@ void MainGameState::render()
     {
         player->Render();
         std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
-        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x  ), static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
+        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
+                 static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }
     // Renderizar todos los enemigos
     for (auto &enemy : enemies)
     {
         enemy->Render();
-    }
-    if (currentWeapon)
-    {
-        currentWeapon->render();
     }
     DrawFPS(GetScreenWidth() - 100, 10);
     EndDrawing();
@@ -133,11 +127,6 @@ void MainGameState::render()
 
 MainGameState::~MainGameState()
 {
-    if (currentWeapon)
-    {
-        delete currentWeapon;
-        currentWeapon = nullptr;
-    }
     for (auto &enemy : enemies)
     {
         delete enemy;

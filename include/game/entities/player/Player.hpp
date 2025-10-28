@@ -1,7 +1,7 @@
 #pragma once
+#include "AEnemy.hpp"
 #include "AEntity.hpp"
 #include "AWeapon.hpp"
-#include "AEnemy.hpp"
 #include "DataFileManager.hpp"
 #include "Item.hpp"
 #include "SpriteLoaderManager.hpp"
@@ -12,7 +12,7 @@
 
 extern "C"
 {
-    #include "raylib.h"
+#include "raylib.h"
 }
 class AWeapon;
 class AEnemy;
@@ -25,13 +25,27 @@ private:
     static constexpr float BASE_MULTIPLIER = 1.0f;
     std::vector<std::shared_ptr<Item>> inventory;
     std::vector<std::unique_ptr<AWeapon>> weapons;
+    std::vector<Vector2> weaponOffsets; // Offset individual para cada arma
     static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
     void UpdatePlayerAnimation(float deltaTime);
-    std::vector<AEnemy*> enemiesInRange;
-    std::vector<AEnemy*> &allEnemies;
+    std::vector<AEnemy *> enemiesInRange;
+    std::vector<AEnemy *> &allEnemies;
     void UpdateEnemiesInRange();
+
+    /// @brief Calcula el offset de posición para un arma basándose en sus dimensiones y el tamaño del sprite del
+    /// jugador
+    /// @param weaponIndex Índice del arma (0-3)
+    /// @param playerSpriteWidth Ancho del frame del sprite del jugador
+    /// @param playerSpriteHeight Alto del frame del sprite del jugador
+    /// @param weaponSpriteWidth Ancho del sprite del arma
+    /// @param weaponSpriteHeight Alto del sprite del arma
+    /// @return Offset de posición relativa desde la esquina superior izquierda
+    Vector2 CalculateWeaponOffset(size_t weaponIndex, float playerSpriteWidth, float playerSpriteHeight,
+                                  float weaponSpriteWidth, float weaponSpriteHeight) const;
+
+    inline const static float WEAPON_OFFSET_DISTANCE = 35.0f; // Distancia desde el centro del sprite
     inline const static float DISTANCE_RANGE = 800.0f;
     inline const static float COOLDOWN_DAMAGE_TIME = 0.5f;
 
@@ -73,7 +87,7 @@ protected:
     float healthRegenerationModifier = BASE_MULTIPLIER;
 
 public:
-    Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy*> &allEnemies);
+    Player(PLAYER_TYPE player, Vector2 position, std::vector<AEnemy *> &allEnemies);
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
     float GetHealth() const { return stats.GetHealth(); }
