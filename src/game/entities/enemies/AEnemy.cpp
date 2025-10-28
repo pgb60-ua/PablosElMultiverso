@@ -39,6 +39,7 @@ Player *AEnemy::GetClosestPlayer()
 
 void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
 {
+
     animation.timeAccumulator += deltaTime;
 
     if (animation.timeAccumulator >= animation.FRAME_DURATION)

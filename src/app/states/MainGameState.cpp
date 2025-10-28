@@ -23,13 +23,15 @@ void MainGameState::init()
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition, enemies));
 
-    for (int i = 0; i < 10; i++)
+    int numZombies = 100;
+    enemies.reserve(numZombies);
+    for (int i = 0; i < numZombies; i++)
     {
         enemies.push_back(new Zombie(std::vector<Player *>{players[0].get(), players[1].get()}));
     }
 
     // Crear el arma desde JSON automáticamente en el constructor
-    currentWeapon = new WingWeapon(Vector2{400.0f, 300.0f}, enemies);
+    currentWeapon = new WingWeapon(Vector2{400.0f, 300.0f}, enemies, enemies);
 }
 
 void MainGameState::handleInput()
@@ -103,10 +105,10 @@ void MainGameState::update(float deltaTime)
     {
         enemy->Update(deltaTime);
     }
-    if(currentWeapon)
+    if (currentWeapon)
     {
         // Asumimos que el arma sigue al primer jugador
-        Vector2 playerPos = {players[0]->GetPosition().x + 32 + 16, players[0]->GetPosition().y - 32 - 16};
+        Vector2 playerPos = {players[0]->GetPosition().x + 80, players[0]->GetPosition().y - 24};
         currentWeapon->update(deltaTime, playerPos);
     }
     if (numero_vivo == players.size())
@@ -129,14 +131,14 @@ void MainGameState::render()
     {
         player->Render();
         std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
-        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x - healthText.length() * 2.5f), static_cast<int>(player->GetPosition().y) + 32, 10, GREEN);
+        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x  ), static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }
     // Renderizar todos los enemigos
     for (auto &enemy : enemies)
     {
         enemy->Render();
     }
-    if(currentWeapon)
+    if (currentWeapon)
     {
         currentWeapon->render();
     }
@@ -146,7 +148,7 @@ void MainGameState::render()
 
 MainGameState::~MainGameState()
 {
-    if(currentWeapon)
+    if (currentWeapon)
     {
         delete currentWeapon;
         currentWeapon = nullptr;

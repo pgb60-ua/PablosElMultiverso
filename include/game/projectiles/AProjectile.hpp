@@ -1,4 +1,5 @@
 #pragma once
+#include "AEnemy.hpp"
 #include "Stats.hpp"
 #include "Geometry.hpp"
 #include "SpriteAnimation.hpp"
@@ -11,16 +12,17 @@ class AProjectile
 {
 private:
     Stats stats;
-    Shape shape;
     Vector2 direction;
     bool active = false;
-    float speed;
+    
 
 protected:
     SpriteAnimation animation;
+    Shape shape;
+    std::vector<AEnemy *> &enemiesInScene;
 
 public:
-    AProjectile();
+    AProjectile(std::vector<AEnemy *> &allEnemies);
     virtual ~AProjectile();
 
     /// @brief Actualiza la posición del proyectil
@@ -39,4 +41,8 @@ public:
     void deactivate();
     bool isActive() const { return active; }
     void activate(Vector2 position, Vector2 direction, const Stats &stats);
+    
+    /// @brief Establece el radio de la hitbox circular del proyectil
+    /// @param radius El radio en píxeles
+    void setRadius(float radius);
 };
