@@ -45,8 +45,6 @@ public:
     // Métodos Heredados de AEntity
     /*--------------------------*/
 
-
-
     /// @brief Realiza un ataque al jugador
     /// @return true si el ataque se realizó, false si está en cooldown
     bool Attack() override;
