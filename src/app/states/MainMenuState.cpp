@@ -23,10 +23,10 @@ void MainMenuState::init() {}
 void MainMenuState::handleInput() {
 
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
-        selectedOption = (selectedOption + 1) % OPTION_COUNT;
+        selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
     }
     if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) {
-        selectedOption = (selectedOption - 1 + OPTION_COUNT) % OPTION_COUNT;
+        selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
     }
 
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
@@ -40,7 +40,7 @@ void MainMenuState::handleInput() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    for(int i = 0; i < OPTION_COUNT; i++) {
+    for(int i = 0; i < MENU_OPTIONS_COUNT; i++) {
         Rectangle btn = getButtonRect(i, screenWidth, screenHeight);
         if (CheckCollisionPointRec(mousePosition, btn)) {
             selectedOption = i;
@@ -69,7 +69,7 @@ void MainMenuState::render() {
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
     DrawText(title, (screenWidth - titleSize.x)/2, screenHeight/4, titleFontSize, RAYWHITE);
 
-    for (int i = 0; i < OPTION_COUNT; i++) {
+    for (int i = 0; i < MENU_OPTIONS_COUNT; i++) {
         Rectangle btn = getButtonRect(i, screenWidth, screenHeight);
         Color boxColor = (selectedOption == i) ? SELECTED_BOX_COLOR : UNSELECTED_BOX_COLOR;
         Color outlineColor = (selectedOption == i) ? SELECTED_OUTLINE_COLOR : UNSELECTED_OUTLINE_COLOR;
