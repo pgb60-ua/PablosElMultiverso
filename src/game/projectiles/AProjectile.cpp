@@ -32,7 +32,7 @@ void AProjectile::update(float deltaTime)
         if (enemy->IsAlive() && CheckCollisionRecs(shape.data.rectangle, enemy->GetHitbox().data.rectangle))
         {
             // std::cout << "Projectile hit an enemy!" << std::endl;
-            enemy->TakeDamage(stats.GetPhysicalDamage());
+            enemy->TakeDamage(stats);
             deactivate();
             break;
         }

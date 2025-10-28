@@ -68,11 +68,6 @@ public:
     // Estado y Propiedades
     /*--------------------------*/
 
-    /// @brief Recibe daño y actualiza la salud del enemigo
-    /// Función utilizada por balas y otras fuentes de daño
-    /// @param amount Cantidad de daño recibido
-    void TakeDamage(float amount) override;
-
     /// @brief Obtiene el jugador más cercano al enemigo
     /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
     Player *GetClosestPlayer();
