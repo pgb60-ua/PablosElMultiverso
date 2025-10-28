@@ -3,6 +3,7 @@
 #include "AEntity.hpp"
 #include "Player.hpp"
 #include "SpriteAnimation.hpp"
+#include "Types.hpp"
 #include <vector>
 extern "C"
 {
