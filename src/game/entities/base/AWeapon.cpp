@@ -6,7 +6,7 @@
 class AEnemy;
 
 AWeapon::AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
-                 int level, const Vector2 &position, const std::vector<AEnemy *> &enemiesInRange, const std::vector<AEnemy *> &allEnemies)
+                 int level, const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : Item(name, description, stats, itemRarity), level(level), position(position), enemiesInRange(enemiesInRange), allEnemies(allEnemies)
 {
 }

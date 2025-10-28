@@ -77,6 +77,10 @@ public:
     /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
     Player *GetClosestPlayer();
 
+    Stats GetStats() const { return stats; }
+
     /// @brief Destructor virtual
     virtual ~AEnemy() = default;
+
+    virtual void CheckCollisions(float deltaTime) override;
 };

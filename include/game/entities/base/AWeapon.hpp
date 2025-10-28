@@ -56,7 +56,7 @@ protected:
 
 public:
     /// @brief Constructor de la clase Weapon
-    AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity, int level, const Vector2 &position = {0.0f, 0.0f}, const std::vector<AEnemy *> &enemiesInRange = {}, const std::vector<AEnemy *> &allEnemies = {});
+    AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity, int level, Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);
 
     /// @brief Getter del tipo de arma
     WEAPON_TYPE GetWeaponType() const { return weaponType; }

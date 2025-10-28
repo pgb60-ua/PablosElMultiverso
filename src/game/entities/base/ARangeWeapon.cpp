@@ -2,7 +2,7 @@
 
 ARangeWeapon::ARangeWeapon(const std::string &name, const std::string &description,
                            const Stats &stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2 &position,
-                           const std::vector<AEnemy *> &enemiesInRange, const std::vector<AEnemy *> &allEnemies)
+                           std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : AWeapon(name, description, stats, itemRarity, level, position, enemiesInRange, allEnemies), POOL_SIZE(poolSize)
 {
     UpdateAttackInterval();

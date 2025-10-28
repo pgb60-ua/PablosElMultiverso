@@ -1,7 +1,7 @@
 #include <cmath>
 #include "WingWeapon.hpp"
 
-WingWeapon::WingWeapon(const Vector2 &position, const std::vector<AEnemy *> &enemiesInRange, const std::vector<AEnemy *> &allEnemies)
+WingWeapon::WingWeapon(const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : ARangeWeapon(
           GetStringFromJSON("name", WEAPON_TYPE::WING, "Unknown Weapon"),
           GetStringFromJSON("description", WEAPON_TYPE::WING, ""),
