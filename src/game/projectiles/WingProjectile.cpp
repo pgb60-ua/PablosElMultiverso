@@ -5,7 +5,8 @@
 #include <cmath>
 
 
-WingProjectile::WingProjectile()
+WingProjectile::WingProjectile(std::vector<AEnemy *> &allEnemies)
+    : AProjectile(allEnemies)
 {
     // Calcular el radio basado en el sprite del proyectil Wing
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::WING);

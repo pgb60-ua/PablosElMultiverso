@@ -21,7 +21,7 @@ void MainGameState::init()
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition, enemies));
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 1; i++)
     {
         enemies.push_back(new Zombie(std::vector<Player *>{players[0].get(), players[1].get()}));
     }
@@ -98,7 +98,7 @@ void MainGameState::update(float deltaTime)
     if (currentWeapon)
     {
         // Asumimos que el arma sigue al primer jugador
-        Vector2 playerPos = {players[0]->GetPosition().x + 32 + 16, players[0]->GetPosition().y - 32 - 16};
+        Vector2 playerPos = {players[0]->GetPosition().x + 80, players[0]->GetPosition().y - 24};
         currentWeapon->update(deltaTime, playerPos);
     }
 }
@@ -114,7 +114,7 @@ void MainGameState::render()
     {
         player->Render();
         std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
-        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x - healthText.length() * 2.5f), static_cast<int>(player->GetPosition().y) + 32, 10, GREEN);
+        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x  ), static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }
     // Renderizar todos los enemigos
     for (auto &enemy : enemies)

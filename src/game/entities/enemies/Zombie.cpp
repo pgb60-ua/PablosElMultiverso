@@ -39,7 +39,7 @@ bool Zombie::Attack()
 
 void Zombie::Move(float deltaTime)
 {
-    if (!alive)
+    if (!IsAlive())
         return;
     Player *closestPlayer = GetClosestPlayer();
 
@@ -133,7 +133,7 @@ void Zombie::Move(float deltaTime)
 
 void Zombie::Render()
 {
-    if (!alive)
+    if (!IsAlive())
         return;
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);
     if (sheet.frames.empty())
@@ -150,7 +150,7 @@ void Zombie::Render()
 
     DrawRectangle(hitbox.data.rectangle.x, hitbox.data.rectangle.y,
                   hitbox.data.rectangle.width, hitbox.data.rectangle.height, RED); // Draw hitbox for debugging
-    DrawTexturePro(sheet.texture, src, dest, origin, 0, WHITE);
+    DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
 }
 
 std::vector<Zombie *> Zombie::s_allZombies;

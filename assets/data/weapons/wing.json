@@ -14,7 +14,7 @@
 	"resistance": 0,
 	"armor": 0,
 	"critical_chance": 15,
-	"critical_damage": 150,
+	"critical_damage": 1.50,
 	"life_steal": 5,
 	"health_regeneration": 0
 }

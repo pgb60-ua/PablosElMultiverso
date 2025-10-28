@@ -1,6 +1,8 @@
 #include "AProjectile.hpp"
+#include <algorithm>
 
-AProjectile::AProjectile()
+AProjectile::AProjectile(std::vector<AEnemy *> &allEnemies)
+    : enemiesInScene(allEnemies)
 {
     shape.type = ShapeType::SHAPE_CIRCLE;
     shape.data.circle.radius = 5.0f; // Radio por defecto
@@ -36,12 +38,17 @@ void AProjectile::update(float deltaTime)
         deactivate();
     }
 
-    for (auto &enemy : *enemiesInScene)
+    for (auto &enemy : enemiesInScene)
     {
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
             // std::cout << "Projectile hit an enemy!" << std::endl;
             enemy->TakeDamage(stats);
+            if(!enemy->IsAlive())
+            {
+                delete enemy;
+                enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));
+            }
             deactivate();
             break;
         }
@@ -57,11 +64,10 @@ void AProjectile::deactivate()
     active = false;
 }
 
-void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats, const std::vector<AEnemy *> &allEnemies)
+void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
 {
     this->active = true;
     setShapePosition(shape, position);
     this->direction = direction;
     this->stats = stats;
-    this->enemiesInScene = &allEnemies;
 }

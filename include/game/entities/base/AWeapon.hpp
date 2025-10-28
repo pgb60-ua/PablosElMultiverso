@@ -41,9 +41,9 @@ protected:
     /// @brief Dirección del arma
     Vector2 direction;
     /// @brief Enemigos en rango del arma
-    const std::vector<AEnemy *> &enemiesInRange;
+    std::vector<AEnemy *> &enemiesInRange;
     /// @brief Todos los enemigos del nivel
-    const std::vector<AEnemy *> &allEnemies;
+    std::vector<AEnemy *> &allEnemies;
 
     /// @brief Obtiene un string del JSON
     static std::string GetStringFromJSON(const std::string &key, WEAPON_TYPE type, const std::string &defaultValue);

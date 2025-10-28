@@ -19,7 +19,7 @@ void ARangeWeapon::ShootProjectile(const Vector2 &position, const Vector2 &direc
     AProjectile *projectile = GetProjectileFromPool();
     if (projectile)
     {
-        projectile->activate(position, direction, stats, allEnemies);
+        projectile->activate(position, direction, stats);
     }
 }
 

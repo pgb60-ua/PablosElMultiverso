@@ -21,7 +21,6 @@ protected:
 
     /// @brief Cantidad de Pablo Coins que suelta al morir
     int pabloCoinsAtDeath;
-    bool alive = true;
 
     /// @brief Constructor protegido para clases derivadas
     AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
@@ -48,7 +47,7 @@ public:
 
     /// @brief Verifica si el enemigo está vivo
     /// @return true si está vivo, false si está muerto
-    bool IsAlive() const { return alive; }
+    bool IsAlive() const { return this->stats.GetHealth() > 0; }
 
     /*--------------------------*/
     // Botín y Economía

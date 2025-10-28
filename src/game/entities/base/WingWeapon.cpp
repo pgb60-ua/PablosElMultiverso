@@ -50,5 +50,5 @@ void WingWeapon::Attack(const Vector2 &position, float deltaTime)
 
 std::unique_ptr<AProjectile> WingWeapon::CreateProjectile()
 {
-    return std::make_unique<WingProjectile>();
+    return std::make_unique<WingProjectile>(allEnemies);
 }
