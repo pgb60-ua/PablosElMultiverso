@@ -1,6 +1,7 @@
 #include "WindowFlags.hpp"
 #include <MainGameState.hpp>
 #include <StateMachine.hpp>
+#include <MainMenuState.hpp>
 #include <chrono>
 #include <memory>
 extern "C"
@@ -16,7 +17,7 @@ int main()
     float delta_time = 0.0f;
 
     StateMachine state_machine = StateMachine();
-    state_machine.add_state(std::make_unique<MainGameState>(), false);
+    state_machine.add_state(std::make_unique<MainMenuState>(), false);
     state_machine.handle_state_changes(delta_time);
     SetTargetFPS(120);
     InitAudioDevice();
@@ -30,6 +31,10 @@ int main()
         state_machine.getCurrentState()->update(delta_time);
         state_machine.getCurrentState()->render();
     }
+    SpriteLoaderManager::GetInstance().ClearCache();
+    CloseAudioDevice();
+    CloseWindow();
+    
 
     return 0;
 }
