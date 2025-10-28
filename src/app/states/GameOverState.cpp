@@ -14,7 +14,7 @@ static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
     int startY = screenHeight / 2;
     int boxX = (screenWidth - GameOverState::BOX_WIDTH) / 2;
     int boxY = startY + index * (GameOverState::BOX_HEIGHT + GameOverState::BOX_SPACING);
-    return (Rectangle){ (float)boxX, (float)boxY, (float)GameOverState::BOX_WIDTH, (float)GameOverState::BOX_HEIGHT };
+    return Rectangle{ (float)boxX, (float)boxY, (float)GameOverState::BOX_WIDTH, (float)GameOverState::BOX_HEIGHT };
 }
 
 GameOverState::GameOverState() {}
@@ -50,7 +50,7 @@ void GameOverState::handleInput() {
                 if (selectedOption == 0) {
                     state_machine->add_state(std::make_unique<MainGameState>(), true);
                 } else {
-                    state_machine->remove_state(true);
+                    state_machine->add_state(std::make_unique<MainMenuState>(), true);
                 }
             }
         }

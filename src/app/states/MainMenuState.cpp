@@ -13,7 +13,7 @@ static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
     int startY = screenHeight / 2;
     int boxX = (screenWidth - MainMenuState::BOX_WIDTH) / 2;
     int boxY = startY + index * (MainMenuState::BOX_HEIGHT + MainMenuState::BOX_SPACING);
-    return (Rectangle){ (float)boxX, (float)boxY, (float)MainMenuState::BOX_WIDTH, (float)MainMenuState::BOX_HEIGHT };
+    return Rectangle{ (float)boxX, (float)boxY, (float)MainMenuState::BOX_WIDTH, (float)MainMenuState::BOX_HEIGHT };
 }
 
 MainMenuState::MainMenuState() {}
