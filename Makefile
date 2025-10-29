@@ -75,7 +75,9 @@ clean:
 	@$(info ✓ Limpieza completada)
 
 # Recompilar todo desde cero
-rebuild: clean all
+rebuild: 
+    $(MAKE) clean 
+    $(MAKE) all
 
 # Ejecutar el juego en modo release
 run: $(TARGET)
