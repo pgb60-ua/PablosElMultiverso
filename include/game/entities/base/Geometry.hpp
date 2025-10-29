@@ -32,3 +32,9 @@ typedef struct
     ShapeType type;
     ShapeData data;
 } Shape;
+
+Vector2 getShapePosition(const Shape &shape);
+
+void setShapePosition(Shape &shape, const Vector2 &position);
+
+bool checkCollisionShapes(const Shape &shape1, const Shape &shape2);

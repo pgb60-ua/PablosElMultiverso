@@ -1,6 +1,9 @@
 #include "Player.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "Types.hpp"
+#include "WingWeapon.hpp"
+#include "GameOverState.hpp"
+#include "StateMachine.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
 #include <iostream>
@@ -17,18 +20,21 @@ void MainGameState::init()
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     Vector2 secondPosition = {600.0f, 700.0f};
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition));
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition));
-    Stats enemyStats = Stats(
-        OffensiveStats{10.0f, 0.0f, 1.0f, 0.1f, 0.0f},
-        DefensiveStats{50.0f, 50.0f, 37.0f, 5.0f, 0.5f, 1.0f});
-    for (int i = 0; i < 200; i++){
-        enemies.push_back(std::make_unique<Zombie>(enemyStats,
-                                           SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE, Vector2{(float)(std::rand() % 800), (float)(std::rand() % 600)}),
-                                           std::vector<Player*>{players[0].get(), players[1].get()},
-                                           10));
+    players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
+    players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition, enemies));
+
+    int numZombies = 100;
+    enemies.reserve(numZombies);
+    for (int i = 0; i < numZombies; i++)
+    {
+        enemies.push_back(new Zombie(std::vector<Player *>{players[0].get(), players[1].get()}));
     }
-    
+
+    // Crear el arma desde JSON automáticamente en el constructor
+    for (int i = 0; i < 4; ++i)
+    {
+        players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    }
 }
 
 void MainGameState::handleInput()
@@ -85,15 +91,27 @@ void MainGameState::handleInput()
 
 void MainGameState::update(float deltaTime)
 {
+    int numero_vivo = 0;
     // Actualizar todos los jugadores (esto llamará internamente a Move si hay dirección)
     for (auto &player : players)
     {
         player->Update(deltaTime);
+        player->CheckCollisions(deltaTime);
+        if (!player->IsAlive())
+        {
+            numero_vivo++;
+        }
+        
     }
     // Actualizar todos los enemigos
     for (auto &enemy : enemies)
     {
         enemy->Update(deltaTime);
+    }
+    if (numero_vivo == (int)players.size())
+    {
+        // Todos los jugadores están muertos, reiniciar el estado del juego
+        state_machine->add_state(std::make_unique<GameOverState>(), true);
     }
 }
 
@@ -107,6 +125,9 @@ void MainGameState::render()
     for (auto &player : players)
     {
         player->Render();
+        std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
+        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
+                 static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }
     // Renderizar todos los enemigos
     for (auto &enemy : enemies)
@@ -115,4 +136,12 @@ void MainGameState::render()
     }
     DrawFPS(GetScreenWidth() - 100, 10);
     EndDrawing();
+}
+
+MainGameState::~MainGameState()
+{
+    for (auto &enemy : enemies)
+    {
+        delete enemy;
+    }
 }

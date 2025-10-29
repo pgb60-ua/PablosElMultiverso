@@ -1,13 +1,21 @@
 #pragma once
 #include "Item.hpp"
+#include "DataFileManager.hpp"
+#include "AEnemy.hpp"
 #include <string>
+#include <SpriteAnimation.hpp>
 
-enum class WeaponType
+class AEnemy;
+
+/// @brief Helper struct para obtener datos de armas desde JSON
+struct WeaponData
 {
-    Melee,
-    Ranged
+    std::string name;
+    std::string description;
+    Stats stats;
+    ItemRarity rarity;
+    int level;
 };
-
 
 class AWeapon : public Item
 {
@@ -18,36 +26,58 @@ private:
     const float MAX_CRITICAL_DAMAGE = 10.0f;
     /// @brief Máximo porcentaje de robo de vida
     const float MAX_LIFE_STEAL = 50.0f;
+    /// @brief Animación del sprite del arma
+    SpriteAnimation animation;
 
 protected:
     /// @brief Tipo de arma
-    WeaponType weaponType;
+    WEAPON_TYPE weaponType;
     /// @brief Nivel del arma
     int level;
     /// @brief Nivel máximo del arma
     const int MAXLEVEL = 4;
     /// @brief Posición del arma
     Vector2 position;
+    /// @brief Dirección del arma
+    Vector2 direction;
+    /// @brief Enemigos en rango del arma
+    std::vector<AEnemy *> &enemiesInRange;
+    /// @brief Todos los enemigos del nivel
+    std::vector<AEnemy *> &allEnemies;
+
+    /// @brief Obtiene un string del JSON
+    static std::string GetStringFromJSON(const std::string &key, WEAPON_TYPE type, const std::string &defaultValue);
+    /// @brief Obtiene un int del JSON
+    static int GetIntFromJSON(const std::string &key, WEAPON_TYPE type, int defaultValue);
+    /// @brief Obtiene la rareza del JSON
+    static ItemRarity GetRarityFromJSON(WEAPON_TYPE type);
+    /// @brief Calcula la dirección de ataque normalizada
+    Vector2 CalculateDirection();
 
 public:
     /// @brief Constructor de la clase Weapon
-    AWeapon(const std::string& name, const std::string& description, const Stats& stats, ItemRarity itemRarity, WeaponType weaponType, int level);
+    AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity, int level,const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);
 
     /// @brief Getter del tipo de arma
-    WeaponType GetWeaponType() const { return weaponType; }
+    WEAPON_TYPE GetWeaponType() const { return weaponType; }
     /// @brief Getter del nivel del arma
     int GetLevel() const { return level; }
     /// @brief Getter del nivel máximo del arma
     int GetMaxLevel() const { return MAXLEVEL; }
     /// @brief Sube de nivel el arma
-    bool Upgrade(const OffensiveStats& newOffensiveStats);
+    bool Upgrade(const OffensiveStats &newOffensiveStats);
     /// @brief Getter de la posición del arma
     Vector2 GetPosition() const { return position; }
     /// @brief Setter de la posición del arma
-    void SetPosition(const Vector2& newPosition) { position = newPosition; }
+    void SetPosition(const Vector2 &newPosition) { position = newPosition; }
+    /// @brief Setter del tipo de arma
+    void SetWeaponType(WEAPON_TYPE newType) { weaponType = newType; }
+    /// @brief Setter de la dirección del arma
+    void SetDirection(const Vector2 &newDirection) { direction = newDirection; }
 
     /// @brief Método para atacar
     virtual void Attack() = 0;
+    virtual void render();
+    virtual void update(float deltaTime, const Vector2 &position);
     virtual ~AWeapon() {}
 };
-

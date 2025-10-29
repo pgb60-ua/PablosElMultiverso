@@ -12,29 +12,45 @@ extern "C"
 class Zombie : public AEnemy
 {
 private:
+    /// @brief Registra todas las instancias activas para aplicar las reglas de Boids
+    static std::vector<Zombie *> s_allZombies;
+
+    /// @brief Velocidad actual acumulada del zombie para suavizar el movimiento
+    Vector2 velocity;
+
+    /// @brief Radio de percepción para detectar otros zombies cercanos
+    static constexpr float PERCEPTION_RADIUS = 250.0f;
+    /// @brief Radio de separación para evitar aglomeración con otros zombies
+    static constexpr float SEPARATION_RADIUS = 80.0f;
+    /// @brief Peso de la regla de alineación (seguir dirección del grupo)
+    static constexpr float ALIGNMENT_WEIGHT = 0.5f;
+    /// @brief Peso de la regla de cohesión (moverse hacia el centro del grupo)
+    static constexpr float COHESION_WEIGHT = 0.45f;
+    /// @brief Peso de la regla de separación (evitar colisiones con otros zombies)
+    static constexpr float SEPARATION_WEIGHT = 0.75f;
+    /// @brief Peso de atracción hacia el objetivo (jugador)
+    static constexpr float TARGET_WEIGHT = 1.2f;
+    /// @brief Multiplicador máximo de fuerza para limitar aceleraciones abruptas
+    static constexpr float MAX_FORCE_MULTIPLIER = 1.6f;
+
 public:
     /// @brief Constructor del Zombie
-    /// @param stats Estadísticas del zombie
     /// @param hitbox Hitbox del zombie
-    /// @param textures Vector de texturas para la animación
-    /// @param pabloCoinsAtDeath Cantidad de Pablo Coins que suelta al morir
     /// @param objectives Referencia al vector de jugadores (objetivos)
-    Zombie(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
+    /// @param pabloCoinsAtDeath Cantidad de Pablo Coins que suelta al morir
+    /// Las estadísticas se cargan automáticamente desde el archivo zombie.json
+    Zombie(std::vector<Player *> objectives);
 
     /*--------------------------*/
     // Métodos Heredados de AEntity
     /*--------------------------*/
 
-    /// @brief Recibe daño y actualiza la salud del zombie
-    /// Función utilizada por balas y otras fuentes de daño
-    /// @param amount Cantidad de daño recibido
-    void TakeDamage(float amount) override;
-
     /// @brief Realiza un ataque al jugador
     /// @return true si el ataque se realizó, false si está en cooldown
     bool Attack() override;
 
-    /// @brief Actualiza el estado del zombie (animación, cooldowns, etc.)
+    /// @brief Actualiza el estado del zombie
+    /// Se llama en cada frame para aplicar la IA y el movimiento
     void Update(float deltaTime) override;
 
     /*--------------------------*/
@@ -45,20 +61,8 @@ public:
     /// @param deltaTime Tiempo transcurrido desde el último frame
     void Move(float deltaTime) override;
 
-    /// @brief Suelta Pablo Coins al morir
-    /// @return Cantidad de Pablo Coins que suelta
-    int DropLoot() const override;
-
-    /*--------------------------*/
-    // Métodos Específicos del Zombie
-    /*--------------------------*/
-
-    /// @brief Obtiene el jugador más cercano al zombie
-    /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
-    Player *GetClosestPlayer();
-
     /// @brief Renderiza el zombie
     void Render() override;
     /// @brief Destructor
-    ~Zombie() override = default;
+    ~Zombie() override;
 };

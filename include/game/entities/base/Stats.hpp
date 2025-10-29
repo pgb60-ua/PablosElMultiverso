@@ -47,6 +47,9 @@ protected:
 public:
     Stats(const OffensiveStats &offensiveStats, const DefensiveStats &defensiveStats);
 
+    /// @brief Constructor por defecto que inicializa todas las stats a 0 (usado para proyectiles)
+    Stats();
+
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
     float GetHealth() const { return defensiveStats.health; }
