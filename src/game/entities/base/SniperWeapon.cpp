@@ -1,17 +1,20 @@
 #include <cmath>
 #include "SniperWeapon.hpp"
+#include "WingProjectile.hpp"
 
 // Helper lambdas para obtener datos del JSON
 
 
-SniperWeapon::SniperWeapon(const Vector2& position)
+SniperWeapon::SniperWeapon(const Vector2& position, std::vector<AEnemy*>& enemiesInRange)
     : ARangeWeapon(
         GetStringFromJSON("name", WEAPON_TYPE::SNIPER, "Unknown Weapon"),
         GetStringFromJSON("description", WEAPON_TYPE::SNIPER, ""),
         DataFileManager::GetInstance().GetWeaponStats(WEAPON_TYPE::SNIPER),
         GetRarityFromJSON(WEAPON_TYPE::SNIPER),
         GetIntFromJSON("level", WEAPON_TYPE::SNIPER, 1),
-        GetIntFromJSON("pool_size", WEAPON_TYPE::SNIPER, 50)
+        GetIntFromJSON("pool_size", WEAPON_TYPE::SNIPER, 50),
+        position,
+        enemiesInRange
     )
 {
     InitializeProjectilePool();
@@ -22,7 +25,7 @@ SniperWeapon::SniperWeapon(const Vector2& position)
 SniperWeapon::~SniperWeapon() {
 }
 
-void SniperWeapon::Attack(const Vector2& position, const Vector2& direction, float deltaTime) {
+void SniperWeapon::Attack(const Vector2& position, float deltaTime) {
     timeSinceLastAttack += deltaTime;
     if (timeSinceLastAttack >= attackInterval) {
         ShootProjectile(position, direction);
@@ -31,5 +34,5 @@ void SniperWeapon::Attack(const Vector2& position, const Vector2& direction, flo
 }
 
 std::unique_ptr<AProjectile> SniperWeapon::CreateProjectile() {
-    return std::make_unique<SniperProjectile>();
+    return std::make_unique<WingProjectile>();
 }

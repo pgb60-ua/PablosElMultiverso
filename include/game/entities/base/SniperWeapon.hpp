@@ -1,6 +1,6 @@
 #pragma once
 #include "ARangeWeapon.hpp"
-#include "SniperProjectile.hpp"
+//#include "SniperProjectile.hpp"
 #include "DataFileManager.hpp"
 #include <memory>
 
@@ -10,11 +10,11 @@ private:
     float timeSinceLastAttack = 0.0f;
 public:
     /// @brief Constructor de la clase SniperWeapon que carga desde JSON
-    SniperWeapon(const Vector2& position = {0.0f, 0.0f});
+    SniperWeapon(const Vector2& position, std::vector<AEnemy*>& enemiesInRange);
     virtual ~SniperWeapon();  
 
     /// @brief Método para atacar
-    void Attack(const Vector2& position, const Vector2& direction, float deltaTime) override;
+    void Attack(const Vector2& position, float deltaTime) override;
 
     void Attack() override {}
 
