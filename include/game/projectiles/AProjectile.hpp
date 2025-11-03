@@ -1,6 +1,7 @@
 #pragma once
 #include "Stats.hpp"
 #include "Geometry.hpp"
+#include "SpriteAnimation.hpp"
 extern "C"
 {
 #include <raylib.h>
@@ -14,6 +15,9 @@ private:
     Vector2 direction;
     bool active = false;
     float speed;
+
+protected:
+    SpriteAnimation animation;
 
 public:
     AProjectile();
@@ -30,7 +34,7 @@ public:
     Stats getStats() const { return stats; }
 
     /// @brief Funcion para renderizar el proyectil
-    virtual void render() const = 0;
+    virtual void render() = 0;
 
     void deactivate();
     bool isActive() const { return active; }

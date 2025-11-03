@@ -17,6 +17,8 @@ protected:
     float attackInterval;
     /// @brief Velocidad de ataque mínima
     static constexpr float MIN_ATTACK_SPEED = 0.1f;
+    /// @brief tiempo desde el último ataque
+    float timeSinceLastAttack = 0.0f;
 
     void UpdateAttackInterval();
 
@@ -27,14 +29,14 @@ protected:
 public:
     /// @brief Constructor de la clase RangeWeapon
     ARangeWeapon(const std::string& name, const std::string& description, 
-        const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize = 50);
+        const Stats& stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2& position,  std::vector<AEnemy*>& enemiesInRange);
     virtual ~ARangeWeapon();
 
     /// @brief Método para atacar
     virtual void Attack() override = 0;
-
+        
     /// @brief Sobrecarga del ataque para armas a distancia
-    virtual void Attack(const Vector2& position, const Vector2& direction, float deltaTime) = 0;
+    virtual void Attack(const Vector2& position, float deltaTime) = 0;
 
     /// @brief Método para crear proyectiles
     virtual std::unique_ptr<AProjectile> CreateProjectile() = 0;
@@ -52,7 +54,7 @@ public:
 
     float GetAttackInterval() const { return attackInterval; }
     
+    virtual void render();
 
-
-
+    void update(float deltaTime, const Vector2& position) override;
 };
