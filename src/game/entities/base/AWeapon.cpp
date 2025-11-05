@@ -6,8 +6,8 @@
 class AEnemy;
 
 AWeapon::AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
-                 int level, const Vector2 &position, std::vector<AEnemy*>& enemiesInRange)
-    : Item(name, description, stats, itemRarity), level(level), position(position), enemiesInRange(enemiesInRange)
+                 int level, const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies)
+    : Item(name, description, stats, itemRarity), level(level), position(position), enemiesInRange(enemiesInRange), allEnemies(allEnemies)
 {
 }
 
@@ -51,10 +51,14 @@ ItemRarity AWeapon::GetRarityFromJSON(WEAPON_TYPE type)
     {
         if (const std::string *val = std::get_if<std::string>(&it->second))
         {
-            if (*val == "Common") return ItemRarity::Common;
-            if (*val == "Uncommon") return ItemRarity::Uncommon;
-            if (*val == "Rare") return ItemRarity::Rare;
-            if (*val == "Epic") return ItemRarity::Epic;
+            if (*val == "Common")
+                return ItemRarity::Common;
+            if (*val == "Uncommon")
+                return ItemRarity::Uncommon;
+            if (*val == "Rare")
+                return ItemRarity::Rare;
+            if (*val == "Epic")
+                return ItemRarity::Epic;
         }
     }
     return ItemRarity::Common;
@@ -86,42 +90,53 @@ bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
 void AWeapon::render()
 {
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(static_cast<WEAPON_TYPE>(weaponType));
-    if (sheet.frames.empty()) return;
+    if (sheet.frames.empty())
+        return;
     animation.frameIndex %= sheet.spriteFrameCount;
 
     Rectangle src = sheet.frames[animation.frameIndex];
 
-    Vector2 origin = { src.width * 0.5f, src.height * 0.5f };
+    Vector2 origin = {src.width * 0.5f, src.height * 0.5f};
 
-    Rectangle dest = { position.x, position.y, src.width, src.height };
+    Rectangle dest = {position.x, position.y, src.width, src.height};
 
     float angle = atan2(direction.y, direction.x) * RAD2DEG + 45.0f;
 
     DrawTexturePro(sheet.texture, src, dest, origin, angle, WHITE);
 }
 
-Vector2 AWeapon::CalculateDirection() {
- float closestDistanceSquared = std::numeric_limits<float>::max();
-    Vector2 closestToEnemy = { 0.0f, 1.0f };
-    
-    for (const AEnemy* enemy : enemiesInRange) {
-        Vector2 toEnemy = { enemy->GetPosition().x - position.x, enemy->GetPosition().y - position.y };
+Vector2 AWeapon::CalculateDirection()
+{
+    float closestDistanceSquared = std::numeric_limits<float>::max();
+    Vector2 closestToEnemy = {0.0f, 1.0f};
+
+    for (const AEnemy *enemy : enemiesInRange)
+    {
+        Vector2 enemyCenter = {
+            enemy->GetPosition().x + enemy->GetHitbox().data.rectangle.width * 0.5f,
+            enemy->GetPosition().y + enemy->GetHitbox().data.rectangle.height * 0.5f
+        };
+        Vector2 toEnemy = {enemyCenter.x - position.x, enemyCenter.y - position.y};
         float distanceSquared = toEnemy.x * toEnemy.x + toEnemy.y * toEnemy.y;
-        if (distanceSquared > 0.0f && distanceSquared < closestDistanceSquared) {
+        if (distanceSquared > 0.0f && distanceSquared < closestDistanceSquared && enemy->IsAlive())
+        {
             closestDistanceSquared = distanceSquared;
             closestToEnemy = toEnemy;
         }
     }
-    
-    if (closestDistanceSquared < std::numeric_limits<float>::max()) {
+
+    if (closestDistanceSquared < std::numeric_limits<float>::max())
+    {
         float distance = sqrt(closestDistanceSquared);
-        if (distance > 0.0f) {
-            return { closestToEnemy.x / distance, closestToEnemy.y / distance };
+        if (distance > 0.0f)
+        {
+            return {closestToEnemy.x / distance, closestToEnemy.y / distance};
         }
     }
-    return { 0.0f, 1.0f };
+    return {0.0f, 1.0f};
 }
-void AWeapon::update(float deltaTime, const Vector2& position) {
+void AWeapon::update(float deltaTime, const Vector2 &position)
+{
     SetPosition(position);
     SetDirection(CalculateDirection());
 }

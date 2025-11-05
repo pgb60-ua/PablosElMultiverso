@@ -1,6 +1,7 @@
 #include "AEntity.hpp"
 #include <utility>
 #include <random>
+#include <iostream>
 
 AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hitbox(hitbox)
 {
@@ -45,7 +46,7 @@ void AEntity::SetAttackSpeed(float newAttackSpeed)
     }
 }
 
-void AEntity::TakeDamage(const Stats& stats)
+void AEntity::TakeDamage(const Stats &stats)
 {
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -53,7 +54,8 @@ void AEntity::TakeDamage(const Stats& stats)
 
     // Aplicar evasión
     float evasion = this->stats.GetDefensiveStats().agility;
-    if (dis(gen) < evasion){
+    if (dis(gen) < evasion)
+    {
         animation.color = GRAY;
         return; // Se esquiva el ataque
     }
@@ -66,12 +68,11 @@ void AEntity::TakeDamage(const Stats& stats)
     float critChance = stats.GetOffensiveStats().criticalChance;
     float critMultiplier = 1.0f;
 
-    
-    if (dis(gen) < critChance){
+    if (dis(gen) < critChance)
+    {
         critMultiplier = stats.GetOffensiveStats().criticalDamage;
         animation.color = ORANGE;
     }
-        
 
     physicalDamage *= critMultiplier;
     magicalDamage *= critMultiplier;
@@ -86,7 +87,7 @@ void AEntity::TakeDamage(const Stats& stats)
 
     float totalDamage = physicalDamageAfterArmor + magicalDamageAfterResistance;
     float newHealth = this->stats.GetHealth() - totalDamage;
-    if (animation.color.r == WHITE.r && animation.color.g == WHITE.g && animation.color.b == WHITE.b && animation.color.a == WHITE.a) 
+    if (animation.color.r == WHITE.r && animation.color.g == WHITE.g && animation.color.b == WHITE.b && animation.color.a == WHITE.a)
         animation.color = RED;
     this->stats.SetHealth(newHealth > 0 ? newHealth : 0);
 }

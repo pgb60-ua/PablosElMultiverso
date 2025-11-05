@@ -3,6 +3,7 @@
 #include "AEntity.hpp"
 #include "Player.hpp"
 #include "SpriteAnimation.hpp"
+#include "Types.hpp"
 #include <vector>
 extern "C"
 {
@@ -24,8 +25,6 @@ protected:
 
     /// @brief Constructor protegido para clases derivadas
     AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
-    /// @brief Animación del enemigo
-    SpriteAnimation animation;
     /// @brief Actualiza la animación del enemigo
     void UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType);
 
@@ -44,6 +43,10 @@ public:
     /// @brief Establece la posición objetivo del enemigo (generalmente el jugador)
     /// @param nuevoObjetivo Posición hacia donde debe moverse el enemigo
     void SetObjective(const std::vector<Player *> newObjectives);
+
+    /// @brief Verifica si el enemigo está vivo
+    /// @return true si está vivo, false si está muerto
+    bool IsAlive() const { return this->stats.GetHealth() > 0; }
 
     /*--------------------------*/
     // Botín y Economía
