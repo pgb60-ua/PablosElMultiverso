@@ -1,6 +1,5 @@
 #include <cmath>
 #include "SniperWeapon.hpp"
-#include "WingProjectile.hpp"
 
 // Helper lambdas para obtener datos del JSON
 
@@ -34,5 +33,5 @@ void SniperWeapon::Attack(const Vector2& position, float deltaTime) {
 }
 
 std::unique_ptr<AProjectile> SniperWeapon::CreateProjectile() {
-    return std::make_unique<WingProjectile>();
+    return std::make_unique<SniperProjectile>();
 }

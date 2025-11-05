@@ -1,6 +1,6 @@
 #pragma once
 #include "ARangeWeapon.hpp"
-//#include "SniperProjectile.hpp"
+#include "SniperProjectile.hpp"
 #include "DataFileManager.hpp"
 #include <memory>
 
