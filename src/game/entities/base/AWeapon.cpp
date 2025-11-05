@@ -133,9 +133,9 @@ void AWeapon::setStatsFromPlayer(const Stats& statsFromPlayer) {
     OffensiveStats playerOffensiveStats = statsFromPlayer.GetOffensiveStats();
 
     weaponOffensiveStats.attackSpeed += playerOffensiveStats.attackSpeed * ATTACK_SPEED_MULTIPLIER;
-    weaponOffensiveStats.criticalChance += playerOffensiveStats.criticalChance * CRITICAL_CHANCE_MULTIPLIER;
-    weaponOffensiveStats.criticalDamage += playerOffensiveStats.criticalDamage * CRITICAL_DAMAGE_MULTIPLIER;
-    weaponOffensiveStats.lifeSteal += playerOffensiveStats.lifeSteal * LIFE_STEAL_MULTIPLIER;
+    weaponOffensiveStats.criticalChance = std::min(weaponOffensiveStats.criticalChance + playerOffensiveStats.criticalChance * CRITICAL_CHANCE_MULTIPLIER, MAX_CRITICAL_CHANCE);
+    weaponOffensiveStats.criticalDamage = std::min(weaponOffensiveStats.criticalDamage + playerOffensiveStats.criticalDamage * CRITICAL_DAMAGE_MULTIPLIER, MAX_CRITICAL_DAMAGE);
+    weaponOffensiveStats.lifeSteal = std::min(weaponOffensiveStats.lifeSteal + playerOffensiveStats.lifeSteal * LIFE_STEAL_MULTIPLIER, MAX_LIFE_STEAL);
 
     newStats.SetOffensiveStats(weaponOffensiveStats);
 
