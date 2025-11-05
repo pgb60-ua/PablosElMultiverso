@@ -72,10 +72,10 @@ bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
     OffensiveStats upgradedStats = {
         currentStats.physicalDamage + newOffensiveStats.physicalDamage,
         currentStats.magicDamage + newOffensiveStats.magicDamage,
-        currentStats.attackSpeed + newOffensiveStats.attackSpeed / 2.0f,
-        std::min(currentStats.criticalChance + newOffensiveStats.criticalChance, MAX_CRITICAL_CHANCE),
-        std::min(currentStats.criticalDamage + newOffensiveStats.criticalDamage, MAX_CRITICAL_DAMAGE),
-        std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal, MAX_LIFE_STEAL)
+        currentStats.attackSpeed + newOffensiveStats.attackSpeed * ATTACK_SPEED_MULTIPLIER,
+        std::min(currentStats.criticalChance + newOffensiveStats.criticalChance * CRITICAL_CHANCE_MULTIPLIER, MAX_CRITICAL_CHANCE),
+        std::min(currentStats.criticalDamage + newOffensiveStats.criticalDamage * CRITICAL_DAMAGE_MULTIPLIER, MAX_CRITICAL_DAMAGE),
+        std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal * LIFE_STEAL_MULTIPLIER, MAX_LIFE_STEAL)
     };
 
     stats.SetOffensiveStats(upgradedStats);
@@ -132,10 +132,10 @@ void AWeapon::setStatsFromPlayer(const Stats& statsFromPlayer) {
     OffensiveStats weaponOffensiveStats = newStats.GetOffensiveStats();
     OffensiveStats playerOffensiveStats = statsFromPlayer.GetOffensiveStats();
 
-    weaponOffensiveStats.attackSpeed += playerOffensiveStats.attackSpeed * 0.5f;
-    weaponOffensiveStats.criticalChance += playerOffensiveStats.criticalChance * 0.3f;
-    weaponOffensiveStats.criticalDamage += playerOffensiveStats.criticalDamage * 0.2f;
-    weaponOffensiveStats.lifeSteal += playerOffensiveStats.lifeSteal * 0.2f;
+    weaponOffensiveStats.attackSpeed += playerOffensiveStats.attackSpeed * ATTACK_SPEED_MULTIPLIER;
+    weaponOffensiveStats.criticalChance += playerOffensiveStats.criticalChance * CRITICAL_CHANCE_MULTIPLIER;
+    weaponOffensiveStats.criticalDamage += playerOffensiveStats.criticalDamage * CRITICAL_DAMAGE_MULTIPLIER;
+    weaponOffensiveStats.lifeSteal += playerOffensiveStats.lifeSteal * LIFE_STEAL_MULTIPLIER;
 
     newStats.SetOffensiveStats(weaponOffensiveStats);
 

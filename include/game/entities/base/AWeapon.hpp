@@ -26,6 +26,14 @@ private:
     const float MAX_CRITICAL_DAMAGE = 10.0f;
     /// @brief Máximo porcentaje de robo de vida
     const float MAX_LIFE_STEAL = 50.0f;
+    /// @brief Multiplicador de velocidad de ataque
+    const float ATTACK_SPEED_MULTIPLIER = 0.5f;
+    /// @brief Multiplicador de daño crítico
+    const float CRITICAL_DAMAGE_MULTIPLIER = 0.2f;
+    /// @brief Multiplicador de robo de vida
+    const float LIFE_STEAL_MULTIPLIER = 0.2f;
+    /// @brief Multiplicador de impacto crítico
+    const float CRITICAL_CHANCE_MULTIPLIER = 0.3f;
     /// @brief Animación del sprite del arma
     SpriteAnimation animation;
 
