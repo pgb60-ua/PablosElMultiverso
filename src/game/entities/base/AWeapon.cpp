@@ -72,7 +72,7 @@ bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
     OffensiveStats upgradedStats = {
         currentStats.physicalDamage + newOffensiveStats.physicalDamage,
         currentStats.magicDamage + newOffensiveStats.magicDamage,
-        currentStats.attackSpeed + newOffensiveStats.attackSpeed,
+        currentStats.attackSpeed + newOffensiveStats.attackSpeed / 2.0f,
         std::min(currentStats.criticalChance + newOffensiveStats.criticalChance, MAX_CRITICAL_CHANCE),
         std::min(currentStats.criticalDamage + newOffensiveStats.criticalDamage, MAX_CRITICAL_DAMAGE),
         std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal, MAX_LIFE_STEAL)
@@ -124,4 +124,20 @@ Vector2 AWeapon::CalculateDirection() {
 void AWeapon::update(float deltaTime, const Vector2& position) {
     SetPosition(position);
     SetDirection(CalculateDirection());
+}
+
+void AWeapon::setStatsFromPlayer(const Stats& statsFromPlayer) {
+    Stats newStats = this->stats;
+
+    OffensiveStats weaponOffensiveStats = newStats.GetOffensiveStats();
+    OffensiveStats playerOffensiveStats = statsFromPlayer.GetOffensiveStats();
+
+    weaponOffensiveStats.attackSpeed += playerOffensiveStats.attackSpeed * 0.5f;
+    weaponOffensiveStats.criticalChance += playerOffensiveStats.criticalChance * 0.3f;
+    weaponOffensiveStats.criticalDamage += playerOffensiveStats.criticalDamage * 0.2f;
+    weaponOffensiveStats.lifeSteal += playerOffensiveStats.lifeSteal * 0.2f;
+
+    newStats.SetOffensiveStats(weaponOffensiveStats);
+
+    this->stats = newStats;
 }

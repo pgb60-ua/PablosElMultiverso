@@ -73,6 +73,9 @@ public:
     /// @brief Setter de la dirección del arma
     void SetDirection(const Vector2& newDirection) { direction = newDirection; }
 
+    /// @brief 
+    void setStatsFromPlayer(const Stats& playerStats);
+
     /// @brief Método para atacar
     virtual void Attack() = 0;
     virtual void render();
