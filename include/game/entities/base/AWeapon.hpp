@@ -84,7 +84,7 @@ public:
     void SetDirection(const Vector2 &newDirection) { direction = newDirection; }
 
     /// @brief Método para ajustar las stats del arma según las stats del jugador
-    void SetStatsFromPlayer(const Stats& playerStats);
+    void setStatsFromPlayer(const Stats& playerStats);
 
     /// @brief Método para atacar
     virtual void Attack() = 0;

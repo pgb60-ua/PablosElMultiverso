@@ -141,7 +141,7 @@ void AWeapon::update(float deltaTime, const Vector2 &position)
     SetDirection(CalculateDirection());
 }
 
-void AWeapon::SetStatsFromPlayer(const Stats& statsFromPlayer) {
+void AWeapon::setStatsFromPlayer(const Stats& statsFromPlayer) {
     Stats newStats = this->stats;
 
     OffensiveStats weaponOffensiveStats = newStats.GetOffensiveStats();
