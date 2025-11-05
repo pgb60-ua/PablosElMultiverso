@@ -1,5 +1,4 @@
 #include "SniperProjectile.hpp"
-#include "SniperProjectile.hpp"
 #include <SpriteSheet.hpp>
 #include <SpriteLoaderManager.hpp>
 #include <cmath>
