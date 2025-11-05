@@ -5,9 +5,6 @@
 #include <memory>
 
 class SniperWeapon : public ARangeWeapon {
-private:
-    /// @brief tiempo desde el último ataque
-    float timeSinceLastAttack = 0.0f;
 public:
     /// @brief Constructor de la clase SniperWeapon que carga desde JSON
     SniperWeapon(const Vector2& position, std::vector<AEnemy*>& enemiesInRange);
