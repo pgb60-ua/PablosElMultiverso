@@ -4,7 +4,7 @@
 
 void MovementSystem::Update(entt::registry &registry, float deltaTime)
 {
-    auto view = registry.view<InputComponent, PositionComponent, MovementSpeedComponent>();
+    auto view = registry.view<const InputComponent, PositionComponent, const MovementSpeedComponent>();
 
     for (auto [entity, input, position, speed] : view.each())
     {

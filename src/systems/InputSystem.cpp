@@ -4,7 +4,7 @@
 
 void InputSystem::Update(entt::registry &registry)
 {
-    auto view = registry.view<PlayerComponent, InputComponent>();
+    auto view = registry.view<const PlayerComponent, InputComponent>();
     for (auto [entity, player, input] : view.each())
     {
         // Intentamos obtener la "fila" asociada a la id y comprobamos que nos haya devuelto algo
