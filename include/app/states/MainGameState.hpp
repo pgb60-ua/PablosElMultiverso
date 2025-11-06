@@ -1,8 +1,9 @@
 #pragma once
-#include "AEnemy.hpp"
-#include "Player.hpp"
+#include "InputSystem.hpp"
+#include "MovementSystem.hpp"
+#include "RenderSystem.hpp"
+#include <EnTT/entt.hpp>
 #include <GameState.hpp>
-#include <memory>
 
 extern "C"
 {
@@ -24,9 +25,8 @@ public:
     void resume() {};
 
 private:
-    char entered_key;
-    Vector2 direction;
-    Vector2 direction2;
-    std::vector<std::unique_ptr<Player>> players;
-    std::vector<AEnemy *> enemies;
+    entt::registry registry;
+    InputSystem inputSystem;
+    RenderSystem renderSystem;
+    MovementSystem movementSystem;
 };

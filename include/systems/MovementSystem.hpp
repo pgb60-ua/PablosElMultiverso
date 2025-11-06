@@ -4,7 +4,7 @@
 class MovementSystem
 {
 public:
-    MovementSystem();
-    ~MovementSystem();
+    MovementSystem() {};
+    ~MovementSystem() {};
     void Update(entt::registry &registry, float deltaTime);
 };

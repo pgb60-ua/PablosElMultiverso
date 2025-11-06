@@ -20,7 +20,7 @@ private:
                                                              {4, {KEY_KP_8, KEY_KP_5, KEY_KP_4, KEY_KP_6}}};
 
 public:
-    InputSystem();
-    ~InputSystem();
+    InputSystem() {};
+    ~InputSystem() {};
     void Update(entt::registry &registry);
 };

@@ -4,8 +4,8 @@ typedef struct
 {
     float width;
     float height;
-    float OffsetX;
-    float OffsetY;
+    float offsetX;
+    float offsetY;
 } RectangleHitboxComponent;
 
 typedef struct

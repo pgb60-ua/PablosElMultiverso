@@ -1,147 +1,50 @@
-#include "Player.hpp"
-#include "SpriteLoaderManager.hpp"
-#include "Types.hpp"
-#include "WingWeapon.hpp"
-#include "GameOverState.hpp"
-#include "StateMachine.hpp"
-#include "Zombie.hpp"
+#include "CollisionComponents.hpp"
+#include "InputComponent.hpp"
+#include "InputSystem.hpp"
+#include "MovementSystem.hpp"
+#include "PlayerComponent.hpp"
+#include "RenderComponent.hpp"
+#include "RenderSystem.hpp"
+#include "TransformComponent.hpp"
 #include <MainGameState.hpp>
-#include <iostream>
 
 extern "C"
 {
 #include <raylib.h>
 }
 
-MainGameState::MainGameState() : direction{0, 0} {}
+MainGameState::MainGameState() {}
 
 void MainGameState::init()
 {
-    // Crear el jugador en una posición inicial
-    Vector2 initialPosition = {400.0f, 300.0f};
-    Vector2 secondPosition = {600.0f, 700.0f};
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition, enemies));
-
-    int numZombies = 100;
-    enemies.reserve(numZombies);
-    for (int i = 0; i < numZombies; i++)
-    {
-        enemies.push_back(new Zombie(std::vector<Player *>{players[0].get(), players[1].get()}));
-    }
-
-    // Crear el arma desde JSON automáticamente en el constructor
-    for (int i = 0; i < 4; ++i)
-    {
-        players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    }
+    auto player = registry.create();
+    registry.emplace<InputComponent>(player, Vector2{0, 0}, 0);
+    registry.emplace<PositionComponent>(player, 400.0f, 300.0f);
+    registry.emplace<RenderComponent>(player, 0.f);
+    registry.emplace<PlayerComponent>(player, "Prueba", 1);
+    registry.emplace<MovementSpeedComponent>(player, 100);
+    // Para eliminar, esto es prueba
+    registry.emplace<RectangleHitboxComponent>(player, 20.0f, 20.0f, 0.f, 0.f);
 }
 
-void MainGameState::handleInput()
-{
-    // Resetear la dirección
-    direction = {0, 0};
+void MainGameState::handleInput() { inputSystem.Update(registry); }
 
-    // Detectar input de teclas y construir vector de dirección
-    if (IsKeyDown(KEY_W))
-    {
-        direction.y = -1; // Arriba (Y negativa en Raylib)
-    }
-    if (IsKeyDown(KEY_S))
-    {
-        direction.y = 1; // Abajo (Y positiva en Raylib)
-    }
-    if (IsKeyDown(KEY_A))
-    {
-        direction.x = -1; // Izquierda (X negativa)
-    }
-    if (IsKeyDown(KEY_D))
-    {
-        direction.x = 1; // Derecha (X positiva)
-    }
-    // Resetear la dirección
-    direction2 = {0, 0};
-
-    // Detectar input de teclas y construir vector de dirección
-    if (IsKeyDown(KEY_UP))
-    {
-        direction2.y = -1; // Arriba (Y negativa en Raylib)
-    }
-    if (IsKeyDown(KEY_DOWN))
-    {
-        direction2.y = 1; // Abajo (Y positiva en Raylib)
-    }
-    if (IsKeyDown(KEY_LEFT))
-    {
-        direction2.x = -1; // Izquierda (X negativa)
-    }
-    if (IsKeyDown(KEY_RIGHT))
-    {
-        direction2.x = 1; // Derecha (X positiva)
-    }
-
-    // Pasar la dirección a todos los jugadores para que la procesen
-    /*for (auto &player : players)
-    {
-        player->HandleInput(direction);
-    }*/
-    players[0]->HandleInput(direction);
-    players[1]->HandleInput(direction2);
-}
-
-void MainGameState::update(float deltaTime)
-{
-    int numero_vivo = 0;
-    // Actualizar todos los jugadores (esto llamará internamente a Move si hay dirección)
-    for (auto &player : players)
-    {
-        player->Update(deltaTime);
-        player->CheckCollisions(deltaTime);
-        if (!player->IsAlive())
-        {
-            numero_vivo++;
-        }
-        
-    }
-    // Actualizar todos los enemigos
-    for (auto &enemy : enemies)
-    {
-        enemy->Update(deltaTime);
-    }
-    if (numero_vivo == (int)players.size())
-    {
-        // Todos los jugadores están muertos, reiniciar el estado del juego
-        state_machine->add_state(std::make_unique<GameOverState>(), true);
-    }
-}
+void MainGameState::update(float deltaTime) { movementSystem.Update(registry, deltaTime); }
 
 void MainGameState::render()
 {
     BeginDrawing();
     ClearBackground(DARKGRAY);
     DrawText("Pablos El Multiverso", 10, 10, 20, LIGHTGRAY);
-
-    // Renderizar todos los jugadores
-    for (auto &player : players)
-    {
-        player->Render();
-        std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
-        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
-                 static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
-    }
-    // Renderizar todos los enemigos
-    for (auto &enemy : enemies)
-    {
-        enemy->Render();
-    }
+    renderSystem.Update(registry);
     DrawFPS(GetScreenWidth() - 100, 10);
     EndDrawing();
 }
 
 MainGameState::~MainGameState()
 {
-    for (auto &enemy : enemies)
+    for (const auto entity : registry.view<RenderComponent>())
     {
-        delete enemy;
+        registry.destroy(entity);
     }
 }

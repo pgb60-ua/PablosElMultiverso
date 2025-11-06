@@ -8,7 +8,7 @@ void MovementSystem::Update(entt::registry &registry, float deltaTime)
 
     for (auto [entity, input, position, speed] : view.each())
     {
-        if (input.direction.x == 0 && input.direction.x == 0)
+        if (input.direction.x == 0 && input.direction.y == 0)
         {
             continue; // No hay que modificar posiciones
         }
@@ -19,7 +19,7 @@ void MovementSystem::Update(entt::registry &registry, float deltaTime)
         float normalizedX = input.direction.x / length;
         float normalizedY = input.direction.y / length;
 
-        position.x = normalizedX * speed.movementSpeed * deltaTime;
-        position.y = normalizedY * speed.movementSpeed * deltaTime;
+        position.x = position.x + normalizedX * speed.movementSpeed * deltaTime;
+        position.y = position.y + normalizedY * speed.movementSpeed * deltaTime;
     }
 }
