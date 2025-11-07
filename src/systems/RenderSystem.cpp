@@ -1,4 +1,5 @@
 #include "RenderSystem.hpp"
+#include "EntityComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "RenderComponents.hpp"
 #include "SpriteLoaderManager.hpp"
@@ -17,9 +18,13 @@ void RenderSystem::Update(entt::registry &registry)
 
 void RenderSystem::UpdateEntities(entt::registry &registry)
 {
-    auto view = registry.view<const PlayerComponent, RenderEntityComponent, const PositionComponent>();
-    for (auto [entity, player, render, position] : view.each())
+    auto view =
+        registry.view<const PlayerComponent, RenderEntityComponent, const PositionComponent, const EntityComponent>();
+    for (auto [entity, player, render, position, entComponent] : view.each())
     {
+        // Si el jugador esta muerto o en la tienda no tiene que renderizarse
+        if (entComponent.state == DEAD || entComponent.state == SHOP)
+            continue;
         const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player.type);
         if (sheet.frames.empty())
             continue;
