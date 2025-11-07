@@ -8,7 +8,7 @@ void InputSystem::Update(entt::registry &registry)
     for (auto [entity, player, input] : view.each())
     {
         // Intentamos obtener la "fila" asociada a la id y comprobamos que nos haya devuelto algo
-        auto it = m_playerBindings.find(player.id);
+        const auto it = m_playerBindings.find(player.id);
         if (it == m_playerBindings.end())
         {
             continue; // No hay configuraciones de teclas para este jugador porque no está su index
