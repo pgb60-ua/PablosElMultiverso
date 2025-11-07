@@ -1,3 +1,4 @@
+#include "AnimationSystem.hpp"
 #include "CollisionComponents.hpp"
 #include "InputComponent.hpp"
 #include "InputSystem.hpp"
@@ -37,13 +38,19 @@ void MainGameState::init()
     registry.emplace<RenderEntityComponent>(player2);
     registry.emplace<PlayerComponent>(player2, "Prueba", 2, PLAYER_TYPE::MAGE);
     registry.emplace<MovementSpeedComponent>(player2, 100.f);
+    const SpriteSheet &sheet2 = SpriteLoaderManager::GetInstance().GetSpriteSheet(PLAYER_TYPE::MAGE);
     // Para eliminar, esto es prueba (porque de momento lo uso para render)
-    registry.emplace<RectangleHitboxComponent>(player2, 20.0f, 20.0f, 0.f, 0.f);
+    registry.emplace<RectangleHitboxComponent>(player2, sheet2.frames.begin()->width, sheet2.frames.begin()->height,
+                                               0.f, 0.f);
 }
 
 void MainGameState::handleInput() { inputSystem.Update(registry); }
 
-void MainGameState::update(float deltaTime) { movementSystem.Update(registry, deltaTime); }
+void MainGameState::update(float deltaTime)
+{
+    movementSystem.Update(registry, deltaTime);
+    animationSystem.Update(registry, deltaTime);
+}
 
 void MainGameState::render()
 {

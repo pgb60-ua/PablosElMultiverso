@@ -1,4 +1,5 @@
 #pragma once
+#include "AnimationSystem.hpp"
 #include "InputSystem.hpp"
 #include "MovementSystem.hpp"
 #include "RenderSystem.hpp"
@@ -29,4 +30,5 @@ private:
     InputSystem inputSystem;
     RenderSystem renderSystem;
     MovementSystem movementSystem;
+    AnimationSystem animationSystem;
 };

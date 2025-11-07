@@ -6,7 +6,6 @@
 #include "SpriteLoaderManager.hpp"
 #include "SpriteSheet.hpp"
 #include "TransformComponent.hpp"
-#include "raylib.h"
 
 void RenderSystem::Update(entt::registry &registry)
 {
