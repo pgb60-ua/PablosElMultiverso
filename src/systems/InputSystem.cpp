@@ -1,11 +1,12 @@
 #include "InputSystem.hpp"
 #include "InputComponent.hpp"
 #include "PlayerComponent.hpp"
+#include "RenderComponents.hpp"
 
 void InputSystem::Update(entt::registry &registry)
 {
-    auto view = registry.view<const PlayerComponent, InputComponent>();
-    for (auto [entity, player, input] : view.each())
+    auto view = registry.view<const PlayerComponent, InputComponent, RenderEntityComponent>();
+    for (auto [entity, player, input, render] : view.each())
     {
         // Intentamos obtener la "fila" asociada a la id y comprobamos que nos haya devuelto algo
         const auto it = m_playerBindings.find(player.id);
@@ -36,6 +37,10 @@ void InputSystem::Update(entt::registry &registry)
         if (IsKeyDown(KEYS.right))
         {
             input.direction.x = 1; // Derecha (X positiva)
+        }
+        if (input.direction.x != 0)
+        {
+            render.animation.flipped = (input.direction.x < 0);
         }
     }
 }
