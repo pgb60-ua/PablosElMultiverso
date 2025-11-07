@@ -5,13 +5,17 @@
 #include "InputSystem.hpp"
 #include "MovementSystem.hpp"
 #include "PlayerComponent.hpp"
+#include "RangeWeaponComponent.hpp"
 #include "RenderComponents.hpp"
 #include "RenderSystem.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "SpriteSheet.hpp"
 #include "TransformComponent.hpp"
 #include "Types.hpp"
+#include "WeaponComponent.hpp"
 #include <MainGameState.hpp>
+#include <iostream>
+#include <ostream>
 
 extern "C"
 {
@@ -26,7 +30,7 @@ void MainGameState::init()
     registry.emplace<InputComponent>(player, Vector2{0, 0}, 0);
     registry.emplace<PositionComponent>(player, 400.0f, 300.0f);
     registry.emplace<RenderEntityComponent>(player);
-    registry.emplace<PlayerComponent>(player, "Prueba", false, PLAYER_TYPE::RANGE);
+    registry.emplace<PlayerComponent>(player, "Prueba", 1, PLAYER_TYPE::RANGE);
     registry.emplace<MovementSpeedComponent>(player, 100.f);
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PLAYER_TYPE::RANGE);
     // Para eliminar, esto es prueba (porque de momento lo uso para render)
@@ -34,11 +38,20 @@ void MainGameState::init()
                                                0.f);
     registry.emplace<EntityComponent>(player, ALIVE);
 
+    auto weaponPlayer1 = registry.create();
+    registry.emplace<PositionComponent>(weaponPlayer1, 200.0f, 200.0f);
+    registry.emplace<WeaponComponent>(weaponPlayer1, player, 20.0f, 20.0f);
+    registry.emplace<RangeWeaponComponent>(weaponPlayer1, WEAPON_TYPE::WING);
+    const SpriteSheet &sheetWeapon = SpriteLoaderManager::GetInstance().GetSpriteSheet(WEAPON_TYPE::WING);
+    registry.emplace<RectangleHitboxComponent>(weaponPlayer1, sheetWeapon.frames.begin()->width,
+                                               sheet.frames.begin()->height, 0.f, 0.f);
+    registry.emplace<RenderEntityComponent>(weaponPlayer1);
+
     auto player2 = registry.create();
     registry.emplace<InputComponent>(player2, Vector2{0, 0}, 0);
     registry.emplace<PositionComponent>(player2, 200.0f, 300.0f);
     registry.emplace<RenderEntityComponent>(player2);
-    registry.emplace<PlayerComponent>(player2, "Prueba", false, PLAYER_TYPE::MAGE);
+    registry.emplace<PlayerComponent>(player2, "Prueba", 2, PLAYER_TYPE::MAGE);
     registry.emplace<MovementSpeedComponent>(player2, 100.f);
     const SpriteSheet &sheet2 = SpriteLoaderManager::GetInstance().GetSpriteSheet(PLAYER_TYPE::MAGE);
     // Para eliminar, esto es prueba (porque de momento lo uso para render)
@@ -53,6 +66,7 @@ void MainGameState::update(float deltaTime)
 {
     movementSystem.Update(registry, deltaTime);
     animationSystem.Update(registry, deltaTime);
+    weaponPositionSystem.Update(registry);
 }
 
 void MainGameState::render()

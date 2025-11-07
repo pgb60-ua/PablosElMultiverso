@@ -1,22 +1,20 @@
 #include "InputSystem.hpp"
 #include "EntityComponent.hpp"
 #include "InputComponent.hpp"
+#include "PlayerComponent.hpp"
 #include "RenderComponents.hpp"
 
 void InputSystem::Update(entt::registry &registry)
 {
-    // Ya que no quiero almacenar id en el componente player, asi puedo usar
-    size_t playerId = 0;
-    auto view = registry.view<InputComponent, RenderEntityComponent, const EntityComponent>();
-    for (auto [entity, input, render, entComponent] : view.each())
+    auto view = registry.view<const PlayerComponent, InputComponent, RenderEntityComponent, const EntityComponent>();
+    for (auto [entity, player, input, render, entComponent] : view.each())
     {
-        playerId++;
         // Si el player esta muerto o en la tienda no tiene que moverse porque no se renderiza
         // TODO : Cuando está en la tienda tiene las teclas para comprar en vez de para mover
         if (entComponent.state == DEAD || entComponent.state == SHOP)
             continue;
         // Intentamos obtener la "fila" asociada a la id y comprobamos que nos haya devuelto algo
-        const auto it = m_playerBindings.find(playerId);
+        const auto it = m_playerBindings.find(player.id);
         if (it == m_playerBindings.end())
         {
             continue; // No hay configuraciones de teclas para este jugador porque no está su index

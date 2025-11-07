@@ -4,7 +4,9 @@ typedef enum
 {
     ALIVE,
     DEAD,
-    SHOP
+    SHOP,
+    DAMAGED,
+    CRITIC
 } EntityState;
 
 typedef struct

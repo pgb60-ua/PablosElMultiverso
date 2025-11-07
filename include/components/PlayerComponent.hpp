@@ -6,6 +6,6 @@
 typedef struct
 {
     std::string name;
-    bool dead;
+    int id;
     PLAYER_TYPE type;
 } PlayerComponent;

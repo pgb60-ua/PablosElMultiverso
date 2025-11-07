@@ -3,6 +3,7 @@
 #include "InputSystem.hpp"
 #include "MovementSystem.hpp"
 #include "RenderSystem.hpp"
+#include "WeaponPositionSystem.hpp"
 #include <EnTT/entt.hpp>
 #include <GameState.hpp>
 
@@ -31,4 +32,5 @@ private:
     RenderSystem renderSystem;
     MovementSystem movementSystem;
     AnimationSystem animationSystem;
+    WeaponPositionSystem weaponPositionSystem;
 };
