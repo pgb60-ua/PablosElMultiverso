@@ -1,8 +1,7 @@
 #include "WindowFlags.hpp"
 #include <MainGameState.hpp>
-#include <StateMachine.hpp>
 #include <MainMenuState.hpp>
-#include <chrono>
+#include <StateMachine.hpp>
 #include <memory>
 extern "C"
 {
@@ -34,7 +33,6 @@ int main()
     SpriteLoaderManager::GetInstance().ClearCache();
     CloseAudioDevice();
     CloseWindow();
-    
 
     return 0;
 }
