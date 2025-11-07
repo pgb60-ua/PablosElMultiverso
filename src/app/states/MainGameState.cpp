@@ -14,8 +14,6 @@
 #include "Types.hpp"
 #include "WeaponComponent.hpp"
 #include <MainGameState.hpp>
-#include <iostream>
-#include <ostream>
 
 extern "C"
 {
@@ -29,7 +27,7 @@ void MainGameState::init()
     auto player = registry.create();
     registry.emplace<InputComponent>(player, Vector2{0, 0}, 0);
     registry.emplace<PositionComponent>(player, 400.0f, 300.0f);
-    registry.emplace<RenderEntityComponent>(player);
+    registry.emplace<RenderEntityComponent>(player, 0.f);
     registry.emplace<PlayerComponent>(player, "Prueba", 1, PLAYER_TYPE::RANGE);
     registry.emplace<MovementSpeedComponent>(player, 100.f);
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PLAYER_TYPE::RANGE);
@@ -40,17 +38,17 @@ void MainGameState::init()
 
     auto weaponPlayer1 = registry.create();
     registry.emplace<PositionComponent>(weaponPlayer1, 200.0f, 200.0f);
-    registry.emplace<WeaponComponent>(weaponPlayer1, player, 20.0f, 20.0f);
+    registry.emplace<WeaponComponent>(weaponPlayer1, player, sheet.frames.begin()->width, sheet.frames.begin()->height);
     registry.emplace<RangeWeaponComponent>(weaponPlayer1, WEAPON_TYPE::WING);
     const SpriteSheet &sheetWeapon = SpriteLoaderManager::GetInstance().GetSpriteSheet(WEAPON_TYPE::WING);
     registry.emplace<RectangleHitboxComponent>(weaponPlayer1, sheetWeapon.frames.begin()->width,
                                                sheet.frames.begin()->height, 0.f, 0.f);
-    registry.emplace<RenderEntityComponent>(weaponPlayer1);
+    registry.emplace<RenderEntityComponent>(weaponPlayer1, 0.f);
 
     auto player2 = registry.create();
     registry.emplace<InputComponent>(player2, Vector2{0, 0}, 0);
     registry.emplace<PositionComponent>(player2, 200.0f, 300.0f);
-    registry.emplace<RenderEntityComponent>(player2);
+    registry.emplace<RenderEntityComponent>(player2, 0.f);
     registry.emplace<PlayerComponent>(player2, "Prueba", 2, PLAYER_TYPE::MAGE);
     registry.emplace<MovementSpeedComponent>(player2, 100.f);
     const SpriteSheet &sheet2 = SpriteLoaderManager::GetInstance().GetSpriteSheet(PLAYER_TYPE::MAGE);

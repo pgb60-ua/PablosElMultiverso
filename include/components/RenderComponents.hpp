@@ -14,5 +14,6 @@ typedef struct
 
 typedef struct
 {
+    float angle;
     SpriteAnimation animation;
 } RenderEntityComponent;

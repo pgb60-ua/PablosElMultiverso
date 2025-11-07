@@ -43,7 +43,7 @@ void RenderSystem::UpdateEntities(entt::registry &registry)
 
         Rectangle dest = {position.x, position.y, src.width, src.height};
 
-        DrawTexturePro(sheet.texture, src, dest, origin, 0, render.animation.color);
+        DrawTexturePro(sheet.texture, src, dest, origin, render.angle, render.animation.color);
     }
 }
 
@@ -69,8 +69,8 @@ void RenderSystem::UpdateItems(entt::registry &registry)
                           src.height > 0 ? src.height * 0.5f : -src.height * 0.5f};
 
         Rectangle dest = {position.x, position.y, src.width, src.height};
-
-        DrawTexturePro(sheet.texture, src, dest, origin, 0, render.animation.color);
+        DrawTexturePro(sheet.texture, src, dest, origin, render.angle, render.animation.color);
+        DrawCircle(position.x, position.y, 3, GREEN);
     }
 }
 
