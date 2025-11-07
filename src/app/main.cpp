@@ -1,3 +1,4 @@
+#include "SpriteLoaderManager.hpp"
 #include "WindowFlags.hpp"
 #include <MainGameState.hpp>
 #include <MainMenuState.hpp>
@@ -30,6 +31,7 @@ int main()
         state_machine.getCurrentState()->update(delta_time);
         state_machine.getCurrentState()->render();
     }
+    SpriteLoaderManager::GetInstance().ClearCache();
     CloseAudioDevice();
     CloseWindow();
 
