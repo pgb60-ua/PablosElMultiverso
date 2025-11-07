@@ -20,8 +20,8 @@ void RenderSystem::Update(entt::registry &registry)
 void RenderSystem::UpdateEntities(entt::registry &registry)
 {
     auto view = registry.view<const PlayerComponent, RenderEntityComponent, const PositionComponent,
-                              const RectangleHitboxComponent, const InputComponent, RectangleHitboxComponent>();
-    for (auto [entity, player, render, position, rectangle, input, hitbox] : view.each())
+                              const InputComponent, const RectangleHitboxComponent>();
+    for (auto [entity, player, render, position, input, hitbox] : view.each())
     {
         const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player.type);
         if (sheet.frames.empty())
