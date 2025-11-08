@@ -4,7 +4,7 @@
 // Helper lambdas para obtener datos del JSON
 
 
-SniperWeapon::SniperWeapon(const Vector2& position, std::vector<AEnemy*>& enemiesInRange, std::vector<AEnemy *> &allEnemies)
+SniperWeapon::SniperWeapon(const Vector2& position, std::vector<AEnemy *>& enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : ARangeWeapon(
         GetStringFromJSON("name", WEAPON_TYPE::SNIPER, "Unknown Weapon"),
         GetStringFromJSON("description", WEAPON_TYPE::SNIPER, ""),
