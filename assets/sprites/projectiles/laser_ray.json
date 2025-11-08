@@ -1,0 +1,11 @@
+{
+  "texture": "LaserRay-Sheet.png",
+  "frames": [
+    {
+      "x": 0,
+      "y": 0,
+      "width": 251,
+      "height": 16
+    }
+  ]
+}
