@@ -8,16 +8,14 @@
 LaserRayProjectile::LaserRayProjectile(std::vector<AEnemy *> &allEnemies)
     : AProjectile(allEnemies)
 {
-    // Calcular el radio basado en el sprite del proyectil Laser Ray
+    shape.type = ShapeType::SHAPE_RECTANGLE;
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::LASER_RAY);
     if (!sheet.frames.empty())
     {
         const Rectangle &frame = sheet.frames[0];
-        // El radio es la mitad del lado más pequeño del sprite
         float width = std::abs(frame.width);
         float height = std::abs(frame.height);
-        float radius = std::min(width, height) * 0.5f;
-        setRadius(radius);
+        shape.data.rectangle = {getPosition().x, getPosition().y, width, height};
     }
 }
 
