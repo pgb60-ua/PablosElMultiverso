@@ -1,5 +1,6 @@
 #include "AnimationSystem.hpp"
 #include "CollisionComponents.hpp"
+#include "EnemyComponent.hpp"
 #include "EntityComponent.hpp"
 #include "InputComponent.hpp"
 #include "InputSystem.hpp"
@@ -56,6 +57,17 @@ void MainGameState::init()
     registry.emplace<RectangleHitboxComponent>(player2, sheet2.frames.begin()->width, sheet2.frames.begin()->height,
                                                0.f, 0.f);
     registry.emplace<EntityComponent>(player2, ALIVE);
+
+    // Enemigo
+    auto enemy = registry.create();
+    registry.emplace<MovementSpeedComponent>(enemy, 30.0f);
+    registry.emplace<PositionComponent>(enemy, 200.0f, 200.0f);
+    const SpriteSheet &enemySheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);
+    registry.emplace<RectangleHitboxComponent>(enemy, enemySheet.frames.begin()->width,
+                                               enemySheet.frames.begin()->height, 0.f, 0.f);
+    registry.emplace<RenderEntityComponent>(enemy, 0.f);
+    registry.emplace<EnemyComponent>(enemy, ENEMY_TYPE::ZOMBIE);
+    registry.emplace<EntityComponent>(enemy, ALIVE);
 }
 
 void MainGameState::handleInput() { inputSystem.Update(registry); }
