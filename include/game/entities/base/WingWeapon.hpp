@@ -4,9 +4,7 @@
 #include "DataFileManager.hpp"
 #include <memory>
 
-class WingWeapon : public ARangeWeapon
-{
-private:
+class WingWeapon : public ARangeWeapon {
 public:
     /// @brief Constructor de la clase WingWeapon que carga desde JSON
     WingWeapon(const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);

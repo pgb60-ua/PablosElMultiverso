@@ -1,0 +1,11 @@
+{
+  "texture": "Sniper-Sheet.png",
+  "frames": [
+    {
+      "x": 4,
+      "y": 0,
+      "width": 8,
+      "height": 16
+    }
+  ]
+}
