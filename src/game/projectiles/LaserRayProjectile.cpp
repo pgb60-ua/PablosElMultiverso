@@ -26,16 +26,6 @@ void LaserRayProjectile::update(float deltaTime)
     if (!active)
         return;
 
-    Vector2 position = getShapePosition(shape);
-    position.x += direction.x * stats.GetMovementSpeed() * deltaTime;
-    position.y += direction.y * stats.GetMovementSpeed() * deltaTime;
-    setShapePosition(shape, position);
-
-    if (position.x < 0 || position.x > GetScreenWidth() || position.y < 0 || position.y > GetScreenHeight())
-    {
-        deactivate();
-    }
-
     for (auto &enemy : enemiesInScene)
     {
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
@@ -46,8 +36,6 @@ void LaserRayProjectile::update(float deltaTime)
                 delete enemy;
                 enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));
             }
-            deactivate();
-            break;
         }
     }
     timeAlive -= deltaTime;
@@ -59,6 +47,12 @@ void LaserRayProjectile::update(float deltaTime)
 
 LaserRayProjectile::~LaserRayProjectile()
 {
+}
+
+void LaserRayProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
+{
+    AProjectile::activate(position, direction, stats);
+    timeAlive = 1.5f; // Dura 0.5 segundos
 }
 
 void LaserRayProjectile::render()
