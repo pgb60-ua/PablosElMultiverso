@@ -1,8 +1,11 @@
 #pragma once
 #include "AnimationSystem.hpp"
+#include "FlockingSystem.hpp"
+#include "FollowPlayerSystem.hpp"
 #include "InputSystem.hpp"
 #include "MovementSystem.hpp"
 #include "RenderSystem.hpp"
+#include "UpdateClosestPlayerSystem.hpp"
 #include "WeaponPositionSystem.hpp"
 #include <EnTT/entt.hpp>
 #include <GameState.hpp>
@@ -33,4 +36,7 @@ private:
     MovementSystem movementSystem;
     AnimationSystem animationSystem;
     WeaponPositionSystem weaponPositionSystem;
+    UpdateClosestPlayerSystem updateClosestPlayerSystem;
+    FlockingSystem flockingSystem;
+    FollowEnemySystem followEnemySystem;
 };

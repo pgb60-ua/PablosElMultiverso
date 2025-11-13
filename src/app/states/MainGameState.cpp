@@ -2,9 +2,12 @@
 #include "CollisionComponents.hpp"
 #include "EnemyComponent.hpp"
 #include "EntityComponent.hpp"
+#include "FlockingComponent.hpp"
+#include "FollowPlayerComponent.hpp"
 #include "InputComponent.hpp"
 #include "InputSystem.hpp"
 #include "MovementSystem.hpp"
+#include "NormalTypeEnemiesComponents.hpp"
 #include "PlayerComponent.hpp"
 #include "RangeWeaponComponent.hpp"
 #include "RenderComponents.hpp"
@@ -14,12 +17,8 @@
 #include "TransformComponent.hpp"
 #include "Types.hpp"
 #include "WeaponComponent.hpp"
+#include "raymath.h"
 #include <MainGameState.hpp>
-
-extern "C"
-{
-#include <raylib.h>
-}
 
 MainGameState::MainGameState() {}
 
@@ -67,13 +66,41 @@ void MainGameState::init()
                                                enemySheet.frames.begin()->height, 0.f, 0.f);
     registry.emplace<RenderEntityComponent>(enemy, 0.f);
     registry.emplace<EnemyComponent>(enemy, ENEMY_TYPE::ZOMBIE);
+    registry.emplace<ZombieComponent>(enemy);
     registry.emplace<EntityComponent>(enemy, ALIVE);
+    registry.emplace<FlockingComponent>(enemy, 150.0f, 50.0f, 1.5f, 1.0f, 0.5f, 2.0f, 2.0f);
+    registry.emplace<FollowPlayerComponent>(enemy, entt::null);
+    // Velocidad inicial aleatoria
+    Vector2 randomVel = {((float)rand() / RAND_MAX) * 2.0f - 1.0f, ((float)rand() / RAND_MAX) * 2.0f - 1.0f};
+    if (Vector2Length(randomVel) > 0.0f)
+    {
+        randomVel = Vector2Scale(Vector2Normalize(randomVel), 100.0f * 0.5f);
+    }
+    registry.emplace<VelocityComponent>(enemy, randomVel);
+
+    // Enemigo2
+    auto enemy2 = registry.create();
+    registry.emplace<MovementSpeedComponent>(enemy2, 30.0f);
+    registry.emplace<PositionComponent>(enemy2, 100.0f, 200.0f);
+    const SpriteSheet &enemySheet2 = SpriteLoaderManager::GetInstance().GetSpriteSheet(ENEMY_TYPE::ZOMBIE);
+    registry.emplace<RectangleHitboxComponent>(enemy2, enemySheet2.frames.begin()->width,
+                                               enemySheet.frames.begin()->height, 0.f, 0.f);
+    registry.emplace<RenderEntityComponent>(enemy2, 0.f);
+    registry.emplace<EnemyComponent>(enemy2, ENEMY_TYPE::ZOMBIE);
+    registry.emplace<ZombieComponent>(enemy2);
+    registry.emplace<EntityComponent>(enemy2, ALIVE);
+    registry.emplace<FlockingComponent>(enemy2, 250.0f, 80.0f, 0.75f, 0.5f, 0.45f, 1.2f, 1.6f);
+    registry.emplace<FollowPlayerComponent>(enemy2, entt::null);
+    registry.emplace<VelocityComponent>(enemy2, randomVel);
 }
 
 void MainGameState::handleInput() { inputSystem.Update(registry); }
 
 void MainGameState::update(float deltaTime)
 {
+    updateClosestPlayerSystem.Update(registry, deltaTime);
+    flockingSystem.Update(registry, deltaTime);
+    followEnemySystem.Update(registry, deltaTime);
     movementSystem.Update(registry, deltaTime);
     animationSystem.Update(registry, deltaTime);
     weaponPositionSystem.Update(registry);

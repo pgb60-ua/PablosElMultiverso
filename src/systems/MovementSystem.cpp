@@ -22,4 +22,12 @@ void MovementSystem::Update(entt::registry &registry, float deltaTime)
         position.x = position.x + normalizedX * speed.movementSpeed * deltaTime;
         position.y = position.y + normalizedY * speed.movementSpeed * deltaTime;
     }
+
+    auto enemies = registry.view<const VelocityComponent, PositionComponent>(entt::exclude<InputComponent>);
+
+    for (auto [entity, velocity, position] : enemies.each())
+    {
+        position.x += velocity.velocity.x * deltaTime;
+        position.y += velocity.velocity.y * deltaTime;
+    }
 }
