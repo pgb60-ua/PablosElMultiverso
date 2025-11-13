@@ -1,16 +1,17 @@
 #include "FollowPlayerSystem.hpp"
+#include "AccelerationComponent.hpp"
 #include "FlockingComponent.hpp"
 #include "FollowPlayerComponent.hpp"
 #include "NormalTypeEnemiesComponents.hpp"
 #include "TransformComponent.hpp"
 #include "raymath.h"
 
-void FollowEnemySystem::Update(entt::registry &registry, float deltaTime)
+void FollowEnemySystem::Update(entt::registry &registry)
 {
     auto view = registry.view<const ZombieComponent, const FollowPlayerComponent, const PositionComponent,
-                              VelocityComponent, const MovementSpeedComponent, const FlockingComponent>();
+                              AccelerationComponent, const MovementSpeedComponent, const FlockingComponent>();
     // De momento como el componente zombie no tiene nada dentro solo se usa como tag pero no se descompone
-    for (auto [entity, targetPlayer, position, velocity, speed, flocking] : view.each())
+    for (auto [entity, targetPlayer, position, acceleration, speed, flocking] : view.each())
     {
         // Con esto compruebo que la "id" que guardo del target existe en el registro
         if (!registry.valid(targetPlayer.targetPlayer))
@@ -27,15 +28,9 @@ void FollowEnemySystem::Update(entt::registry &registry, float deltaTime)
 
         if (Vector2Length(toPlayer) > 0.0f)
         {
+            // SUMAR a la aceleración (no a velocity directamente)
             Vector2 targetForce = Vector2Scale(Vector2Normalize(toPlayer), speed.movementSpeed * flocking.targetWeight);
-            velocity.velocity = Vector2Add(velocity.velocity, Vector2Scale(targetForce, deltaTime));
-        }
-
-        // Limitamos la velocidad maxima
-        float currentSpeed = Vector2Length(velocity.velocity);
-        if (currentSpeed > speed.movementSpeed)
-        {
-            velocity.velocity = Vector2Scale(Vector2Normalize(velocity.velocity), speed.movementSpeed);
+            acceleration = Vector2Add(acceleration, targetForce);
         }
     }
 }

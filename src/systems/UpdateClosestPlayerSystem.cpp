@@ -2,7 +2,6 @@
 #include "FollowPlayerComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "TransformComponent.hpp"
-#include "spdlog/spdlog.h"
 #include <limits>
 
 void UpdateClosestPlayerSystem::Update(entt::registry &registry, float deltaTime)

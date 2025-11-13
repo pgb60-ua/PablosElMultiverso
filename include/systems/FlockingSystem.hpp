@@ -10,5 +10,5 @@ class FlockingSystem
 public:
     FlockingSystem() {};
     ~FlockingSystem() {};
-    void Update(entt::registry &registry, float deltaTime);
+    void Update(entt::registry &registry);
 };

@@ -11,5 +11,5 @@ class FollowEnemySystem
 public:
     FollowEnemySystem() {};
     ~FollowEnemySystem() {};
-    void Update(entt::registry &registry, float deltaTime);
+    void Update(entt::registry &registry);
 };

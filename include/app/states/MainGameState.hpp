@@ -1,4 +1,5 @@
 #pragma once
+#include "AccelerationIntegrationSystem.hpp"
 #include "AnimationSystem.hpp"
 #include "FlockingSystem.hpp"
 #include "FollowPlayerSystem.hpp"
@@ -6,6 +7,7 @@
 #include "MovementSystem.hpp"
 #include "RenderSystem.hpp"
 #include "UpdateClosestPlayerSystem.hpp"
+#include "VelocityLimiterSystem.hpp"
 #include "WeaponPositionSystem.hpp"
 #include <EnTT/entt.hpp>
 #include <GameState.hpp>
@@ -39,4 +41,6 @@ private:
     UpdateClosestPlayerSystem updateClosestPlayerSystem;
     FlockingSystem flockingSystem;
     FollowEnemySystem followEnemySystem;
+    AccelerationIntegrationSystem accelerationIntegrationSystem;
+    VelocityLimiterSystem velocityLimiterSystem;
 };

@@ -1,14 +1,15 @@
 #include "FlockingSystem.hpp"
+#include "AccelerationComponent.hpp"
 #include "FlockingComponent.hpp"
 #include "NormalTypeEnemiesComponents.hpp"
 #include "TransformComponent.hpp"
 #include "raymath.h"
 
-void FlockingSystem::Update(entt::registry &registry, float deltaTime)
+void FlockingSystem::Update(entt::registry &registry)
 {
-    auto zombies = registry.view<const ZombieComponent, const PositionComponent, VelocityComponent,
-                                 const FlockingComponent, const MovementSpeedComponent>();
-    for (auto [entity, position, velocity, flocking, speed] : zombies.each())
+    auto zombies = registry.view<const ZombieComponent, const PositionComponent, const VelocityComponent,
+                                 AccelerationComponent, const FlockingComponent, const MovementSpeedComponent>();
+    for (auto [entity, position, velocity, acceleration, flocking, speed] : zombies.each())
     {
         Vector2 separationForce = Vector2Zero();
         Vector2 alignmentForce = Vector2Zero();
@@ -17,7 +18,11 @@ void FlockingSystem::Update(entt::registry &registry, float deltaTime)
 
         Vector2 currentPos = {position.x, position.y};
 
-        for (auto [otherEntity, otherPosition, otherVelocity, otherFlocking, otherSpeed] : zombies.each())
+        // Resetear aceleración al inicio (se acumula en este frame)
+        acceleration = Vector2Zero();
+
+        for (auto [otherEntity, otherPosition, otherVelocity, otherAcceleration, otherFlocking, otherSpeed] :
+             zombies.each())
         {
             if (entity == otherEntity)
                 continue;
@@ -47,8 +52,6 @@ void FlockingSystem::Update(entt::registry &registry, float deltaTime)
             }
         }
 
-        Vector2 acceleration = Vector2Zero();
-
         // Aplicamos cohesion si hay vecinos
         if (neighborCount > 0)
         {
@@ -66,7 +69,8 @@ void FlockingSystem::Update(entt::registry &registry, float deltaTime)
             alignmentForce = Vector2Scale(alignmentForce, 1.0f / neighborCount);
             if (Vector2Length(alignmentForce) > 0.0f)
             {
-                alignmentForce = Vector2Scale(alignmentForce, flocking.alignmentWeight * speed.movementSpeed);
+                alignmentForce =
+                    Vector2Scale(Vector2Normalize(alignmentForce), flocking.alignmentWeight * speed.movementSpeed);
                 acceleration = Vector2Add(acceleration, alignmentForce);
             }
         }
@@ -78,14 +82,5 @@ void FlockingSystem::Update(entt::registry &registry, float deltaTime)
                 Vector2Scale(Vector2Normalize(separationForce), flocking.separationWeight * speed.movementSpeed);
             acceleration = Vector2Add(acceleration, separationForce);
         }
-
-        float maxForce = flocking.maxForceMultiplier * speed.movementSpeed;
-        if (Vector2Length(acceleration) > maxForce)
-        {
-            acceleration = Vector2Scale(Vector2Normalize(acceleration), maxForce);
-        }
-
-        // Actualizo la velocidad
-        velocity.velocity = Vector2Add(velocity.velocity, Vector2Scale(acceleration, deltaTime));
     }
 }
