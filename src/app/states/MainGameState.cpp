@@ -39,7 +39,8 @@ void MainGameState::init()
 
     auto weaponPlayer1 = registry.create();
     registry.emplace<PositionComponent>(weaponPlayer1, 200.0f, 200.0f);
-    registry.emplace<WeaponComponent>(weaponPlayer1, player, sheet.frames.begin()->width, sheet.frames.begin()->height);
+    registry.emplace<WeaponComponent>(weaponPlayer1, player, sheet.frames.begin()->width, sheet.frames.begin()->height,
+                                      entt::null);
     registry.emplace<RangeWeaponComponent>(weaponPlayer1, WEAPON_TYPE::WING);
     const SpriteSheet &sheetWeapon = SpriteLoaderManager::GetInstance().GetSpriteSheet(WEAPON_TYPE::WING);
     registry.emplace<RectangleHitboxComponent>(weaponPlayer1, sheetWeapon.frames.begin()->width,
@@ -101,14 +102,16 @@ void MainGameState::handleInput() { inputSystem.Update(registry); }
 
 void MainGameState::update(float deltaTime)
 {
-    updateClosestPlayerSystem.Update(registry, deltaTime); // 1. Actualizar targets
-    flockingSystem.Update(registry);    // 2. Calcular fuerzas de flocking -> acumulan en acceleration
-    followEnemySystem.Update(registry); // 3. Calcular fuerza hacia jugador -> suma a acceleration
-    accelerationIntegrationSystem.Update(registry, deltaTime); // 4. Aplicar acceleration a velocity (con deltaTime)
-    velocityLimiterSystem.Update(registry);                    // 5. Limitar velocity máxima
-    movementSystem.Update(registry, deltaTime);                // 6. Aplicar velocity a position
+    updateClosestPlayerSystem.Update(registry, deltaTime); // 1. Actualizar targets de zombies
+    getClosestEnemySystem.Update(registry, deltaTime);     // 2. Actualizar targets de armas
+    flockingSystem.Update(registry);    // 3. Calcular fuerzas de flocking -> acumulan en acceleration
+    followEnemySystem.Update(registry); // 4. Calcular fuerza hacia jugador -> suma a acceleration
+    accelerationIntegrationSystem.Update(registry, deltaTime); // 5. Aplicar acceleration a velocity (con deltaTime)
+    velocityLimiterSystem.Update(registry);                    // 6. Limitar velocity máxima
+    movementSystem.Update(registry, deltaTime);                // 7. Aplicar velocity a position
+    weaponPositionSystem.Update(registry);                     // 8. Actualizar posición de armas
+    weaponRotationSystem.Update(registry);                     // 9. Rotar armas hacia enemigos
     animationSystem.Update(registry, deltaTime);
-    weaponPositionSystem.Update(registry);
 }
 
 void MainGameState::render()

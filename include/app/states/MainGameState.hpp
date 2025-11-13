@@ -3,12 +3,14 @@
 #include "AnimationSystem.hpp"
 #include "FlockingSystem.hpp"
 #include "FollowPlayerSystem.hpp"
+#include "GetClosestEnemySystem.hpp"
 #include "InputSystem.hpp"
 #include "MovementSystem.hpp"
 #include "RenderSystem.hpp"
 #include "UpdateClosestPlayerSystem.hpp"
 #include "VelocityLimiterSystem.hpp"
 #include "WeaponPositionSystem.hpp"
+#include "WeaponRotationSystem.hpp"
 #include <EnTT/entt.hpp>
 #include <GameState.hpp>
 
@@ -43,4 +45,6 @@ private:
     FollowEnemySystem followEnemySystem;
     AccelerationIntegrationSystem accelerationIntegrationSystem;
     VelocityLimiterSystem velocityLimiterSystem;
+    GetClosestEnemySystem getClosestEnemySystem;
+    WeaponRotationSystem weaponRotationSystem;
 };
