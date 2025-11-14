@@ -1,17 +1,14 @@
 #include "RenderSystem.hpp"
-#include "AnimationSystem.hpp"
 #include "EnemyComponent.hpp"
 #include "EntityComponent.hpp"
 #include "PlayerComponent.hpp"
+#include "ProjectileComponent.hpp"
 #include "RangeWeaponComponent.hpp"
 #include "RenderComponents.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "SpriteSheet.hpp"
 #include "TransformComponent.hpp"
-#include "Types.hpp"
 #include "raylib.h"
-#include <iostream>
-#include <ostream>
 
 void RenderSystem::Update(entt::registry &registry)
 {
@@ -58,32 +55,31 @@ void RenderSystem::UpdateEntities(entt::registry &registry)
 
 void RenderSystem::UpdateItems(entt::registry &registry)
 {
-    auto view = registry.view<const PositionComponent, RenderEntityComponent, RangeWeaponComponent>();
+    auto view = registry.view<const PositionComponent, RenderEntityComponent, const RangeWeaponComponent>();
     // TODO Comprobar que no se muestren armas cuando jugador muerto
     for (auto [entity, position, render, range] : view.each())
     {
         const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(range.type);
         if (sheet.frames.empty())
             continue;
-        render.animation.frameIndex %= sheet.spriteFrameCount;
-
-        Rectangle src = sheet.frames[render.animation.frameIndex];
-
-        if (render.animation.flipped)
-        {
-            src.width *= -1.0f;
-        }
-
-        Vector2 origin = {src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
-                          src.height > 0 ? src.height * 0.5f : -src.height * 0.5f};
-
-        Rectangle dest = {position.x, position.y, src.width, src.height};
-        DrawTexturePro(sheet.texture, src, dest, origin, render.angle, render.animation.color);
-        DrawCircle(position.x, position.y, 3, GREEN);
+        AuxUpdateEntities(sheet, render, position);
     }
 }
 
-void RenderSystem::UpdateBullets(entt::registry &registry) {}
+void RenderSystem::UpdateBullets(entt::registry &registry)
+{
+    auto projectiles = registry.view<PositionComponent, RenderEntityComponent, const ProjectileComponent>();
+
+    for (auto [entity, position, render, projectile] : projectiles.each())
+    {
+        if (!projectile.active)
+            continue;
+        const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(projectile.type);
+        if (sheet.frames.empty())
+            continue;
+        AuxUpdateEntities(sheet, render, position);
+    }
+}
 
 void RenderSystem::AuxUpdateEntities(const SpriteSheet &sheet, RenderEntityComponent &render,
                                      const PositionComponent &position)

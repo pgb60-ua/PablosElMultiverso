@@ -10,6 +10,7 @@
 #include "MovementSystem.hpp"
 #include "NormalTypeEnemiesComponents.hpp"
 #include "PlayerComponent.hpp"
+#include "ProjectileComponent.hpp"
 #include "RangeWeaponComponent.hpp"
 #include "RenderComponents.hpp"
 #include "RenderSystem.hpp"
@@ -96,6 +97,18 @@ void MainGameState::init()
     registry.emplace<FollowPlayerComponent>(enemy2, entt::null);
     registry.emplace<VelocityComponent>(enemy2, randomVel);
     registry.emplace<AccelerationComponent>(enemy2, Vector2Zero());
+
+    // Bala
+    auto bala = registry.create();
+    // Mirar porque no puede empezar que se vea la bala
+    registry.emplace<PositionComponent>(bala, 400.f, 400.f);
+    registry.emplace<RenderEntityComponent>(bala, 0.f);
+    const SpriteSheet &balaSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::WING);
+    registry.emplace<RectangleHitboxComponent>(bala, balaSheet.frames.begin()->width, balaSheet.frames.begin()->height,
+                                               0.f, 0.f);
+    registry.emplace<EntityComponent>(bala, ALIVE);
+    registry.emplace<ProjectileComponent>(bala, weaponPlayer1, PROJECTILE_TYPE::WING, false);
+    registry.emplace<MovementSpeedComponent>(bala, 40.0f);
 }
 
 void MainGameState::handleInput() { inputSystem.Update(registry); }
