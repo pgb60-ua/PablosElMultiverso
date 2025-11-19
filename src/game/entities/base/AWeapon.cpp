@@ -100,7 +100,7 @@ void AWeapon::render()
 
     Rectangle dest = {position.x, position.y, src.width, src.height};
 
-    float angle = atan2(direction.y, direction.x) * RAD2DEG + 45.0f;
+    float angle = atan2(direction.y, direction.x) * RAD2DEG;
 
     DrawTexturePro(sheet.texture, src, dest, origin, angle, WHITE);
 }

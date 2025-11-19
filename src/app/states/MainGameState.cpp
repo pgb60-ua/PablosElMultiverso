@@ -2,6 +2,8 @@
 #include "SpriteLoaderManager.hpp"
 #include "Types.hpp"
 #include "WingWeapon.hpp"
+#include "LaserRayWeapon.hpp"
+#include "SniperWeapon.hpp"
 #include "GameOverState.hpp"
 #include "StateMachine.hpp"
 #include "Zombie.hpp"
@@ -33,7 +35,7 @@ void MainGameState::init()
     // Crear el arma desde JSON automáticamente en el constructor
     for (int i = 0; i < 4; ++i)
     {
-        players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+        players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
     }
 }
 
