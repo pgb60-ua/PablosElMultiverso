@@ -18,7 +18,7 @@ RESET := $(shell printf "\033[0m")
 CXX := g++
 
 # Caché de compilación
-CCCACHE := ccache
+CCACHE := ccache
 
 # Flags de compilación base
 CXXFLAGS := -std=c++17   # Usa el estándar de C++17
@@ -28,7 +28,7 @@ CXXFLAGS += -fPIC        # Genera código independiente de posición (para libre
 CXXFLAGS += -O3          # Nivel máximo de optimización
 CXXFLAGS += -march=native # Optimiza para la arquitectura específica de la máquina local
 
-
+DEPS_FLAGS := -MMD -MP
 # Paralelización automática
 MAKEFLAGS += --jobs=$(shell nproc 2>/dev/null || echo 4)
 
@@ -59,16 +59,18 @@ TARGET := game-dev
 # Regla principal
 all: check-raylib $(TARGET)
 
-# Regla para crear el ejecutable
 $(TARGET): $(OBJS)
 	$(info $(GREEN)Enlazando $@...$(RESET))
-	$(CCCACHE) $(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $@
+	$(CCACHE) $(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $@
 	$(info $(GREEN)Compilación completada: $@$(RESET))
 
 # Regla para compilar archivos objeto
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
-	$(CCCACHE) $(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
+	$(CCACHE) $(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) $(DEPS_FLAGS) -c $< -o $@
+
+# Con las DEPS_FLAGS, generamos archivos .d para las dependencias y con este include las añade de verdad
+-include $(OBJS:.o=.d)
 
 # Crear directorios si no existen
 $(BUILD_DIR):
