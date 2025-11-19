@@ -30,7 +30,7 @@ void LaserRayProjectile::update(float deltaTime)
     Vector2 dir = getDirection();
     if (dir.x != 0.0f || dir.y != 0.0f)
     {
-        shape.data.rotatedRectangle.rotation = atan2f(dir.y, dir.x) * RAD2DEG + 90.0f;
+        shape.data.rotatedRectangle.rotation = atan2f(dir.y, dir.x) * RAD2DEG;
     }
 
     for (auto &enemy : enemiesInScene)
@@ -88,7 +88,6 @@ void LaserRayProjectile::render()
     if (dir.x != 0.0f || dir.y != 0.0f)
     {
         angleDeg = atan2f(dir.y, dir.x) * RAD2DEG;
-        angleDeg += 90.0f;
     }
 
     DrawTexturePro(sheet.texture, src, dest, origin, angleDeg, WHITE);
