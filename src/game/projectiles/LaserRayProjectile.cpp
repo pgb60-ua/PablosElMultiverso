@@ -50,7 +50,7 @@ LaserRayProjectile::~LaserRayProjectile()
 void LaserRayProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
 {
     AProjectile::activate(position, direction, stats);
-    timeAlive = 1.5f; // Dura 0.5 segundos
+    timeAlive = 1.5f; // Dura 1.5 segundos
 }
 
 void LaserRayProjectile::render()
