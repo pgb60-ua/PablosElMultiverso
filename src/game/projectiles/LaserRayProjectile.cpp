@@ -62,8 +62,8 @@ void LaserRayProjectile::render()
 
     Rectangle src = sheet.frames[animation.frameIndex];
 
-    Vector2 origin = {src.width * 0.5f, src.height * 0.5f};
-
+    Vector2 origin = {src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
+                      src.height > 0 ? src.height * 0.5f : -src.height * 0.5f};
     Rectangle dest = {getPosition().x, getPosition().y,
                       src.width, src.height};
 
