@@ -37,7 +37,7 @@ public:
 
     void deactivate();
     bool isActive() const { return active; }
-    void virtual activate(Vector2 position, Vector2 direction, const Stats &stats);
+    virtual void activate(Vector2 position, Vector2 direction, const Stats &stats);
 
     /// @brief Establece el radio de la hitbox circular del proyectil
     /// @param radius El radio en píxeles
