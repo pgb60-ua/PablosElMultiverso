@@ -10,7 +10,6 @@ extern "C"
 
 class AProjectile
 {
-private:
 protected:
     Stats stats;
     Vector2 direction;
