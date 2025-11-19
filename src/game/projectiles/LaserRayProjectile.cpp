@@ -4,18 +4,20 @@
 #include <cstdio>
 #include <cmath>
 #include <algorithm>
+#include <rlgl.h>
 
 LaserRayProjectile::LaserRayProjectile(std::vector<AEnemy *> &allEnemies)
     : AProjectile(allEnemies)
 {
-    shape.type = ShapeType::SHAPE_RECTANGLE;
+    shape.type = ShapeType::SHAPE_ROTATED_RECTANGLE;
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::LASER_RAY);
     if (!sheet.frames.empty())
     {
         const Rectangle &frame = sheet.frames[0];
         float width = std::abs(frame.width);
         float height = std::abs(frame.height);
-        shape.data.rectangle = {getPosition().x, getPosition().y, width, height};
+        Vector2 pos = getPosition();
+        shape.data.rotatedRectangle = {pos.x, pos.y, width, height, 0.0f};
     }
 }
 
@@ -24,9 +26,20 @@ void LaserRayProjectile::update(float deltaTime)
     if (!active)
         return;
 
+    // Calcular y actualizar el ángulo de rotación del láser
+    Vector2 dir = getDirection();
+    if (dir.x != 0.0f || dir.y != 0.0f)
+    {
+        shape.data.rotatedRectangle.rotation = atan2f(dir.y, dir.x) * RAD2DEG + 90.0f;
+    }
+
     for (auto &enemy : enemiesInScene)
     {
-        if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
+        if (!enemy->IsAlive())
+            continue;
+
+        // Usar la función checkCollisionShapes
+        if (checkCollisionShapes(shape, enemy->GetHitbox()))
         {
             Stats copia = getStats();
             copia.SetMagicDamage(copia.GetMagicDamage() * deltaTime); // Daño por segundo
@@ -52,7 +65,7 @@ LaserRayProjectile::~LaserRayProjectile()
 void LaserRayProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
 {
     AProjectile::activate(position, direction, stats);
-    timeAlive = 0.5f; // Dura x segundos
+    timeAlive = TIME_TO_BE_ALIVE;
 }
 
 void LaserRayProjectile::render()
