@@ -16,7 +16,6 @@ public:
     void Attack() override {}
 
     void ShootProjectile(const Vector2 &position, const Vector2 &direction, const std::vector<AEnemy *> &allEnemies);
- 
 
     /// @brief Método para crear proyectiles
     std::unique_ptr<AProjectile> CreateProjectile() override;

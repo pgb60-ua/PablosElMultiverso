@@ -1,10 +1,6 @@
 #include <cmath>
 #include "LaserRayWeapon.hpp"
 #include "SpriteLoaderManager.hpp"
-#include <iostream>
-
-// Helper lambdas para obtener datos del JSON
-
 
 LaserRayWeapon::LaserRayWeapon(const Vector2& position, std::vector<AEnemy *>& enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : ARangeWeapon(
@@ -59,5 +55,5 @@ void LaserRayWeapon::ShootProjectile(const Vector2 &position, const Vector2 &dir
 }
 
 std::unique_ptr<AProjectile> LaserRayWeapon::CreateProjectile() {
-    return std::make_unique<SniperProjectile>(allEnemies);
+    return std::make_unique<LaserRayProjectile>(allEnemies);
 }
