@@ -69,7 +69,7 @@ Es importante destacar que _make all_ es completamente estable en ejecución par
 | **Con ccache** (1ª compilación, caché vacía) | **13.6s** |
 | **Con ccache** (2ª compilación, caché llena) | **1.7s** |
 
-**Mejora:** De 13.6s → 1.7s = **800% más rápido** (8x más rápido)
+**Mejora:** De 13.6s → 1.7s = **700% más rápido** (8x más rápido)
 
 **Respuesta:** `ccache` no mejora la primera compilación, pero **reduce el tiempo en un 87.5% en compilaciones subsiguientes** cuando solo hay cambios incrementales, ya que evita recompilar los archivos sin cambios, reutilizando los resultados almacenados.
 
