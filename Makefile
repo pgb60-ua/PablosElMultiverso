@@ -21,8 +21,13 @@ CXX := g++
 CCCACHE := ccache
 
 # Flags de compilación base
-CXXFLAGS := -std=c++17 -Wall -pedantic
-CXXFLAGS += -fPIC -O3 -march=native
+CXXFLAGS := -std=c++17   # Usa el estándar de C++17
+CXXFLAGS += -Wall        # Activa la mayoría de advertencias del compilador
+CXXFLAGS += -pedantic    # Fuerza estricta conformidad al estándar C++
+CXXFLAGS += -fPIC        # Genera código independiente de posición (para librerías compartidas)
+CXXFLAGS += -O3          # Nivel máximo de optimización
+CXXFLAGS += -march=native # Optimiza para la arquitectura específica de la máquina local
+
 
 # Paralelización automática
 MAKEFLAGS += --jobs=$(shell nproc 2>/dev/null || echo 4)
