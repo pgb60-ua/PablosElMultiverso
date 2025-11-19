@@ -1,0 +1,20 @@
+{
+	"name": "Laser Beam",
+	"description": "Single-shot laser that hits every enemy in the targeted row and then disappears",
+	"level": 1,
+	"rarity": "Epic",
+	"pool_size": 4,
+	"health": 0,
+	"max_health": 0,
+	"movement_speed":100,
+	"agility": 0,
+	"attack_speed": 1,
+	"physical_damage": 20,
+	"magical_damage": 140,
+	"resistance": 0,
+	"armor": 0,
+	"critical_chance": 5,
+	"critical_damage": 125,
+	"life_steal": 0,
+	"health_regeneration": 0
+}
