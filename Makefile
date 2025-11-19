@@ -1,16 +1,28 @@
 # ============================================================================
+# COLORES PARA SALIDA EN CONSOLA
+# ============================================================================
+
+GREEN := $(shell printf "\033[1;32m")
+YELLOW := $(shell printf "\033[1;33m")
+BLUE := $(shell printf "\033[1;34m")
+RED := $(shell printf "\033[1;31m")
+RESET := $(shell printf "\033[0m")
+
+
+
+# ============================================================================
 # CONFIGURACIÓN DE COMPILACIÓN
 # ============================================================================
 
 # Compilador
 CXX := g++
 
+# Caché de compilación
+CCCACHE := ccache
+
 # Flags de compilación base
 CXXFLAGS := -std=c++17 -Wall -pedantic
-CXXFLAGS += -fPIC -O3 -DNDEBUG -march=native
-
-# Dependencias automáticas
-CXXFLAGS += -MMD -MP
+CXXFLAGS += -fPIC -O3 -march=native
 
 # Paralelización automática
 MAKEFLAGS += --jobs=$(shell nproc 2>/dev/null || echo 4)
@@ -24,12 +36,9 @@ INCLUDE_DIR := include
 VENDOR_INCLUDE := vendor/include
 VENDOR_LIB := vendor/lib
 BUILD_DIR := build
-DEP_DIR := $(BUILD_DIR)/.deps
-
 # Archivos fuente
 SRCS := $(shell find $(SRC_DIR) -type f -name "*.cpp")
 OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
-DEPS := $(SRCS:$(SRC_DIR)/%.cpp=$(DEP_DIR)/%.d)
 
 # Directorios de include
 INCLUDE_DIRS := $(shell find $(INCLUDE_DIR) -type d)
@@ -43,26 +52,23 @@ LDLIBS := -lraylib -lGL -lm -lpthread -lrt -lX11
 TARGET := game-dev
 
 # Regla principal
-all: $(TARGET)
+all: check-raylib $(TARGET)
 
 # Regla para crear el ejecutable
 $(TARGET): $(OBJS)
-	$(info Enlazando $@...)
-	$(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $@
-	$(info ✓ Compilación completada: $@)
+	$(info $(GREEN)Enlazando $@...$(RESET))
+	$(CCCACHE) $(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $@
+	$(info $(GREEN)Compilación completada: $@$(RESET))
 
 # Regla para compilar archivos objeto
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR) $(DEP_DIR)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
-	@cp $(BUILD_DIR)/$*.d $(DEP_DIR)/$*.d 2>/dev/null || true
+	$(CCCACHE) $(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
 
 # Crear directorios si no existen
-$(BUILD_DIR) $(DEP_DIR):
+$(BUILD_DIR):
 	@mkdir -p $@
 
-# Incluir archivos de dependencias
--include $(DEPS)
 
 # ============================================================================
 # REGLAS DE LIMPIEZA Y UTILIDAD
@@ -70,9 +76,9 @@ $(BUILD_DIR) $(DEP_DIR):
 
 # Limpiar archivos compilados
 clean:
-	@$(info Limpiando archivos compilados...)
+	@$(info $(RED)Limpiando archivos compilados...$(RESET))
 	@rm -rf $(BUILD_DIR) $(TARGET)*
-	@$(info ✓ Limpieza completada)
+	@$(info $(GREEN)Limpieza completada$(RESET))
 
 # Recompilar todo desde cero
 rebuild: 
@@ -86,13 +92,14 @@ run: $(TARGET)
 # Mostrar información de compilación
 info:
 	$(info ╔════════════════════════════════════════════════╗)
-	$(info ║       Información del Proyecto                 ║)
+	$(info ║       $(BLUE)Información del Proyecto$(RESET)                 ║)
 	$(info ╠════════════════════════════════════════════════╣)
-	$(info ║ Target: $(TARGET))
-	$(info ║ Compilador: $(CXX))
-	$(info ║ CXXFLAGS: $(CXXFLAGS))
-	$(info ║ Archivos fuente: $(words $(SRCS)))
-	$(info ║ Directorios de include: $(words $(INCLUDE_DIRS)))
+	$(info ║ $(BLUE)Target:$(RESET) $(TARGET))
+	$(info ║ $(BLUE)Compilador:$(RESET) $(CXX))
+	$(info ║ $(BLUE)CXXFLAGS:$(RESET) $(CXXFLAGS))
+	$(info ║ $(BLUE)Archivos fuente:$(RESET) $(words $(SRCS)))
+	$(info ║ $(BLUE)Directorios de include:$(RESET) $(words $(INCLUDE_DIRS)))
+	$(info ║ $(BLUE)Dependencias externas:$(RESET) $(RAYLIB_DEP))
 	$(info ╚════════════════════════════════════════════════╝)
 
 # Ver estadísticas de compilación
@@ -103,5 +110,34 @@ stats:
 	$(info   Archivos header: $(shell find $(INCLUDE_DIR) -name "*.hpp" | wc -l))
 	$(info   Tamaño ejecutable: $(shell ls -lh $(TARGET) 2>/dev/null | awk '{print $$5}' || echo 'no compilado'))
 
+clean-cache:
+	ccache --clear
+	ccache --zero-stats
+
+
+# ============================================================================
+# DEPENDENCIAS EXTERNAS
+# ============================================================================
+
+RAYLIB := libraylib.a
+RAYLIB_DEP := $(VENDOR_LIB)/$(RAYLIB)
+
+# Verificar e instalar raylib si es necesario
+check-raylib: | $(VENDOR_LIB)
+	@if [ ! -f "$(RAYLIB_DEP)" ]; then \
+		echo "$(YELLOW)Raylib no está instalada. Descargando...$(RESET)"; \
+		git clone --depth 1 https://github.com/raysan5/raylib.git; \
+		$(MAKE) -C raylib/src/ PLATFORM=PLATFORM_DESKTOP; \
+		mkdir -p $(VENDOR_LIB); \
+		mv raylib/src/libraylib.a $(VENDOR_LIB)/; \
+		rm -rf raylib; \
+		echo "$(GREEN)Raylib instalada correctamente.$(RESET)"; \
+	else \
+		echo "$(GREEN)Raylib ya está instalada.$(RESET)"; \
+	fi
+
+$(VENDOR_LIB):
+	@mkdir -p $(VENDOR_LIB)
+
 # Declarar reglas que no son archivos
-.PHONY: all clean rebuild run info stats
+.PHONY: all clean rebuild run info stats clean-cache check-raylib 
