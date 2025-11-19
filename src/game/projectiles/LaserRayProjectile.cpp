@@ -28,7 +28,9 @@ void LaserRayProjectile::update(float deltaTime)
     {
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
-            enemy->TakeDamage(stats);
+            Stats copia = getStats();
+            copia.SetMagicDamage(copia.GetMagicDamage() * deltaTime); // Daño por segundo
+            enemy->TakeDamage(copia);
             if (!enemy->IsAlive())
             {
                 delete enemy;
@@ -50,7 +52,7 @@ LaserRayProjectile::~LaserRayProjectile()
 void LaserRayProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
 {
     AProjectile::activate(position, direction, stats);
-    timeAlive = 1.5f; // Dura 1.5 segundos
+    timeAlive = 0.5f; // Dura 1.5 segundos
 }
 
 void LaserRayProjectile::render()
