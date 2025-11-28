@@ -12,5 +12,6 @@ public:
     void update(float deltaTime) override;
     ~LaserRayProjectile();
     void activate(Vector2 position, Vector2 direction, const Stats &stats) override;
+    void updatePositionAndDirection(Vector2 newPosition, Vector2 newDirection); 
     void render() override;
 };

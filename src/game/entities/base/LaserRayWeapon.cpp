@@ -29,6 +29,25 @@ void LaserRayWeapon::Attack(const Vector2& position, float deltaTime) {
         ShootProjectile(position, direction, allEnemies);
         timeSinceLastAttack -= attackInterval;
     }
+    const SpriteSheet &projectileSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::LASER_RAY);
+    float projectileOffset = 0.0f;
+    if (!projectileSheet.frames.empty())
+    {
+        projectileOffset = projectileSheet.frames[0].width / 2.0f;
+    }
+    
+    for (auto &projectile : GetActiveProjectiles())
+    {
+        Vector2 newLaserPos = {
+            position.x + direction.x * projectileOffset,
+            position.y + direction.y * projectileOffset
+        };
+        
+        LaserRayProjectile* laser = dynamic_cast<LaserRayProjectile*>(projectile);
+        if (laser) {
+            laser->updatePositionAndDirection(newLaserPos, direction);
+        }
+    }
 }
 
 void LaserRayWeapon::ShootProjectile(const Vector2 &position, const Vector2 &direction, const std::vector<AEnemy *> &allEnemies)
@@ -36,21 +55,7 @@ void LaserRayWeapon::ShootProjectile(const Vector2 &position, const Vector2 &dir
     AProjectile *projectile = GetProjectileFromPool();
     if (projectile)
     {
-        const SpriteSheet &projectileSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::LASER_RAY);
-        
-        float projectileOffset = 0.0f;
-        if (!projectileSheet.frames.empty())
-        {
-            projectileOffset = projectileSheet.frames[0].width / 2.0f;
-        }
-        
-        // Calcular la posición inicial del proyectil
-        Vector2 projectileStartPos = {
-            position.x + direction.x * projectileOffset,
-            position.y + direction.y * projectileOffset
-        };
-        
-        projectile->activate(projectileStartPos, direction, stats);
+        projectile->activate(position, direction, stats);
     }
 }
 

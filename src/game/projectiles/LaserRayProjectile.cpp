@@ -51,7 +51,7 @@ void LaserRayProjectile::update(float deltaTime)
             }
         }
     }
-    timeAlive -= deltaTime;
+    timeAlive -= (deltaTime * 2);
     if (timeAlive <= 0.0f)
     {
         deactivate();
@@ -66,6 +66,18 @@ void LaserRayProjectile::activate(Vector2 position, Vector2 direction, const Sta
 {
     AProjectile::activate(position, direction, stats);
     timeAlive = TIME_TO_BE_ALIVE;
+}
+
+void LaserRayProjectile::updatePositionAndDirection(Vector2 newPosition, Vector2 newDirection)
+{
+    setShapePosition(shape, newPosition);
+    
+    direction = newDirection;
+    
+    if (newDirection.x != 0.0f || newDirection.y != 0.0f)
+    {
+        shape.data.rotatedRectangle.rotation = atan2f(newDirection.y, newDirection.x) * RAD2DEG;
+    }
 }
 
 void LaserRayProjectile::render()
