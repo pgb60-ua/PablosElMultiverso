@@ -116,7 +116,7 @@ void MainGameState::update(float deltaTime)
         // Todos los jugadores están muertos, reiniciar el estado del juego
         state_machine->add_state(std::make_unique<GameOverState>(), true);
     }
-    if (enemies.empty())
+    else if (enemies.empty())
     {
         state_machine->add_state(std::make_unique<GameWonState>(), true);
     }
