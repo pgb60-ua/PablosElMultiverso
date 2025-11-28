@@ -25,14 +25,6 @@ void LaserRayProjectile::update(float deltaTime)
 {
     if (!active)
         return;
-
-    // Calcular y actualizar el ángulo de rotación del láser
-    Vector2 dir = getDirection();
-    if (dir.x != 0.0f || dir.y != 0.0f)
-    {
-        shape.data.rotatedRectangle.rotation = atan2f(dir.y, dir.x) * RAD2DEG;
-    }
-
     for (auto &enemy : enemiesInScene)
     {
         if (!enemy->IsAlive())
@@ -51,7 +43,7 @@ void LaserRayProjectile::update(float deltaTime)
             }
         }
     }
-    timeAlive -= (deltaTime * 2);
+    timeAlive -= (deltaTime * TIME_DECAY_MULTIPLIER);
     if (timeAlive <= 0.0f)
     {
         deactivate();
