@@ -44,9 +44,7 @@ void LaserRayWeapon::Attack(const Vector2& position, float deltaTime) {
         };
         
         LaserRayProjectile* laser = static_cast<LaserRayProjectile*>(projectile);
-        if (laser) {
-            laser->updatePositionAndDirection(newLaserPos, direction);
-        }
+        laser->updatePositionAndDirection(newLaserPos, direction);
     }
 }
 
