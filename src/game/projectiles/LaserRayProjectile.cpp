@@ -43,7 +43,7 @@ void LaserRayProjectile::update(float deltaTime)
             }
         }
     }
-    timeAlive -= (deltaTime * TIME_DECAY_MULTIPLIER);
+    timeAlive -= deltaTime;
     if (timeAlive <= 0.0f)
     {
         deactivate();

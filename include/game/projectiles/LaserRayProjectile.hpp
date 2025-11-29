@@ -4,8 +4,7 @@
 class LaserRayProjectile : public AProjectile
 {
 private:
-    inline static const float TIME_TO_BE_ALIVE = 1.5f; // Segundos que dura el rayo
-    inline static const float TIME_DECAY_MULTIPLIER = 2.0f;   // Multiplicador para que el rayo decaiga más rápido
+    inline static const float TIME_TO_BE_ALIVE = 0.60f; // Segundos que dura el rayo
     float timeAlive = 0.0f;
 
 public:
