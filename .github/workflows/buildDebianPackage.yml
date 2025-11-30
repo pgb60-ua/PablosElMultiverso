@@ -1,0 +1,68 @@
+name: Build Debian Package
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential debhelper devscripts \
+            libx11-dev libgl1-mesa-dev xorg-dev
+
+      - name: Get Release info
+        id: release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = process.env.GITHUB_REF_NAME;
+            const rel = await github.rest.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: tag
+            });
+            core.setOutput("upload_url", rel.data.upload_url);
+            core.setOutput("name", rel.data.name || tag);
+            core.setOutput("body", rel.data.body || "");
+          result-encoding: string
+
+      - name: Generate debian/changelog from Release
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          RELEASE_NAME="${{ steps.release.outputs.name }}"
+          RELEASE_BODY="${{ steps.release.outputs.body }}"
+
+          {
+            echo "pablos-el-multiverso ($VERSION) unstable; urgency=medium"
+            echo
+            echo "  * $RELEASE_NAME"
+            echo
+            echo "$RELEASE_BODY" | sed 's/^/    - /'
+            echo
+            echo " -- CI Builder <pablo.garcia.belando@gmail.com>  $(date -R)"
+          } > debian/changelog
+
+      - name: Build Debian package
+        run: |
+          dpkg-buildpackage -us -uc -b
+
+      - name: Upload .deb to Release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: "../pablos-el-multiverso_${GITHUB_REF_NAME#v}_amd64.deb"
+          asset_name: "pablos-el-multiverso_${GITHUB_REF_NAME#v}_amd64.deb"
+          asset_content_type: application/vnd.debian.binary-package
