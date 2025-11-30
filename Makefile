@@ -56,6 +56,18 @@ LDLIBS := -lraylib -lGL -lm -lpthread -lrt -lX11
 # Target
 TARGET := game-dev
 
+# ============================================================================
+# DIRECTORIOS DE INSTALACION
+# ============================================================================
+
+APP_NAME := pablos-el-multiverso
+PREFIX ?= /usr
+BINDIR := $(PREFIX)/bin
+LIBDIR := $(PREFIX)/lib/$(APP_NAME)
+DATADIR := $(PREFIX)/share/$(APP_NAME)
+ASSETS_DIR := assets
+
+# ============================================================================
 # Regla principal
 all: check-raylib $(TARGET)
 
@@ -75,6 +87,14 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
 # Crear directorios si no existen
 $(BUILD_DIR):
 	@mkdir -p $@
+
+# Regla de instalación
+install: $(TARGET)
+	install -d $(DESTDIR)$(BINDIR)
+	install -d $(DESTDIR)$(LIBDIR)
+	install -m 0755 $(TARGET) $(DESTDIR)$(BINDIR)/$(APP_NAME)
+	install -d $(DESTDIR)$(DATADIR)/assets
+	if [ -d "$(ASSETS_DIR)" ]; then cp -r $(ASSETS_DIR)/* $(DESTDIR)$(DATADIR)/assets/; fi
 
 
 # ============================================================================
