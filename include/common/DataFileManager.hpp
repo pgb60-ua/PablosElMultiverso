@@ -13,10 +13,11 @@ using DataMap = std::unordered_map<std::string, DataValue>;
 
 class DataFileManager
 {
-    const std::string BASE_PATH_PLAYER = "assets/data/players/";
-    const std::string BASE_PATH_ITEM = "assets/data/items/";
-    const std::string BASE_PATH_ENEMY = "assets/data/enemies/";
-    const std::string BASE_PATH_WEAPON = "assets/data/weapons/";
+private:
+    std::string BASE_PATH_PLAYER = "assets/data/players/";
+    std::string BASE_PATH_ITEM = "assets/data/items/";
+    std::string BASE_PATH_ENEMY = "assets/data/enemies/";
+    std::string BASE_PATH_WEAPON = "assets/data/weapons/";
 
 public:
     static DataFileManager &GetInstance()
@@ -29,6 +30,9 @@ public:
     const DataMap &GetData(ITEM_TYPE type);
     const DataMap &GetData(ENEMY_TYPE type);
     const DataMap &GetData(WEAPON_TYPE type);
+
+    void SetAssetsRoot(const std::string &assetsRoot);
+    void DetectAndSetAssetsPath();
 
     void ClearCache();
     void ClearCachePlayers();

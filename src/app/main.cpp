@@ -20,6 +20,8 @@ int main()
     state_machine.handle_state_changes(delta_time);
     SetTargetFPS(120);
     InitAudioDevice();
+    DataFileManager::GetInstance().DetectAndSetAssetsPath();
+    SpriteLoaderManager::GetInstance().DetectAndSetAssetsPath();
 
     while (!state_machine.is_game_ending() && !WindowShouldClose())
     {

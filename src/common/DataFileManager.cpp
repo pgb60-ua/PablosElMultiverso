@@ -5,6 +5,43 @@
 #include <sstream>
 #include <stdexcept>
 #include <variant>
+#include <filesystem>
+#include <cstdlib>
+
+void DataFileManager::SetAssetsRoot(const std::string &assetsRoot)
+{
+    std::string root = assetsRoot;
+    if (!root.empty() && root.back() != '/' && root.back() != '\\')
+    {
+        root.push_back('/');
+    }
+
+    BASE_PATH_PLAYER = root + "data/players/";
+    BASE_PATH_ITEM = root + "data/items/";
+    BASE_PATH_ENEMY = root + "data/enemies/";
+    BASE_PATH_WEAPON = root + "data/weapons/";
+}
+
+void DataFileManager::DetectAndSetAssetsPath()
+{
+    namespace fs = std::filesystem;
+    try
+    {
+        if (fs::is_directory("assets"))
+        {
+            SetAssetsRoot("assets");
+            return;
+        }
+        if (fs::is_directory("/usr/share/pablos-el-multiverso/assets"))
+        {
+            SetAssetsRoot("/usr/share/pablos-el-multiverso/assets");
+            return;
+        } 
+    
+    }
+    catch (...) {    
+    }
+}
 
 std::string DataFileManager::GetFilePath(PLAYER_TYPE type) const
 {
