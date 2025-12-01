@@ -1,0 +1,205 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Source: https://github.com/pgb60-ua/PablosElMultiverso
+Upstream-Name: pablos-el-multiverso
+Upstream-Contact: Pablo García Belando <pablo.garcia.belando@gmail.com>
+
+Files: *
+Copyright: 2025 Pablo García Belando <pablo.garcia.belando@gmail.com>, \
+	Carlos María Casado López, Manuel José Tornero Fuster, Alejandro Jimenez Martinez
+License: MIT
+ The project source code is licensed under the MIT License. The full
+ license text is included below.
+ .
+ MIT License
+ 
+ Copyright (c) 2025 Pablo García Belando , Carlos María Casado López, Manuel José Tornero Fuster, Alejandro Jimenez Martinez
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+Files: debian/*
+Copyright: 2025 unknown <pablo@unknown>
+License: GPL-2+
+ This packaging helper files in `debian/` are distributed under the
+ GPL-2+ license for the purposes of Debian packaging. See the quoted text
+ below for the license terms applied to these files.
+ .
+ This package is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <https://www.gnu.org/licenses/>
+Comment:
+ On Debian systems, the complete text of the GNU General
+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+
+Files: vendor/include/EnTT/**
+Copyright: 2017-2025 Michele Caini
+License: MIT
+ .
+ The EnTT library bundled in `vendor/include/EnTT` is licensed under the
+ MIT License. Full text:
+ .
+ The MIT License (MIT)
+ 
+ Copyright (c) 2017-2025 Michele Caini, author of EnTT
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copy of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copy or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+Files: vendor/include/nlohmann/**
+Copyright: 2013-2022 Niels Lohmann
+License: MIT
+ .
+ The nlohmann/json library bundled in `vendor/include/nlohmann` is licensed
+ under the MIT License. Full text:
+ .
+ MIT License 
+ 
+ Copyright (c) 2013-2022 Niels Lohmann
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+Files: vendor/include/spdlog/**
+Copyright: 2016 Gabi Melman
+License: MIT
+ .
+ The spdlog headers bundled in `vendor/include/spdlog` are licensed under the
+ MIT License. Full text:
+ .
+ The MIT License (MIT)
+ 
+ Copyright (c) 2016 Gabi Melman.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ .
+ -- NOTE: Third party dependency used by this software --
+ This software depends on the fmt lib (MIT License), and users must comply to
+ its license: https://raw.githubusercontent.com/fmtlib/fmt/master/LICENSE
+
+Files: vendor/**/raylib* vendor/lib/libraylib.a
+Copyright: 2013-2025 Ramon Santamaria (@raysan5)
+License: zlib/libpng-style (raylib)
+ .
+ The raylib library bundled or built into `vendor/` is distributed under its
+ permissive zlib/libpng-style license. Full text:
+ .
+ Copyright (c) 2013-2025 Ramon Santamaria (@raysan5)
+ 
+ This software is provided "as-is", without any express or implied warranty. In no event 
+ will the authors be held liable for any damages arising from the use of this software.
+ 
+ Permission is granted to anyone to use this software for any purpose, including commercial 
+ applications, and to alter it and redistribute it freely, subject to the following restrictions:
+ 
+	 1. The origin of this software must not be misrepresented; you must not claim that you 
+	 wrote the original software. If you use this software in a product, an acknowledgment 
+	 in the product documentation would be appreciated but is not required.
+ 
+	 2. Altered source versions must be plainly marked as such, and must not be misrepresented
+	 as being the original software.
+ 
+	 3. This notice may not be removed or altered from any source distribution.
+
+Files: LICENSE.DCAGII-Game-Template
+Copyright: 2025 Antonio Ríos Vila
+License: MIT (DCAGII Game Template)
+ .
+ This file documents the MIT license used by the DCAGII Game Template referenced
+ in the project. Full text:
+ .
+ ===============================================================================
+ This is the license for the DCAGII Game Template
+ GitHub repository: https://github.com/antoniorv6/DCAGII-Game-Template
+ ===============================================================================
+ 
+ MIT License
+ 
+ Copyright (c) 2025 Antonio Ríos Vila
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.

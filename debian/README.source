@@ -1,0 +1,22 @@
+pablos-el-multiverso for Debian
+--------------------------------
+
+Source Package Information
+--------------------------
+
+This package includes vendored dependencies in the vendor/ directory:
+- raylib: Game development library
+- EnTT: Entity Component System
+- nlohmann-json: JSON parsing library
+- spdlog: Logging library
+
+The vendored libraries are included for ease of building and are properly
+licensed (see LICENSE.* files in the root directory).
+
+Building
+--------
+The package uses a standard Makefile build system. Run 'make' to compile
+the game and 'make install' to install it.
+
+ -- Pablo García <pablo.garcia.belando@gmail.com>  Mon, 1 Dec 2025 15:47:47 +0100
+

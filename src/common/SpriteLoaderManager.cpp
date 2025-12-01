@@ -2,11 +2,49 @@
 #include <stdexcept>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <filesystem>
+#include <cstdlib>
 
 SpriteLoaderManager::~SpriteLoaderManager()
 {   
     ClearCache();
 }   
+
+void SpriteLoaderManager::SetAssetsRoot(const std::string &assetsRoot)
+{
+    std::string root = assetsRoot;
+    if (!root.empty() && root.back() != '/' && root.back() != '\\')
+    {
+        root.push_back('/');
+    }
+
+    BASE_PATH_PLAYER = root + "sprites/players/";
+    BASE_PATH_ITEM = root + "sprites/items/";
+    BASE_PATH_ENEMY = root + "sprites/enemies/";
+    BASE_PATH_PROJECTILE = root + "sprites/projectiles/";
+    BASE_PATH_WEAPON = root + "sprites/weapons/";
+    BASE_PATH_MAP = root + "sprites/maps/";
+}
+
+void SpriteLoaderManager::DetectAndSetAssetsPath()
+{
+    namespace fs = std::filesystem;
+    try
+    {
+        if (fs::is_directory("assets"))
+        {
+            SetAssetsRoot("assets");
+            return;
+        }
+        if (fs::is_directory("/usr/share/pablos-el-multiverso/assets"))
+        {
+            SetAssetsRoot("/usr/share/pablos-el-multiverso/assets");
+            return;
+        }     
+    }
+    catch (...) {    
+    }
+}
 
 std::string SpriteLoaderManager::GetMetadataPath(PLAYER_TYPE type) const
 {

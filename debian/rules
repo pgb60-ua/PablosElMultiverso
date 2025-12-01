@@ -1,0 +1,8 @@
+﻿#!/usr/bin/make -f
+
+# Versión mínima usando debhelper
+%:
+	dh $@
+
+override_dh_auto_install:
+	$(MAKE) DESTDIR=$$(pwd)/debian/pablos-el-multiverso PREFIX=/usr APP_NAME=pablos-el-multiverso install

@@ -1,0 +1,111 @@
+name: Build Debian Package
+
+on:
+  release:
+    types: [created, published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag version (e.g., v0.3.0)"
+        required: true
+        type: string
+      release_name:
+        description: "Release name/title"
+        required: false
+        type: string
+      release_notes:
+        description: 'Release notes (use \n for line breaks)'
+        required: false
+        type: string
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.event.release.tag_name }}
+          fetch-depth: 0
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential debhelper devscripts \
+            libx11-dev libgl1-mesa-dev xorg-dev ccache
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then
+            FULL_TAG="${{ inputs.tag }}"
+          else
+            FULL_TAG="${{ github.event.release.tag_name }}"
+          fi
+
+          VERSION=${FULL_TAG#v}
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "full_tag=$FULL_TAG" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION (tag: $FULL_TAG)"
+
+      - name: Generate debian/changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          FULL_TAG="${{ steps.version.outputs.full_tag }}"
+
+          # Get release notes
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            NOTES="${{ inputs.release_notes }}"
+          else
+            NOTES="${{ github.event.release.body }}"
+          fi
+
+          # Start changelog
+          {
+            echo "pablos-el-multiverso ($VERSION) unstable; urgency=medium"
+            echo
+            echo "  * Release $FULL_TAG"
+            echo
+            
+            # Process notes if present
+            if [ -n "$NOTES" ]; then
+              echo "$NOTES" | sed 's/^/    - /'
+            else
+              echo "    - Manual build"
+            fi
+            
+            echo
+            echo " -- CI Builder <pablo.garcia.belando@gmail.com>  $(date -R)"
+          } > debian/changelog
+
+          echo "Generated changelog:"
+          cat debian/changelog
+
+      - name: Build Debian package
+        run: |
+          dpkg-buildpackage -us -uc -b
+
+      - name: Find generated .deb file
+        id: find_deb
+        run: |
+          DEB_FILE=$(ls ../pablos-el-multiverso_*.deb | head -n 1)
+          if [ ! -f "$DEB_FILE" ]; then
+            echo "Error: .deb file not found"
+            exit 1
+          fi
+          echo "deb_file=$DEB_FILE" >> $GITHUB_OUTPUT
+          echo "Found package: $(basename $DEB_FILE)"
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.full_tag }}
+          name: ${{ inputs.release_name || github.event.release.name || format('Release {0}', steps.version.outputs.full_tag) }}
+          body: ${{ inputs.release_notes || github.event.release.body || format('Debian package for {0}', steps.version.outputs.full_tag) }}
+          files: ${{ steps.find_deb.outputs.deb_file }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

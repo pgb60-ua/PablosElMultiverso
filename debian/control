@@ -1,0 +1,14 @@
+Source: pablos-el-multiverso
+Section: games
+Priority: optional
+Maintainer: pgb60-ua <pablo.garcia.belando@gmail.com>
+Build-Depends: debhelper-compat (= 13), g++, libgl1-mesa-dev, libx11-dev
+Standards-Version: 4.6.0
+Homepage: https://github.com/pgb60-ua/PablosElMultiverso
+Rules-Requires-Root: no
+
+Package: pablos-el-multiverso
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: PablosElMultiverso
+  Es un juego estilo vampire survivor desarrollado en C++ con la libreria Raylib.
