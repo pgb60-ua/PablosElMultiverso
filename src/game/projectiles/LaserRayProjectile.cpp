@@ -25,14 +25,6 @@ void LaserRayProjectile::update(float deltaTime)
 {
     if (!active)
         return;
-
-    // Calcular y actualizar el ángulo de rotación del láser
-    Vector2 dir = getDirection();
-    if (dir.x != 0.0f || dir.y != 0.0f)
-    {
-        shape.data.rotatedRectangle.rotation = atan2f(dir.y, dir.x) * RAD2DEG;
-    }
-
     for (auto &enemy : enemiesInScene)
     {
         if (!enemy->IsAlive())
@@ -66,6 +58,18 @@ void LaserRayProjectile::activate(Vector2 position, Vector2 direction, const Sta
 {
     AProjectile::activate(position, direction, stats);
     timeAlive = TIME_TO_BE_ALIVE;
+}
+
+void LaserRayProjectile::updatePositionAndDirection(Vector2 newPosition, Vector2 newDirection)
+{
+    setShapePosition(shape, newPosition);
+    
+    direction = newDirection;
+    
+    if (newDirection.x != 0.0f || newDirection.y != 0.0f)
+    {
+        shape.data.rotatedRectangle.rotation = atan2f(newDirection.y, newDirection.x) * RAD2DEG;
+    }
 }
 
 void LaserRayProjectile::render()

@@ -5,6 +5,7 @@
 #include "LaserRayWeapon.hpp"
 #include "SniperWeapon.hpp"
 #include "GameOverState.hpp"
+#include "GameWonState.hpp"
 #include "StateMachine.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
@@ -114,6 +115,10 @@ void MainGameState::update(float deltaTime)
     {
         // Todos los jugadores están muertos, reiniciar el estado del juego
         state_machine->add_state(std::make_unique<GameOverState>(), true);
+    }
+    else if (enemies.empty())
+    {
+        state_machine->add_state(std::make_unique<GameWonState>(), true);
     }
 }
 

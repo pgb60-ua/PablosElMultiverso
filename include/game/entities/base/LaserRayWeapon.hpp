@@ -5,6 +5,10 @@
 #include <memory>
 
 class LaserRayWeapon : public ARangeWeapon {
+private:
+    /// @brief Offset del proyectil (mitad del ancho del sprite)
+    float projectileOffset;
+
 public:
     /// @brief Constructor de la clase LaserRayWeapon que carga desde JSON
     LaserRayWeapon(const Vector2& position, std::vector<AEnemy *>& enemiesInRange, std::vector<AEnemy *> &allEnemies);
