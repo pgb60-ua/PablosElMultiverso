@@ -36,6 +36,13 @@ jobs:
             g++ make ccache findutils \
             libgl1-mesa-dev libx11-dev xorg-dev
 
+      - name: Fix debian/rules format
+        run: |
+          # Remove BOM if present and ensure Unix line endings
+          sed -i '1s/^\xEF\xBB\xBF//' debian/rules
+          dos2unix debian/rules 2>/dev/null || sed -i 's/\r$//' debian/rules
+          chmod +x debian/rules
+
       - name: Extract version from tag
         id: version
         run: |

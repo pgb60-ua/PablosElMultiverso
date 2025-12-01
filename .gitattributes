@@ -1,0 +1,15 @@
+# Ensure Debian packaging files use Unix line endings
+debian/rules text eol=lf
+debian/control text eol=lf
+debian/changelog text eol=lf
+debian/copyright text eol=lf
+
+# Makefiles
+Makefile text eol=lf
+
+# GitHub Actions workflows
+.github/workflows/*.yml text eol=lf
+
+# Source code
+*.cpp text eol=lf
+*.hpp text eol=lf
