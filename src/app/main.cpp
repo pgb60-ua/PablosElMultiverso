@@ -1,8 +1,7 @@
 #include "WindowFlags.hpp"
 #include <MainGameState.hpp>
-#include <StateMachine.hpp>
 #include <MainMenuState.hpp>
-#include <chrono>
+#include <StateMachine.hpp>
 #include <memory>
 extern "C"
 {
@@ -21,6 +20,8 @@ int main()
     state_machine.handle_state_changes(delta_time);
     SetTargetFPS(120);
     InitAudioDevice();
+    DataFileManager::GetInstance().DetectAndSetAssetsPath();
+    SpriteLoaderManager::GetInstance().DetectAndSetAssetsPath();
 
     while (!state_machine.is_game_ending() && !WindowShouldClose())
     {
@@ -34,7 +35,6 @@ int main()
     SpriteLoaderManager::GetInstance().ClearCache();
     CloseAudioDevice();
     CloseWindow();
-    
 
     return 0;
 }

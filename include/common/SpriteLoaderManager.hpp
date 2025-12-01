@@ -15,12 +15,13 @@ extern "C"
 class SpriteLoaderManager
 {
 public:
-    inline static const std::string BASE_PATH_PLAYER = "assets/sprites/players/";
-    inline static const std::string BASE_PATH_ITEM = "assets/sprites/items/";
-    inline static const std::string BASE_PATH_ENEMY = "assets/sprites/enemies/";
-    inline static const std::string BASE_PATH_PROJECTILE = "assets/sprites/projectiles/";
-    inline static const std::string BASE_PATH_WEAPON = "assets/sprites/weapons/";
-    inline static const std::string BASE_PATH_MAP = "assets/sprites/maps/";
+
+    std::string BASE_PATH_PLAYER = "assets/sprites/players/";
+    std::string BASE_PATH_ITEM = "assets/sprites/items/";
+    std::string BASE_PATH_ENEMY = "assets/sprites/enemies/";
+    std::string BASE_PATH_PROJECTILE = "assets/sprites/projectiles/";
+    std::string BASE_PATH_WEAPON = "assets/sprites/weapons/";
+    std::string BASE_PATH_MAP = "assets/sprites/maps/";
 
     static SpriteLoaderManager &GetInstance()
     {
@@ -77,6 +78,10 @@ public:
     void ClearCache(WEAPON_TYPE type);
     // Limpia la caché de un mapa específico
     void ClearCache(MAP_TYPE type);
+
+    // Configuración de rutas de assets en tiempo de ejecución.
+    void SetAssetsRoot(const std::string &assetsRoot);
+    void DetectAndSetAssetsPath();
 
 private:
     SpriteLoaderManager() = default;

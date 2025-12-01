@@ -43,7 +43,7 @@ void AProjectile::update(float deltaTime)
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
             enemy->TakeDamage(stats);
-            if(!enemy->IsAlive())
+            if (!enemy->IsAlive())
             {
                 delete enemy;
                 enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));

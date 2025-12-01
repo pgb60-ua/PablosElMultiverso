@@ -30,6 +30,24 @@ This project uses raylib, a simple and easy-to-use library to enjoy videogames p
 
 This project uses nlohmann/json for JSON parsing and serialization.
 
+## EnTT
+
+- **Author:** Michele Caini (@skypjack)
+- **Repository:** https://github.com/skypjack/entt
+- **License:** MIT License
+- **License File:** [LICENSE.EnTT](LICENSE.EnTT)
+
+This project uses EnTT (Entity Component System), a fast and reliable entity-component system.
+
+## spdlog
+
+- **Author:** Gabi Melman
+- **Repository:** https://github.com/gabime/spdlog
+- **License:** MIT License
+- **License File:** [LICENSE.spdlog](LICENSE.spdlog)
+
+This project uses spdlog, a fast C++ logging library.
+
 ---
 
 ## Project License

@@ -76,10 +76,11 @@ bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
     OffensiveStats upgradedStats = {
         currentStats.physicalDamage + newOffensiveStats.physicalDamage,
         currentStats.magicDamage + newOffensiveStats.magicDamage,
-        currentStats.attackSpeed + newOffensiveStats.attackSpeed,
-        std::min(currentStats.criticalChance + newOffensiveStats.criticalChance, MAX_CRITICAL_CHANCE),
-        std::min(currentStats.criticalDamage + newOffensiveStats.criticalDamage, MAX_CRITICAL_DAMAGE),
-        std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal, MAX_LIFE_STEAL)};
+        currentStats.attackSpeed + newOffensiveStats.attackSpeed * ATTACK_SPEED_MULTIPLIER,
+        std::min(currentStats.criticalChance + newOffensiveStats.criticalChance * CRITICAL_CHANCE_MULTIPLIER, MAX_CRITICAL_CHANCE),
+        std::min(currentStats.criticalDamage + newOffensiveStats.criticalDamage * CRITICAL_DAMAGE_MULTIPLIER, MAX_CRITICAL_DAMAGE),
+        std::min(currentStats.lifeSteal + newOffensiveStats.lifeSteal * LIFE_STEAL_MULTIPLIER, MAX_LIFE_STEAL)
+    };
 
     stats.SetOffensiveStats(upgradedStats);
 
@@ -99,7 +100,7 @@ void AWeapon::render()
 
     Rectangle dest = {position.x, position.y, src.width, src.height};
 
-    float angle = atan2(direction.y, direction.x) * RAD2DEG + 45.0f;
+    float angle = atan2(direction.y, direction.x) * RAD2DEG;
 
     DrawTexturePro(sheet.texture, src, dest, origin, angle, WHITE);
 }
@@ -138,4 +139,20 @@ void AWeapon::update(float deltaTime, const Vector2 &position)
 {
     SetPosition(position);
     SetDirection(CalculateDirection());
+}
+
+void AWeapon::SetStatsFromPlayer(const Stats& statsFromPlayer) {
+    Stats newStats = this->stats;
+
+    OffensiveStats weaponOffensiveStats = newStats.GetOffensiveStats();
+    OffensiveStats playerOffensiveStats = statsFromPlayer.GetOffensiveStats();
+
+    weaponOffensiveStats.attackSpeed += playerOffensiveStats.attackSpeed * ATTACK_SPEED_MULTIPLIER;
+    weaponOffensiveStats.criticalChance = std::min(weaponOffensiveStats.criticalChance + playerOffensiveStats.criticalChance * CRITICAL_CHANCE_MULTIPLIER, MAX_CRITICAL_CHANCE);
+    weaponOffensiveStats.criticalDamage = std::min(weaponOffensiveStats.criticalDamage + playerOffensiveStats.criticalDamage * CRITICAL_DAMAGE_MULTIPLIER, MAX_CRITICAL_DAMAGE);
+    weaponOffensiveStats.lifeSteal = std::min(weaponOffensiveStats.lifeSteal + playerOffensiveStats.lifeSteal * LIFE_STEAL_MULTIPLIER, MAX_LIFE_STEAL);
+
+    newStats.SetOffensiveStats(weaponOffensiveStats);
+
+    this->stats = newStats;
 }

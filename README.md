@@ -8,6 +8,8 @@ This project incorporates code from multiple sources. Please see [NOTICES.md](NO
 - **DCAGII Game Template:** MIT License - See [LICENSE.DCAGII-Game-Template](LICENSE.DCAGII-Game-Template)
 - **raylib:** zlib/libpng License - See [LICENSE.raylib](LICENSE.raylib)
 - **nlohmann/json:** MIT License - See [LICENSE.nlohmann-json](LICENSE.nlohmann-json)
+- **EnTT:** MIT License - See [LICENSE.EnTT](LICENSE.EnTT)
+- **spdlog:** MIT License - See [LICENSE.spdlog](LICENSE.spdlog)
 
 ## Estrategia de gestión de ramas
 

@@ -30,7 +30,6 @@
 *.lai
 *.la
 *.a
-!libraylib.a
 *.lib
 
 # Executables
