@@ -33,7 +33,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential debhelper devscripts \
-            libx11-dev libgl1-mesa-dev xorg-dev ccache
+            g++ make ccache findutils \
+            libgl1-mesa-dev libx11-dev xorg-dev
 
       - name: Extract version from tag
         id: version
