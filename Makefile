@@ -71,7 +71,7 @@ ASSETS_DIR := assets
 # Regla principal
 all: check-raylib $(TARGET)
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) | check-raylib
 	$(info $(GREEN)Enlazando $@...$(RESET))
 	$(CCACHE) $(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $@
 	$(info $(GREEN)Compilación completada: $@$(RESET))
