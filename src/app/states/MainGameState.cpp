@@ -24,20 +24,21 @@ void MainGameState::init()
     Vector2 initialPosition = {400.0f, 300.0f};
     Vector2 secondPosition = {600.0f, 700.0f};
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::MAGE, secondPosition, enemies));
 
     int numZombies = 100;
     enemies.reserve(numZombies);
     for (int i = 0; i < numZombies; i++)
     {
-        enemies.push_back(new Zombie(std::vector<Player *>{players[0].get(), players[1].get()}));
+        enemies.push_back(new Zombie(std::vector<Player *>{players[0].get()}));
     }
 
     // Crear el arma desde JSON automáticamente en el constructor
-    for (int i = 0; i < 4; ++i)
-    {
-        players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    }
+
+    players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    players[0]->AddWeapon(std::make_unique<SniperWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+
 }
 
 void MainGameState::handleInput()
@@ -89,7 +90,6 @@ void MainGameState::handleInput()
         player->HandleInput(direction);
     }*/
     players[0]->HandleInput(direction);
-    players[1]->HandleInput(direction2);
 }
 
 void MainGameState::update(float deltaTime)
@@ -104,7 +104,7 @@ void MainGameState::update(float deltaTime)
         {
             numero_vivo++;
         }
-        
+
     }
     // Actualizar todos los enemigos
     for (auto &enemy : enemies)
