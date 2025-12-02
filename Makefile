@@ -96,7 +96,7 @@ install: $(TARGET)
 	install -d $(DESTDIR)$(DATADIR)/assets
 	if [ -d "$(ASSETS_DIR)" ]; then cp -r $(ASSETS_DIR)/* $(DESTDIR)$(DATADIR)/assets/; fi
 
-#Regla distribución
+# Regla de distribución
 dist: 
 	@dpkg-buildpackage -us -uc -b
 # ============================================================================
