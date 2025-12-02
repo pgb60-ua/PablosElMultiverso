@@ -22,7 +22,6 @@ void MainGameState::init()
 {
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
-    Vector2 secondPosition = {600.0f, 700.0f};
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
 
     int numZombies = 100;
