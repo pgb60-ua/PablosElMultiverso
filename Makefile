@@ -26,7 +26,6 @@ CXXFLAGS += -Wall        # Activa la mayoría de advertencias del compilador
 CXXFLAGS += -pedantic    # Fuerza estricta conformidad al estándar C++
 CXXFLAGS += -fPIC        # Genera código independiente de posición (para librerías compartidas)
 CXXFLAGS += -O3          # Nivel máximo de optimización
-CXXFLAGS += -march=native # Optimiza para la arquitectura específica de la máquina local
 
 DEPS_FLAGS := -MMD -MP
 # Paralelización automática
@@ -97,7 +96,7 @@ install: $(TARGET)
 	if [ -d "$(ASSETS_DIR)" ]; then cp -r $(ASSETS_DIR)/* $(DESTDIR)$(DATADIR)/assets/; fi
 
 # Regla de distribución
-dist: 
+dist:
 	@dpkg-buildpackage -us -uc -b
 # ============================================================================
 # REGLAS DE LIMPIEZA Y UTILIDAD
@@ -110,8 +109,8 @@ clean:
 	@$(info $(GREEN)Limpieza completada$(RESET))
 
 # Recompilar todo desde cero
-rebuild: 
-	$(MAKE) clean 
+rebuild:
+	$(MAKE) clean
 	$(MAKE) all
 
 # Ejecutar el juego en modo release
@@ -169,4 +168,4 @@ $(VENDOR_LIB):
 	@mkdir -p $(VENDOR_LIB)
 
 # Declarar reglas que no son archivos
-.PHONY: all clean rebuild run info stats clean-cache check-raylib 
+.PHONY: all clean rebuild run info stats clean-cache check-raylib
