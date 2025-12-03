@@ -42,4 +42,8 @@ game-dev
 *.dwo
 
 .vscode
+.vs
 .clangd
+
+# Build folders
+build/
