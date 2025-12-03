@@ -42,7 +42,11 @@ game-dev
 *.dwo
 
 .vscode
+.vs
 .clangd
+
+# Build folders
+build/
 
 # Debian build files
 debian/pablos-el-multiverso
