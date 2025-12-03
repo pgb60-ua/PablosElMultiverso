@@ -34,8 +34,6 @@ set(VENDOR_INCLUDE "${CMAKE_SOURCE_DIR}/vendor/include")
 set(VENDOR_LIB "${CMAKE_SOURCE_DIR}/vendor/lib")
 set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 
-message("${INCLUDE_DIR}")
-
 # ============================================================================
 # ARCHIVOS FUENTE
 # ============================================================================
@@ -51,8 +49,6 @@ foreach(SUBDIR ${INCLUDE_SUBDIRS})
     endif()
 endforeach()
 list(REMOVE_DUPLICATES ALL_INCLUDE_DIRS)
-
-message("${ALL_INCLUDE_DIRS}")
 
 # ============================================================================
 # EJECUTABLE
