@@ -47,3 +47,10 @@ game-dev
 
 # Build folders
 build/
+
+# Debian build files
+debian/pablos-el-multiverso
+debian/.debhelper
+debian/debhelper-build-stamp
+debian/pablos-el-multiverso.substvars
+debian/files
