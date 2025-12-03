@@ -43,3 +43,9 @@ game-dev
 
 .vscode
 .clangd
+
+debian/pablos-el-multiverso
+debian/.debhelper
+debian/debhelper-build-stamp
+debian/pablos-el-multiverso.substvars
+debian/files
