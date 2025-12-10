@@ -6,7 +6,6 @@
 EggplosiveProjectile::EggplosiveProjectile(std::vector<AEnemy *> &allEnemies)
     : AProjectile(allEnemies)
 {
-    // Configurar hitbox circular para el proyectil
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::SNIPER);
     if (!sheet.frames.empty())
     {
@@ -34,7 +33,6 @@ void EggplosiveProjectile::update(float deltaTime)
     if (!active)
         return;
 
-    // Si ya explotó, aplicar daño continuo
     if (hasExploded)
     {
         Explode(deltaTime);
@@ -46,20 +44,17 @@ void EggplosiveProjectile::update(float deltaTime)
         return;
     }
 
-    // Mover el proyectil
     Vector2 position = getPosition();
     position.x += direction.x * stats.GetMovementSpeed() * deltaTime;
     position.y += direction.y * stats.GetMovementSpeed() * deltaTime;
     setShapePosition(shape, position);
 
-    // Verificar colisión con enemigos
     for (auto &enemy : enemiesInScene)
     {
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
-            // Explotar al tocar un enemigo
             hasExploded = true;
-            timeAlive = TIME_TO_BE_ALIVE; // Reiniciar el tiempo para el veneno
+            timeAlive = TIME_TO_BE_ALIVE;
             return;
         }
     }
@@ -69,29 +64,25 @@ void EggplosiveProjectile::Explode(float deltaTime)
 {
     Vector2 explosionCenter = getPosition();
     
-    // Causar daño a todos los enemigos dentro del radio de explosión
     for (auto &enemy : enemiesInScene)
     {
         if (!enemy->IsAlive())
             continue;
             
-        // Calcular la posición del centro del enemigo
         Shape enemyHitbox = enemy->GetHitbox();
         Vector2 enemyCenter = {
             enemyHitbox.data.rectangle.x + enemyHitbox.data.rectangle.width * 0.5f,
             enemyHitbox.data.rectangle.y + enemyHitbox.data.rectangle.height * 0.5f
         };
         
-        // Calcular distancia desde el centro de la explosión
         float dx = enemyCenter.x - explosionCenter.x;
         float dy = enemyCenter.y - explosionCenter.y;
         float distance = std::sqrt(dx * dx + dy * dy);
         
-        // Si el enemigo está dentro del radio, causar daño
         if (distance <= EXPLOSION_RADIUS)
         {
             Stats copia = getStats();
-            copia.SetMagicDamage(copia.GetMagicDamage() * deltaTime); // Daño por segundo
+            copia.SetMagicDamage(copia.GetMagicDamage() * deltaTime); 
             enemy->TakeDamage(copia);
             
             if (!enemy->IsAlive())
@@ -129,7 +120,6 @@ void EggplosiveProjectile::render()
         src.height
     };
 
-    // Calcular rotación según la dirección
     Vector2 dir = getDirection();
     float angleDeg = 0.0f;
     if (dir.x != 0.0f || dir.y != 0.0f)
@@ -137,14 +127,12 @@ void EggplosiveProjectile::render()
         angleDeg = atan2f(dir.y, dir.x) * RAD2DEG;
     }
 
-    // Solo dibujar el sprite si no ha explotado
     if (!hasExploded)
     {
         DrawTexturePro(sheet.texture, src, dest, origin, angleDeg, WHITE);
     }
     else
     {
-        // Dibujar charco de veneno
         float alpha = (timeAlive / TIME_TO_BE_ALIVE) * 150.0f; // Fade out
         Color poisonColor = {0, 255, 0, (unsigned char)alpha};
         DrawCircle(getPosition().x, getPosition().y, EXPLOSION_RADIUS, poisonColor);
