@@ -129,6 +129,8 @@ void ChooseNPCGameState::init()
     LoadCharacterSprites();
 
     currentCharacterIndex = 0;
+    arrowHovered[0] = false;
+    arrowHovered[1] = false;
 }
 
 void ChooseNPCGameState::handleInput()
@@ -155,6 +157,61 @@ void ChooseNPCGameState::handleInput()
     {
         state_machine->add_state(std::make_unique<MainMenuState>(), true);
     }
+
+    // Detectar hover del ratón sobre los botones de flecha
+    Vector2 mousePosition = GetMousePosition();
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+    
+    // Calcular posiciones para los botones
+    Vector2 containerPos = GetContainerPos(screenWidth, screenHeight);
+    float spriteWidth = CONTAINER_SIZE * CONTAINER_SCALE;
+    float spriteHeight = spriteWidth;
+    Vector2 spritePos = GetSpritePos(containerPos, spriteWidth, spriteHeight);
+    
+    // Resetear el array de hover
+    arrowHovered[0] = false;
+    arrowHovered[1] = false;
+    
+    // Verificar hover sobre cada botón
+    for (int i = 0; i < 2; i++)
+    {
+        Rectangle btn = GetArrowButtonRect(i, spritePos, spriteWidth, screenHeight);
+        if (CheckCollisionPointRec(mousePosition, btn))
+        {
+            arrowHovered[i] = true;
+            
+            // Si se hace clic, navegar
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                if (i == 0) // Flecha izquierda
+                {
+                    currentCharacterIndex = (currentCharacterIndex - 1 + characters.size()) % characters.size();
+                }
+                else // Flecha derecha
+                {
+                    currentCharacterIndex = (currentCharacterIndex + 1) % characters.size();
+                }
+            }
+        }
+    }
+    
+    // Verificar clic en el recuadro del personaje para seleccionarlo
+    Rectangle containerRect = {
+        containerPos.x,
+        containerPos.y,
+        DISPLAY_SIZE,
+        DISPLAY_SIZE
+    };
+    
+    if (CheckCollisionPointRec(mousePosition, containerRect))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            // Confirmar selección del personaje actual
+            state_machine->add_state(std::make_unique<MainGameState>(characters[currentCharacterIndex].type), true);
+        }
+    }
 }
 
 void ChooseNPCGameState::update(float deltaTime __attribute__((unused)))
@@ -171,29 +228,98 @@ void ChooseNPCGameState::DrawCenteredText(const char* text, float y, int fontSiz
     DrawTextEx(GetFontDefault(), text, textPos, (float)fontSize, 1.0f, color);
 }
 
-void ChooseNPCGameState::DrawNavigationArrows(const Vector2& spritePos, float spriteWidth) const
+Vector2 ChooseNPCGameState::GetContainerPos(int screenWidth, int screenHeight) const
+{
+    return Vector2{
+        (screenWidth - DISPLAY_SIZE) / 2.0f,
+        (screenHeight - DISPLAY_SIZE) / 2.0f - 20.0f
+    };
+}
+
+Vector2 ChooseNPCGameState::GetSpritePos(const Vector2& containerPos, float spriteWidth, float spriteHeight) const
+{
+    return Vector2{
+        containerPos.x + (DISPLAY_SIZE - spriteWidth) / 2.0f,
+        containerPos.y + (DISPLAY_SIZE - spriteHeight) / 2.0f
+    };
+}
+
+Rectangle ChooseNPCGameState::GetArrowButtonRect(int index, const Vector2& spritePos, float spriteWidth, int screenHeight)
+{
+    // index 0 = flecha izquierda, index 1 = flecha derecha
+    if (index == 0) {
+        const char* leftArrow = "<";
+        Vector2 leftArrowSize = MeasureTextEx(GetFontDefault(), leftArrow, ARROW_FONT_SIZE, 1);
+        Vector2 leftArrowPos = {
+            spritePos.x - ARROW_DISTANCE,
+            (screenHeight - leftArrowSize.y) / 2.0f
+        };
+        
+        return Rectangle{
+            leftArrowPos.x - ARROW_PADDING,
+            leftArrowPos.y - ARROW_PADDING,
+            leftArrowSize.x + ARROW_PADDING * 2,
+            leftArrowSize.y + ARROW_PADDING * 2
+        };
+    } else {
+        const char* rightArrow = ">";
+        Vector2 rightArrowSize = MeasureTextEx(GetFontDefault(), rightArrow, ARROW_FONT_SIZE, 1);
+        Vector2 rightArrowPos = {
+            spritePos.x + spriteWidth + ARROW_DISTANCE - rightArrowSize.x,
+            (screenHeight - rightArrowSize.y) / 2.0f
+        };
+        
+        return Rectangle{
+            rightArrowPos.x - ARROW_PADDING,
+            rightArrowPos.y - ARROW_PADDING,
+            rightArrowSize.x + ARROW_PADDING * 2,
+            rightArrowSize.y + ARROW_PADDING * 2
+        };
+    }
+}
+
+void ChooseNPCGameState::DrawNavigationArrows(const Vector2& spritePos, float spriteWidth)
 {
     int screenHeight = GetScreenHeight();
-    int arrowFontSize = 60;
-    Color arrowColor = (characters.size() > 1) ? SELECTED_ARROW_COLOR : UNSELECTED_ARROW_COLOR;
+    Color fillColor = {60, 60, 60, 255};
 
-    // Flecha izquierda
+    // Dibujar flecha izquierda
+    Rectangle leftRect = GetArrowButtonRect(0, spritePos, spriteWidth, screenHeight);
     const char* leftArrow = "<";
-    Vector2 leftArrowSize = MeasureTextEx(GetFontDefault(), leftArrow, arrowFontSize, 1);
+    Vector2 leftArrowSize = MeasureTextEx(GetFontDefault(), leftArrow, ARROW_FONT_SIZE, 1);
     Vector2 leftArrowPos = {
-        spritePos.x - 120.0f,
+        spritePos.x - ARROW_DISTANCE,
         (screenHeight - leftArrowSize.y) / 2.0f
     };
-    DrawTextEx(GetFontDefault(), leftArrow, leftArrowPos, (float)arrowFontSize, 1.0f, arrowColor);
+    
+    // Usar el array para determinar el color según el hover
+    Color leftArrowColor = arrowHovered[0] ? SELECTED_ARROW_COLOR : UNSELECTED_ARROW_COLOR;
+    if (characters.size() <= 1) {
+        leftArrowColor = UNSELECTED_ARROW_COLOR;
+    }
+    
+    DrawRectangleRec(leftRect, fillColor);
+    DrawRectangleLinesEx(leftRect, 1.0f, leftArrowColor);
+    DrawTextEx(GetFontDefault(), leftArrow, leftArrowPos, (float)ARROW_FONT_SIZE, 1.0f, leftArrowColor);
 
-    // Flecha derecha
+    // Dibujar flecha derecha
+    Rectangle rightRect = GetArrowButtonRect(1, spritePos, spriteWidth, screenHeight);
     const char* rightArrow = ">";
-    Vector2 rightArrowSize = MeasureTextEx(GetFontDefault(), rightArrow, arrowFontSize, 1);
+    Vector2 rightArrowSize = MeasureTextEx(GetFontDefault(), rightArrow, ARROW_FONT_SIZE, 1);
     Vector2 rightArrowPos = {
-        spritePos.x + spriteWidth + 120.0f - rightArrowSize.x,
+        spritePos.x + spriteWidth + ARROW_DISTANCE - rightArrowSize.x,
         (screenHeight - rightArrowSize.y) / 2.0f
     };
-    DrawTextEx(GetFontDefault(), rightArrow, rightArrowPos, (float)arrowFontSize, 1.0f, arrowColor);
+    
+    // Usar el array para determinar el color según el hover
+    Color rightArrowColor = arrowHovered[1] ? SELECTED_ARROW_COLOR : UNSELECTED_ARROW_COLOR;
+    if (characters.size() <= 1) {
+        rightArrowColor = UNSELECTED_ARROW_COLOR;
+    }
+    
+    DrawRectangleRec(rightRect, fillColor);
+    DrawRectangleLinesEx(rightRect, 1.0f, rightArrowColor);
+    DrawTextEx(GetFontDefault(), rightArrow, rightArrowPos, (float)ARROW_FONT_SIZE, 1.0f, rightArrowColor);
 }
 
 void ChooseNPCGameState::render()
@@ -212,43 +338,33 @@ void ChooseNPCGameState::render()
         CharacterOption &currentChar = characters[currentCharacterIndex];
         SpriteFrame frame = GetCurrentFrame(currentChar);
 
-        // Tamaño fijo del cuadrado contenedor
-        const float containerSize = 64.0f;
-        const float containerScale = 6.0f; // Escala para visualización
-        const float displaySize = containerSize * containerScale;
-
         // Posición del cuadrado contenedor (centrado)
-        Vector2 containerPos = {
-            (screenWidth - displaySize) / 2.0f,
-            (screenHeight - displaySize) / 2.0f - 20.0f
-        };
+        Vector2 containerPos = GetContainerPos(screenWidth, screenHeight);
 
         // Dibujar fondo del sprite (cuadrado fijo de 64x64 escalado)
+        Color bgColor = {40, 40, 40, 255};
         DrawRectangle(
             (int)containerPos.x,
             (int)containerPos.y,
-            (int)displaySize,
-            (int)displaySize,
-            (Color){40, 40, 40, 255}
+            (int)DISPLAY_SIZE,
+            (int)DISPLAY_SIZE,
+            bgColor
         );
         // Línea amarilla 
         DrawRectangleLines(
             (int)containerPos.x - 1,
             (int)containerPos.y - 1,
-            (int)displaySize + 2,
-            (int)displaySize + 2,
+            (int)DISPLAY_SIZE + 2,
+            (int)DISPLAY_SIZE + 2,
             YELLOW
         );
 
         // Calcular tamaño del sprite 
-        float spriteWidth = frame.width * containerScale;
-        float spriteHeight = frame.height * containerScale;
+        float spriteWidth = frame.width * CONTAINER_SCALE;
+        float spriteHeight = frame.height * CONTAINER_SCALE;
 
         // Calcular posición del sprite para centrarlo dentro del contenedor
-        Vector2 spritePos = {
-            containerPos.x + (displaySize - spriteWidth) / 2.0f,
-            containerPos.y + (displaySize - spriteHeight) / 2.0f
-        };
+        Vector2 spritePos = GetSpritePos(containerPos, spriteWidth, spriteHeight);
 
         // Dibujar sprite
         if (currentChar.spriteSheet.id > 0) {
@@ -258,17 +374,17 @@ void ChooseNPCGameState::render()
         }
 
         // Dibujar nombre del personaje
-        DrawCenteredText(currentChar.name.c_str(), containerPos.y + displaySize + 30.0f, 35, YELLOW);
+        DrawCenteredText(currentChar.name.c_str(), containerPos.y + DISPLAY_SIZE + 30.0f, 35, YELLOW);
 
         // Dibujar descripción si existe
         if (!currentChar.description.empty())
         {
-            float descY = containerPos.y + displaySize + 70.0f; // 30 + 40
+            float descY = containerPos.y + DISPLAY_SIZE + 70.0f; // 30 + 40
             DrawCenteredText(currentChar.description.c_str(), descY, 18, GRAY);
         }
 
         // Dibujar flechas de navegación
-        DrawNavigationArrows(containerPos, displaySize);
+        DrawNavigationArrows(containerPos, DISPLAY_SIZE);
 
         // Indicador de personaje actual
         const char* indicator = TextFormat("%d / %d", currentCharacterIndex + 1, (int)characters.size());
