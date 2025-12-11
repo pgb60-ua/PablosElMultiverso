@@ -36,6 +36,12 @@ class ChooseNPCGameState : public GameState {
         
         void LoadCharacterSprites();
         SpriteFrame GetCurrentFrame(const CharacterOption& character) const;
+        
+        // Funciones helper para simplificar el código
+        std::string GetDefaultCharacterName(PLAYER_TYPE type) const;
+        void DrawCenteredText(const char* text, float y, int fontSize, Color color) const;
+        void DrawNavigationArrows(const Vector2& spritePos, float spriteWidth) const;
+        void LoadCharacterData(CharacterOption& character, PLAYER_TYPE type);
 
     public:
         ChooseNPCGameState();
