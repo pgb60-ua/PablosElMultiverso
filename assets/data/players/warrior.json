@@ -16,7 +16,7 @@
 	"life_steal": 8,
 	"health_regeneration": 3.0,
 	"is_ranged": false,
-	"description": "Un guerrero fuerte con alta salud y armadura, además, se llama Pablo",
+	"description": "Si, lo estás viendo bien, es un mono con teléfono que, por si fuera poco, se llama Pablo",
 	"health_modifier": 1.0,
 	"movement_speed_modifier": 1.0,
 	"agility_modifier": 1.0,
