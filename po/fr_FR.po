@@ -43,7 +43,7 @@ msgstr "PABLOS, LE MULTIVERS"
 
 #: src/app/states/GameWonState.cpp:68
 msgid "¡HAS GANADO!"
-msgstr "TU AS GAGNE!"
+msgstr "TU AS GAGNÉ!"
 
 #: src/app/states/MainGameState.cpp:136
 msgid "Salud: "

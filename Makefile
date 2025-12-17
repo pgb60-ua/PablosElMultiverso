@@ -196,4 +196,4 @@ msgfmt_EN:
 	msgfmt po/en_US.po -o locale/en_US/LC_MESSAGES/pablos.mo
 
 # Declarar reglas que no son archivos
-.PHONY: all clean rebuild run info stats clean-cache check-raylib pot msginit msgmerge msgfmt
+.PHONY: all clean rebuild run info stats clean-cache check-raylib pot msginit_FR msginit_EN msgfmt_FR msgfmt_EN
