@@ -11,6 +11,7 @@
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
 #include <iostream>
+#include "I18N.hpp"
 
 extern "C"
 {
@@ -132,7 +133,7 @@ void MainGameState::render()
     for (auto &player : players)
     {
         player->Render();
-        std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
+        std::string healthText = _("Salud: ") + std::to_string(static_cast<int>(player->GetHealth()));
         DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
                  static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }

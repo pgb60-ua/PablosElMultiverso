@@ -2,13 +2,14 @@
 #include <MainGameState.hpp>
 #include <StateMachine.hpp>
 #include <string>
+#include "I18N.hpp"
 extern "C"
 {
 #include <raylib.h>
 }
 
-static const char *MENU_OPTIONS[] = {"Jugar", "Salir"};
-static const int MENU_OPTIONS_COUNT = sizeof(MENU_OPTIONS) / sizeof(MENU_OPTIONS[0]);
+const char *MainMenuState::MENU_OPTIONS[2] = { _("Jugar"), _("Salir") };
+
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight)
 {
@@ -27,11 +28,11 @@ void MainMenuState::handleInput()
 
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
     {
-        selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
+        selectedOption = (selectedOption + 1) % MainMenuState::OPTION_COUNT;
     }
     if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
     {
-        selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+        selectedOption = (selectedOption - 1 + MainMenuState::OPTION_COUNT) % MainMenuState::OPTION_COUNT;
     }
 
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER))
@@ -49,7 +50,7 @@ void MainMenuState::handleInput()
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    for (int i = 0; i < MENU_OPTIONS_COUNT; i++)
+    for (int i = 0; i < MainMenuState::OPTION_COUNT; i++)
     {
         Rectangle btn = getButtonRect(i, screenWidth, screenHeight);
         if (CheckCollisionPointRec(mousePosition, btn))
@@ -79,13 +80,13 @@ void MainMenuState::render()
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    const char *title = "PABLOS, EL MULTIVERSO";
+    const char *title = _("PABLOS, EL MULTIVERSO");
     int titleFontSize = 50;
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
     Vector2 titlePos = {(screenWidth - titleSize.x) / 2.0f, (float)screenHeight / 4.0f - titleSize.y / 2.0f};
     DrawTextEx(GetFontDefault(), title, titlePos, (float)titleFontSize, 1.0f, RAYWHITE);
 
-    for (int i = 0; i < MENU_OPTIONS_COUNT; i++)
+    for (int i = 0; i < MainMenuState::OPTION_COUNT; i++)
     {
         Rectangle btn = getButtonRect(i, screenWidth, screenHeight);
         Color boxColor = (selectedOption == i) ? SELECTED_BOX_COLOR : UNSELECTED_BOX_COLOR;
@@ -94,9 +95,9 @@ void MainMenuState::render()
 
         DrawRectangleRec(btn, boxColor);
         DrawRectangleLinesEx(btn, 2, outlineColor);
-        Vector2 textSize = MeasureTextEx(GetFontDefault(), MENU_OPTIONS[i], 30, 1);
+        Vector2 textSize = MeasureTextEx(GetFontDefault(), _(MainMenuState::MENU_OPTIONS[i]), 30, 1);
 
-        DrawText(MENU_OPTIONS[i], (int)btn.x + (btn.width - textSize.x) / 2, (int)btn.y + (btn.height - textSize.y) / 2,
+        DrawText(_(MainMenuState::MENU_OPTIONS[i]), (int)btn.x + (btn.width - textSize.x) / 2, (int)btn.y + (btn.height - textSize.y) / 2,
                  30, textColor);
     }
     DrawFPS(GetScreenWidth() - 100, 10);

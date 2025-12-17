@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-17 17:55+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/app/states/GameOverState.cpp:11 src/app/states/GameWonState.cpp:11
+msgid "Volver a jugar"
+msgstr ""
+
+#: src/app/states/GameOverState.cpp:11
+msgid "Volver al menú principal"
+msgstr ""
+
+#: src/app/states/GameOverState.cpp:69
+msgid "¡HAS PERDIDO!"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:11
+msgid "Jugar"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:11
+msgid "Salir"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:83
+msgid "PABLOS, EL MULTIVERSO"
+msgstr ""
+
+#: src/app/states/GameWonState.cpp:11
+msgid "Volver al menu principal"
+msgstr ""
+
+#: src/app/states/GameWonState.cpp:68
+msgid "¡HAS GANADO!"
+msgstr ""
+
+#: src/app/states/MainGameState.cpp:136
+msgid "Salud: "
+msgstr ""
