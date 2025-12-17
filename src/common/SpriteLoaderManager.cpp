@@ -103,8 +103,10 @@ std::string SpriteLoaderManager::GetMetadataPath(PROJECTILE_TYPE type) const
     {
     case PROJECTILE_TYPE::WAND:
         return BASE_PATH_PROJECTILE + "wand.json";
-    case PROJECTILE_TYPE::EGGPLOSIVE:
-        return BASE_PATH_PROJECTILE + "eggplosive.json";
+    case PROJECTILE_TYPE::EGGPLOSIVE_BULLET:
+        return BASE_PATH_PROJECTILE + "eggplosionBullet.json";
+    case PROJECTILE_TYPE::EGGPLOSIVE_CIRCLE:
+        return BASE_PATH_PROJECTILE + "eggplosionCircle.json";
     case PROJECTILE_TYPE::LASER_RAY:
         return BASE_PATH_PROJECTILE + "laser_ray.json";
     case PROJECTILE_TYPE::SNIPER:
