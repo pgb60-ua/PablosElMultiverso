@@ -3,7 +3,7 @@
     "description": "An explosive egg launcher that fires a single-shot projectile that explodes on impact, dealing area damage",
 	"level": 1,
 	"rarity": "Epic",
-	"pool_size": 1,
+	"pool_size": 10,
 	"health": 0,
 	"max_health": 0,
 	"movement_speed":200,
