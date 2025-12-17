@@ -2,7 +2,7 @@ name: Build Debian Package (CMake)
 
 on:
   release:
-    types: [created, published]
+    types: [published]
   workflow_dispatch:
     inputs:
       tag:
@@ -78,7 +78,7 @@ jobs:
       - name: Find generated .deb file
         id: find_deb
         run: |
-          DEB_FILE=$(find build -name "*.deb" | head -n 1)
+          DEB_FILE=$(find build -name "PablosElMultiverso*.deb" | head -n 1)
           if [ ! -f "$DEB_FILE" ]; then
             echo "Error: .deb file not found"
             exit 1
