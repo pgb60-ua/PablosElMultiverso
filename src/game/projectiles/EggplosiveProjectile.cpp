@@ -6,15 +6,7 @@
 EggplosiveProjectile::EggplosiveProjectile(std::vector<AEnemy *> &allEnemies)
     : AProjectile(allEnemies)
 {
-    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::SNIPER);
-    if (!sheet.frames.empty())
-    {
-        const Rectangle &frame = sheet.frames[0];
-        float width = std::abs(frame.width);
-        float height = std::abs(frame.height);
-        float radius = std::min(width, height) * 0.5f;
-        setRadius(radius);
-    }
+
 }
 
 EggplosiveProjectile::~EggplosiveProjectile()
@@ -26,6 +18,7 @@ void EggplosiveProjectile::activate(Vector2 position, Vector2 direction, const S
     AProjectile::activate(position, direction, stats);
     timeAlive = TIME_TO_BE_ALIVE;
     hasExploded = false;
+    setRadiusDefault();
 }
 
 void EggplosiveProjectile::update(float deltaTime)
@@ -36,11 +29,6 @@ void EggplosiveProjectile::update(float deltaTime)
     if (hasExploded)
     {
         Explode(deltaTime);
-        timeAlive -= deltaTime;
-        if (timeAlive <= 0.0f)
-        {
-            deactivate();
-        }
         return;
     }
 
@@ -63,11 +51,27 @@ void EggplosiveProjectile::update(float deltaTime)
 void EggplosiveProjectile::Explode(float deltaTime)
 {
     Vector2 explosionCenter = getPosition();
-    
-    for (auto &enemy : enemiesInScene)
+    const SpriteSheet &bulletCircle = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::EGGPLOSIVE_CIRCLE);
+
+
+    if (!bulletCircle.frames.empty())
     {
+        const Rectangle &frame = bulletCircle.frames[0];
+        float width = std::abs(frame.width);
+        float height = std::abs(frame.height);
+        float radius = std::min(width, height) * 0.5f;
+        setRadius(radius);
+    }
+
+    for (size_t i = 0; i < enemiesInScene.size(); )
+    {
+        AEnemy* enemy = enemiesInScene[i];
+        
         if (!enemy->IsAlive())
+        {
+            i++;
             continue;
+        }
             
         Shape enemyHitbox = enemy->GetHitbox();
         Vector2 enemyCenter = {
@@ -79,7 +83,7 @@ void EggplosiveProjectile::Explode(float deltaTime)
         float dy = enemyCenter.y - explosionCenter.y;
         float distance = std::sqrt(dx * dx + dy * dy);
         
-        if (distance <= EXPLOSION_RADIUS)
+        if (distance <= shape.data.circle.radius)
         {
             Stats copia = getStats();
             copia.SetMagicDamage(copia.GetMagicDamage() * deltaTime); 
@@ -88,9 +92,12 @@ void EggplosiveProjectile::Explode(float deltaTime)
             if (!enemy->IsAlive())
             {
                 delete enemy;
-                enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));
+                enemiesInScene.erase(enemiesInScene.begin() + i);
+                continue; 
             }
         }
+        
+        i++;
     }
     timeAlive -= deltaTime;
     if (timeAlive <= 0.0f)
@@ -101,7 +108,11 @@ void EggplosiveProjectile::Explode(float deltaTime)
 
 void EggplosiveProjectile::render()
 {
-    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::SNIPER);
+    const SpriteSheet &sheet = hasExploded ? 
+        SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::EGGPLOSIVE_CIRCLE) :
+        SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::EGGPLOSIVE_BULLET);
+    
+
     if (sheet.frames.empty())
         return;
         
@@ -134,8 +145,22 @@ void EggplosiveProjectile::render()
     else
     {
         float alpha = (timeAlive / TIME_TO_BE_ALIVE) * 150.0f; // Fade out
-        Color poisonColor = {0, 255, 0, (unsigned char)alpha};
-        DrawCircle(getPosition().x, getPosition().y, EXPLOSION_RADIUS, poisonColor);
-        DrawCircleLines(getPosition().x, getPosition().y, EXPLOSION_RADIUS, GREEN);
+        DrawTexturePro(sheet.texture, src, dest, origin, angleDeg, Color{255, 255, 255, static_cast<unsigned char>(alpha)});
+
+    }
+}
+
+void EggplosiveProjectile::setRadiusDefault()
+{
+    const SpriteSheet &bulletSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::EGGPLOSIVE_BULLET);
+
+
+    if (!bulletSheet.frames.empty())
+    {
+        const Rectangle &frame = bulletSheet.frames[0];
+        float width = std::abs(frame.width);
+        float height = std::abs(frame.height);
+        float radius = std::min(width, height) * 0.5f;
+        setRadius(radius);
     }
 }
