@@ -10,7 +10,7 @@
 	"agility": 0,
 	"attack_speed": 0.5,
 	"physical_damage": 0,
-	"magical_damage": 200,
+	"magical_damage": 4,
 	"resistance": 0,
 	"armor": 0,
 	"critical_chance": 5,
