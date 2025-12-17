@@ -8,7 +8,7 @@ extern "C"
 #include <raylib.h>
 }
 
-const char *MainMenuState::MENU_OPTIONS[2] = { _("Jugar"), _("Salir") };
+const char *MainMenuState::MENU_OPTIONS[2] = { N_("Jugar"), N_("Salir") };
 
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight)

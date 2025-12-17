@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-17 17:55+0100\n"
+"POT-Creation-Date: 2025-12-17 18:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Volver a jugar"
 msgstr ""
 
-#: src/app/states/GameOverState.cpp:11
+#: src/app/states/GameOverState.cpp:11 src/app/states/GameWonState.cpp:11
 msgid "Volver al menú principal"
 msgstr ""
 
@@ -39,10 +39,6 @@ msgstr ""
 
 #: src/app/states/MainMenuState.cpp:83
 msgid "PABLOS, EL MULTIVERSO"
-msgstr ""
-
-#: src/app/states/GameWonState.cpp:11
-msgid "Volver al menu principal"
 msgstr ""
 
 #: src/app/states/GameWonState.cpp:68

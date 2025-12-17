@@ -21,7 +21,7 @@ msgstr ""
 msgid "Volver a jugar"
 msgstr "Rejouer"
 
-#: src/app/states/GameOverState.cpp:11
+#: src/app/states/GameOverState.cpp:11 src/app/states/GameWonState.cpp:11
 msgid "Volver al menú principal"
 msgstr "Retour au menu principal"
 
@@ -41,13 +41,9 @@ msgstr "Sortir"
 msgid "PABLOS, EL MULTIVERSO"
 msgstr "PABLOS, LE MULTIVERS"
 
-#: src/app/states/GameWonState.cpp:11
-msgid "Volver al menu principal"
-msgstr "Retour au menu principal"
-
 #: src/app/states/GameWonState.cpp:68
 msgid "¡HAS GANADO!"
-msgstr "TU AVEZ GAGNE!"
+msgstr "TU AS GAGNE!"
 
 #: src/app/states/MainGameState.cpp:136
 msgid "Salud: "

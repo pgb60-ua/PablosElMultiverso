@@ -177,12 +177,10 @@ $(VENDOR_LIB):
 # LOCALIZACIÓN CON GETTEXT
 # ============================================================================
 
-# Variable con todos los archivos cpp
-ALL_CPP := $(shell find src -name "*.cpp")
 
 pot:
 	@mkdir -p po
-	xgettext --keyword=_ --from-code=UTF-8 --output=po/pablos.pot $(ALL_CPP)
+	xgettext --keyword=_ --keyword=N_ --from-code=UTF-8 --output=po/pablos.pot $(SRCS)
 
 msginit_EN:
 	msginit -i po/pablos.pot -l en_US -o po/en_US.po

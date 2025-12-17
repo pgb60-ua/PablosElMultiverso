@@ -8,7 +8,7 @@ extern "C" {
     #include <raylib.h>
 }
 
-const char* GameOverState::MENU_OPTIONS[2] = { _("Volver a jugar"), _("Volver al menú principal") };
+const char* GameOverState::MENU_OPTIONS[2] = { N_("Volver a jugar"), N_("Volver al menú principal") };
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
     int startY = screenHeight / 2;
