@@ -1,11 +1,11 @@
 {
-  "texture": "EggplosiveWeapon-Sheet.png",
+  "texture": "Eggplosive-Sheet.png",
   "frames": [
     {
-      "x": 0,
-      "y": 0,
-      "width": 48,
-      "height": 48
+      "x": 1,
+      "y": 4,
+      "width": 29,
+      "height": 27
     }
   ]
 }
