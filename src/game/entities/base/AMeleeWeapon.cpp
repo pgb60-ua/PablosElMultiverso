@@ -38,15 +38,10 @@ void AMeleeWeapon::UpdateAttackInterval()
     attackInterval = 1.0f / attackSpeed;
 }
 
-void AMeleeWeapon::setStats(const Stats &newStats)
+void AMeleeWeapon::SetStats(const Stats &newStats)
 {
     stats = newStats;
     UpdateAttackInterval();
-}
-
-void AMeleeWeapon::render()
-{
-    AWeapon::render();
 }
 
 void AMeleeWeapon::update(float deltaTime, const Vector2 &position)

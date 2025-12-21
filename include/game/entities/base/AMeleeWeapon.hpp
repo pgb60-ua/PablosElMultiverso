@@ -28,11 +28,9 @@ public:
     /// @brief Sobrecarga del ataque melee con deltaTime
     virtual void Attack(float deltaTime);
 
-    void setStats(const Stats &newStats);
+    void SetStats(const Stats &newStats);
 
-    float getAttackInterval() const { return attackInterval;};
-
-    virtual void render();
+    float GetAttackInterval() const { return attackInterval;};
 
     void update(float deltaTime, const Vector2 &position) override;
 
