@@ -30,7 +30,7 @@ public:
 
     void SetStats(const Stats &newStats);
 
-    float GetAttackInterval() const { return attackInterval;};
+    float GetAttackInterval() const { return attackInterval; }
 
     void update(float deltaTime, const Vector2 &position) override;
 };
