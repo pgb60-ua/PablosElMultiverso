@@ -20,8 +20,10 @@ public:
                  const Vector2 &position, std::vector<AEnemy *> &enemiesInRange,
                  std::vector<AEnemy *> &allEnemies);
 
+    virtual ~AMeleeWeapon();
+
     /// @brief Método para atacar
-    virtual void Attack() override;
+    virtual void Attack() override = 0;
     
     /// @brief Sobrecarga del ataque melee con deltaTime
     virtual void Attack(float deltaTime);
