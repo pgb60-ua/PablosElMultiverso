@@ -64,7 +64,6 @@ void AudioManager::PlaySound(PROJECTILE_TYPE type)
     }
     catch (const std::exception &e)
     {
-        // Registrar error pero no fallar
         TraceLog(LOG_WARNING, "Error reproduciendo sonido de proyectil: %s", e.what());
     }
 }
@@ -78,7 +77,6 @@ void AudioManager::PlaySound(WEAPON_TYPE type)
     }
     catch (const std::exception &e)
     {
-        // Registrar error pero no fallar
         TraceLog(LOG_WARNING, "Error reproduciendo sonido de arma: %s", e.what());
     }
 }
@@ -260,7 +258,6 @@ void AudioManager::PlayEnemySound(ENEMY_TYPE type)
     }
     catch (const std::exception &e)
     {
-        // Registrar error pero no fallar
         TraceLog(LOG_WARNING, "Error reproduciendo sonido de enemigo: %s", e.what());
     }
 }

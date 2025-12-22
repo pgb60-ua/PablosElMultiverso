@@ -1,5 +1,6 @@
 #include <cmath>
 #include "SniperWeapon.hpp"
+#include "AudioManager.hpp"
 
 // Helper lambdas para obtener datos del JSON
 
@@ -29,6 +30,7 @@ void SniperWeapon::Attack(const Vector2& position, float deltaTime) {
     timeSinceLastAttack += deltaTime;
     if (timeSinceLastAttack >= attackInterval) {
         ShootProjectile(position, direction, allEnemies);
+        AudioManager::GetInstance().PlaySound(PROJECTILE_TYPE::SNIPER);
         timeSinceLastAttack -= attackInterval;
     }
 }

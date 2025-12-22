@@ -3,6 +3,7 @@
 #include <cmath>
 #include <limits>
 #include <raymath.h>
+#include "AudioManager.hpp"
 
 Zombie::Zombie(std::vector<Player *> objectives)
     : AEnemy(
@@ -179,4 +180,10 @@ void Zombie::Update(float deltaTime)
         stats.SetHealth(newHealth);
     }
     UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::ZOMBIE);
+}
+
+void Zombie::TakeDamage(const Stats &stats)
+{
+    AEnemy::TakeDamage(stats);
+    AudioManager::GetInstance().PlayEnemySound(ENEMY_TYPE::ZOMBIE);
 }

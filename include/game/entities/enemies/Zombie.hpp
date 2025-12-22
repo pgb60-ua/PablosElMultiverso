@@ -63,6 +63,9 @@ public:
 
     /// @brief Renderiza el zombie
     void Render() override;
+
+    void TakeDamage(const Stats &stats) override;
+
     /// @brief Destructor
     ~Zombie() override;
 };

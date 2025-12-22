@@ -23,28 +23,24 @@ public:
         return instance;
     }
 
-    // ========== SONIDOS DE PROYECTILES ==========
     /// @brief Obtiene el sonido para un tipo de proyectil
     const Sound &GetSound(PROJECTILE_TYPE type);
 
     /// @brief Reproduce un sonido por tipo de proyectil
     void PlaySound(PROJECTILE_TYPE type);
 
-    // ========== SONIDOS DE ARMAS ==========
     /// @brief Obtiene el sonido para un tipo de arma
     const Sound &GetSound(WEAPON_TYPE type);
 
     /// @brief Reproduce un sonido por tipo de arma
     void PlaySound(WEAPON_TYPE type);
 
-    // ========== SONIDOS DE ENEMIGOS ==========
     /// @brief Obtiene el sonido para un tipo de enemigo
     const Sound &GetEnemySound(ENEMY_TYPE type);
 
     /// @brief Reproduce un sonido por tipo de enemigo
     void PlayEnemySound(ENEMY_TYPE type);
 
-    // ========== MÚSICA ==========
     /// @brief Carga y reproduce música de fondo en loop
     void PlayBackgroundMusic(const std::string &musicFile);
 

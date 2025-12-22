@@ -1,6 +1,7 @@
 #include <cmath>
 #include "LaserRayWeapon.hpp"
 #include "SpriteLoaderManager.hpp"
+#include "AudioManager.hpp"
 
 LaserRayWeapon::LaserRayWeapon(const Vector2& position, std::vector<AEnemy *>& enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : ARangeWeapon(
@@ -33,6 +34,7 @@ void LaserRayWeapon::Attack(const Vector2& position, float deltaTime) {
     timeSinceLastAttack += deltaTime;
     if (timeSinceLastAttack >= attackInterval) {
         ShootProjectile(position, direction, allEnemies);
+        AudioManager::GetInstance().PlaySound(PROJECTILE_TYPE::LASER_RAY);
         timeSinceLastAttack -= attackInterval;
     }
     
