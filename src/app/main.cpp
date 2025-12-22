@@ -2,6 +2,7 @@
 #include <MainGameState.hpp>
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
+#include <AudioManager.hpp>
 #include <memory>
 extern "C"
 {
@@ -21,6 +22,7 @@ int main()
     SetTargetFPS(120);
     InitAudioDevice();
     DataFileManager::GetInstance().DetectAndSetAssetsPath();
+    AudioManager::GetInstance().DetectAndSetAssetsPath();
     SpriteLoaderManager::GetInstance().DetectAndSetAssetsPath();
 
     while (!state_machine.is_game_ending() && !WindowShouldClose())
@@ -33,6 +35,7 @@ int main()
         state_machine.getCurrentState()->render();
     }
     SpriteLoaderManager::GetInstance().ClearCache();
+    AudioManager::GetInstance().ClearCache();
     CloseAudioDevice();
     CloseWindow();
 
