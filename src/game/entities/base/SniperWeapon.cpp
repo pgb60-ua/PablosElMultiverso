@@ -30,7 +30,7 @@ void SniperWeapon::Attack(const Vector2& position, float deltaTime) {
     timeSinceLastAttack += deltaTime;
     if (timeSinceLastAttack >= attackInterval) {
         ShootProjectile(position, direction, allEnemies);
-        AudioManager::GetInstance().PlaySound(PROJECTILE_TYPE::SNIPER);
+        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::SNIPER);
         timeSinceLastAttack -= attackInterval;
     }
 }

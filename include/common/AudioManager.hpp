@@ -12,7 +12,6 @@ class AudioManager
 {
 public:
     std::string BASE_PATH_SOUNDS = "assets/sounds/";
-    std::string BASE_PATH_PROJECTILE_SOUNDS = "assets/sounds/projectiles/";
     std::string BASE_PATH_WEAPON_SOUNDS = "assets/sounds/weapons/";
     std::string BASE_PATH_ENEMY_SOUNDS = "assets/sounds/enemies/";
     std::string BASE_PATH_MUSIC = "assets/sounds/music/";
@@ -22,12 +21,6 @@ public:
         static AudioManager instance;
         return instance;
     }
-
-    /// @brief Obtiene el sonido para un tipo de proyectil
-    const Sound &GetSound(PROJECTILE_TYPE type);
-
-    /// @brief Reproduce un sonido por tipo de proyectil
-    void PlaySound(PROJECTILE_TYPE type);
 
     /// @brief Obtiene el sonido para un tipo de arma
     const Sound &GetSound(WEAPON_TYPE type);
@@ -44,39 +37,18 @@ public:
     /// @brief Carga y reproduce música de fondo en loop
     void PlayBackgroundMusic(const std::string &musicFile);
 
-    /// @brief Detiene la música de fondo
-    void StopBackgroundMusic();
-
-    /// @brief Pausa la música de fondo
-    void PauseBackgroundMusic();
-
-    /// @brief Reanuda la música de fondo
-    void ResumeBackgroundMusic();
-
-    /// @brief Establece el volumen de la música (0.0 a 1.0)
-    void SetMusicVolume(float volume);
-
-    /// @brief Obtiene el volumen actual de la música
-    float GetMusicVolume() const;
-
-    /// @brief Verifica si hay música reproduciéndose
-    bool IsMusicPlaying() const;
+    /// @brief Actualiza el stream de música (debe llamarse cada frame)
+    void UpdateMusic();
 
     // ========== CACHÉ Y LIMPIEZA ==========
     /// @brief Limpia toda la caché de sonidos
     void ClearCache();
-
-    /// @brief Limpia la caché de sonidos de proyectiles
-    void ClearCacheProjectiles();
 
     /// @brief Limpia la caché de sonidos de armas
     void ClearCacheWeapons();
 
     /// @brief Limpia la caché de sonidos de enemigos
     void ClearCacheEnemies();
-
-    /// @brief Limpia la caché de un sonido de proyectil específico
-    void ClearCache(PROJECTILE_TYPE type);
 
     /// @brief Limpia la caché de un sonido de arma específica
     void ClearCache(WEAPON_TYPE type);
@@ -103,7 +75,6 @@ private:
     std::string GetFilePath(WEAPON_TYPE type) const;
     std::string GetFilePath(ENEMY_TYPE type) const;
 
-    std::unordered_map<int, Sound> projectileSoundsCache;
     std::unordered_map<int, Sound> weaponSoundsCache;
     std::unordered_map<int, Sound> enemySoundsCache;
     
@@ -112,13 +83,11 @@ private:
         std::vector<Sound> aliases;
     };
     
-    std::unordered_map<int, SoundAliasPool> projectileAliasPools;
     std::unordered_map<int, SoundAliasPool> weaponAliasPools;
     std::unordered_map<int, SoundAliasPool> enemyAliasPools;
     
     Music currentMusic = {};
     std::string currentMusicFile = "";
-    float currentMusicVolume = 1.0f;
 
     std::string assetsRoot = "";
 };

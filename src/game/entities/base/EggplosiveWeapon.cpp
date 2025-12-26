@@ -29,7 +29,7 @@ void EggplosiveWeapon::Attack(const Vector2& position, float deltaTime)
     if (timeSinceLastAttack >= attackInterval) 
     {
         ShootProjectile(position, direction, allEnemies);
-        AudioManager::GetInstance().PlaySound(PROJECTILE_TYPE::EGGPLOSIVE_BULLET);
+        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::EGGPLOSIVE);
         timeSinceLastAttack -= attackInterval;
     }
 }

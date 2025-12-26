@@ -1,5 +1,6 @@
 #include <cmath>
 #include "WingWeapon.hpp"
+#include "AudioManager.hpp"
 
 WingWeapon::WingWeapon(const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : ARangeWeapon(
@@ -28,6 +29,7 @@ void WingWeapon::Attack(const Vector2 &position, float deltaTime)
     if (timeSinceLastAttack >= attackInterval)
     {
         // Disparo central
+        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::WING);
         ShootProjectile(position, direction, allEnemies);
 
         const float angle = 30.0f * DEG2RAD;
@@ -41,7 +43,9 @@ void WingWeapon::Attack(const Vector2 &position, float deltaTime)
             direction.x * cosA + direction.y * sinA,
             direction.x * -sinA + direction.y * cosA};
 
+        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::WING);
         ShootProjectile(position, dirPlus, allEnemies);
+        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::WING);
         ShootProjectile(position, dirMinus, allEnemies);
 
         timeSinceLastAttack -= attackInterval;
