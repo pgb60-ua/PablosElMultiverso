@@ -3,6 +3,8 @@
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
 #include <memory>
+#include "I18N.hpp"
+
 extern "C"
 {
 #include <raylib.h>
@@ -10,6 +12,9 @@ extern "C"
 
 int main()
 {
+    setlocale(LC_ALL, "");
+    bindtextdomain("pablos", "./locale");
+    textdomain("pablos");
     // Crear ventana con el tamaño del monitor
     InitWindow(1200, 800, "Pablos, El Multiverso");
 

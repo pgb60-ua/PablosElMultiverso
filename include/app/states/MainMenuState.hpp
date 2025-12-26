@@ -7,6 +7,8 @@ extern "C" {
 class MainMenuState : public GameState {
 
     protected:
+        static const char *MENU_OPTIONS[2];
+        static constexpr int OPTION_COUNT = 2;
         int selectedOption = 0;
         const Color SELECTED_BOX_COLOR = {150, 30, 30, 255};
         const Color UNSELECTED_BOX_COLOR = {60, 60, 60, 255};
