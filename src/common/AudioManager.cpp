@@ -60,7 +60,34 @@ void AudioManager::PlaySound(PROJECTILE_TYPE type)
     try
     {
         const Sound &sound = GetSound(type);
-        ::PlaySound(sound);
+        int typeKey = static_cast<int>(type);
+        
+        if (projectileAliasPools.find(typeKey) == projectileAliasPools.end())
+        {
+            SoundAliasPool pool;
+            for (int i = 0; i < MAX_CONCURRENT_SOUNDS; i++)
+            {
+                pool.aliases.push_back(LoadSoundAlias(sound));
+            }
+            projectileAliasPools[typeKey] = pool;
+        }
+        
+        SoundAliasPool &pool = projectileAliasPools[typeKey];
+        int availableIndex = -1;
+        
+        for (int i = 0; i < MAX_CONCURRENT_SOUNDS; i++)
+        {
+            if (!IsSoundPlaying(pool.aliases[i]))
+            {
+                availableIndex = i;
+                break;
+            }
+        }
+        
+        if (availableIndex != -1)
+        {
+            ::PlaySound(pool.aliases[availableIndex]);
+        }
     }
     catch (const std::exception &e)
     {
@@ -73,7 +100,34 @@ void AudioManager::PlaySound(WEAPON_TYPE type)
     try
     {
         const Sound &sound = GetSound(type);
-        ::PlaySound(sound);
+        int typeKey = static_cast<int>(type);
+        
+        if (weaponAliasPools.find(typeKey) == weaponAliasPools.end())
+        {
+            SoundAliasPool pool;
+            for (int i = 0; i < MAX_CONCURRENT_SOUNDS; i++)
+            {
+                pool.aliases.push_back(LoadSoundAlias(sound));
+            }
+            weaponAliasPools[typeKey] = pool;
+        }
+        
+        SoundAliasPool &pool = weaponAliasPools[typeKey];
+        int availableIndex = -1;
+        
+        for (int i = 0; i < MAX_CONCURRENT_SOUNDS; i++)
+        {
+            if (!IsSoundPlaying(pool.aliases[i]))
+            {
+                availableIndex = i;
+                break;
+            }
+        }
+        
+        if (availableIndex != -1)
+        {
+            ::PlaySound(pool.aliases[availableIndex]);
+        }
     }
     catch (const std::exception &e)
     {
@@ -187,7 +241,7 @@ std::string AudioManager::GetFilePath(PROJECTILE_TYPE type) const
     case PROJECTILE_TYPE::EGGPLOSIVE_CIRCLE:
         return basePath + "eggplosive_circle.wav";
     case PROJECTILE_TYPE::EGGPLOSIVE_BULLET:
-        return basePath + "eggplosive_bullet.wav";
+        return basePath + "chicken.wav";
     case PROJECTILE_TYPE::LASER_RAY:
         return basePath + "laser_ray.wav";
     case PROJECTILE_TYPE::SNIPER:
@@ -254,7 +308,34 @@ void AudioManager::PlayEnemySound(ENEMY_TYPE type)
     try
     {
         const Sound &sound = GetEnemySound(type);
-        ::PlaySound(sound);
+        int typeKey = static_cast<int>(type);
+        
+        if (enemyAliasPools.find(typeKey) == enemyAliasPools.end())
+        {
+            SoundAliasPool pool;
+            for (int i = 0; i < MAX_CONCURRENT_SOUNDS; i++)
+            {
+                pool.aliases.push_back(LoadSoundAlias(sound));
+            }
+            enemyAliasPools[typeKey] = pool;
+        }
+        
+        SoundAliasPool &pool = enemyAliasPools[typeKey];
+        int availableIndex = -1;
+        
+        for (int i = 0; i < MAX_CONCURRENT_SOUNDS; i++)
+        {
+            if (!IsSoundPlaying(pool.aliases[i]))
+            {
+                availableIndex = i;
+                break;
+            }
+        }
+        
+        if (availableIndex != -1)
+        {
+            ::PlaySound(pool.aliases[availableIndex]);
+        }
     }
     catch (const std::exception &e)
     {
@@ -316,7 +397,7 @@ void AudioManager::SetMusicVolume(float volume)
 {
     if (!currentMusicFile.empty())
     {
-        currentMusicVolume = std::max(0.0f, std::min(1.0f, volume)); // Clamp entre 0 y 1
+        currentMusicVolume = std::max(0.0f, std::min(1.0f, volume));
         ::SetMusicVolume(currentMusic, currentMusicVolume);
     }
 }
@@ -339,8 +420,9 @@ std::string AudioManager::GetFilePath(ENEMY_TYPE type) const
 
     switch (type)
     {
+        //esto cuando metamos a los siguientes enemigos lo cambiamos
     case ENEMY_TYPE::ZOMBIE:
-        return basePath + "zombie.wav";
+        return basePath + "enemy.wav";
     case ENEMY_TYPE::ENEMY2:
         return basePath + "enemy2.wav";
     case ENEMY_TYPE::ENEMY3:

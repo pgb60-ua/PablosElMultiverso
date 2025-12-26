@@ -185,5 +185,10 @@ void Zombie::Update(float deltaTime)
 void Zombie::TakeDamage(const Stats &stats)
 {
     AEnemy::TakeDamage(stats);
-    AudioManager::GetInstance().PlayEnemySound(ENEMY_TYPE::ZOMBIE);
+    
+    // Solo reproducir sonido si el zombie muere
+    if (!IsAlive())
+    {
+        AudioManager::GetInstance().PlayEnemySound(ENEMY_TYPE::ZOMBIE);
+    }
 }

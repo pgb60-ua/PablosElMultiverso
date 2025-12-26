@@ -2,7 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include "Types.hpp"
-
+#include <vector>
 extern "C"
 {
     #include <raylib.h>
@@ -106,6 +106,15 @@ private:
     std::unordered_map<int, Sound> projectileSoundsCache;
     std::unordered_map<int, Sound> weaponSoundsCache;
     std::unordered_map<int, Sound> enemySoundsCache;
+    
+    static constexpr int MAX_CONCURRENT_SOUNDS = 4;
+    struct SoundAliasPool {
+        std::vector<Sound> aliases;
+    };
+    
+    std::unordered_map<int, SoundAliasPool> projectileAliasPools;
+    std::unordered_map<int, SoundAliasPool> weaponAliasPools;
+    std::unordered_map<int, SoundAliasPool> enemyAliasPools;
     
     Music currentMusic = {};
     std::string currentMusicFile = "";
