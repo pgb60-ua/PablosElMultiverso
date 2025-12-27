@@ -37,10 +37,10 @@ class ChooseNPCGameState : public GameState {
         // Funciones auxiliares para calcular posiciones y rectángulos
         Vector2 GetContainerPos(int screenWidth, int screenHeight) const;
         Vector2 GetSpritePos(const Vector2& containerPos, float spriteWidth, float spriteHeight) const;
-
-    public:
         // Función auxiliar estática para calcular rectángulos de botones de flecha
         static Rectangle GetArrowButtonRect(int index, const Vector2& spritePos, float spriteWidth, int screenHeight);
+
+    public:
         ChooseNPCGameState();
         ~ChooseNPCGameState();
         virtual void init() override;

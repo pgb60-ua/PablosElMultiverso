@@ -24,8 +24,6 @@ std::string ChooseNPCGameState::GetDefaultCharacterName(PLAYER_TYPE type) const
         return "Ranger";
     case PLAYER_TYPE::WARRIOR:
         return "Warrior";
-    case PLAYER_TYPE::HEALER:
-        return "Healer";
     default:
         return "Character";
     }
@@ -113,48 +111,55 @@ void ChooseNPCGameState::handleInput()
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    // Calcular posiciones para los botones
-    Vector2 containerPos = GetContainerPos(screenWidth, screenHeight);
-    float spriteWidth = CONTAINER_SIZE * CONTAINER_SCALE;
-    float spriteHeight = spriteWidth;
-    Vector2 spritePos = GetSpritePos(containerPos, spriteWidth, spriteHeight);
-
-    // Resetear el array de hover
-    arrowHovered[0] = false;
-    arrowHovered[1] = false;
-
-    // Verificar hover sobre cada botón
-    for (int i = 0; i < 2; i++)
+    if (!characters.empty() && currentCharacterIndex < static_cast<int>(characters.size()))
     {
-        Rectangle btn = GetArrowButtonRect(i, spritePos, spriteWidth, screenHeight);
-        if (CheckCollisionPointRec(mousePosition, btn))
-        {
-            arrowHovered[i] = true;
+        CharacterOption &currentChar = characters[currentCharacterIndex];
+        const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(currentChar.type);
+        Rectangle frame = sheet.frames[currentChar.spriteAnimation.frameIndex];
 
-            // Si se hace clic, navegar
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        // Calcular posiciones para los botones usando el frame real
+        Vector2 containerPos = GetContainerPos(screenWidth, screenHeight);
+        float spriteWidth = frame.width * CONTAINER_SCALE;
+        float spriteHeight = frame.height * CONTAINER_SCALE;
+        Vector2 spritePos = GetSpritePos(containerPos, spriteWidth, spriteHeight);
+
+        // Resetear el array de hover
+        arrowHovered[0] = false;
+        arrowHovered[1] = false;
+
+        // Verificar hover sobre cada botón
+        for (int i = 0; i < 2; i++)
+        {
+            Rectangle btn = GetArrowButtonRect(i, spritePos, spriteWidth, screenHeight);
+            if (CheckCollisionPointRec(mousePosition, btn))
             {
-                if (i == 0) // Flecha izquierda
+                arrowHovered[i] = true;
+
+                // Si se hace clic, navegar
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
-                    currentCharacterIndex = (currentCharacterIndex - 1 + characters.size()) % characters.size();
-                }
-                else // Flecha derecha
-                {
-                    currentCharacterIndex = (currentCharacterIndex + 1) % characters.size();
+                    if (i == 0) // Flecha izquierda
+                    {
+                        currentCharacterIndex = (currentCharacterIndex - 1 + characters.size()) % characters.size();
+                    }
+                    else // Flecha derecha
+                    {
+                        currentCharacterIndex = (currentCharacterIndex + 1) % characters.size();
+                    }
                 }
             }
         }
-    }
 
-    // Verificar clic en el recuadro del personaje para seleccionarlo
-    Rectangle containerRect = {containerPos.x, containerPos.y, DISPLAY_SIZE, DISPLAY_SIZE};
+        // Verificar clic en el recuadro del personaje para seleccionarlo
+        Rectangle containerRect = {containerPos.x, containerPos.y, DISPLAY_SIZE, DISPLAY_SIZE};
 
-    if (CheckCollisionPointRec(mousePosition, containerRect))
-    {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        if (CheckCollisionPointRec(mousePosition, containerRect))
         {
-            // Confirmar selección del personaje actual
-            state_machine->add_state(std::make_unique<MainGameState>(characters[currentCharacterIndex].type), true);
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                // Confirmar selección del personaje actual
+                state_machine->add_state(std::make_unique<MainGameState>(characters[currentCharacterIndex].type), true);
+            }
         }
     }
 }

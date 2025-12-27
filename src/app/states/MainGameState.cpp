@@ -9,7 +9,6 @@
 #include "StateMachine.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
-#include <iostream>
 
 extern "C"
 {
@@ -22,7 +21,7 @@ MainGameState::MainGameState(PLAYER_TYPE playerType)
 {
 }
 
-// Constructor por defecto 
+// Constructor por defecto con tipo de jugador por defecto (Mage)
 MainGameState::MainGameState()
     : selectedPlayerType(PLAYER_TYPE::MAGE), direction{0, 0} // Valor por defecto
 {
