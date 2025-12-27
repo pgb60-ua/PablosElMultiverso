@@ -33,66 +33,29 @@ std::string ChooseNPCGameState::GetDefaultCharacterName(PLAYER_TYPE type) const
 
 void ChooseNPCGameState::LoadCharacterData(CharacterOption &character, PLAYER_TYPE type)
 {
-    auto &dataManager = DataFileManager::GetInstance();
-    auto &spriteManager = SpriteLoaderManager::GetInstance();
+    DataFileManager &dataManager = DataFileManager::GetInstance();
 
     try
     {
         // Obtener datos del personaje
         const DataMap &characterData = dataManager.GetData(type);
 
-        // Obtener nombre del JSON de datos
-        auto nameIt = characterData.find("name");
-        if (nameIt != characterData.end() && std::holds_alternative<std::string>(nameIt->second))
-        {
-            character.name = std::get<std::string>(nameIt->second);
-            TraceLog(LOG_INFO, "Loaded character name: %s", character.name.c_str());
-        }
+        // Obtener nombre
+        if (characterData.count("name") && std::holds_alternative<std::string>(characterData.at("name")))
+            character.name = std::get<std::string>(characterData.at("name"));
         else
-        {
             character.name = GetDefaultCharacterName(type);
-            TraceLog(LOG_WARNING, "Using default name for character type");
-        }
 
         // Obtener descripción
-        auto descIt = characterData.find("description");
-        character.description = (descIt != characterData.end() && std::holds_alternative<std::string>(descIt->second))
-                                    ? std::get<std::string>(descIt->second)
-                                    : "";
-
-        TraceLog(LOG_INFO, "Character description: %s", character.description.c_str());
-
-        // Obtener sprite sheet
-        const SpriteSheet &spriteSheet = spriteManager.GetSpriteSheet(type);
-        character.spriteSheet = spriteSheet.texture;
-        character.spriteSheetPath = "";
-
-        TraceLog(LOG_INFO, "Loaded sprite sheet with texture ID: %d, frames: %zu", spriteSheet.texture.id,
-                 spriteSheet.frames.size());
-
-        // Convertir Rectangle a SpriteFrame
-        for (const auto &rect : spriteSheet.frames)
-        {
-            SpriteFrame frame;
-            frame.x = (int)rect.x;
-            frame.y = (int)rect.y;
-            frame.width = (int)rect.width;
-            frame.height = (int)rect.height;
-            character.frames.push_back(frame);
-        }
-
-        character.currentFrame = 0;
-        TraceLog(LOG_INFO, "Successfully loaded character: %s with %zu frames", character.name.c_str(),
-                 character.frames.size());
+        if (characterData.count("description") && std::holds_alternative<std::string>(characterData.at("description")))
+            character.description = std::get<std::string>(characterData.at("description"));
+        else
+            character.description = "";
     }
     catch (const std::exception &e)
     {
-        // Si falla, crear un personaje por defecto
-        TraceLog(LOG_ERROR, "Failed to load character data: %s", e.what());
         character.name = GetDefaultCharacterName(type);
         character.description = "";
-        character.currentFrame = 0;
-        TraceLog(LOG_WARNING, "Using fallback character: %s", character.name.c_str());
     }
 }
 
@@ -109,15 +72,14 @@ void ChooseNPCGameState::LoadCharacterSprites()
     }
 }
 
-SpriteFrame ChooseNPCGameState::GetCurrentFrame(const CharacterOption &character) const
+Rectangle ChooseNPCGameState::GetCurrentFrame(const CharacterOption &character) const
 {
-    if (!character.frames.empty() && character.currentFrame < static_cast<int>(character.frames.size()))
+    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(character.type);
+    if (!sheet.frames.empty() && character.spriteAnimation.frameIndex < static_cast<int>(sheet.frames.size()))
     {
-        return character.frames[character.currentFrame];
+        return sheet.frames[character.spriteAnimation.frameIndex];
     }
-
-    // Frame por defecto si no hay datos
-    return SpriteFrame{0, 0, 64, 64};
+    return Rectangle{0, 0, 64, 64};
 }
 
 void ChooseNPCGameState::init()
@@ -210,10 +172,21 @@ void ChooseNPCGameState::handleInput()
     }
 }
 
-void ChooseNPCGameState::update(float deltaTime __attribute__((unused)))
+void ChooseNPCGameState::update(float deltaTime)
 {
-    // Por ahora no hay lógica de actualización
-    // Aquí se podría agregar animación de sprites si se desea
+    if (!characters.empty() && currentCharacterIndex < static_cast<int>(characters.size()))
+    {
+        CharacterOption &character = characters[currentCharacterIndex];
+        const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(character.type);
+
+        character.spriteAnimation.timeAccumulator += deltaTime;
+        if (character.spriteAnimation.timeAccumulator >= character.spriteAnimation.FRAME_DURATION)
+        {
+            character.spriteAnimation.timeAccumulator = 0.0f;
+            character.spriteAnimation.frameIndex++;
+            character.spriteAnimation.frameIndex %= sheet.spriteFrameCount;
+        }
+    }
 }
 
 void ChooseNPCGameState::DrawCenteredText(const char *text, float y, int fontSize, Color color) const
@@ -315,15 +288,15 @@ void ChooseNPCGameState::render()
     if (!characters.empty() && currentCharacterIndex < static_cast<int>(characters.size()))
     {
         CharacterOption &currentChar = characters[currentCharacterIndex];
-        SpriteFrame frame = GetCurrentFrame(currentChar);
+        const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(currentChar.type);
+        Rectangle frame = GetCurrentFrame(currentChar);
 
         // Posición del cuadrado contenedor (centrado)
         Vector2 containerPos = GetContainerPos(screenWidth, screenHeight);
 
-        // Dibujar fondo del sprite (cuadrado fijo de 64x64 escalado)
+        // Dibujar fondo del sprite
         Color bgColor = {40, 40, 40, 255};
         DrawRectangle((int)containerPos.x, (int)containerPos.y, (int)DISPLAY_SIZE, (int)DISPLAY_SIZE, bgColor);
-        // Línea amarilla
         DrawRectangleLines((int)containerPos.x - 1, (int)containerPos.y - 1, (int)DISPLAY_SIZE + 2,
                            (int)DISPLAY_SIZE + 2, YELLOW);
 
@@ -335,11 +308,10 @@ void ChooseNPCGameState::render()
         Vector2 spritePos = GetSpritePos(containerPos, spriteWidth, spriteHeight);
 
         // Dibujar sprite
-        if (currentChar.spriteSheet.id > 0)
+        if (sheet.texture.id > 0)
         {
-            Rectangle sourceRec = {(float)frame.x, (float)frame.y, (float)frame.width, (float)frame.height};
             Rectangle destRec = {spritePos.x, spritePos.y, spriteWidth, spriteHeight};
-            DrawTexturePro(currentChar.spriteSheet, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
+            DrawTexturePro(sheet.texture, frame, destRec, {0, 0}, 0.0f, currentChar.spriteAnimation.color);
         }
 
         // Dibujar nombre del personaje

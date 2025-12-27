@@ -13,7 +13,7 @@ class MainGameState : public GameState
 {
 public:
     MainGameState();
-     MainGameState(PLAYER_TYPE playerType);
+    MainGameState(PLAYER_TYPE playerType);
     ~MainGameState();
 
     void init() override;

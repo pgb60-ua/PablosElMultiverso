@@ -1,5 +1,6 @@
 #pragma once
 #include "GameState.hpp"
+#include "SpriteAnimation.hpp"
 #include "Types.hpp"
 #include <vector>
 #include <string>
@@ -8,21 +9,11 @@ extern "C" {
     #include <raylib.h>
 }
 
-struct SpriteFrame {
-    int x;
-    int y;
-    int width;
-    int height;
-};
-
 struct CharacterOption {
     PLAYER_TYPE type;
     std::string name;
     std::string description;
-    Texture2D spriteSheet;
-    std::string spriteSheetPath;
-    std::vector<SpriteFrame> frames;
-    int currentFrame;
+    SpriteAnimation spriteAnimation;
 };
 
 class ChooseNPCGameState : public GameState {
@@ -36,7 +27,7 @@ class ChooseNPCGameState : public GameState {
         const Color UNSELECTED_ARROW_COLOR = GRAY;
         
         void LoadCharacterSprites();
-        SpriteFrame GetCurrentFrame(const CharacterOption& character) const;
+        Rectangle GetCurrentFrame(const CharacterOption& character) const;
         
         // Funciones helper para simplificar el código
         std::string GetDefaultCharacterName(PLAYER_TYPE type) const;
