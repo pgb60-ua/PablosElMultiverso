@@ -18,7 +18,7 @@ struct CharacterOption {
 
 class ChooseNPCGameState : public GameState {
 
-    protected:
+    private:
         std::vector<CharacterOption> characters;
         int currentCharacterIndex = 0;
         bool arrowHovered[2] = {false, false}; // Array para rastrear hover: [0] = izquierda, [1] = derecha
@@ -27,7 +27,6 @@ class ChooseNPCGameState : public GameState {
         const Color UNSELECTED_ARROW_COLOR = GRAY;
         
         void LoadCharacterSprites();
-        Rectangle GetCurrentFrame(const CharacterOption& character) const;
         
         // Funciones helper para simplificar el código
         std::string GetDefaultCharacterName(PLAYER_TYPE type) const;
@@ -64,7 +63,7 @@ class ChooseNPCGameState : public GameState {
         static constexpr float CONTAINER_SIZE = 64.0f;
         static constexpr float CONTAINER_SCALE = 6.0f;
         static constexpr float DISPLAY_SIZE = CONTAINER_SIZE * CONTAINER_SCALE;
-        static constexpr int ARROW_FONT_SIZE = 60;
-        static constexpr float ARROW_PADDING = 15.0f;
-        static constexpr float ARROW_DISTANCE = 120.0f;
+        static constexpr int ARROW_FONT_SIZE = 90;
+        static constexpr float ARROW_PADDING = 20.0f;
+        static constexpr float ARROW_DISTANCE = 160.0f;
 };

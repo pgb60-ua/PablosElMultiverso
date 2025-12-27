@@ -72,22 +72,9 @@ void ChooseNPCGameState::LoadCharacterSprites()
     }
 }
 
-Rectangle ChooseNPCGameState::GetCurrentFrame(const CharacterOption &character) const
-{
-    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(character.type);
-    if (!sheet.frames.empty() && character.spriteAnimation.frameIndex < static_cast<int>(sheet.frames.size()))
-    {
-        return sheet.frames[character.spriteAnimation.frameIndex];
-    }
-    return Rectangle{0, 0, 64, 64};
-}
 
 void ChooseNPCGameState::init()
 {
-    // Detectar y establecer la ruta de assets
-    DataFileManager::GetInstance().DetectAndSetAssetsPath();
-    SpriteLoaderManager::GetInstance().DetectAndSetAssetsPath();
-
     // Cargar los personajes con sus datos y sprites
     LoadCharacterSprites();
 
@@ -211,67 +198,40 @@ Vector2 ChooseNPCGameState::GetSpritePos(const Vector2 &containerPos, float spri
 Rectangle ChooseNPCGameState::GetArrowButtonRect(int index, const Vector2 &spritePos, float spriteWidth,
                                                  int screenHeight)
 {
-    // index 0 = flecha izquierda, index 1 = flecha derecha
-    if (index == 0)
-    {
-        const char *leftArrow = "<";
-        Vector2 leftArrowSize = MeasureTextEx(GetFontDefault(), leftArrow, ARROW_FONT_SIZE, 1);
-        Vector2 leftArrowPos = {spritePos.x - ARROW_DISTANCE, (screenHeight - leftArrowSize.y) / 2.0f};
+    const char *arrow = (index == 0) ? "<" : ">";
+    Vector2 arrowSize = MeasureTextEx(GetFontDefault(), arrow, ARROW_FONT_SIZE, 1);
 
-        return Rectangle{leftArrowPos.x - ARROW_PADDING, leftArrowPos.y - ARROW_PADDING,
-                         leftArrowSize.x + ARROW_PADDING * 2, leftArrowSize.y + ARROW_PADDING * 2};
-    }
-    else
-    {
-        const char *rightArrow = ">";
-        Vector2 rightArrowSize = MeasureTextEx(GetFontDefault(), rightArrow, ARROW_FONT_SIZE, 1);
-        Vector2 rightArrowPos = {spritePos.x + spriteWidth + ARROW_DISTANCE - rightArrowSize.x,
-                                 (screenHeight - rightArrowSize.y) / 2.0f};
+    float xPos = (index == 0) ? spritePos.x - ARROW_DISTANCE
+                              : spritePos.x + spriteWidth + ARROW_DISTANCE - arrowSize.x;
+    float yPos = (screenHeight - arrowSize.y) / 2.0f;
 
-        return Rectangle{rightArrowPos.x - ARROW_PADDING, rightArrowPos.y - ARROW_PADDING,
-                         rightArrowSize.x + ARROW_PADDING * 2, rightArrowSize.y + ARROW_PADDING * 2};
-    }
+    return Rectangle{xPos - ARROW_PADDING, yPos - ARROW_PADDING,
+                     arrowSize.x + ARROW_PADDING * 2, arrowSize.y + ARROW_PADDING * 2};
 }
 
 void ChooseNPCGameState::DrawNavigationArrows(const Vector2 &spritePos, float spriteWidth)
 {
     int screenHeight = GetScreenHeight();
     Color fillColor = {60, 60, 60, 255};
+    const char *arrows[] = {"<", ">"};
 
-    // Dibujar flecha izquierda
-    Rectangle leftRect = GetArrowButtonRect(0, spritePos, spriteWidth, screenHeight);
-    const char *leftArrow = "<";
-    Vector2 leftArrowSize = MeasureTextEx(GetFontDefault(), leftArrow, ARROW_FONT_SIZE, 1);
-    Vector2 leftArrowPos = {spritePos.x - ARROW_DISTANCE, (screenHeight - leftArrowSize.y) / 2.0f};
-
-    // Usar el array para determinar el color según el hover
-    Color leftArrowColor = arrowHovered[0] ? SELECTED_ARROW_COLOR : UNSELECTED_ARROW_COLOR;
-    if (characters.size() <= 1)
+    for (int i = 0; i < 2; i++)
     {
-        leftArrowColor = UNSELECTED_ARROW_COLOR;
+        Rectangle rect = GetArrowButtonRect(i, spritePos, spriteWidth, screenHeight);
+        Vector2 arrowSize = MeasureTextEx(GetFontDefault(), arrows[i], ARROW_FONT_SIZE, 1);
+
+        // Calcular posición del texto
+        float xPos = (i == 0) ? spritePos.x - ARROW_DISTANCE
+                              : spritePos.x + spriteWidth + ARROW_DISTANCE - arrowSize.x;
+        Vector2 arrowPos = {xPos, (screenHeight - arrowSize.y) / 2.0f};
+
+        // Color según hover
+        Color arrowColor = (arrowHovered[i] && characters.size() > 1) ? SELECTED_ARROW_COLOR : UNSELECTED_ARROW_COLOR;
+
+        DrawRectangleRec(rect, fillColor);
+        DrawRectangleLinesEx(rect, 1.0f, arrowColor);
+        DrawTextEx(GetFontDefault(), arrows[i], arrowPos, (float)ARROW_FONT_SIZE, 1.0f, arrowColor);
     }
-
-    DrawRectangleRec(leftRect, fillColor);
-    DrawRectangleLinesEx(leftRect, 1.0f, leftArrowColor);
-    DrawTextEx(GetFontDefault(), leftArrow, leftArrowPos, (float)ARROW_FONT_SIZE, 1.0f, leftArrowColor);
-
-    // Dibujar flecha derecha
-    Rectangle rightRect = GetArrowButtonRect(1, spritePos, spriteWidth, screenHeight);
-    const char *rightArrow = ">";
-    Vector2 rightArrowSize = MeasureTextEx(GetFontDefault(), rightArrow, ARROW_FONT_SIZE, 1);
-    Vector2 rightArrowPos = {spritePos.x + spriteWidth + ARROW_DISTANCE - rightArrowSize.x,
-                             (screenHeight - rightArrowSize.y) / 2.0f};
-
-    // Usar el array para determinar el color según el hover
-    Color rightArrowColor = arrowHovered[1] ? SELECTED_ARROW_COLOR : UNSELECTED_ARROW_COLOR;
-    if (characters.size() <= 1)
-    {
-        rightArrowColor = UNSELECTED_ARROW_COLOR;
-    }
-
-    DrawRectangleRec(rightRect, fillColor);
-    DrawRectangleLinesEx(rightRect, 1.0f, rightArrowColor);
-    DrawTextEx(GetFontDefault(), rightArrow, rightArrowPos, (float)ARROW_FONT_SIZE, 1.0f, rightArrowColor);
 }
 
 void ChooseNPCGameState::render()
@@ -289,7 +249,7 @@ void ChooseNPCGameState::render()
     {
         CharacterOption &currentChar = characters[currentCharacterIndex];
         const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(currentChar.type);
-        Rectangle frame = GetCurrentFrame(currentChar);
+        Rectangle frame = sheet.frames[currentChar.spriteAnimation.frameIndex];
 
         // Posición del cuadrado contenedor (centrado)
         Vector2 containerPos = GetContainerPos(screenWidth, screenHeight);
