@@ -1,0 +1,11 @@
+{
+  "texture": "Axe-Sheet.png",
+  "frames": [
+    {
+      "x": 8,
+      "y": 0,
+      "width": 17,
+      "height": 32
+    }
+  ]
+}
