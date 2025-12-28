@@ -1,5 +1,5 @@
 #include "MainMenuState.hpp"
-#include "ChooseNPCGameState.hpp"
+#include "ChooseNPCMenuState.hpp"
 #include "StateMachine.hpp"
 #include <string>
 extern "C"
@@ -38,7 +38,7 @@ void MainMenuState::handleInput()
     {
         if (selectedOption == 0)
         {
-            state_machine->add_state(std::make_unique<ChooseNPCGameState>(), true);
+            state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
         }
         else
         {
@@ -59,7 +59,7 @@ void MainMenuState::handleInput()
             {
                 if (selectedOption == 0)
                 {
-                    state_machine->add_state(std::make_unique<ChooseNPCGameState>(), true);
+                    state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
                 }
                 else
                 {

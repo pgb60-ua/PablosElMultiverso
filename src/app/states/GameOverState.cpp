@@ -3,7 +3,7 @@
 #include <MainGameState.hpp>
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
-#include "ChooseNPCGameState.hpp"
+#include "ChooseNPCMenuState.hpp"
 extern "C" {
     #include <raylib.h>
 }
@@ -33,7 +33,7 @@ void GameOverState::handleInput() {
 
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
         if (selectedOption == 0) {
-            state_machine->add_state(std::make_unique<ChooseNPCGameState>(), true);
+            state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
         } else {
             state_machine->add_state(std::make_unique<MainMenuState>(), true);
         }
@@ -49,7 +49,7 @@ void GameOverState::handleInput() {
             selectedOption = i;
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 if (selectedOption == 0) {
-                    state_machine->add_state(std::make_unique<ChooseNPCGameState>(), true);
+                    state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
                 } else {
                     state_machine->add_state(std::make_unique<MainMenuState>(), true);
                 }

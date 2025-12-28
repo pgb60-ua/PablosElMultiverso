@@ -16,7 +16,7 @@ struct CharacterOption {
     SpriteAnimation spriteAnimation;
 };
 
-class ChooseNPCGameState : public GameState {
+class ChooseNPCMenuState : public GameState {
 
     private:
         std::vector<CharacterOption> characters;
@@ -41,8 +41,8 @@ class ChooseNPCGameState : public GameState {
         static Rectangle GetArrowButtonRect(int index, const Vector2& spritePos, float spriteWidth, int screenHeight);
 
     public:
-        ChooseNPCGameState();
-        ~ChooseNPCGameState();
+        ChooseNPCMenuState();
+        ~ChooseNPCMenuState();
         virtual void init() override;
         virtual void handleInput() override;
         virtual void update(float deltaTime) override;

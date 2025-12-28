@@ -1,6 +1,6 @@
 #include "GameWonState.hpp"
 #include <string>
-#include "ChooseNPCGameState.hpp"
+#include "ChooseNPCMenuState.hpp"
 #include <MainGameState.hpp>
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
@@ -32,7 +32,7 @@ void GameWonState::handleInput() {
 
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
         if (selectedOption == 0) {
-            state_machine->add_state(std::make_unique<ChooseNPCGameState>(), true);
+            state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
         } else {
             state_machine->add_state(std::make_unique<MainMenuState>(), true);
         }
@@ -48,7 +48,7 @@ void GameWonState::handleInput() {
             selectedOption = i;
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 if (selectedOption == 0) {
-                    state_machine->add_state(std::make_unique<ChooseNPCGameState>(), true);
+                    state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
                 } else {
                     state_machine->add_state(std::make_unique<MainMenuState>(), true);
                 }

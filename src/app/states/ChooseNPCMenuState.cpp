@@ -1,4 +1,4 @@
-#include "ChooseNPCGameState.hpp"
+#include "ChooseNPCMenuState.hpp"
 #include "DataFileManager.hpp"
 #include "MainGameState.hpp"
 #include "MainMenuState.hpp"
@@ -10,11 +10,11 @@ extern "C"
 #include <raylib.h>
 }
 
-ChooseNPCGameState::ChooseNPCGameState() {}
+ChooseNPCMenuState::ChooseNPCMenuState() {}
 
-ChooseNPCGameState::~ChooseNPCGameState() {}
+ChooseNPCMenuState::~ChooseNPCMenuState() {}
 
-std::string ChooseNPCGameState::GetDefaultCharacterName(PLAYER_TYPE type) const
+std::string ChooseNPCMenuState::GetDefaultCharacterName(PLAYER_TYPE type) const
 {
     switch (type)
     {
@@ -29,7 +29,7 @@ std::string ChooseNPCGameState::GetDefaultCharacterName(PLAYER_TYPE type) const
     }
 }
 
-void ChooseNPCGameState::LoadCharacterData(CharacterOption &character, PLAYER_TYPE type)
+void ChooseNPCMenuState::LoadCharacterData(CharacterOption &character, PLAYER_TYPE type)
 {
     DataFileManager &dataManager = DataFileManager::GetInstance();
 
@@ -57,7 +57,7 @@ void ChooseNPCGameState::LoadCharacterData(CharacterOption &character, PLAYER_TY
     }
 }
 
-void ChooseNPCGameState::LoadCharacterSprites()
+void ChooseNPCMenuState::LoadCharacterSprites()
 {
     std::vector<PLAYER_TYPE> types = {PLAYER_TYPE::MAGE, PLAYER_TYPE::RANGE, PLAYER_TYPE::WARRIOR};
 
@@ -71,7 +71,7 @@ void ChooseNPCGameState::LoadCharacterSprites()
 }
 
 
-void ChooseNPCGameState::init()
+void ChooseNPCMenuState::init()
 {
     // Cargar los personajes con sus datos y sprites
     LoadCharacterSprites();
@@ -81,7 +81,7 @@ void ChooseNPCGameState::init()
     arrowHovered[1] = false;
 }
 
-void ChooseNPCGameState::handleInput()
+void ChooseNPCMenuState::handleInput()
 {
     // Navegación con flechas horizontales
     if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D))
@@ -164,7 +164,7 @@ void ChooseNPCGameState::handleInput()
     }
 }
 
-void ChooseNPCGameState::update(float deltaTime)
+void ChooseNPCMenuState::update(float deltaTime)
 {
     if (!characters.empty() && currentCharacterIndex < static_cast<int>(characters.size()))
     {
@@ -181,7 +181,7 @@ void ChooseNPCGameState::update(float deltaTime)
     }
 }
 
-void ChooseNPCGameState::DrawCenteredText(const char *text, float y, int fontSize, Color color) const
+void ChooseNPCMenuState::DrawCenteredText(const char *text, float y, int fontSize, Color color) const
 {
     int screenWidth = GetScreenWidth();
     Vector2 textSize = MeasureTextEx(GetFontDefault(), text, fontSize, 1);
@@ -189,18 +189,18 @@ void ChooseNPCGameState::DrawCenteredText(const char *text, float y, int fontSiz
     DrawTextEx(GetFontDefault(), text, textPos, (float)fontSize, 1.0f, color);
 }
 
-Vector2 ChooseNPCGameState::GetContainerPos(int screenWidth, int screenHeight) const
+Vector2 ChooseNPCMenuState::GetContainerPos(int screenWidth, int screenHeight) const
 {
     return Vector2{(screenWidth - DISPLAY_SIZE) / 2.0f, (screenHeight - DISPLAY_SIZE) / 2.0f - 20.0f};
 }
 
-Vector2 ChooseNPCGameState::GetSpritePos(const Vector2 &containerPos, float spriteWidth, float spriteHeight) const
+Vector2 ChooseNPCMenuState::GetSpritePos(const Vector2 &containerPos, float spriteWidth, float spriteHeight) const
 {
     return Vector2{containerPos.x + (DISPLAY_SIZE - spriteWidth) / 2.0f,
                    containerPos.y + (DISPLAY_SIZE - spriteHeight) / 2.0f};
 }
 
-Rectangle ChooseNPCGameState::GetArrowButtonRect(int index, const Vector2 &spritePos, float spriteWidth,
+Rectangle ChooseNPCMenuState::GetArrowButtonRect(int index, const Vector2 &spritePos, float spriteWidth,
                                                  int screenHeight)
 {
     const char *arrow = (index == 0) ? "<" : ">";
@@ -214,7 +214,7 @@ Rectangle ChooseNPCGameState::GetArrowButtonRect(int index, const Vector2 &sprit
                      arrowSize.x + ARROW_PADDING * 2, arrowSize.y + ARROW_PADDING * 2};
 }
 
-void ChooseNPCGameState::DrawNavigationArrows(const Vector2 &spritePos, float spriteWidth)
+void ChooseNPCMenuState::DrawNavigationArrows(const Vector2 &spritePos, float spriteWidth)
 {
     int screenHeight = GetScreenHeight();
     Color fillColor = {60, 60, 60, 255};
@@ -239,7 +239,7 @@ void ChooseNPCGameState::DrawNavigationArrows(const Vector2 &spritePos, float sp
     }
 }
 
-void ChooseNPCGameState::render()
+void ChooseNPCMenuState::render()
 {
     BeginDrawing();
     ClearBackground(BLACK);
@@ -305,5 +305,5 @@ void ChooseNPCGameState::render()
     EndDrawing();
 }
 
-void ChooseNPCGameState::pause() {}
-void ChooseNPCGameState::resume() {}
+void ChooseNPCMenuState::pause() {}
+void ChooseNPCMenuState::resume() {}
