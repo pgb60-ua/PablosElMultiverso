@@ -19,21 +19,14 @@ void AMeleeWeapon::Attack(float deltaTime)
     
     if (timeSinceLastAttack >= attackInterval && !enemiesInRange.empty())
     {
-        for (int i = (int)enemiesInRange.size() - 1; i >= 0; --i)
+        enemiesInRange.erase(
+            std::remove(enemiesInRange.begin(), enemiesInRange.end(), nullptr),
+            enemiesInRange.end());
+        // Ataca a todos los enemigos en rango
+        for (AEnemy *enemy : enemiesInRange)
         {
-            AEnemy *enemy = enemiesInRange[i];
-            if (enemy == nullptr)
-                continue;
-            
             enemy->TakeDamage(stats);
-            
-            if (!enemy->IsAlive())
-            {
-                delete enemy;
-                enemiesInRange.erase(enemiesInRange.begin() + i);
-            }
         }
-        
         timeSinceLastAttack -= attackInterval;
     }
 }
