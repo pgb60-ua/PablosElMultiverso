@@ -1,4 +1,7 @@
 #pragma once
+extern "C" {
+    #include <raylib.h>
+}
 struct SpriteAnimation
 {
     inline const static float FRAME_DURATION = 0.075f; // Duración de cada frame en segundos
