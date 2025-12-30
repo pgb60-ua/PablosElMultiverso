@@ -2,10 +2,10 @@
   "texture": "Axe-Sheet.png",
   "frames": [
     {
-      "x": 16,
-      "y": 0,
-      "width": 33,
-      "height": 64
+      "x": 0,
+      "y": 16,
+      "width": 64,
+      "height": 33
     }
   ]
 }
