@@ -110,16 +110,20 @@ set(CPACK_PACKAGE_NAME "PablosElMultiverso")
 set(CPACK_PACKAGE_VENDOR "pgb60-ua")
 set(CPACK_PACKAGE_VERSION "0.4.0")
 set(CPACK_DEBIAN_PACKAGE_NAME "pablos-el-multiverso")
+set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt")
 
 if(WIN32)
     install(TARGETS pablos-el-multiverso RUNTIME DESTINATION .)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets DESTINATION .)
-    set(CPACK_GENERATOR "NSIS")
+    install(FILES 
+        ${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt
+        ${PROJECT_SOURCE_DIR}/NOTICES.md
+        DESTINATION .)
     
+    set(CPACK_GENERATOR "NSIS")  
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "PablosElMultiverso")
     set(CPACK_NSIS_DISPLAY_NAME "PablosElMultiverso")
-    set(CPACK_NSIS_PACKAGE_NAME "PablosElMultiverso")
-    
+    set(CPACK_NSIS_PACKAGE_NAME "PablosElMultiverso")   
     set(CPACK_NSIS_INSTALLED_ICON_NAME "pablos-el-multiverso.exe")
     set(CPACK_NSIS_MENU_LINKS "pablos-el-multiverso.exe" "PablosElMultiverso")
 
@@ -129,6 +133,10 @@ if(UNIX AND NOT APPLE)
     install(TARGETS pablos-el-multiverso DESTINATION bin)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets 
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
+    install(FILES 
+        ${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt
+        ${PROJECT_SOURCE_DIR}/NOTICES.md
+        DESTINATION ${CMAKE_INSTALL_DOCDIR})
     set(CPACK_GENERATOR "DEB")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Pablo García Belando")
     set(CPACK_DEBIAN_PACKAGE_SECTION "games")
