@@ -1,7 +1,7 @@
 #include "Round.hpp"
 #include <cstdlib>
-Round::Round(float duration, float spawnRate, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*> enemiesOnMap)
-    : duration(duration), spawnRate(spawnRate), enemiesToSpawn(enemiesToSpawn), enemiesOnMap(enemiesOnMap)
+Round::Round(float duration, float spawnRate, int roundNumber, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*> enemiesOnMap)
+    : duration(duration), spawnRate(spawnRate), roundNumber(roundNumber), enemiesToSpawn(enemiesToSpawn), enemiesOnMap(enemiesOnMap)
 {
 }
 
