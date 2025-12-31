@@ -10,7 +10,7 @@ class Round
 {
 private:
     std::vector<AEnemy*> enemiesToSpawn;
-    std::vector<AEnemy*> enemiesOnMap;
+    std::vector<AEnemy*>& enemiesOnMap;
     int roundNumber;
     float duration;
     float spawnRate;
@@ -18,11 +18,14 @@ private:
     float elapsedTime = 0.0f;
 
 public:
-    Round(float duration, float spawnRate,int roundNumber, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*> enemiesOnMap);
+    Round(float duration, float spawnRate,int roundNumber, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*>& enemiesOnMap);
     ~Round();
 
     void Update(float deltaTime);
+    void Render();
     bool IsRoundOver() const;
 
     int GetRoundNumber() const { return roundNumber; }
+    int GetRemainingEnemies() const { return enemiesToSpawn.size() + enemiesOnMap.size(); }
+    float GetRemainingTime() const { return duration - elapsedTime; }
 };

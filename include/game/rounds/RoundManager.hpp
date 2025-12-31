@@ -11,14 +11,15 @@ class RoundManager
 {
 private:
     std::vector<RoundInfo> roundInfos;
-    std::vector<AEnemy*> enemiesOnMap;
-    std::vector<Player*> players;
+    std::vector<AEnemy*>& enemiesOnMap;
+    std::vector<Player*>& players;
     std::vector<AEnemy*> CreateEnemiesForRound(const RoundInfo& roundInfo);
     Round currentRound;
 public:
-    RoundManager(const std::vector<ROUND_TYPE>& roundTypes, std::vector<AEnemy*> enemiesOnMap, std::vector<Player*> players);
+    RoundManager(const ROUND_TYPE roundType, std::vector<AEnemy*>& enemiesOnMap, std::vector<Player*>& players);
     ~RoundManager() = default;
     void Update(float deltaTime);
+    void Render();
     bool IsCurrentRoundOver() const;
 
     Round GetCurrentRound() const;

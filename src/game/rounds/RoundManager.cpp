@@ -1,16 +1,13 @@
 #include "RoundManager.hpp"
 #include "Zombie.hpp"
 #include <functional>
-// TODO: Agregar includes de otros enemigos cuando existan
+#include <new>
 
-RoundManager::RoundManager(const std::vector<ROUND_TYPE>& roundTypes, std::vector<AEnemy*> enemiesOnMap, std::vector<Player*> players)
+RoundManager::RoundManager(const ROUND_TYPE roundType, std::vector<AEnemy*>& enemiesOnMap, std::vector<Player*>& players)
     : enemiesOnMap(enemiesOnMap), players(players), currentRound(0, 0, 0.0f, std::vector<AEnemy*>(), enemiesOnMap)
 {
     DataFileManager& dataManager = DataFileManager::GetInstance();
-    for (const auto& roundType : roundTypes)
-    {
-        this->roundInfos = dataManager.GetRounds(roundType);
-    }
+    this->roundInfos = dataManager.GetRounds(roundType);
 }
 
 std::vector<AEnemy*> RoundManager::CreateEnemiesForRound(const RoundInfo& roundInfo)
@@ -68,16 +65,22 @@ bool RoundManager::MoveToNextRound()
     [nextRoundNumber](const RoundInfo& info) {
         return info.roundNumber == nextRoundNumber;
     });
+
     
     if (it != roundInfos.end())
     {
         RoundInfo& roundInfo = *it;
         std::vector<AEnemy*> enemiesToSpawn = CreateEnemiesForRound(roundInfo);
         currentRound.~Round();
-        currentRound = Round(roundInfo.roundNumber, roundInfo.duration, roundInfo.spawnRate, enemiesToSpawn, enemiesOnMap);
+        new (&currentRound) Round(roundInfo.duration, roundInfo.spawnRate, roundInfo.roundNumber, enemiesToSpawn, enemiesOnMap);
 
         return true;
     }
     return false;
+}
+
+void RoundManager::Render()
+{
+    this->currentRound.Render();
 }
 

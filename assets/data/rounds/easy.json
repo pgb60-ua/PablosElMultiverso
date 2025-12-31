@@ -3,9 +3,9 @@
         {
             "roundNumber": 1,
             "duration": 60.0,
-            "spawnRate": 5.0,
+            "spawnRate": 0.2,
             "enemiesToSpawn": {
-                "ZOMBIE": 20
+                "ZOMBIE": 200
             }
         },
         {
