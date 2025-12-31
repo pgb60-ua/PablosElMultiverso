@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "Types.hpp"
+#include "AMeleeWeapon.hpp"
 #include "raylib.h"
 #include <cmath>
 #include <cstddef>
@@ -109,10 +110,12 @@ void Player::Update(float deltaTime)
 
     // Actualizar posición de las armas usando los offsets almacenados
     Vector2 playerPos = GetPosition();
+    playerPos.x += hitbox.data.rectangle.width * 0.5f;
+    playerPos.y += hitbox.data.rectangle.height * 0.5f;
+
     for (size_t i = 0; i < weapons.size(); i++)
     {
-        Vector2 weaponPos = {playerPos.x + weaponOffsets[i].x, playerPos.y + weaponOffsets[i].y};
-        weapons[i]->update(deltaTime, weaponPos);
+        weapons[i]->update(deltaTime, playerPos);
     }
 }
 
@@ -171,6 +174,17 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
 
         weapons.push_back(std::move(newWeapon)); // std::move transfiere ownership
         weaponOffsets.push_back(offset);         // Guardar el offset para esta arma
+
+        float initialAngle = 0.0f;
+        size_t currentWeaponIndex = weapons.size() - 1;
+        switch (currentWeaponIndex)
+        {
+            case 0: initialAngle = 225.0f; break; //Arriba-Izquierda
+            case 1: initialAngle = 315.0f; break; //Arriba-Derecha
+            case 2: initialAngle = 135.0f; break; //Abajo-Izquierda
+            case 3: initialAngle = 45.0f;  break; //Abajo-Derecha
+        }
+        weapons.back()->SetOrbitAngle(initialAngle);
     }
     // Si tengo 4, sumo las stats
     else
