@@ -1,6 +1,5 @@
 #include "Round.hpp"
 #include <cstdlib>
-#include <iostream>
 Round::Round(float duration, float spawnRate, int roundNumber, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*>& enemiesOnMap)
     : duration(duration), spawnRate(spawnRate), roundNumber(roundNumber), enemiesToSpawn(enemiesToSpawn), enemiesOnMap(enemiesOnMap)
 {
@@ -20,8 +19,6 @@ void Round::Update(float deltaTime)
 {
     elapsedTime += deltaTime;
     timeSinceLastSpawn += deltaTime;
-    std::cout << "Elapsed Time: " << elapsedTime << " / " << duration << std::endl;
-    std::cout << "Time Since Last Spawn: " << timeSinceLastSpawn << " / " << spawnRate << std::endl;
     if (timeSinceLastSpawn >= spawnRate)
     {
         if (!enemiesToSpawn.empty())
@@ -30,7 +27,6 @@ void Round::Update(float deltaTime)
             AEnemy* enemy = enemiesToSpawn[randomIndex];
             enemiesToSpawn.erase(enemiesToSpawn.begin() + randomIndex);
             enemiesOnMap.push_back(enemy);
-            std::cout << "Spawned enemy. Remaining to spawn: " << enemiesToSpawn.size() << std::endl;
         }
         timeSinceLastSpawn = 0.0f;
     }
