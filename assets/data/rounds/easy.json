@@ -3,18 +3,45 @@
         {
             "roundNumber": 1,
             "duration": 60.0,
-            "spawnRate": 0.2,
+            "spawnRate": 1,
             "enemiesToSpawn": {
-                "ZOMBIE": 200
+                "ZOMBIE": 20
             }
         },
         {
             "roundNumber": 2,
-            "duration": 75.0,
-            "spawnRate": 4.0,
+            "duration": 60.0,
+            "spawnRate": 0.8,
             "enemiesToSpawn": {
                 "ZOMBIE": 30,
                 "DARKIN":1
+            }
+        },
+        {
+            "roundNumber": 3,
+            "duration": 60.0,
+            "spawnRate": 0.7,
+            "enemiesToSpawn": {
+                "ZOMBIE": 40,
+                "DARKIN":5
+            }
+        },
+        {
+            "roundNumber": 4,
+            "duration": 60.0,
+            "spawnRate": 0.6,
+            "enemiesToSpawn": {
+                "ZOMBIE": 50,
+                "DARKIN":10
+            }
+        },
+        {
+            "roundNumber": 5,
+            "duration": 60.0,
+            "spawnRate": 0.5,
+            "enemiesToSpawn": {
+                "ZOMBIE": 60,
+                "DARKIN":15
             }
         }
     ]

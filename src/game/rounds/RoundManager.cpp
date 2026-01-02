@@ -66,7 +66,6 @@ bool RoundManager::MoveToNextRound()
         return info.roundNumber == nextRoundNumber;
     });
 
-    
     if (it != roundInfos.end())
     {
         RoundInfo& roundInfo = *it;
