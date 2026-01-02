@@ -110,9 +110,13 @@ void MainGameState::update(float deltaTime)
         // Todos los jugadores están muertos, reiniciar el estado del juego
         state_machine->add_state(std::make_unique<GameOverState>(), true);
     }
-    else if (roundManager.IsCurrentRoundOver() && !roundManager.MoveToNextRound())
+    else if (roundManager.IsCurrentRoundOver())
     {
-        state_machine->add_state(std::make_unique<GameWonState>(), true);
+        if(!roundManager.MoveToNextRound()){
+            state_machine->add_state(std::make_unique<GameWonState>(), true);
+        }else{
+            //TODO: Lanzar pantalla de tienda
+        }
     }
 
     roundManager.Update(deltaTime);
