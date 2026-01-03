@@ -21,6 +21,10 @@ MainGameState::MainGameState() : direction{0, 0} {}
 
 void MainGameState::init()
 {
+    // Cargar el mapa
+    mapSprite = &SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT);
+    mapUpperSprite = &SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
+    
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
@@ -126,6 +130,8 @@ void MainGameState::render()
 {
     BeginDrawing();
     ClearBackground(DARKGRAY);
+    DrawTextureRec(mapSprite->texture, mapSprite->frames[0], {0, 0}, WHITE);
+    
     DrawText("Pablos El Multiverso", 10, 10, 20, LIGHTGRAY);
 
     // Renderizar todos los jugadores
@@ -142,6 +148,7 @@ void MainGameState::render()
         enemy->Render();
     }
     DrawFPS(GetScreenWidth() - 100, 10);
+    DrawTextureRec(mapUpperSprite->texture, mapUpperSprite->frames[0], {0, 0}, WHITE);
     EndDrawing();
 }
 
