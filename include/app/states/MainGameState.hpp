@@ -30,6 +30,4 @@ private:
     Vector2 direction2;
     std::vector<std::unique_ptr<Player>> players;
     std::vector<AEnemy *> enemies;
-    const SpriteSheet* mapSprite;
-    const SpriteSheet* mapUpperSprite;
 };
