@@ -16,7 +16,7 @@
 	"life_steal": 5,
 	"health_regeneration": 1.5,
 	"is_ranged": true,
-	"description": "An original Pablo's extension, now with ranged combat abilities.",
+	"description": "An extension of the original Pablo, now with ranged combat abilities.",
 	"health_modifier": 1.0,
 	"movement_speed_modifier": 1.0,
 	"agility_modifier": 1.0,
