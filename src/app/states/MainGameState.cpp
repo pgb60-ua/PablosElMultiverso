@@ -24,7 +24,7 @@ MainGameState::MainGameState(PLAYER_TYPE playerType)
 
 // Constructor por defecto con tipo de jugador por defecto (Mage)
 MainGameState::MainGameState()
-    : selectedPlayerType(PLAYER_TYPE::MAGE), direction{0, 0}, roundManager(ROUND_TYPE::EASY, enemies, playerPointers)
+    : MainGameState(PLAYER_TYPE::MAGE)
 {
 }
 
