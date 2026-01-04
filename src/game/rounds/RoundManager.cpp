@@ -82,8 +82,3 @@ void RoundManager::Render()
 {
     this->currentRound.Render();
 }
-
-RoundManager::~RoundManager()
-{
-    // Los destructores de los miembros se llaman automáticamente
-}

@@ -528,19 +528,6 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
         return defaultValue;
     };
 
-    auto getString = [&data](const std::string &key, const std::string &defaultValue = "") -> std::string
-    {
-        auto it = data.find(key);
-        if (it != data.end())
-        {
-            if (const std::string *val = std::get_if<std::string>(&it->second))
-            {
-                return *val;
-            }
-        }
-        return defaultValue;
-    };
-
     // Parsear las rondas del DataMap
     int roundsCount = getInt("rounds_count", 0);
 
