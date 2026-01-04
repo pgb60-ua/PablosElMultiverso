@@ -42,7 +42,8 @@ enum class PROJECTILE_TYPE
     EGGPLOSIVE_BULLET,
     LASER_RAY,
     SNIPER,
-    WING
+    WING,
+    CHEMICAL_BULLET
 };
 
 enum class MAP_TYPE
