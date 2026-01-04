@@ -114,6 +114,7 @@ set(CPACK_DEBIAN_PACKAGE_NAME "pablos-el-multiverso")
 if(WIN32)
     install(TARGETS pablos-el-multiverso RUNTIME DESTINATION .)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets DESTINATION .)
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/locale DESTINATION .)
     set(CPACK_GENERATOR "NSIS")
     
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "PablosElMultiverso")
@@ -129,6 +130,8 @@ if(UNIX AND NOT APPLE)
     install(TARGETS pablos-el-multiverso DESTINATION bin)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets 
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/locale/ 
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/locale)
     set(CPACK_GENERATOR "DEB")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Pablo García Belando")
     set(CPACK_DEBIAN_PACKAGE_SECTION "games")

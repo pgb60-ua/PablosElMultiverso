@@ -34,7 +34,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential debhelper devscripts \
             g++ make ccache findutils \
-            libgl1-mesa-dev libx11-dev xorg-dev
+            libgl1-mesa-dev libx11-dev xorg-dev gettext locales
+          sudo locale-gen en_US.UTF-8
+          sudo locale-gen fr_FR.UTF-8
 
       - name: Fix debian/rules format
         run: |
@@ -90,6 +92,13 @@ jobs:
 
           echo "Generated changelog:"
           cat debian/changelog
+
+      - name: Compile locale files
+        run: |
+          mkdir -p locale/en_US/LC_MESSAGES
+          mkdir -p locale/fr_FR/LC_MESSAGES
+          msgfmt po/en_US.po -o locale/en_US/LC_MESSAGES/pablos.mo
+          msgfmt po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
 
       - name: Build Debian package
         run: |

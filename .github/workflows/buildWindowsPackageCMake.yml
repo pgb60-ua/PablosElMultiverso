@@ -56,8 +56,18 @@ jobs:
           
           echo "Updated CMakeLists.txt with version $VERSION"
 
-      - name: Install NSIS
-        run: choco install nsis -y
+      - name: Install NSIS and gettext
+        run: |
+          choco install nsis -y
+          choco install gettext -y
+
+      - name: Compile locale files
+        shell: bash
+        run: |
+          mkdir -p locale/en_US/LC_MESSAGES
+          mkdir -p locale/fr_FR/LC_MESSAGES
+          msgfmt po/en_US.po -o locale/en_US/LC_MESSAGES/pablos.mo
+          msgfmt po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
 
       - name: Configure CMake
         run: cmake -S . -B build
