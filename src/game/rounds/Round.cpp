@@ -26,7 +26,7 @@ void Round::Update(float deltaTime)
             enemiesToSpawn.erase(enemiesToSpawn.begin() + randomIndex);
             enemiesOnMap.push_back(enemy);
         }
-        timeSinceLastSpawn = 0.0f;
+        timeSinceLastSpawn -= spawnRate;
     }
 
     for (auto &enemy : enemiesOnMap)

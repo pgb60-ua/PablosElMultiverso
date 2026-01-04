@@ -1,9 +1,10 @@
 #pragma once
 #include "DataFileManager.hpp"
 #include "Types.hpp"
+#include "Round.hpp"
 #include <vector>
 #include <memory>
-#include <Round.hpp>
+
 
 
 
@@ -22,7 +23,7 @@ public:
     void Render();
     bool IsCurrentRoundOver() const;
 
-    Round GetCurrentRound() const;
+    const Round& GetCurrentRound() const;
 
     /// @brief Avanza a la siguiente ronda si existe
     /// @return true si se avanzó a la siguiente ronda, false si no hay más rondas

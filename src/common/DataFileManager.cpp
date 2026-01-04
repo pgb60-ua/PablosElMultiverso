@@ -8,6 +8,7 @@
 #include <variant>
 #include <filesystem>
 #include <cstdlib>
+#include <spdlog/spdlog.h>
 
 void DataFileManager::SetAssetsRoot(const std::string &assetsRoot)
 {
@@ -572,8 +573,12 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
                         enemyType = ENEMY_TYPE::ZOMBIE;
                     else if (enemyName == "DARKIN")
                         enemyType = ENEMY_TYPE::DARKIN;
-                    else
+                    else{
+                        spdlog::warn("DataFileManager::GetRounds: Unknown ENEMY_TYPE '{}'", enemyName);
                         continue; // Ignorar tipos desconocidos
+                    }
+
+                        
                     
                     roundInfo.enemiesToSpawnCount[enemyType] = enemyCount;
                 }

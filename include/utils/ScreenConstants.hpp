@@ -1,2 +1,3 @@
-const int SCREEN_WIDTH = 1200;
-const int SCREEN_HEIGHT = 800;
+#pragma once
+inline const int SCREEN_WIDTH = 1200;
+inline const int SCREEN_HEIGHT = 800;

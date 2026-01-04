@@ -18,7 +18,7 @@ private:
     float elapsedTime = 0.0f;
 
 public:
-    Round(float duration, float spawnRate,int roundNumber, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*>& enemiesOnMap);
+    Round(float duration, float spawnRate, int roundNumber, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*>& enemiesOnMap);
     ~Round();
 
     void Update(float deltaTime);

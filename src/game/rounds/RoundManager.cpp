@@ -52,7 +52,7 @@ bool RoundManager::IsCurrentRoundOver() const
     return currentRound.IsRoundOver();
 }
 
-Round RoundManager::GetCurrentRound() const
+const Round& RoundManager::GetCurrentRound() const
 {
     return currentRound;
 }
@@ -83,3 +83,7 @@ void RoundManager::Render()
     this->currentRound.Render();
 }
 
+RoundManager::~RoundManager()
+{
+    // Los destructores de los miembros se llaman automáticamente
+}
