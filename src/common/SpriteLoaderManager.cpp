@@ -113,6 +113,8 @@ std::string SpriteLoaderManager::GetMetadataPath(PROJECTILE_TYPE type) const
         return BASE_PATH_PROJECTILE + "sniper.json";
     case PROJECTILE_TYPE::WING:
         return BASE_PATH_PROJECTILE + "wing.json";
+    case PROJECTILE_TYPE::CHEMICAL_BULLET:
+        return BASE_PATH_PROJECTILE + "chemical_bullet.json";
     default:
         throw std::runtime_error("Unknown PROJECTILE type");
     }
