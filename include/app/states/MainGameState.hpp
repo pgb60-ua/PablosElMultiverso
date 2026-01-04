@@ -15,6 +15,7 @@ class MainGameState : public GameState
 {
 public:
     MainGameState();
+    MainGameState(PLAYER_TYPE playerType);
     ~MainGameState();
 
     void init() override;
@@ -26,6 +27,7 @@ public:
     void resume() {};
 
 private:
+    PLAYER_TYPE selectedPlayerType;
     char entered_key;
     Vector2 direction;
     Vector2 direction2;

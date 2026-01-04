@@ -10,20 +10,29 @@
 #include "StateMachine.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
-#include <iostream>
 
 extern "C"
 {
 #include <raylib.h>
 }
 
-MainGameState::MainGameState() : direction{0, 0}, roundManager(ROUND_TYPE::EASY, enemies, playerPointers) {}
+// Constructor que recibe el tipo de jugador
+MainGameState::MainGameState(PLAYER_TYPE playerType)
+    : selectedPlayerType(playerType), direction{0, 0}, roundManager(ROUND_TYPE::EASY, enemies, playerPointers)
+{
+}
+
+// Constructor por defecto con tipo de jugador por defecto (Mage)
+MainGameState::MainGameState()
+    : MainGameState(PLAYER_TYPE::MAGE)
+{
+}
 
 void MainGameState::init()
 {  
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
+    players.push_back(std::make_unique<Player>(selectedPlayerType, initialPosition, enemies));
     
     playerPointers.clear();
     for (const auto& player : players)
