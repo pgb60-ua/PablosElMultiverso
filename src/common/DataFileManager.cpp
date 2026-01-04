@@ -1,5 +1,6 @@
+#include "DataFileManager.hpp"
+#include "RoundInfo.hpp"
 #include "Types.hpp"
-#include <DataFileManager.hpp>
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <sstream>
@@ -7,6 +8,7 @@
 #include <variant>
 #include <filesystem>
 #include <cstdlib>
+#include <spdlog/spdlog.h>
 
 void DataFileManager::SetAssetsRoot(const std::string &assetsRoot)
 {
@@ -83,12 +85,10 @@ std::string DataFileManager::GetFilePath(ENEMY_TYPE type) const
     {
     case ENEMY_TYPE::ZOMBIE:
         return BASE_PATH_ENEMY + "zombie.json";
-    case ENEMY_TYPE::ENEMY2:
-        return BASE_PATH_ENEMY + "enemy2.json";
-    case ENEMY_TYPE::ENEMY3:
-        return BASE_PATH_ENEMY + "enemy3.json";
-    case ENEMY_TYPE::ENEMY4:
-        return BASE_PATH_ENEMY + "enemy4.json";
+    case ENEMY_TYPE::DARKIN:
+        return BASE_PATH_ENEMY + "darkin.json";
+    case ENEMY_TYPE::CHEMICAL_DESTRUCTOR:
+        return BASE_PATH_ENEMY + "chemical_destructor.json";
     default:
         throw std::runtime_error("Unknown ENEMY type");
     }
@@ -116,6 +116,21 @@ std::string DataFileManager::GetFilePath(WEAPON_TYPE type) const
         return BASE_PATH_WEAPON + "wing.json";
     default:
         throw std::runtime_error("Unknown WEAPON type");
+    }
+}
+
+std::string DataFileManager::GetFilePath(ROUND_TYPE type) const
+{
+    switch (type)
+    {
+    case ROUND_TYPE::EASY:
+        return BASE_PATH_ROUND + "easy.json";
+    case ROUND_TYPE::MEDIUM:
+        return BASE_PATH_ROUND + "medium.json";
+    case ROUND_TYPE::HARD:
+        return BASE_PATH_ROUND + "hard.json";
+    default:
+        throw std::runtime_error("Unknown ROUND type");
     }
 }
 
@@ -191,6 +206,24 @@ const DataMap &DataFileManager::GetData(WEAPON_TYPE type)
     return weaponCache[type];
 }
 
+const DataMap &DataFileManager::GetData(ROUND_TYPE type)
+{
+    // Buscar en caché
+    auto it = roundCache.find(type);
+    if (it != roundCache.end())
+    {
+        return it->second;
+    }
+
+    // No está en caché, cargar desde archivo
+    std::string path = GetFilePath(type);
+    DataMap data = LoadFromFile(path);
+
+    // Guardar en caché y devolver referencia
+    roundCache[type] = std::move(data);
+    return roundCache[type];
+}
+
 void DataFileManager::ClearCache()
 {
     playerCache.clear();
@@ -206,6 +239,8 @@ void DataFileManager::ClearCacheEnemies() { enemyCache.clear(); }
 
 void DataFileManager::ClearCacheWeapons() { weaponCache.clear(); }
 
+void DataFileManager::ClearCacheRounds() { roundCache.clear(); }
+
 void DataFileManager::ClearCache(PLAYER_TYPE type) { playerCache.erase(type); }
 
 void DataFileManager::ClearCache(ITEM_TYPE type) { itemCache.erase(type); }
@@ -213,6 +248,8 @@ void DataFileManager::ClearCache(ITEM_TYPE type) { itemCache.erase(type); }
 void DataFileManager::ClearCache(ENEMY_TYPE type) { enemyCache.erase(type); }
 
 void DataFileManager::ClearCache(WEAPON_TYPE type) { weaponCache.erase(type); }
+
+void DataFileManager::ClearCache(ROUND_TYPE type) { roundCache.erase(type); }
 
 // Cargar y parsear archivo a diccionario
 DataMap DataFileManager::LoadFromFile(const std::string &path)
@@ -231,27 +268,63 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
         nlohmann::json j;
         file >> j;
 
-        // Convertir cada elemento del JSON al DataMap
-        for (auto &[key, value] : j.items())
+        // Función helper recursiva para aplanar JSON
+        std::function<void(const nlohmann::json&, const std::string&)> flattenJson;
+        flattenJson = [&data, &flattenJson](const nlohmann::json& jsonObj, const std::string& prefix)
         {
-            if (value.is_string())
+            if (jsonObj.is_object())
             {
-                data[key] = value.get<std::string>();
+                for (const auto& [key, value] : jsonObj.items())
+                {
+                    std::string newKey = prefix.empty() ? key : prefix + key;
+                    
+                    if (value.is_string())
+                    {
+                        data[newKey] = value.get<std::string>();
+                    }
+                    else if (value.is_number_integer())
+                    {
+                        data[newKey] = value.get<int>();
+                    }
+                    else if (value.is_number_float())
+                    {
+                        data[newKey] = value.get<float>();
+                    }
+                    else if (value.is_boolean())
+                    {
+                        data[newKey] = value.get<bool>();
+                    }
+                    else if (value.is_array())
+                    {
+                        // Guardar el tamaño del array
+                        data[newKey + "_count"] = static_cast<int>(value.size());
+                        
+                        // Procesar cada elemento del array
+                        for (size_t i = 0; i < value.size(); ++i)
+                        {
+                            flattenJson(value[i], newKey + "_" + std::to_string(i) + "_");
+                        }
+                    }
+                    else if (value.is_object())
+                    {
+                        // Procesar objetos anidados
+                        flattenJson(value, newKey + "_");
+                    }
+                }
             }
-            else if (value.is_number_integer())
+            else if (jsonObj.is_array())
             {
-                data[key] = value.get<int>();
+                // Si el root es un array
+                data[prefix + "count"] = static_cast<int>(jsonObj.size());
+                for (size_t i = 0; i < jsonObj.size(); ++i)
+                {
+                    flattenJson(jsonObj[i], prefix + std::to_string(i) + "_");
+                }
             }
-            else if (value.is_number_float())
-            {
-                data[key] = value.get<float>();
-            }
-            else if (value.is_boolean())
-            {
-                data[key] = value.get<bool>();
-            }
-            // Si es otro tipo (objeto, array), se ignora por ahora
-        }
+        };
+
+        // Aplanar el JSON
+        flattenJson(j, "");
     }
     catch (const nlohmann::json::exception &e)
     {
@@ -410,4 +483,101 @@ Stats DataFileManager::GetWeaponStats(WEAPON_TYPE type)
     };
 
     return Stats(offensiveStats, defensiveStats);
+}
+
+// ============================================================================
+// Métodos para obtener datos específicos de rondas
+// ============================================================================
+
+std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
+{
+    // Obtener el DataMap cacheado
+    const DataMap &data = GetData(type);
+    std::vector<RoundInfo> rounds;
+
+    // Helper lambdas para extraer datos del DataMap
+    auto getInt = [&data](const std::string &key, int defaultValue = 0) -> int
+    {
+        auto it = data.find(key);
+        if (it != data.end())
+        {
+            if (const int *val = std::get_if<int>(&it->second))
+            {
+                return *val;
+            }
+            if (const float *val = std::get_if<float>(&it->second))
+            {
+                return static_cast<int>(*val);
+            }
+        }
+        return defaultValue;
+    };
+
+    auto getFloat = [&data](const std::string &key, float defaultValue = 0.0f) -> float
+    {
+        auto it = data.find(key);
+        if (it != data.end())
+        {
+            if (const float *val = std::get_if<float>(&it->second))
+            {
+                return *val;
+            }
+            if (const int *val = std::get_if<int>(&it->second))
+            {
+                return static_cast<float>(*val);
+            }
+        }
+        return defaultValue;
+    };
+
+    // Parsear las rondas del DataMap
+    int roundsCount = getInt("rounds_count", 0);
+
+    for (int i = 0; i < roundsCount; ++i)
+    {
+        std::string prefix = "rounds_" + std::to_string(i) + "_";
+        
+        RoundInfo roundInfo;
+        roundInfo.roundNumber = getInt(prefix + "roundNumber", 0);
+        roundInfo.duration = getFloat(prefix + "duration", 60.0f);
+        roundInfo.spawnRate = getFloat(prefix + "spawnRate", 5.0f);
+
+        // Parsear enemigos - el objeto enemiesToSpawn se aplana como enemiesToSpawn_KEY
+        // Necesitamos iterar manualmente sobre las claves del DataMap que coincidan
+        for (const auto& [key, value] : data)
+        {
+            std::string enemyPrefix = prefix + "enemiesToSpawn_";
+            if (key.find(enemyPrefix) == 0 && key.find("_count") == std::string::npos)
+            {
+
+                std::string enemyName = key.substr(enemyPrefix.length());
+                int enemyCount = getInt(key, 0);
+
+                if (!enemyName.empty() && enemyCount > 0)
+                {
+                    ENEMY_TYPE enemyType;
+                    
+                    // Convertir string a ENEMY_TYPE
+                    if (enemyName == "ZOMBIE")
+                        enemyType = ENEMY_TYPE::ZOMBIE;
+                    else if (enemyName == "DARKIN")
+                        enemyType = ENEMY_TYPE::DARKIN;
+                    else if (enemyName == "CHEMICAL_DESTRUCTOR")
+                        enemyType = ENEMY_TYPE::CHEMICAL_DESTRUCTOR;
+                    else{
+                        spdlog::warn("DataFileManager::GetRounds: Unknown ENEMY_TYPE '{}'", enemyName);
+                        continue; // Ignorar tipos desconocidos
+                    }
+
+                        
+                    
+                    roundInfo.enemiesToSpawnCount[enemyType] = enemyCount;
+                }
+            }
+        }
+
+        rounds.push_back(roundInfo);
+    }
+
+    return rounds;
 }
