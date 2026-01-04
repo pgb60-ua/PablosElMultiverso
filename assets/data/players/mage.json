@@ -1,6 +1,6 @@
 {
-  "name": "Pablo el Huevo de Combate",
-  "class": "Mago",
+  "name": "Pablo the Combat Egg",
+  "class": "Mage",
   "level": 1,
   "health": 80,
   "max_health": 80,
@@ -17,5 +17,5 @@
   "life_steal": 0,
   "health_regeneration": 2.5,
   "is_ranged": true,
-  "description": "Una extensión del Pablo original, ahora con habilidades mágicas poderosas."
+  "description": "An original Pablo's extension, now with powerful magical abilities."
 }

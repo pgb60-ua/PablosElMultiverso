@@ -31,7 +31,7 @@ class ChooseNPCMenuState : public GameState {
         // Funciones helper para simplificar el código
         std::string GetDefaultCharacterName(PLAYER_TYPE type) const;
         void DrawCenteredText(const char* text, float y, int fontSize, Color color) const;
-        void DrawNavigationArrows(const Vector2& spritePos, float spriteWidth);
+        void DrawNavigationArrows(const Vector2& spritePos, float spriteWidth) const;
         void LoadCharacterData(CharacterOption& character, PLAYER_TYPE type);
         
         // Funciones auxiliares para calcular posiciones y rectángulos

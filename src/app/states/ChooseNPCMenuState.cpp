@@ -174,7 +174,7 @@ void ChooseNPCMenuState::update(float deltaTime)
         character.spriteAnimation.timeAccumulator += deltaTime;
         if (character.spriteAnimation.timeAccumulator >= character.spriteAnimation.FRAME_DURATION)
         {
-            character.spriteAnimation.timeAccumulator = 0.0f;
+            character.spriteAnimation.timeAccumulator -= character.spriteAnimation.FRAME_DURATION;
             character.spriteAnimation.frameIndex++;
             character.spriteAnimation.frameIndex %= sheet.spriteFrameCount;
         }
@@ -214,7 +214,7 @@ Rectangle ChooseNPCMenuState::GetArrowButtonRect(int index, const Vector2 &sprit
                      arrowSize.x + ARROW_PADDING * 2, arrowSize.y + ARROW_PADDING * 2};
 }
 
-void ChooseNPCMenuState::DrawNavigationArrows(const Vector2 &spritePos, float spriteWidth)
+void ChooseNPCMenuState::DrawNavigationArrows(const Vector2 &spritePos, float spriteWidth) const
 {
     int screenHeight = GetScreenHeight();
     Color fillColor = {60, 60, 60, 255};
