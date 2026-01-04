@@ -4,7 +4,7 @@
 	"level": 1,
 	"health": 120,
 	"max_health": 120,
-	"movement_speed": 5.0,
+	"movement_speed": 60.0,
 	"agility": 8,
 	"attack_speed": 1.0,
 	"physical_damage": 40,

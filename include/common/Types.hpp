@@ -38,7 +38,8 @@ enum class WEAPON_TYPE
 enum class PROJECTILE_TYPE
 {
     WAND,
-    EGGPLOSIVE,
+    EGGPLOSIVE_CIRCLE,
+    EGGPLOSIVE_BULLET,
     LASER_RAY,
     SNIPER,
     WING
@@ -46,5 +47,6 @@ enum class PROJECTILE_TYPE
 
 enum class MAP_TYPE
 {
-    DEFAULT
+    DEFAULT,
+    DEFAULT_UPPER
 };

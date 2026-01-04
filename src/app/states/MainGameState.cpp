@@ -4,6 +4,7 @@
 #include "WingWeapon.hpp"
 #include "LaserRayWeapon.hpp"
 #include "SniperWeapon.hpp"
+#include "EggplosiveWeapon.hpp"
 #include "GameOverState.hpp"
 #include "GameWonState.hpp"
 #include "StateMachine.hpp"
@@ -28,7 +29,7 @@ MainGameState::MainGameState()
 }
 
 void MainGameState::init()
-{
+{  
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     players.push_back(std::make_unique<Player>(selectedPlayerType, initialPosition, enemies));
@@ -45,7 +46,7 @@ void MainGameState::init()
     players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
     players[0]->AddWeapon(std::make_unique<SniperWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
     players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    players[0]->AddWeapon(std::make_unique<EggplosiveWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
 
 }
 
@@ -134,6 +135,10 @@ void MainGameState::render()
 {
     BeginDrawing();
     ClearBackground(DARKGRAY);
+
+    const SpriteSheet &mapSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT);
+    DrawTextureRec(mapSprite.texture, mapSprite.frames[0], {0, 0}, WHITE);
+    
     DrawText("Pablos El Multiverso", 10, 10, 20, LIGHTGRAY);
 
     // Renderizar todos los jugadores
@@ -150,6 +155,9 @@ void MainGameState::render()
         enemy->Render();
     }
     DrawFPS(GetScreenWidth() - 100, 10);
+
+    const SpriteSheet &mapUpperSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
+    DrawTextureRec(mapUpperSprite.texture, mapUpperSprite.frames[0], {0, 0}, WHITE);
     EndDrawing();
 }
 

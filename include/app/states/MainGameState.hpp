@@ -1,6 +1,7 @@
 #pragma once
 #include "AEnemy.hpp"
 #include "Player.hpp"
+#include "SpriteSheet.hpp"
 #include <GameState.hpp>
 #include <memory>
 
