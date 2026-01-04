@@ -11,6 +11,7 @@ enum class ENEMY_TYPE
 {
     ZOMBIE,
     DARKIN,
+    CHEMICAL_DESTRUCTOR
 };
 
 enum class ITEM_TYPE

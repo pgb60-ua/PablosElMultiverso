@@ -88,6 +88,8 @@ std::string SpriteLoaderManager::GetMetadataPath(ENEMY_TYPE type) const
         return BASE_PATH_ENEMY + "zombie.json";
     case ENEMY_TYPE::DARKIN:
         return BASE_PATH_ENEMY + "darkin.json";
+    case ENEMY_TYPE::CHEMICAL_DESTRUCTOR:
+        return BASE_PATH_ENEMY + "chemical_destructor.json";
     default:
         throw std::runtime_error("Unknown ENEMY type");
     }

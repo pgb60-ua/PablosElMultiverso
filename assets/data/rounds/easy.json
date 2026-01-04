@@ -14,7 +14,7 @@
             "spawnRate": 0.8,
             "enemiesToSpawn": {
                 "ZOMBIE": 30,
-                "DARKIN":1
+                "DARKIN": 1
             }
         },
         {
@@ -23,7 +23,7 @@
             "spawnRate": 0.7,
             "enemiesToSpawn": {
                 "ZOMBIE": 40,
-                "DARKIN":5
+                "DARKIN": 5
             }
         },
         {
@@ -32,7 +32,7 @@
             "spawnRate": 0.6,
             "enemiesToSpawn": {
                 "ZOMBIE": 50,
-                "DARKIN":10
+                "DARKIN": 10
             }
         },
         {
@@ -41,7 +41,8 @@
             "spawnRate": 0.5,
             "enemiesToSpawn": {
                 "ZOMBIE": 60,
-                "DARKIN":15
+                "DARKIN": 15,
+                "CHEMICAL_DESTRUCTOR": 1
             }
         }
     ]

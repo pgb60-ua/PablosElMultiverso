@@ -87,6 +87,8 @@ std::string DataFileManager::GetFilePath(ENEMY_TYPE type) const
         return BASE_PATH_ENEMY + "zombie.json";
     case ENEMY_TYPE::DARKIN:
         return BASE_PATH_ENEMY + "darkin.json";
+    case ENEMY_TYPE::CHEMICAL_DESTRUCTOR:
+        return BASE_PATH_ENEMY + "chemical_destructor.json";
     default:
         throw std::runtime_error("Unknown ENEMY type");
     }
@@ -560,6 +562,8 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
                         enemyType = ENEMY_TYPE::ZOMBIE;
                     else if (enemyName == "DARKIN")
                         enemyType = ENEMY_TYPE::DARKIN;
+                    else if (enemyName == "CHEMICAL_DESTRUCTOR")
+                        enemyType = ENEMY_TYPE::CHEMICAL_DESTRUCTOR;
                     else{
                         spdlog::warn("DataFileManager::GetRounds: Unknown ENEMY_TYPE '{}'", enemyName);
                         continue; // Ignorar tipos desconocidos

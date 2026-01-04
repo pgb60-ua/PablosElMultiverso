@@ -4,7 +4,7 @@
 #include <new>
 
 RoundManager::RoundManager(const ROUND_TYPE roundType, std::vector<AEnemy*>& enemiesOnMap, std::vector<Player*>& players)
-    : enemiesOnMap(enemiesOnMap), players(players), currentRound(0, 0, 0.0f, std::vector<AEnemy*>(), enemiesOnMap)
+    : enemiesOnMap(enemiesOnMap), players(players), currentRound(0.0f, 0.0f, 0, std::vector<AEnemy*>(), enemiesOnMap)
 {
     DataFileManager& dataManager = DataFileManager::GetInstance();
     this->roundInfos = dataManager.GetRounds(roundType);
@@ -22,7 +22,9 @@ std::vector<AEnemy*> RoundManager::CreateEnemiesForRound(const RoundInfo& roundI
     std::unordered_map<ENEMY_TYPE, std::function<AEnemy*()>> enemyFactories =
     {
         {ENEMY_TYPE::ZOMBIE,[&]() -> AEnemy*{return new Zombie(players);}},
-        //{ENEMY_TYPE::DARKIN,[&]() -> AEnemy*{return new Darkin(players);}}
+        //{ENEMY_TYPE::DARKIN,[&]() -> AEnemy*{return new Darkin(players);}},
+        //{ENEMY_TYPE::CHEMICAL_DESTRUCTOR,[&]() -> AEnemy*{return new ChemicalDestructor(players);}}
+
     };
 
     for (const auto& [enemyType, count] : roundInfo.enemiesToSpawnCount)
