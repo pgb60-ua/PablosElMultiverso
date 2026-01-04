@@ -1,4 +1,5 @@
 #include "WindowFlags.hpp"
+#include "ScreenConstants.hpp"
 #include <MainGameState.hpp>
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
@@ -11,7 +12,7 @@ extern "C"
 int main()
 {
     // Crear ventana con el tamaño del monitor
-    InitWindow(1200, 800, "Pablos, El Multiverso");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pablos, El Multiverso");
 
     float delta_time = 0.0f;
 

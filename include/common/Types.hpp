@@ -10,9 +10,8 @@ enum class PLAYER_TYPE
 enum class ENEMY_TYPE
 {
     ZOMBIE,
-    ENEMY2,
-    ENEMY3,
-    ENEMY4
+    DARKIN,
+    CHEMICAL_DESTRUCTOR
 };
 
 enum class ITEM_TYPE
@@ -50,4 +49,11 @@ enum class MAP_TYPE
 {
     DEFAULT,
     DEFAULT_UPPER
+};
+
+enum class ROUND_TYPE
+{
+    EASY,
+    MEDIUM,
+    HARD
 };

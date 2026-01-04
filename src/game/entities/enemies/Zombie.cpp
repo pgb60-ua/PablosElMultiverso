@@ -1,4 +1,5 @@
 #include "Zombie.hpp"
+#include "ScreenConstants.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -8,7 +9,7 @@ Zombie::Zombie(std::vector<Player *> objectives)
     : AEnemy(
           DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE),
           SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE,
-                                                             Vector2{(float)(std::rand() % 2000), (float)(std::rand() % 2000)}),
+                                                             Vector2{(float)(std::rand() % SCREEN_WIDTH), (float)(std::rand() % SCREEN_HEIGHT)}),
           objectives,
           50)
 {
