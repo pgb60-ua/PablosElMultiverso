@@ -1,0 +1,71 @@
+{
+  "texture": "darkin-Sheet.png",
+  "frames": [
+    {
+      "x": 2,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 66,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 130,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 194,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 258,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 322,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 386,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 450,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 514,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 578,
+      "y": 0,
+      "width":60,
+      "height": 64
+    },
+    {
+      "x": 642,
+      "y": 0,
+      "width":60,
+      "height": 64
+    }
+  ]
+}

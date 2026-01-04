@@ -145,6 +145,8 @@ std::string SpriteLoaderManager::GetMetadataPath(MAP_TYPE type) const
     {
     case MAP_TYPE::DEFAULT:
         return BASE_PATH_MAP + "default.json";
+    case MAP_TYPE::DEFAULT_UPPER:
+        return BASE_PATH_MAP + "default_upper.json";
     default:
         throw std::runtime_error("Unknown MAP type");
     }

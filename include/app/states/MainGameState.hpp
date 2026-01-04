@@ -2,6 +2,7 @@
 #include "AEnemy.hpp"
 #include "Player.hpp"
 #include "RoundManager.hpp"
+#include "SpriteSheet.hpp"
 #include <GameState.hpp>
 #include <memory>
 

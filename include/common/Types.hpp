@@ -45,7 +45,8 @@ enum class PROJECTILE_TYPE
 
 enum class MAP_TYPE
 {
-    DEFAULT
+    DEFAULT,
+    DEFAULT_UPPER
 };
 
 enum class ROUND_TYPE
