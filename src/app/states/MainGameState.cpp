@@ -18,13 +18,13 @@ extern "C"
 
 // Constructor que recibe el tipo de jugador
 MainGameState::MainGameState(PLAYER_TYPE playerType)
-    : selectedPlayerType(playerType), direction{0, 0}
+    : selectedPlayerType(playerType), direction{0, 0}, roundManager(ROUND_TYPE::EASY, enemies, playerPointers)
 {
 }
 
 // Constructor por defecto con tipo de jugador por defecto (Mage)
 MainGameState::MainGameState()
-    : selectedPlayerType(PLAYER_TYPE::MAGE), direction{0, 0} // Valor por defecto
+    : selectedPlayerType(PLAYER_TYPE::MAGE), direction{0, 0}, roundManager(ROUND_TYPE::EASY, enemies, playerPointers)
 {
 }
 
@@ -33,15 +33,14 @@ void MainGameState::init()
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     players.push_back(std::make_unique<Player>(selectedPlayerType, initialPosition, enemies));
-
-    int numZombies = 100;
-    enemies.reserve(numZombies);
-    for (int i = 0; i < numZombies; i++)
+    
+    playerPointers.clear();
+    for (const auto& player : players)
     {
-        enemies.push_back(new Zombie(std::vector<Player *>{players[0].get()}));
+        playerPointers.push_back(player.get());
     }
 
-    // Crear el arma desde JSON automáticamente en el constructor
+    roundManager.MoveToNextRound();
 
     players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
     players[0]->AddWeapon(std::make_unique<SniperWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
@@ -115,20 +114,22 @@ void MainGameState::update(float deltaTime)
         }
 
     }
-    // Actualizar todos los enemigos
-    for (auto &enemy : enemies)
-    {
-        enemy->Update(deltaTime);
-    }
+
     if (numero_vivo == (int)players.size())
     {
         // Todos los jugadores están muertos, reiniciar el estado del juego
         state_machine->add_state(std::make_unique<GameOverState>(), true);
     }
-    else if (enemies.empty())
+    else if (roundManager.IsCurrentRoundOver())
     {
-        state_machine->add_state(std::make_unique<GameWonState>(), true);
+        if(!roundManager.MoveToNextRound()){
+            state_machine->add_state(std::make_unique<GameWonState>(), true);
+        }else{
+            //TODO: Lanzar pantalla de tienda
+        }
     }
+
+    roundManager.Update(deltaTime);
 }
 
 void MainGameState::render()
@@ -149,11 +150,7 @@ void MainGameState::render()
         DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
                  static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }
-    // Renderizar todos los enemigos
-    for (auto &enemy : enemies)
-    {
-        enemy->Render();
-    }
+    roundManager.Render();
     DrawFPS(GetScreenWidth() - 100, 10);
 
     const SpriteSheet &mapUpperSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
