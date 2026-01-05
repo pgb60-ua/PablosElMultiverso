@@ -1,6 +1,6 @@
 {
-  "name": "Mage",
-  "class": "Magic User",
+  "name": "Pablo, the Combat Egg",
+  "class": "Mage",
   "level": 1,
   "health": 80,
   "max_health": 80,
@@ -17,5 +17,5 @@
   "life_steal": 0,
   "health_regeneration": 2.5,
   "is_ranged": true,
-  "description": "A powerful spellcaster who wields the forces of magic"
+  "description": "An extension of the original Pablo, now with powerful magical abilities."
 }
