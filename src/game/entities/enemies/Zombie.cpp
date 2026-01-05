@@ -6,9 +6,9 @@
 Zombie::Zombie(std::vector<Player *> objectives)
     : AEnemy(
           DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE),
-          SpriteLoaderManager::GetInstance().GetSpriteHitbox(ENEMY_TYPE::ZOMBIE, Vector2{(float)(std::rand() % SCREEN_WIDTH), (float)(std::rand() % SCREEN_HEIGHT)}),
-          objectives,
-          50)
+          SpriteLoaderManager::GetInstance().GetSpriteHitbox(
+              ENEMY_TYPE::ZOMBIE, Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
+          objectives, 50)
 {
     // Las stats se cargan automáticamente desde zombie.json en la lista de inicialización
 }
@@ -27,8 +27,7 @@ void Zombie::Render()
     Vector2 origin = {src.width * 0.5f, src.height * 0.5f};
 
     Rectangle dest = {hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
-                      hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f,
-                      src.width, src.height};
+                      hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f, src.width, src.height};
 
     DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
     animation.color = WHITE;

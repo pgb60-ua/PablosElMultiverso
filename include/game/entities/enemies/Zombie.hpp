@@ -13,10 +13,7 @@ class Zombie : public AEnemy
 {
 public:
     /// @brief Constructor del Zombie
-    /// @param hitbox Hitbox del zombie
     /// @param objectives Referencia al vector de jugadores (objetivos)
-    /// @param pabloCoinsAtDeath Cantidad de Pablo Coins que suelta al morir
-    /// Las estadísticas se cargan automáticamente desde el archivo zombie.json
     Zombie(std::vector<Player *> objectives);
 
     /*--------------------------*/
