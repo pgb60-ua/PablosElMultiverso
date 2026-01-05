@@ -6,7 +6,7 @@
             "spawnRate": 0.7,
             "enemiesToSpawn": {
                 "DARKIN": 20,
-                "ZOMBIE": 20
+                "CHEMICAL_DESTRUCTOR": 20
             }
         },
         {
