@@ -92,6 +92,9 @@ public:
     /// @brief Obtiene los puntos de vida actuales
     float GetHealth() const { return stats.GetHealth(); }
 
+    /// @brief Obtiene los puntos de vida totales
+    float GetMaxHealth() const { return stats.GetMaxHealth(); }
+
     /// @brief Obtiene la velocidad de movimiento actual
     float GetMovementSpeed() const { return stats.GetMovementSpeed(); }
 
@@ -165,8 +168,11 @@ public:
     /**/
     // Setters de stats (aplican modificador automáticamente)
 
-    /// @brief Establece los puntos de vida base y aplica modificador
-    void SetHealth(float newHealth) { stats.SetHealth(newHealth * healthModifier); }
+    /// @brief Establece los puntos de vida actuales
+    void SetHealth(float newHealth) { stats.SetHealth(newHealth); }
+
+    /// @brief Obtiene los puntos de vida actuales
+    void SetMaxHealt(float newMaxHealt) { stats.SetMaxHealth(newMaxHealt * healthModifier); }
 
     /// @brief Establece la velocidad de movimiento base y aplica modificador
     void SetMovementSpeed(float newSpeed) { stats.SetMovementSpeed(newSpeed * movementSpeedModifier); }
