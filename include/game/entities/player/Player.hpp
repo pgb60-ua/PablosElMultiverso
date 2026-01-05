@@ -23,7 +23,7 @@ class Player : public AEntity
 private:
     void ImportModifiers(PLAYER_TYPE player);
     static constexpr float BASE_MULTIPLIER = 1.0f;
-    std::vector<std::shared_ptr<Item>> inventory;
+    std::vector<const Item *> inventory;
     std::vector<std::unique_ptr<AWeapon>> weapons;
     std::vector<Vector2> weaponOffsets; // Offset individual para cada arma
     static constexpr int WEAPON_MAX = 4;
@@ -33,6 +33,7 @@ private:
     std::vector<AEnemy *> enemiesInRange;
     std::vector<AEnemy *> &allEnemies;
     void UpdateEnemiesInRange();
+    int pabloCoins;
 
     /// @brief Calcula el offset de posición para un arma basándose en sus dimensiones y el tamaño del sprite del
     /// jugador
@@ -253,13 +254,25 @@ public:
     void SetOffensiveStatsWithModifiers(const OffensiveStats &offensiveStats);
     void SetDefensiveStatsWithModifiers(const DefensiveStats &defensiveStats);
 
+    /// @brief Devuelve el numero de monedas que tiene el jugador
+    int GetPabloCoins() const { return pabloCoins; }
+    /// @brief Modifica el numero de monedas que tiene el jugador
+    void ModifyPabloCoins(int coins)
+    {
+        pabloCoins += coins;
+        if (pabloCoins < 0)
+        {
+            pabloCoins = 0;
+        }
+    }
+
     PLAYER_TYPE GetPlayerType() { return player; }
     void SetPlayerType(PLAYER_TYPE player) { this->player = player; }
 
     void Move(Vector2 newDirection, float deltaTime);
     void Update(float deltaTime) override;
     void HandleInput(Vector2 inputDirection);
-    void AddItem(std::shared_ptr<Item> item);
+    void AddItem(const Item *item);
     void AddWeapon(std::unique_ptr<AWeapon> newWeapon);
     void CheckCollisions(float deltaTime) override;
     void Render() override;
