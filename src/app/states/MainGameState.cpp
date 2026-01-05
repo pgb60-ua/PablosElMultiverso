@@ -125,7 +125,8 @@ void MainGameState::update(float deltaTime)
         }
         else
         {
-            state_machine->add_state(std::make_unique<ShopState>(), false);
+            // Lo pongo en false para no eliminar el MainGameState
+            state_machine->add_state(std::make_unique<ShopState>(players[0].get()), false);
         }
     }
 

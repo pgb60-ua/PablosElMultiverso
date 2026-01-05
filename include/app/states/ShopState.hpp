@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Player.hpp"
 #include <GameState.hpp>
 #include <memory>
 
@@ -12,9 +13,11 @@ class ShopState : public GameState
 {
 private:
     bool passRound = false;
+    Player *player;
+    constexpr static int PADDING = 100;
 
 public:
-    ShopState();
+    ShopState(Player *player);
     ~ShopState();
 
     void init() override;
