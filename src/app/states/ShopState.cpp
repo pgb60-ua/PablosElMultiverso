@@ -10,7 +10,7 @@
 
 ShopState::ShopState(Player *player) : player(player) {}
 ShopState::~ShopState() {}
-void ShopState::init() {}
+void ShopState::init() { texture = LoadTexture("assets/sprites/shop/items/Zombiesaur_64.png"); }
 void ShopState::handleInput()
 {
     if (IsKeyPressed(KEY_SPACE))
@@ -24,19 +24,25 @@ void ShopState::update(float deltaTime)
     {
         state_machine->remove_state(false);
     }
+    // if rerroll
+    // if block
 }
 void ShopState::render()
 {
     int screenSemiWidth = GetScreenWidth() / 2;
     int heightStats = GetScreenHeight() - 200;
     int widthStats = screenSemiWidth - GetScreenWidth() / 6;
+    int minXShop = screenSemiWidth + (screenSemiWidth - widthStats - 100);
 
     // Entre 13 porque muestro 12 stats y dejo 1 para margen de arriba y abajo
     int spaceStats = heightStats / 13;
 
     BeginDrawing();
 
-    ClearBackground(BLACK);
+    // ClearBackground(BLACK);
+
+    // Dibujamos cuadrado de menu de tienda
+    DrawRectangle(50, 50, GetScreenWidth() - 100, GetScreenHeight() - 100, BLACK);
 
     // Pintamos las stats
     DrawRectangle(100, 100, widthStats, heightStats, WHITE);
@@ -55,8 +61,10 @@ void ShopState::render()
              20, RED);
     DrawText(TextFormat("Life Steal: %.1f", player->GetLifeSteal()), 120, PADDING + spaceStats * 12, 20, RED);
 
-    // Pintamos la tienda
-    DrawRectangle(screenSemiWidth + (screenSemiWidth - widthStats - 100), 100, widthStats, heightStats, WHITE);
+    // Pintamos la tienda (los items)
+    DrawRectangle(minXShop, 100, widthStats, heightStats, WHITE);
+    DrawRectangle(minXShop, 100, 64, 64, GRAY);
+    DrawTexture(texture, minXShop, 100, WHITE);
 
     EndDrawing();
 }

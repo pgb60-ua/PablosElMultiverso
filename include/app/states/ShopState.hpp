@@ -14,6 +14,7 @@ class ShopState : public GameState
 private:
     bool passRound = false;
     Player *player;
+    Texture2D texture;
     constexpr static int PADDING = 100;
 
 public:
