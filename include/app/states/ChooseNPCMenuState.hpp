@@ -31,14 +31,14 @@ class ChooseNPCMenuState : public GameState {
         // Funciones helper para simplificar el código
         std::string GetDefaultCharacterName(PLAYER_TYPE type) const;
         void DrawCenteredText(const char* text, float y, int fontSize, Color color) const;
-        void DrawNavigationArrows(const Vector2& spritePos, float spriteWidth) const;
+        void DrawNavigationArrows(const Vector2& containerPos) const;
         void LoadCharacterData(CharacterOption& character, PLAYER_TYPE type);
         
         // Funciones auxiliares para calcular posiciones y rectángulos
         Vector2 GetContainerPos(int screenWidth, int screenHeight) const;
         Vector2 GetSpritePos(const Vector2& containerPos, float spriteWidth, float spriteHeight) const;
         // Función auxiliar estática para calcular rectángulos de botones de flecha
-        static Rectangle GetArrowButtonRect(int index, const Vector2& spritePos, float spriteWidth, int screenHeight);
+        static Rectangle GetArrowButtonRect(int index, const Vector2& containerPos, int screenHeight);
 
     public:
         ChooseNPCMenuState();
