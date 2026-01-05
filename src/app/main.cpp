@@ -4,6 +4,8 @@
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
 #include <memory>
+#include <cstdlib>
+#include <ctime>
 extern "C"
 {
 #include <raylib.h>
@@ -13,6 +15,8 @@ int main()
 {
     // Crear ventana con el tamaño del monitor
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pablos, El Multiverso");
+
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     float delta_time = 0.0f;
 
