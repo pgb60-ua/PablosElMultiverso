@@ -4,7 +4,6 @@
 #include <limits>
 #include <raymath.h>
 
-std::vector<AEnemy *> AEnemy::s_allEnemies;
 
 AEnemy::AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
     : AEntity(stats, hitbox), objectives(objectives), pabloCoinsAtDeath(pabloCoinsAtDeath)
