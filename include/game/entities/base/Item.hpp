@@ -27,6 +27,8 @@ protected:
     ItemRarity itemRarity;
     /// @brief Precio del item
     int price;
+    /// @brif Icono para la tienda
+    Texture2D *icon;
 
 public:
     /// @brief Constructor de la clase Item
@@ -47,6 +49,14 @@ public:
 
     /// @brief Getter del precio del item
     int GetPrice() const { return price; }
+
+    /// @brief Getter "provisional" para devolver icono
+    const Texture2D *GetIcon() const { return icon; }
+    void SetIcon(Texture2D *newIcon)
+    {
+        if (newIcon != nullptr)
+            icon = newIcon;
+    }
 
     // Setters
     /// @brief Setter del nombre del objeto
