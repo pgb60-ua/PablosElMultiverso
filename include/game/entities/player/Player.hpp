@@ -33,7 +33,7 @@ private:
     std::vector<AEnemy *> enemiesInRange;
     std::vector<AEnemy *> &allEnemies;
     void UpdateEnemiesInRange();
-    int pabloCoins;
+    int pabloCoins = 0;
 
     /// @brief Calcula el offset de posición para un arma basándose en sus dimensiones y el tamaño del sprite del
     /// jugador
