@@ -17,26 +17,6 @@ void Shop::reRoll()
     }
 }
 
-void Shop::BlockSlot(int index)
-{
-    if (index < 0 || index >= MAX_ITEMS_SHOP)
-    {
-        spdlog::warn("Trying to block an item out of range");
-        return;
-    }
-    shopPool[index].isBlocked = true;
-}
-
-void Shop::UnblockSlot(int index)
-{
-    if (index < 0 || index >= MAX_ITEMS_SHOP)
-    {
-        spdlog::warn("Trying to unblock an item out of range");
-        return;
-    }
-    shopPool[index].isBlocked = false;
-}
-
 bool Shop::IsSlotBlocked(int index) const
 {
     if (index < 0 || index >= MAX_ITEMS_SHOP)
@@ -46,6 +26,16 @@ bool Shop::IsSlotBlocked(int index) const
     }
     return shopPool[index].isBlocked;
 }
+
+void Shop::AlternateBlockSlot(int index)
+{
+    if (index < 0 || index >= MAX_ITEMS_SHOP)
+    {
+        spdlog::warn("Trying to acces an item out of range");
+        return;
+    }
+    shopPool[index].isBlocked = !shopPool[index].isBlocked;
+};
 
 const Item *Shop::BuyItem(int index) const
 {
