@@ -7,8 +7,6 @@ Darkin::Darkin(std::vector<Player *> players)
               ENEMY_TYPE::DARKIN, Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
           players, 75)
 {
-    // Inicializar
-    // Darkin
 }
 
 void Darkin::Update(float deltaTime)
