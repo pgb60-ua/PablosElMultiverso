@@ -122,15 +122,14 @@ void Player::HandleInput(Vector2 newInputDirection)
     inputDirection = newInputDirection;
 }
 
-void Player::AddItem(std::shared_ptr<Item> item)
+void Player::AddItem(const Item *item)
 {
-    Stats itemStats = item->GetStats();
+    const Stats itemStats = item->GetStats();
 
     // Añadir las stats del item aplicando los modificadores
     SetOffensiveStatsWithModifiers(itemStats.GetOffensiveStats());
     SetDefensiveStatsWithModifiers(itemStats.GetDefensiveStats());
 
-    // Añadir el item al inventario (shared_ptr se copia, incrementa ref count)
     inventory.push_back(item);
 }
 
