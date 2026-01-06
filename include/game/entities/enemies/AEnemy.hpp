@@ -23,7 +23,7 @@ protected:
     int pabloCoinsAtDeath;
 
     /// @brief Registra todas las instancias activas para aplicar las reglas de Boids
-    static std::vector<AEnemy *> s_allEnemies;
+    inline static std::vector<AEnemy *> s_allEnemies;
 
     /// @brief Velocidad actual acumulada del enemigo para suavizar el movimiento
     Vector2 velocity;
