@@ -6,4 +6,5 @@ typedef struct
 {
     const Item *item;
     bool isBlocked;
+    bool isBuyed;
 } TShopSlot;

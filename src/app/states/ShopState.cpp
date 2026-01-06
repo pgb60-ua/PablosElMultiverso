@@ -1,19 +1,32 @@
 #include "ShopState.hpp"
-#include "MainGameState.hpp"
 #include "Player.hpp"
+#include "ShopSlot.hpp"
 #include "StateMachine.hpp"
 #include "raylib.h"
-#include <algorithm>
-#include <iostream>
-#include <memory>
-#include <ostream>
 
-ShopState::ShopState(Player *player) : player(player) {}
+ShopState::ShopState(Player *player) : player(player), shop() {}
 ShopState::~ShopState() {}
-void ShopState::init() { texture = LoadTexture("assets/sprites/shop/items/Zombiesaur_64.png"); }
+void ShopState::init() { player->ModifyPabloCoins(50); }
 void ShopState::handleInput()
 {
-    if (IsKeyPressed(KEY_SPACE))
+    if (IsKeyPressed(KEY_S))
+    {
+        NextSelectedItem(1);
+    }
+    else if (IsKeyPressed(KEY_W))
+    {
+        NextSelectedItem(-1);
+    }
+    // Quiero que tenga boton para avanzar ronda
+    if (IsKeyPressed(KEY_ENTER) && selectedItem >= 0 && selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+    {
+        willBuy = true;
+    }
+    if (IsKeyPressed(KEY_SPACE) && selectedItem > 0 && selectedItem < Shop::MAX_ITEMS_SHOP - 1)
+    {
+        willAlternateBlock = true;
+    }
+    if (IsKeyPressed(KEY_E))
     {
         passRound = true;
     }
@@ -22,10 +35,29 @@ void ShopState::update(float deltaTime)
 {
     if (passRound)
     {
+        passRound = false;
         state_machine->remove_state(false);
     }
+    if (willAlternateBlock)
+    {
+        shop.AlternateBlockSlot(selectedItem);
+        willAlternateBlock = false;
+    }
+    if (willBuy)
+    {
+        const TShopSlot &slot = shop.GetItemsShop()[selectedItem];
+        if (slot.item != nullptr && !slot.isBuyed && player->GetPabloCoins() >= slot.item->GetPrice())
+        {
+            const Item *item = shop.BuyItem(selectedItem);
+            if (item != nullptr)
+            {
+                player->ModifyPabloCoins(-item->GetPrice());
+                player->AddItem(item);
+            }
+        }
+        willBuy = false;
+    }
     // if rerroll
-    // if block
 }
 void ShopState::render()
 {
@@ -43,6 +75,9 @@ void ShopState::render()
 
     // Dibujamos cuadrado de menu de tienda
     DrawRectangle(50, 50, GetScreenWidth() - 100, GetScreenHeight() - 100, BLACK);
+
+    // Pintamos las pablo coins (le doy 110 para margen)
+    DrawText(TextFormat("Pablo Coins: %d", player->GetPabloCoins()), widthStats + 110, 100, 20, WHITE);
 
     // Pintamos las stats
     DrawRectangle(100, 100, widthStats, heightStats, WHITE);
@@ -63,8 +98,50 @@ void ShopState::render()
 
     // Pintamos la tienda (los items)
     DrawRectangle(minXShop, 100, widthStats, heightStats, WHITE);
-    DrawRectangle(minXShop, 100, 64, 64, GRAY);
-    DrawTexture(texture, minXShop, 100, WHITE);
+    // Pintamos los items
+    for (int i = 0; i < Shop::MAX_ITEMS_SHOP; i++)
+    {
+        Color color = GRAY;
+        const TShopSlot &slot = shop.GetItemsShop()[i];
+        // Si el item esta comprado no aparece
+        if (slot.isBuyed)
+        {
+            continue;
+        }
+        if (i == selectedItem)
+        {
+            color = BLUE;
+        }
+        else if (slot.isBlocked)
+        {
+            color = RED;
+        }
+
+        DrawRectangle(minXShop, 100 + i * (heightStats / 5), widthStats, 64, color);
+        DrawText(slot.item->GetName().c_str(), minXShop + 70, 100 + i * (heightStats / 5), 20, WHITE);
+
+        DrawTexture(*slot.item->GetIcon(), minXShop, 100 + i * (heightStats / 5), WHITE);
+    }
 
     EndDrawing();
+}
+
+void ShopState::NextSelectedItem(int direction)
+{
+    int newSelection = selectedItem + direction;
+
+    // Buscar el siguiente item válido en la dirección indicada
+    while (newSelection >= 0 && newSelection < Shop::MAX_ITEMS_SHOP)
+    {
+        // Si encontramos un item válido (no comprado/no null)
+        if (!shop.GetItemsShop()[newSelection].isBuyed)
+        {
+            selectedItem = newSelection;
+            return;
+        }
+
+        newSelection += direction;
+    }
+
+    // Si llegamos aquí, no hay items válidos en esa dirección, no hacemos nada
 }
