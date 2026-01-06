@@ -1,8 +1,9 @@
 #pragma once
-#include <string>
 #include "Stats.hpp"
-extern "C" {
-    #include <raylib.h>
+#include <string>
+extern "C"
+{
+#include <raylib.h>
 }
 
 enum class ItemRarity
@@ -24,11 +25,13 @@ protected:
     Stats stats;
     /// @brief Rareza del objeto
     ItemRarity itemRarity;
+    /// @brief Precio del item
+    int price;
 
 public:
     /// @brief Constructor de la clase Item
 
-    Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity);
+    Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity, int price);
 
     /// @brief Getter del nombre del objeto
     std::string GetName() const { return name; }
@@ -42,6 +45,9 @@ public:
     /// @brief Getter de la rareza del objeto
     ItemRarity GetItemRarity() const { return itemRarity; }
 
+    /// @brief Getter del precio del item
+    int GetPrice() const { return price; }
+
     // Setters
     /// @brief Setter del nombre del objeto
     void SetName(const std::string &newName) { name = newName; }
@@ -54,6 +60,15 @@ public:
 
     /// @brief Setter de la rareza del objeto
     void SetItemRarity(ItemRarity newRarity) { itemRarity = newRarity; }
+
+    void SetPrice(int newPrice)
+    {
+        if (newPrice < 0)
+        {
+            newPrice = 0;
+        }
+        price = newPrice;
+    }
 
     virtual ~Item() {}
 };
