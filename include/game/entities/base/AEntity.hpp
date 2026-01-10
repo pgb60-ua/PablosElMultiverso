@@ -97,7 +97,7 @@ public:
     bool IsAlive();
 
     /// @brief Realiza un ataque al jugador
-    virtual bool Attack() = 0;
+    virtual bool Attack();
     /// @brief Comprueba las colisiones de la entidad
     virtual void CheckCollisions(float deltaTime) = 0;
 

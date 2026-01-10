@@ -1,5 +1,6 @@
 #include "RoundManager.hpp"
 #include "Zombie.hpp"
+#include "Darkin.hpp"
 #include <functional>
 #include <new>
 
@@ -22,7 +23,7 @@ std::vector<AEnemy*> RoundManager::CreateEnemiesForRound(const RoundInfo& roundI
     std::unordered_map<ENEMY_TYPE, std::function<AEnemy*()>> enemyFactories =
     {
         {ENEMY_TYPE::ZOMBIE,[&]() -> AEnemy*{return new Zombie(players);}},
-        //{ENEMY_TYPE::DARKIN,[&]() -> AEnemy*{return new Darkin(players);}},
+        {ENEMY_TYPE::DARKIN,[&]() -> AEnemy*{return new Darkin(players);}},
         //{ENEMY_TYPE::CHEMICAL_DESTRUCTOR,[&]() -> AEnemy*{return new ChemicalDestructor(players);}}
 
     };
@@ -63,7 +64,7 @@ bool RoundManager::MoveToNextRound()
 {
 
     int nextRoundNumber = currentRound.GetRoundNumber() + 1;
-    auto it = std::find_if(roundInfos.begin(), roundInfos.end(), 
+    auto it = std::find_if(roundInfos.begin(), roundInfos.end(),
     [nextRoundNumber](const RoundInfo& info) {
         return info.roundNumber == nextRoundNumber;
     });

@@ -3,6 +3,11 @@
 #include <random>
 #include <utility>
 
+bool AEntity::Attack()
+{
+    return false;
+}
+
 AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hitbox(hitbox)
 {
     // No se puede crear a una entidad con 0 de vida
