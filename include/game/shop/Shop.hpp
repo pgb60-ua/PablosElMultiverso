@@ -19,7 +19,4 @@ public:
     // Pongo private abajo porque necesito la constante
 private:
     std::array<TShopSlot, MAX_ITEMS_SHOP> shopPool;
-    // Provisional
-    Texture2D texture;
-    Item testItem;
 };

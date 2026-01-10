@@ -1,33 +1,42 @@
 #include "Shop.hpp"
 #include "Item.hpp"
+#include "ItemsFactory.hpp"
 #include "ShopSlot.hpp"
 #include "raylib.h"
 #include <spdlog/spdlog.h>
 
 Shop::Shop()
-    : testItem("name", "description",
-               Stats(OffensiveStats{10.0f, 10.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-                     DefensiveStats{0.0f, 10.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f}),
-               ItemRarity::Common, 10)
 {
-    // De forma provisional
-    texture = LoadTexture("assets/sprites/shop/items/Zombiesaur_64.png");
-    testItem.SetIcon(&texture);
-    TShopSlot slot1 = {&testItem, false, false};
-    shopPool.fill(slot1);
-};
+    std::vector<const Item *> randomItems = ItemsFactory::GetInstance().GetRandomItems(MAX_ITEMS_SHOP);
 
-Shop::~Shop() { UnloadTexture(texture); };
+    for (size_t i = 0; i < randomItems.size() && i < MAX_ITEMS_SHOP; ++i)
+    {
+        shopPool[i] = {randomItems[i], false, false};
+    }
+
+    // Si no hay suficientes items, llenar el resto con nullptr
+    for (size_t i = randomItems.size(); i < MAX_ITEMS_SHOP; ++i)
+    {
+        shopPool[i] = {nullptr, false, false};
+    }
+};
+Shop::~Shop() {};
 
 const std::array<TShopSlot, Shop::MAX_ITEMS_SHOP> &Shop::GetItemsShop() const { return shopPool; };
 
 void Shop::reRoll()
 {
-    for (TShopSlot slot : shopPool)
+    std::vector<const Item *> randomItems = ItemsFactory::GetInstance().GetRandomItems(MAX_ITEMS_SHOP);
+    size_t randomIndex = 0;
+
+    for (size_t i = 0; i < MAX_ITEMS_SHOP; ++i)
     {
-        if (!slot.isBlocked)
+        // Solo cambiar items que NO estén bloqueados
+        if (!shopPool[i].isBlocked && randomIndex < randomItems.size())
         {
-            // TODO : pedir item para cambiarlo de toda la pool cargada
+            shopPool[i].item = randomItems[randomIndex];
+            shopPool[i].isBuyed = false; // Resetear estado de compra
+            randomIndex++;
         }
     }
 }
