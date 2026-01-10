@@ -2,7 +2,6 @@
 #include "Item.hpp"
 #include "ItemsFactory.hpp"
 #include "ShopSlot.hpp"
-#include "raylib.h"
 #include <spdlog/spdlog.h>
 
 Shop::Shop()
