@@ -184,10 +184,19 @@ void ShopState::update(float deltaTime)
             const Item *item = shop.BuyItem(selectedItem);
             if (item != nullptr)
             {
-                player->ModifyPabloCoins(-item->GetPrice());
-
                 if (IsWeaponType(item->GetType()))
                 {
+                    // Verificar si el jugador puede aceptar esta arma
+                    WEAPON_TYPE weaponType = ItemTypeToWeaponType(item->GetType());
+                    if (!player->CanAcceptWeapon(weaponType))
+                    {
+                        // No puede comprar esta arma (todas las armas del mismo tipo están al máximo)
+                        willBuy = false;
+                        return;
+                    }
+
+                    player->ModifyPabloCoins(-item->GetPrice());
+
                     // Crear el arma usando la factory
                     auto weapon = WeaponFactory::CreateWeapon(item->GetType(), player->GetPosition(),
                                                               player->enemiesInRange, player->allEnemies);
@@ -198,6 +207,7 @@ void ShopState::update(float deltaTime)
                 }
                 else
                 {
+                    player->ModifyPabloCoins(-item->GetPrice());
                     player->AddItem(item);
                 }
             }
