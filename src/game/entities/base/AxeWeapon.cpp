@@ -34,12 +34,11 @@ void AxeWeapon::Attack(float deltaTime)
 
     if (isSwinging)
     {
-        float oneWayDuration = SWING_RANGE / SWING_SPEED;
-        float totalDuration = oneWayDuration * 2.0f;
+        float totalDuration = ONE_WAY_DURATION * 2.0f;
 
-        if (timeSinceLastAttack <= oneWayDuration)
+        if (timeSinceLastAttack <= ONE_WAY_DURATION)
         {
-            float progress = timeSinceLastAttack / oneWayDuration;
+            float progress = timeSinceLastAttack / ONE_WAY_DURATION;
             swingAngle = progress * SWING_RANGE;
             
             const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(WEAPON_TYPE::AXE);
@@ -95,8 +94,8 @@ void AxeWeapon::Attack(float deltaTime)
         }
         else
         {
-            float returnTime = timeSinceLastAttack - oneWayDuration;
-            float progress = returnTime / oneWayDuration;
+            float returnTime = timeSinceLastAttack - ONE_WAY_DURATION;
+            float progress = returnTime / ONE_WAY_DURATION;
             swingAngle = SWING_RANGE - (progress * SWING_RANGE);
         }
 
