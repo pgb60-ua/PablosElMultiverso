@@ -138,11 +138,11 @@ Vector2 AWeapon::CalculateDirection()
 }
 void AWeapon::update(float deltaTime, const Vector2 &position)
 {
-    currentOrbitAngle += orbitSpeed * deltaTime;
+    currentOrbitAngle += ORBIT_SPEED * deltaTime;
     if (currentOrbitAngle >= 360.0f) currentOrbitAngle -= 360.0f;
 
     float rad = currentOrbitAngle * DEG2RAD;
-    Vector2 offset = { cosf(rad) * orbitRadius, sinf(rad) * orbitRadius };
+    Vector2 offset = { cosf(rad) * ORBIT_RADIUS, sinf(rad) * ORBIT_RADIUS };
     
     Vector2 finalPos = Vector2Add(position, offset);
     

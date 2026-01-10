@@ -34,13 +34,13 @@ void AxeWeapon::Attack(float deltaTime)
 
     if (isSwinging)
     {
-        float oneWayDuration = swingRange / swingSpeed;
+        float oneWayDuration = SWING_RANGE / SWING_SPEED;
         float totalDuration = oneWayDuration * 2.0f;
 
         if (timeSinceLastAttack <= oneWayDuration)
         {
             float progress = timeSinceLastAttack / oneWayDuration;
-            swingAngle = progress * swingRange;
+            swingAngle = progress * SWING_RANGE;
             
             const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(WEAPON_TYPE::AXE);
             float spriteSize = DEFAULT_ATTACK_RANGE;
@@ -81,7 +81,7 @@ void AxeWeapon::Attack(float deltaTime)
                         while (angleDiff <= -180.0f) angleDiff += 360.0f;
                         while (angleDiff > 180.0f) angleDiff -= 360.0f;
 
-                        float startSwing = -swingRange / 2.0f;
+                        float startSwing = -SWING_RANGE / 2.0f;
                         float currentEndSwing = startSwing + swingAngle;
 
                         if (angleDiff >= startSwing && angleDiff <= currentEndSwing)
@@ -97,7 +97,7 @@ void AxeWeapon::Attack(float deltaTime)
         {
             float returnTime = timeSinceLastAttack - oneWayDuration;
             float progress = returnTime / oneWayDuration;
-            swingAngle = swingRange - (progress * swingRange);
+            swingAngle = SWING_RANGE - (progress * SWING_RANGE);
         }
 
         // Finalizar ataque
@@ -112,12 +112,12 @@ void AxeWeapon::Attack(float deltaTime)
     {
         isSwinging = true;
         swingAngle = 0.0f; 
-        timeSinceLastAttack = 0.0f;
+        timeSinceLastAttack -= attackInterval;
         hitEnemies.clear();
     }
 
     float currentDirAngle = atan2(direction.y, direction.x);
-    float startOffset = -swingRange / 2.0f;
+    float startOffset = -SWING_RANGE / 2.0f;
     float finalVisualAngle = currentDirAngle + ((startOffset + swingAngle) * DEG2RAD);
     
     SetDirection(Vector2{cos(finalVisualAngle), sin(finalVisualAngle)});

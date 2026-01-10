@@ -7,8 +7,8 @@ class AxeWeapon : public AMeleeWeapon {
 private:
     bool isSwinging = false;
     float swingAngle = 0.0f;
-    float swingSpeed = 180.0f; 
-    float swingRange = 120.0f; 
+    static constexpr float SWING_SPEED = 180.0f; 
+    static constexpr float SWING_RANGE = 120.0f; 
     
     static constexpr float DEFAULT_ATTACK_RANGE = 50.0f;
 
