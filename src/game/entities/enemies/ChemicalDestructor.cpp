@@ -11,12 +11,11 @@ ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
                  ENEMY_TYPE::CHEMICAL_DESTRUCTOR,
                  Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
              players, 75)
-// weapon(std::make_unique<ChemicalDestructorWeapon>(this->GetPosition(), {}, players))
 {
     targetWeight = 3.5f;
     static std::vector<AEnemy *> emptyVector;
     Vector2 enemyCenter = GetCenterPosition();
-    this->weapon = std::make_unique<ChemicalDestructorWeapon>(Vector2Subtract(enemyCenter, Vector2{63, 61}), emptyVector, this->objectives);
+    this->weapon = std::make_unique<ChemicalDestructorWeapon>(Vector2Subtract(enemyCenter, Vector2{63, 61}), emptyVector, players);
 }
 
 bool ChemicalDestructor::Attack()
@@ -71,9 +70,6 @@ Vector2 ChemicalDestructor::CalculateTargetForce(const Vector2 &enemyPos, const 
     // Si está muy cerca, alejarse; si está muy lejos, acercarse
     // Usar un factor de suavizado para evitar movimientos bruscos
     float forceMultiplier = (distanceDifference / TARGET_DISTANCE) * targetWeight;
-    
-    // Limitar la fuerza máxima para evitar movimientos extremos
-    // forceMultiplier = std::max(-targetWeight, std::min(targetWeight, forceMultiplier));
     
     return Vector2Scale(directionToPlayer, baseSpeed * forceMultiplier);
 }
