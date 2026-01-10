@@ -323,8 +323,29 @@ void ShopState::render()
             // Dibujar arma existente
             const auto &weapon = weapons[i];
 
+            // Color del borde según el nivel
+            Color borderColor;
+            switch (weapon->GetLevel())
+            {
+            case 1:
+                borderColor = Color{150, 150, 150, 255}; // Gris
+                break;
+            case 2:
+                borderColor = Color{100, 255, 100, 255}; // Verde
+                break;
+            case 3:
+                borderColor = Color{100, 150, 255, 255}; // Azul
+                break;
+            case 4:
+                borderColor = Color{255, 200, 50, 255}; // Amarillo
+                break;
+            default:
+                borderColor = Color{150, 150, 150, 255}; // Gris por defecto
+                break;
+            }
+
             // Borde
-            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, Color{100, 150, 255, 255});
+            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, borderColor);
             DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{45, 45, 65, 255});
 
             // Sprite del arma
