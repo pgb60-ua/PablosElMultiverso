@@ -1,14 +1,14 @@
 #include "DataFileManager.hpp"
 #include "RoundInfo.hpp"
 #include "Types.hpp"
+#include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <spdlog/spdlog.h>
 #include <sstream>
 #include <stdexcept>
 #include <variant>
-#include <filesystem>
-#include <cstdlib>
-#include <spdlog/spdlog.h>
 
 void DataFileManager::SetAssetsRoot(const std::string &assetsRoot)
 {
@@ -39,9 +39,9 @@ void DataFileManager::DetectAndSetAssetsPath()
             SetAssetsRoot("/usr/share/pablos-el-multiverso/assets");
             return;
         }
-
     }
-    catch (...) {
+    catch (...)
+    {
     }
 }
 
@@ -66,14 +66,36 @@ std::string DataFileManager::GetFilePath(ITEM_TYPE type) const
 {
     switch (type)
     {
-    case ITEM_TYPE::WEAPON:
-        return BASE_PATH_ITEM + "weapon.json";
-    case ITEM_TYPE::ITEM1:
-        return BASE_PATH_ITEM + "item1.json";
-    case ITEM_TYPE::ITEM2:
-        return BASE_PATH_ITEM + "item2.json";
-    case ITEM_TYPE::ITEM3:
-        return BASE_PATH_ITEM + "item3.json";
+    case ITEM_TYPE::FIREBALL:
+        return BASE_PATH_ITEM + "Fireball.json";
+    case ITEM_TYPE::SPINED_BREASTPLATE:
+        return BASE_PATH_ITEM + "SpinedBreastplate.json";
+    case ITEM_TYPE::PEARL_EGG:
+        return BASE_PATH_ITEM + "PearlEgg.json";
+    case ITEM_TYPE::RAVENS_FEATHER:
+        return BASE_PATH_ITEM + "Raven'sFeather.json";
+    case ITEM_TYPE::VOID_RING:
+        return BASE_PATH_ITEM + "VoidRing.json";
+    case ITEM_TYPE::SATCHEL:
+        return BASE_PATH_ITEM + "Satchel.json";
+    case ITEM_TYPE::SPIRIT_MASK:
+        return BASE_PATH_ITEM + "SpiritMask.json";
+    case ITEM_TYPE::CELESTIAL_SPARK:
+        return BASE_PATH_ITEM + "CelestialSpark.json";
+    case ITEM_TYPE::EXPLOSIVE_ARSENAL:
+        return BASE_PATH_ITEM + "ExplosiveArsenal.json";
+    case ITEM_TYPE::MAGICAL_MIRROR:
+        return BASE_PATH_ITEM + "MagicalMirror.json";
+    case ITEM_TYPE::ETHEREAL_DAGGER:
+        return BASE_PATH_ITEM + "EtherealDagger.json";
+    case ITEM_TYPE::SPOTLIGHT:
+        return BASE_PATH_ITEM + "Spotlight.json";
+    case ITEM_TYPE::CRIMSON_VIAL:
+        return BASE_PATH_ITEM + "CrimsonVial.json";
+    case ITEM_TYPE::RUBY_HEART:
+        return BASE_PATH_ITEM + "RubyHeart.json";
+    case ITEM_TYPE::RAW_MEAT:
+        return BASE_PATH_ITEM + "RawMeat.json";
     default:
         throw std::runtime_error("Unknown ITEM type");
     }
@@ -271,12 +293,12 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
         file >> j;
 
         // Función helper recursiva para aplanar JSON
-        std::function<void(const nlohmann::json&, const std::string&)> flattenJson;
-        flattenJson = [&data, &flattenJson](const nlohmann::json& jsonObj, const std::string& prefix)
+        std::function<void(const nlohmann::json &, const std::string &)> flattenJson;
+        flattenJson = [&data, &flattenJson](const nlohmann::json &jsonObj, const std::string &prefix)
         {
             if (jsonObj.is_object())
             {
-                for (const auto& [key, value] : jsonObj.items())
+                for (const auto &[key, value] : jsonObj.items())
                 {
                     std::string newKey = prefix.empty() ? key : prefix + key;
 
@@ -438,8 +460,6 @@ Stats DataFileManager::GetEnemyStats(ENEMY_TYPE type)
 // Métodos de conveniencia para obtener datos específicos de armas
 // ============================================================================
 
-
-
 Stats DataFileManager::GetWeaponStats(WEAPON_TYPE type)
 {
     const DataMap &data = GetData(type);
@@ -546,7 +566,7 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
 
         // Parsear enemigos - el objeto enemiesToSpawn se aplana como enemiesToSpawn_KEY
         // Necesitamos iterar manualmente sobre las claves del DataMap que coincidan
-        for (const auto& [key, value] : data)
+        for (const auto &[key, value] : data)
         {
             std::string enemyPrefix = prefix + "enemiesToSpawn_";
             if (key.find(enemyPrefix) == 0 && key.find("_count") == std::string::npos)
@@ -566,13 +586,11 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
                         enemyType = ENEMY_TYPE::DARKIN;
                     else if (enemyName == "CHEMICAL_DESTRUCTOR")
                         enemyType = ENEMY_TYPE::CHEMICAL_DESTRUCTOR;
-                    else{
+                    else
+                    {
                         spdlog::warn("DataFileManager::GetRounds: Unknown ENEMY_TYPE '{}'", enemyName);
                         continue; // Ignorar tipos desconocidos
                     }
-
-
-
                     roundInfo.enemiesToSpawnCount[enemyType] = enemyCount;
                 }
             }
