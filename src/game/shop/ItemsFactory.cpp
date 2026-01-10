@@ -1,5 +1,6 @@
 #include "ItemsFactory.hpp"
 #include "DataFileManager.hpp"
+#include "Types.hpp"
 #include "spdlog/spdlog.h"
 #include <memory>
 #include <random>        // para std::random_device, std::mt19937
@@ -13,14 +14,18 @@ ItemsFactory::~ItemsFactory() {}
 void ItemsFactory::LoadAllItems()
 {
     DataFileManager &dm = DataFileManager::GetInstance();
-    for (int i = 0; i < 10; i++)
+
+    // Iterar desde el primer item hasta el último
+    for (int i = static_cast<int>(ITEM_TYPE::FIREBALL); i <= static_cast<int>(ITEM_TYPE::RAW_MEAT); ++i)
     {
-        ItemData itemData = dm.GetItemData(ITEM_TYPE::ITEM1);
+        ITEM_TYPE type = static_cast<ITEM_TYPE>(i);
+        ItemData itemData = dm.GetItemData(type);
         auto item = std::make_unique<Item>(itemData.name, itemData.description, itemData.stats, itemData.rarity,
                                            itemData.price);
-        item->SetType(ITEM_TYPE::ITEM1);
+        item->SetType(type);
         allItems.push_back(std::move(item));
     }
+
     spdlog::info("ItemsFactory: Loaded {} items", allItems.size());
 };
 
