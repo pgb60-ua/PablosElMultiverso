@@ -18,6 +18,7 @@ void ItemsFactory::LoadAllItems()
         ItemData itemData = dm.GetItemData(ITEM_TYPE::ITEM1);
         auto item = std::make_unique<Item>(itemData.name, itemData.description, itemData.stats, itemData.rarity,
                                            itemData.price);
+        item->SetType(ITEM_TYPE::ITEM1);
         allItems.push_back(std::move(item));
     }
     spdlog::info("ItemsFactory: Loaded {} items", allItems.size());
