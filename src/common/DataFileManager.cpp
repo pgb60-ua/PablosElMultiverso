@@ -67,14 +67,36 @@ std::string DataFileManager::GetFilePath(ITEM_TYPE type) const
 {
     switch (type)
     {
-    case ITEM_TYPE::WEAPON:
-        return BASE_PATH_ITEM + "weapon.json";
-    case ITEM_TYPE::ITEM1:
-        return BASE_PATH_ITEM + "item1.json";
-    case ITEM_TYPE::ITEM2:
-        return BASE_PATH_ITEM + "item2.json";
-    case ITEM_TYPE::ITEM3:
-        return BASE_PATH_ITEM + "item3.json";
+    case ITEM_TYPE::FIREBALL:
+        return BASE_PATH_ITEM + "Fireball.json";
+    case ITEM_TYPE::SPINED_BREASTPLATE:
+        return BASE_PATH_ITEM + "SpinedBreastplate.json";
+    case ITEM_TYPE::PEARL_EGG:
+        return BASE_PATH_ITEM + "PearlEgg.json";
+    case ITEM_TYPE::RAVENS_FEATHER:
+        return BASE_PATH_ITEM + "Raven'sFeather.json";
+    case ITEM_TYPE::VOID_RING:
+        return BASE_PATH_ITEM + "VoidRing.json";
+    case ITEM_TYPE::SATCHEL:
+        return BASE_PATH_ITEM + "Satchel.json";
+    case ITEM_TYPE::SPIRIT_MASK:
+        return BASE_PATH_ITEM + "SpiritMask.json";
+    case ITEM_TYPE::CELESTIAL_SPARK:
+        return BASE_PATH_ITEM + "CelestialSpark.json";
+    case ITEM_TYPE::EXPLOSIVE_ARSENAL:
+        return BASE_PATH_ITEM + "ExplosiveArsenal.json";
+    case ITEM_TYPE::MAGICAL_MIRROR:
+        return BASE_PATH_ITEM + "MagicalMirror.json";
+    case ITEM_TYPE::ETHEREAL_DAGGER:
+        return BASE_PATH_ITEM + "EtherealDagger.json";
+    case ITEM_TYPE::SPOTLIGHT:
+        return BASE_PATH_ITEM + "Spotlight.json";
+    case ITEM_TYPE::CRIMSON_VIAL:
+        return BASE_PATH_ITEM + "CrimsonVial.json";
+    case ITEM_TYPE::RUBY_HEART:
+        return BASE_PATH_ITEM + "RubyHeart.json";
+    case ITEM_TYPE::RAW_MEAT:
+        return BASE_PATH_ITEM + "RawMeat.json";
     default:
         throw std::runtime_error("Unknown ITEM type");
     }
