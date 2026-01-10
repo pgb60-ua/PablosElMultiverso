@@ -2,7 +2,10 @@
 #include "ChemicalDestructorProjectile.hpp"
 #include "DataFileManager.hpp"
 #include "Player.hpp"
-#include "raylib.h"
+extern "C"
+{
+#include <raylib.h>
+}
 #include "raymath.h"
 #include <cmath>
 
