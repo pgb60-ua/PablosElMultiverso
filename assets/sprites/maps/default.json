@@ -1,11 +1,11 @@
 {
-  "texture": "MapaBase-Sheet.png",
+  "texture": "Mapa-Sheet.png",
   "frames": [
     {
       "x": 0,
       "y": 0,
-      "width": 2048,
-      "height": 2048
+      "width": 1200,
+      "height": 800
     }
   ]
 }

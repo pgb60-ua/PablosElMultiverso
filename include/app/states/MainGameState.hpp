@@ -1,6 +1,8 @@
 #pragma once
 #include "AEnemy.hpp"
 #include "Player.hpp"
+#include "RoundManager.hpp"
+#include "SpriteSheet.hpp"
 #include <GameState.hpp>
 #include <memory>
 
@@ -13,6 +15,7 @@ class MainGameState : public GameState
 {
 public:
     MainGameState();
+    MainGameState(PLAYER_TYPE playerType);
     ~MainGameState();
 
     void init() override;
@@ -24,9 +27,12 @@ public:
     void resume() {};
 
 private:
+    PLAYER_TYPE selectedPlayerType;
     char entered_key;
     Vector2 direction;
     Vector2 direction2;
     std::vector<std::unique_ptr<Player>> players;
+    std::vector<Player*> playerPointers;
     std::vector<AEnemy *> enemies;
+    RoundManager roundManager;
 };

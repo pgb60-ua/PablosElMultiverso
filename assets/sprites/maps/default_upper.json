@@ -1,0 +1,11 @@
+{
+  "texture": "MapaUpper-Sheet.png",
+  "frames": [
+    {
+      "x": 0,
+      "y": 0,
+      "width": 1200,
+      "height": 800
+    }
+  ]
+}

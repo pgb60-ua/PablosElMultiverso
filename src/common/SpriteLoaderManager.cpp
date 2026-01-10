@@ -86,12 +86,10 @@ std::string SpriteLoaderManager::GetMetadataPath(ENEMY_TYPE type) const
     {
     case ENEMY_TYPE::ZOMBIE:
         return BASE_PATH_ENEMY + "zombie.json";
-    case ENEMY_TYPE::ENEMY2:
-        return BASE_PATH_ENEMY + "enemy2.json";
-    case ENEMY_TYPE::ENEMY3:
-        return BASE_PATH_ENEMY + "enemy3.json";
-    case ENEMY_TYPE::ENEMY4:
-        return BASE_PATH_ENEMY + "enemy4.json";
+    case ENEMY_TYPE::DARKIN:
+        return BASE_PATH_ENEMY + "darkin.json";
+    case ENEMY_TYPE::CHEMICAL_DESTRUCTOR:
+        return BASE_PATH_ENEMY + "chemical_destructor.json";
     default:
         throw std::runtime_error("Unknown ENEMY type");
     }
@@ -113,6 +111,8 @@ std::string SpriteLoaderManager::GetMetadataPath(PROJECTILE_TYPE type) const
         return BASE_PATH_PROJECTILE + "sniper.json";
     case PROJECTILE_TYPE::WING:
         return BASE_PATH_PROJECTILE + "wing.json";
+    case PROJECTILE_TYPE::CHEMICAL_BULLET:
+        return BASE_PATH_PROJECTILE + "chemical_bullet.json";
     default:
         throw std::runtime_error("Unknown PROJECTILE type");
     }
@@ -149,6 +149,8 @@ std::string SpriteLoaderManager::GetMetadataPath(MAP_TYPE type) const
     {
     case MAP_TYPE::DEFAULT:
         return BASE_PATH_MAP + "default.json";
+    case MAP_TYPE::DEFAULT_UPPER:
+        return BASE_PATH_MAP + "default_upper.json";
     default:
         throw std::runtime_error("Unknown MAP type");
     }
