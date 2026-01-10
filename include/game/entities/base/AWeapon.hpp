@@ -62,7 +62,7 @@ protected:
     /// @brief Calcula la dirección de ataque normalizada
     virtual Vector2 CalculateDirection();
 
-    /// @brief Ángulo actual 
+    /// @brief Ángulo actual
     float currentOrbitAngle = 0.0f;
     /// @brief Radio del giro
     const float ORBIT_RADIUS = 80.0f;
@@ -72,6 +72,8 @@ protected:
 public:
     /// @brief Establece el ángulo inicial de la órbita
     void SetOrbitAngle(float angle) { currentOrbitAngle = angle; }
+    /// @brief Obtiene el ángulo actual de la órbita
+    float GetOrbitAngle() const { return currentOrbitAngle; }
 
     /// @brief Constructor de la clase Weapon
     AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
