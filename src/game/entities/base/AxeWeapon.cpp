@@ -43,7 +43,7 @@ void AxeWeapon::Attack(float deltaTime)
             swingAngle = progress * swingRange;
             
             const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(WEAPON_TYPE::AXE);
-            float spriteSize = 50.0f;
+            float spriteSize = DEFAULT_ATTACK_RANGE;
             if (!sheet.frames.empty()) {
                 spriteSize = std::max(sheet.frames[0].width, sheet.frames[0].height);
             }
@@ -59,6 +59,8 @@ void AxeWeapon::Attack(float deltaTime)
 
                 for (AEnemy *enemy : enemiesInRange)
                 {
+                    if (!enemy || !enemy->IsAlive()) continue;
+
                     if (std::find(hitEnemies.begin(), hitEnemies.end(), enemy) != hitEnemies.end())
                     {
                         continue;

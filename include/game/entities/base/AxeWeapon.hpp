@@ -10,6 +10,8 @@ private:
     float swingSpeed = 180.0f; 
     float swingRange = 120.0f; 
     
+    static constexpr float DEFAULT_ATTACK_RANGE = 50.0f;
+
     std::vector<AEnemy*> hitEnemies;
 public:
     /// @brief Constructor de la clase AxeWeapon que carga desde JSON
