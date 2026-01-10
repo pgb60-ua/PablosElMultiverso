@@ -16,12 +16,17 @@ void ItemsFactory::LoadAllItems()
     DataFileManager &dm = DataFileManager::GetInstance();
 
     // Iterar desde el primer item hasta el último
-    for (int i = static_cast<int>(ITEM_TYPE::FIREBALL); i <= static_cast<int>(ITEM_TYPE::COIN); ++i)
+    for (int i = static_cast<int>(ITEM_TYPE::FIREBALL); i <= static_cast<int>(ITEM_TYPE::WEAPON_WING); ++i)
     {
         ITEM_TYPE type = static_cast<ITEM_TYPE>(i);
 
-        // Saltar COIN porque no es un item que se pueda comprar
+        // Saltar COIN porque no es un item que se pueda comprar, solo un sprite
         if (type == ITEM_TYPE::COIN)
+            continue;
+
+        // Saltar armas que aún no tienen datos
+        if (type == ITEM_TYPE::WEAPON_AXE || type == ITEM_TYPE::WEAPON_SWORD || type == ITEM_TYPE::WEAPON_SCYTHE ||
+            type == ITEM_TYPE::WEAPON_WAND)
             continue;
 
         ItemData itemData = dm.GetItemData(type);
