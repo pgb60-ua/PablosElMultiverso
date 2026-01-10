@@ -8,7 +8,7 @@ private:
     bool isSwinging = false;
     float swingAngle = 0.0f;
     float swingSpeed = 180.0f; 
-    float swingRange = 90.0f; 
+    float swingRange = 120.0f; 
     
     std::vector<AEnemy*> hitEnemies;
 public:

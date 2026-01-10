@@ -76,10 +76,13 @@ void AxeWeapon::Attack(float deltaTime)
                         float enemyAngle = atan2(toEnemy.y, toEnemy.x) * RAD2DEG;
                         float angleDiff = enemyAngle - baseAngleDeg;
                         
-                        while (angleDiff < 0) angleDiff += 360.0f;
-                        while (angleDiff >= 360) angleDiff -= 360.0f;
+                        while (angleDiff <= -180.0f) angleDiff += 360.0f;
+                        while (angleDiff > 180.0f) angleDiff -= 360.0f;
 
-                        if (angleDiff <= swingAngle)
+                        float startSwing = -swingRange / 2.0f;
+                        float currentEndSwing = startSwing + swingAngle;
+
+                        if (angleDiff >= startSwing && angleDiff <= currentEndSwing)
                         {
                             enemy->TakeDamage(stats);
                             hitEnemies.push_back(enemy);
@@ -95,26 +98,27 @@ void AxeWeapon::Attack(float deltaTime)
             swingAngle = swingRange - (progress * swingRange);
         }
 
-        float currentDirAngle = atan2(direction.y, direction.x);
-        float newAngle = currentDirAngle + (swingAngle * DEG2RAD);
-        SetDirection(Vector2{cos(newAngle), sin(newAngle)});
-
+        // Finalizar ataque
         if (timeSinceLastAttack >= totalDuration)
         {
             isSwinging = false;
             swingAngle = 0.0f;
             hitEnemies.clear();
         }
-        return;
     }
-
-    if (timeSinceLastAttack >= attackInterval)
+    else if (timeSinceLastAttack >= attackInterval)
     {
         isSwinging = true;
         swingAngle = 0.0f; 
         timeSinceLastAttack = 0.0f;
         hitEnemies.clear();
     }
+
+    float currentDirAngle = atan2(direction.y, direction.x);
+    float startOffset = -swingRange / 2.0f;
+    float finalVisualAngle = currentDirAngle + ((startOffset + swingAngle) * DEG2RAD);
+    
+    SetDirection(Vector2{cos(finalVisualAngle), sin(finalVisualAngle)});
 }
 
 void AxeWeapon::update(float deltaTime, const Vector2 &position)
