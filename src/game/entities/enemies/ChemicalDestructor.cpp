@@ -1,6 +1,5 @@
 #include "ChemicalDestructor.hpp"
 #include "ScreenConstants.hpp"
-#include "SniperWeapon.hpp"
 
 ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
     : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::CHEMICAL_DESTRUCTOR),

@@ -38,10 +38,10 @@ void DataFileManager::DetectAndSetAssetsPath()
         {
             SetAssetsRoot("/usr/share/pablos-el-multiverso/assets");
             return;
-        } 
-    
+        }
+
     }
-    catch (...) {    
+    catch (...) {
     }
 }
 
@@ -114,6 +114,8 @@ std::string DataFileManager::GetFilePath(WEAPON_TYPE type) const
         return BASE_PATH_WEAPON + "sniper.json";
     case WEAPON_TYPE::WING:
         return BASE_PATH_WEAPON + "wing.json";
+    case WEAPON_TYPE::CHEMICAL_DESTRUCTOR:
+        return BASE_PATH_WEAPON + "chemical_destructor.json";
     default:
         throw std::runtime_error("Unknown WEAPON type");
     }
@@ -277,7 +279,7 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
                 for (const auto& [key, value] : jsonObj.items())
                 {
                     std::string newKey = prefix.empty() ? key : prefix + key;
-                    
+
                     if (value.is_string())
                     {
                         data[newKey] = value.get<std::string>();
@@ -298,7 +300,7 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
                     {
                         // Guardar el tamaño del array
                         data[newKey + "_count"] = static_cast<int>(value.size());
-                        
+
                         // Procesar cada elemento del array
                         for (size_t i = 0; i < value.size(); ++i)
                         {
@@ -536,7 +538,7 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
     for (int i = 0; i < roundsCount; ++i)
     {
         std::string prefix = "rounds_" + std::to_string(i) + "_";
-        
+
         RoundInfo roundInfo;
         roundInfo.roundNumber = getInt(prefix + "roundNumber", 0);
         roundInfo.duration = getFloat(prefix + "duration", 60.0f);
@@ -556,7 +558,7 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
                 if (!enemyName.empty() && enemyCount > 0)
                 {
                     ENEMY_TYPE enemyType;
-                    
+
                     // Convertir string a ENEMY_TYPE
                     if (enemyName == "ZOMBIE")
                         enemyType = ENEMY_TYPE::ZOMBIE;
@@ -569,8 +571,8 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
                         continue; // Ignorar tipos desconocidos
                     }
 
-                        
-                    
+
+
                     roundInfo.enemiesToSpawnCount[enemyType] = enemyCount;
                 }
             }
