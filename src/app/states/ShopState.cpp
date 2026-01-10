@@ -366,8 +366,23 @@ void ShopState::render()
         int textX = itemsX + 100;
         DrawText(slot.item->GetName().c_str(), textX, slotY + 10, 22, Color{255, 255, 255, 255});
 
-        // Descripción del item (primera línea)
-        DrawText(slot.item->GetDescription().c_str(), textX, slotY + 35, 14, Color{180, 180, 200, 255});
+        // Descripción del item (truncada si es muy larga)
+        std::string description = slot.item->GetDescription();
+        int maxDescriptionWidth = itemsWidth - 220; // Dejar espacio para el precio
+        int descriptionWidth = MeasureText(description.c_str(), 14);
+
+        if (descriptionWidth > maxDescriptionWidth)
+        {
+            // Truncar y agregar "..."
+            while (descriptionWidth > maxDescriptionWidth && !description.empty())
+            {
+                description.pop_back();
+                descriptionWidth = MeasureText((description + "...").c_str(), 14);
+            }
+            description += "...";
+        }
+
+        DrawText(description.c_str(), textX, slotY + 35, 14, Color{180, 180, 200, 255});
 
         // Rareza con color
         Color rarityColor;
