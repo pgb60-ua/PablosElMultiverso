@@ -47,5 +47,11 @@ void AMeleeWeapon::SetStats(const Stats &newStats)
 void AMeleeWeapon::update(float deltaTime, const Vector2 &position)
 {
     AWeapon::update(deltaTime, position);
+
+    //Las armas melee apuntan hacia fuera, no como las armas de distancia
+    float rad = currentOrbitAngle * DEG2RAD;
+    Vector2 outwardDir = { cosf(rad), sinf(rad) };
+    SetDirection(outwardDir);
+
     Attack(deltaTime);
 }

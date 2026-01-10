@@ -2,6 +2,7 @@
 #include "SpriteLoaderManager.hpp"
 #include <SpriteSheet.hpp>
 #include <cmath>
+#include "raymath.h"
 
 class AEnemy;
 
@@ -140,8 +141,18 @@ Vector2 AWeapon::CalculateDirection()
 }
 void AWeapon::update(float deltaTime, const Vector2 &position)
 {
-    SetPosition(position);
-    SetDirection(CalculateDirection());
+    currentOrbitAngle += ORBIT_SPEED * deltaTime;
+    if (currentOrbitAngle >= 360.0f) currentOrbitAngle -= 360.0f;
+
+    float rad = currentOrbitAngle * DEG2RAD;
+    Vector2 offset = { cosf(rad) * ORBIT_RADIUS, sinf(rad) * ORBIT_RADIUS };
+    
+    Vector2 finalPos = Vector2Add(position, offset);
+    
+    SetPosition(finalPos);
+    if(!enemiesInRange.empty()) {
+        SetDirection(CalculateDirection());
+    }
 }
 
 void AWeapon::SetStatsFromPlayer(const Stats &statsFromPlayer)
