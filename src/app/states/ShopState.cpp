@@ -181,20 +181,23 @@ void ShopState::update(float deltaTime)
         const TShopSlot &slot = shop.GetItemsShop()[selectedItem];
         if (slot.item != nullptr && !slot.isBuyed && player->GetPabloCoins() >= slot.item->GetPrice())
         {
+            // Verificar ANTES de comprar si es un arma y si se puede aceptar
+            if (IsWeaponType(slot.item->GetType()))
+            {
+                WEAPON_TYPE weaponType = ItemTypeToWeaponType(slot.item->GetType());
+                if (!player->CanAcceptWeapon(weaponType))
+                {
+                    // No puede comprar esta arma (todas las armas del mismo tipo están al máximo)
+                    willBuy = false;
+                    return;
+                }
+            }
+
             const Item *item = shop.BuyItem(selectedItem);
             if (item != nullptr)
             {
                 if (IsWeaponType(item->GetType()))
                 {
-                    // Verificar si el jugador puede aceptar esta arma
-                    WEAPON_TYPE weaponType = ItemTypeToWeaponType(item->GetType());
-                    if (!player->CanAcceptWeapon(weaponType))
-                    {
-                        // No puede comprar esta arma (todas las armas del mismo tipo están al máximo)
-                        willBuy = false;
-                        return;
-                    }
-
                     player->ModifyPabloCoins(-item->GetPrice());
 
                     // Crear el arma usando la factory
@@ -264,7 +267,7 @@ void ShopState::render()
 
     // Stats con mejor formato
     int statY = statsY + 60;
-    int statSpacing = (statsHeight - 80) / 12;
+    int statSpacing = 25; // Espaciado fijo más compacto
 
     Color statColor = Color{200, 200, 220, 255};
     Color valueColor = Color{255, 255, 255, 255};
@@ -280,9 +283,9 @@ void ShopState::render()
         else
             multColor = Color{150, 150, 150, 255}; // Gris
 
-        DrawText(TextFormat("x%.2f", multiplier), statsX + 20, statY, 14, multColor);
-        DrawText(name, statsX + 75, statY, 18, statColor);
-        DrawText(TextFormat("%.1f", value), statsX + statsWidth - 80, statY, 18, valueColor);
+        DrawText(TextFormat("x%.2f", multiplier), statsX + 20, statY, 12, multColor);
+        DrawText(name, statsX + 75, statY, 14, statColor);
+        DrawText(TextFormat("%.1f", value), statsX + statsWidth - 80, statY, 14, valueColor);
         statY += statSpacing;
     };
 
@@ -298,6 +301,56 @@ void ShopState::render()
     drawStatWithMultiplier("Critical Damage:", player->GetCriticalDamage(), player->GetCriticalDamageModifier());
     drawStatWithMultiplier("Health Regen:", player->GetHealthRegeneration(), player->GetHealthRegenerationModifier());
     drawStatWithMultiplier("Life Steal:", player->GetLifeSteal(), player->GetLifeStealModifier());
+
+    // Panel de armas del jugador (debajo del panel de stats)
+    int weaponsY = statY + 20;
+    DrawText("WEAPONS", statsX + 20, weaponsY, 20, Color{255, 200, 0, 255});
+    DrawLine(statsX + 20, weaponsY + 25, statsX + statsWidth - 20, weaponsY + 25, Color{255, 200, 0, 255});
+
+    int weaponSlotSize = 70;
+    int weaponSlotSpacing = 10;
+    int weaponStartX = statsX + 20;
+    int weaponStartY = weaponsY + 35;
+
+    const auto &weapons = player->GetWeapons();
+    for (int i = 0; i < 4; i++)
+    {
+        int weaponX = weaponStartX + (i % 2) * (weaponSlotSize + weaponSlotSpacing);
+        int weaponY = weaponStartY + (i / 2) * (weaponSlotSize + weaponSlotSpacing);
+
+        if (i < weapons.size())
+        {
+            // Dibujar arma existente
+            const auto &weapon = weapons[i];
+
+            // Borde
+            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, Color{100, 150, 255, 255});
+            DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{45, 45, 65, 255});
+
+            // Sprite del arma
+            const SpriteSheet &weaponSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(weapon->GetWeaponType());
+            if (!weaponSheet.frames.empty())
+            {
+                Rectangle sourceRec = weaponSheet.frames[0];
+                float scale = (weaponSlotSize - 10) / std::max(sourceRec.width, sourceRec.height);
+                Rectangle destRec = {(float)(weaponX + weaponSlotSize / 2), (float)(weaponY + weaponSlotSize / 2),
+                                     sourceRec.width * scale, sourceRec.height * scale};
+                Vector2 origin = {destRec.width / 2, destRec.height / 2};
+                DrawTexturePro(weaponSheet.texture, sourceRec, destRec, origin, 0.0f, WHITE);
+            }
+
+            // Nivel del arma
+            const char *levelText = TextFormat("Lv%d", weapon->GetLevel());
+            DrawText(levelText, weaponX + 5, weaponY + weaponSlotSize - 18, 14, Color{255, 255, 100, 255});
+        }
+        else
+        {
+            // Dibujar slot vacío
+            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, Color{80, 80, 100, 255});
+            DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{60, 60, 70, 255});
+            DrawText("EMPTY", weaponX + 10, weaponY + weaponSlotSize / 2 - 7, 12, Color{120, 120, 130, 255});
+        }
+    }
 
     // Panel de items (derecha)
     int itemsX = statsX + statsWidth + 30;
