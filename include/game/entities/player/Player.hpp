@@ -176,7 +176,7 @@ public:
     void SetHealth(float newHealth) { stats.SetHealth(newHealth); }
 
     /// @brief Obtiene los puntos de vida actuales
-    void SetMaxHealt(float newMaxHealt) { stats.SetMaxHealth(newMaxHealt * healthModifier); }
+    void SetMaxHealth(float newMaxHealt) { stats.SetMaxHealth(newMaxHealt * healthModifier); }
 
     /// @brief Establece la velocidad de movimiento base y aplica modificador
     void SetMovementSpeed(float newSpeed) { stats.SetMovementSpeed(newSpeed * movementSpeedModifier); }

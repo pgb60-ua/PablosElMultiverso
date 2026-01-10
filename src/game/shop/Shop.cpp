@@ -85,7 +85,7 @@ bool Shop::IsSlotBuyed(int index) const
 {
     if (index < 0 || index >= MAX_ITEMS_SHOP)
     {
-        spdlog::warn("Trying to access if an item is blocked out of range");
+        spdlog::warn("Trying to access if an item is buyed out of range");
         return false;
     }
     return shopPool[index].isBuyed;
