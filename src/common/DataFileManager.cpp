@@ -1,14 +1,15 @@
 #include "DataFileManager.hpp"
+#include "Item.hpp"
 #include "RoundInfo.hpp"
 #include "Types.hpp"
+#include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <spdlog/spdlog.h>
 #include <sstream>
 #include <stdexcept>
 #include <variant>
-#include <filesystem>
-#include <cstdlib>
-#include <spdlog/spdlog.h>
 
 void DataFileManager::SetAssetsRoot(const std::string &assetsRoot)
 {
@@ -38,10 +39,10 @@ void DataFileManager::DetectAndSetAssetsPath()
         {
             SetAssetsRoot("/usr/share/pablos-el-multiverso/assets");
             return;
-        } 
-    
+        }
     }
-    catch (...) {    
+    catch (...)
+    {
     }
 }
 
@@ -269,15 +270,15 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
         file >> j;
 
         // Función helper recursiva para aplanar JSON
-        std::function<void(const nlohmann::json&, const std::string&)> flattenJson;
-        flattenJson = [&data, &flattenJson](const nlohmann::json& jsonObj, const std::string& prefix)
+        std::function<void(const nlohmann::json &, const std::string &)> flattenJson;
+        flattenJson = [&data, &flattenJson](const nlohmann::json &jsonObj, const std::string &prefix)
         {
             if (jsonObj.is_object())
             {
-                for (const auto& [key, value] : jsonObj.items())
+                for (const auto &[key, value] : jsonObj.items())
                 {
                     std::string newKey = prefix.empty() ? key : prefix + key;
-                    
+
                     if (value.is_string())
                     {
                         data[newKey] = value.get<std::string>();
@@ -298,7 +299,7 @@ DataMap DataFileManager::LoadFromFile(const std::string &path)
                     {
                         // Guardar el tamaño del array
                         data[newKey + "_count"] = static_cast<int>(value.size());
-                        
+
                         // Procesar cada elemento del array
                         for (size_t i = 0; i < value.size(); ++i)
                         {
@@ -385,6 +386,86 @@ Stats DataFileManager::GetPlayerStats(PLAYER_TYPE type)
     return Stats(offensiveStats, defensiveStats);
 }
 
+ItemData DataFileManager::GetItemData(ITEM_TYPE type)
+{
+    const DataMap &data = GetData(type);
+
+    auto getString = [&data](const std::string &key, const std::string &defaultValue = "") -> std::string
+    {
+        auto it = data.find(key);
+        if (it != data.end())
+        {
+            if (const std::string *val = std::get_if<std::string>(&it->second))
+            {
+                return *val;
+            }
+        }
+        return defaultValue;
+    };
+
+    auto getInt = [&data](const std::string &key, int defaultValue = 0) -> int
+    {
+        auto it = data.find(key);
+        if (it != data.end())
+        {
+            if (const int *val = std::get_if<int>(&it->second))
+            {
+                return *val;
+            }
+            if (const float *val = std::get_if<float>(&it->second))
+            {
+                return static_cast<int>(*val);
+            }
+        }
+        return defaultValue;
+    };
+
+    auto getFloat = [&data](const std::string &key, float defaultValue = 0.0f) -> float
+    {
+        auto it = data.find(key);
+        if (it != data.end())
+        {
+            if (const float *val = std::get_if<float>(&it->second))
+            {
+                return *val;
+            }
+            if (const int *val = std::get_if<int>(&it->second))
+            {
+                return static_cast<float>(*val);
+            }
+        }
+        return defaultValue;
+    };
+
+    // Parsear datos básicos
+    std::string name = getString("name", "Unknown Item");
+    std::string description = getString("description", "");
+    int price = getInt("price", 0);
+
+    // Parsear rareza
+    std::string rarityStr = getString("rarity", "Common");
+    ItemRarity rarity = ItemRarity::Common;
+    if (rarityStr == "Uncommon")
+        rarity = ItemRarity::Uncommon;
+    else if (rarityStr == "Rare")
+        rarity = ItemRarity::Rare;
+    else if (rarityStr == "Epic")
+        rarity = ItemRarity::Epic;
+
+    // Parsear stats
+    OffensiveStats offensiveStats = {getFloat("physical_damage"),       getFloat("magical_damage"),
+                                     getFloat("attack_speed", 0.0f),    getFloat("critical_chance"),
+                                     getFloat("critical_damage", 0.0f), getFloat("life_steal")};
+
+    DefensiveStats defensiveStats = {
+        getFloat("health", 0.0f), getFloat("max_health", 0.0f), getFloat("movement_speed", 0.0f), getFloat("agility"),
+        getFloat("armor"),        getFloat("resistance"),       getFloat("health_regeneration")};
+
+    Stats stats(offensiveStats, defensiveStats);
+
+    return ItemData{name, description, stats, rarity, price};
+}
+
 Stats DataFileManager::GetEnemyStats(ENEMY_TYPE type)
 {
     const DataMap &data = GetData(type);
@@ -435,8 +516,6 @@ Stats DataFileManager::GetEnemyStats(ENEMY_TYPE type)
 // ============================================================================
 // Métodos de conveniencia para obtener datos específicos de armas
 // ============================================================================
-
-
 
 Stats DataFileManager::GetWeaponStats(WEAPON_TYPE type)
 {
@@ -536,7 +615,7 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
     for (int i = 0; i < roundsCount; ++i)
     {
         std::string prefix = "rounds_" + std::to_string(i) + "_";
-        
+
         RoundInfo roundInfo;
         roundInfo.roundNumber = getInt(prefix + "roundNumber", 0);
         roundInfo.duration = getFloat(prefix + "duration", 60.0f);
@@ -544,7 +623,7 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
 
         // Parsear enemigos - el objeto enemiesToSpawn se aplana como enemiesToSpawn_KEY
         // Necesitamos iterar manualmente sobre las claves del DataMap que coincidan
-        for (const auto& [key, value] : data)
+        for (const auto &[key, value] : data)
         {
             std::string enemyPrefix = prefix + "enemiesToSpawn_";
             if (key.find(enemyPrefix) == 0 && key.find("_count") == std::string::npos)
@@ -556,7 +635,7 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
                 if (!enemyName.empty() && enemyCount > 0)
                 {
                     ENEMY_TYPE enemyType;
-                    
+
                     // Convertir string a ENEMY_TYPE
                     if (enemyName == "ZOMBIE")
                         enemyType = ENEMY_TYPE::ZOMBIE;
@@ -564,13 +643,12 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
                         enemyType = ENEMY_TYPE::DARKIN;
                     else if (enemyName == "CHEMICAL_DESTRUCTOR")
                         enemyType = ENEMY_TYPE::CHEMICAL_DESTRUCTOR;
-                    else{
+                    else
+                    {
                         spdlog::warn("DataFileManager::GetRounds: Unknown ENEMY_TYPE '{}'", enemyName);
                         continue; // Ignorar tipos desconocidos
                     }
 
-                        
-                    
                     roundInfo.enemiesToSpawnCount[enemyType] = enemyCount;
                 }
             }
@@ -580,4 +658,51 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
     }
 
     return rounds;
+}
+
+// ============================================================================
+// Métodos de conveniencia para obtener datos específicos de items
+// ============================================================================
+
+Stats DataFileManager::GetItemStats(ITEM_TYPE type)
+{
+    const DataMap &data = GetData(type);
+
+    auto getFloat = [&data](const std::string &key, float defaultValue = 0.0f) -> float
+    {
+        auto it = data.find(key);
+        if (it != data.end())
+        {
+            if (const float *val = std::get_if<float>(&it->second))
+            {
+                return *val;
+            }
+            if (const int *val = std::get_if<int>(&it->second))
+            {
+                return static_cast<float>(*val);
+            }
+        }
+        return defaultValue;
+    };
+
+    OffensiveStats offensiveStats = {
+        getFloat("physical_damage"),       // physicalDamage
+        getFloat("magical_damage"),        // magicDamage
+        getFloat("attack_speed", 0.0f),    // attackSpeed
+        getFloat("critical_chance"),       // criticalChance
+        getFloat("critical_damage", 0.0f), // criticalDamage
+        getFloat("life_steal")             // lifeSteal
+    };
+
+    DefensiveStats defensiveStats = {
+        getFloat("health", 0.0f),         // health
+        getFloat("max_health", 0.0f),     // healthMax
+        getFloat("movement_speed", 0.0f), // movementSpeed
+        getFloat("agility"),              // agility
+        getFloat("armor"),                // armor
+        getFloat("resistance"),           // resistance
+        getFloat("health_regeneration")   // healthRegeneration
+    };
+
+    return Stats(offensiveStats, defensiveStats);
 }
