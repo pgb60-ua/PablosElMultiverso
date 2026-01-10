@@ -4,6 +4,8 @@
 #include "SpriteLoaderManager.hpp"
 #include "SpriteSheet.hpp"
 #include "StateMachine.hpp"
+#include "Types.hpp"
+#include "WeaponFactory.hpp"
 #include "raylib.h"
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
@@ -183,7 +185,21 @@ void ShopState::update(float deltaTime)
             if (item != nullptr)
             {
                 player->ModifyPabloCoins(-item->GetPrice());
-                player->AddItem(item);
+
+                if (IsWeaponType(item->GetType()))
+                {
+                    // Crear el arma usando la factory
+                    auto weapon = WeaponFactory::CreateWeapon(item->GetType(), player->GetPosition(),
+                                                              player->enemiesInRange, player->allEnemies);
+                    if (weapon != nullptr)
+                    {
+                        player->AddWeapon(std::move(weapon));
+                    }
+                }
+                else
+                {
+                    player->AddItem(item);
+                }
             }
         }
         willBuy = false;
