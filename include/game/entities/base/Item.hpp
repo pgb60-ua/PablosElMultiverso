@@ -1,5 +1,6 @@
 #pragma once
 #include "Stats.hpp"
+#include "Types.hpp"
 #include <string>
 extern "C"
 {
@@ -27,6 +28,8 @@ protected:
     ItemRarity itemRarity;
     /// @brief Precio del item
     int price;
+    /// @brief Tipo de item
+    ITEM_TYPE type;
 
 public:
     /// @brief Constructor de la clase Item
@@ -47,6 +50,8 @@ public:
 
     /// @brief Getter del precio del item
     int GetPrice() const { return price; }
+
+    ITEM_TYPE GetType() const { return type; };
 
     // Setters
     /// @brief Setter del nombre del objeto
@@ -69,6 +74,8 @@ public:
         }
         price = newPrice;
     }
+
+    void SetType(ITEM_TYPE newType) { type = newType; }
 
     virtual ~Item() {}
 };
