@@ -5,6 +5,6 @@
 	"rarity": "Epic",
 	"armor": 40,
 	"resistance": 15,
-	"health": 30,
+	"max_health": 30,
 	"movement_speed": -5
 }

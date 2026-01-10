@@ -5,5 +5,5 @@
 	"rarity": "Rare",
 	"magical_damage": 25,
 	"critical_damage": 15,
-	"health": -10
+	"max_health": -10
 }
