@@ -1,0 +1,10 @@
+{
+	"name": "Explosive Arsenal",
+	"description": "Increases damage output but makes you more vulnerable",
+	"price": 190,
+	"rarity": "Rare",
+	"physical_damage": 30,
+	"magical_damage": 20,
+	"armor": -15,
+	"resistance": -10
+}

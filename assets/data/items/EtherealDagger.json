@@ -1,0 +1,11 @@
+{
+	"name": "Ethereal Dagger",
+	"description": "A ghostly blade that strikes with deadly precision",
+	"price": 280,
+	"rarity": "Epic",
+	"physical_damage": 25,
+	"critical_chance": 18,
+	"agility": 12,
+	"attack_speed": 0.25,
+	"armor": -8
+}

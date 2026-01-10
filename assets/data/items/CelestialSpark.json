@@ -1,0 +1,10 @@
+{
+	"name": "Celestial Spark",
+	"description": "A fragment of a star that enhances critical strikes",
+	"price": 300,
+	"rarity": "Legendary",
+	"critical_chance": 20,
+	"critical_damage": 40,
+	"attack_speed": 0.2,
+	"health": -15
+}
