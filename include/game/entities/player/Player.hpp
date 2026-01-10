@@ -23,6 +23,7 @@ class Player : public AEntity
 public:
     std::vector<AEnemy *> enemiesInRange;
     std::vector<AEnemy *> &allEnemies;
+    const std::vector<std::unique_ptr<AWeapon>> &GetWeapons() const { return weapons; }
 
 private:
     void ImportModifiers(PLAYER_TYPE player);
