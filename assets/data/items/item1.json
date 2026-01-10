@@ -1,0 +1,8 @@
+{
+	"name": "Espada de Fuego",
+	"description": "Una espada envuelta en llamas",
+	"price": 10,
+	"rarity": "Rare",
+	"physical_damage": 50.0,
+	"critical_chance": 15.0
+}
