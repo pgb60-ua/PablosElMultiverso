@@ -42,12 +42,10 @@ void ShopState::handleInput()
     // Input de mouse
     Vector2 mousePos = GetMousePosition();
     int screenWidth = GetScreenWidth();
-    int screenHeight = GetScreenHeight();
     int headerHeight = 80;
 
     // Panel de stats del jugador (izquierda)
     int statsX = 40;
-    int statsY = headerHeight + 20;
     int statsWidth = screenWidth * 0.35f;
 
     // Panel de items (derecha)
@@ -132,7 +130,6 @@ void ShopState::handleInput()
 
         // Panel de stats del jugador (izquierda)
         int statsX = 40;
-        int statsY = headerHeight + 20;
         int statsWidth = screenWidth * 0.35f;
 
         // Panel de items (derecha)
@@ -313,7 +310,7 @@ void ShopState::render()
     int weaponStartY = weaponsY + 35;
 
     const auto &weapons = player->GetWeapons();
-    for (int i = 0; i < 4; i++)
+    for (size_t i = 0; i < 4; i++)
     {
         int weaponX = weaponStartX + (i % 2) * (weaponSlotSize + weaponSlotSpacing);
         int weaponY = weaponStartY + (i / 2) * (weaponSlotSize + weaponSlotSpacing);
@@ -511,7 +508,6 @@ void ShopState::render()
         // Precio
         int priceX = itemsX + itemsWidth - 120;
         Rectangle coinFrame = coinSheet.frames[0];
-        float coinScale = 30.0f / coinFrame.width; // Escalar a 30px
         DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)slotY + 35}, WHITE);
         DrawText(TextFormat("%d", slot.item->GetPrice()), priceX + 20, slotY + 45, 20, Color{255, 200, 0, 255});
 

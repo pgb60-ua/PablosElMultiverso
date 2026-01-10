@@ -175,14 +175,12 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
     else
     {
         WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
-        bool upgraded = false;
 
         for (auto &weapon : weapons)
         {
             if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() < weapon->GetMaxLevel())
             {
                 weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats());
-                upgraded = true;
                 break;
             }
         }
