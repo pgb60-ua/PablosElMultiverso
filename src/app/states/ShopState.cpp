@@ -344,7 +344,23 @@ void ShopState::render()
 
         // Icono del item
         const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(slot.item->GetType());
-        DrawTexture(sheet.texture, itemsX + 25, slotY + 18, WHITE);
+        Rectangle sourceRec = sheet.frames[0];
+
+        // Escalar armas (32x32) a 64x64 para que se vean del mismo tamaño que los items
+        ITEM_TYPE itemType = slot.item->GetType();
+        bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
+
+        if (isWeapon)
+        {
+            // Escalar 2x para armas
+            Rectangle destRec = {(float)(itemsX + 25), (float)(slotY + 18), sourceRec.width * 2, sourceRec.height * 2};
+            DrawTexturePro(sheet.texture, sourceRec, destRec, Vector2{0, 0}, 0.0f, WHITE);
+        }
+        else
+        {
+            // Items normales sin escalar
+            DrawTextureRec(sheet.texture, sourceRec, Vector2{(float)(itemsX + 25), (float)(slotY + 18)}, WHITE);
+        }
 
         // Nombre del item
         int textX = itemsX + 100;
