@@ -44,7 +44,7 @@ bool Shop::IsSlotBlocked(int index) const
 {
     if (index < 0 || index >= MAX_ITEMS_SHOP)
     {
-        spdlog::warn("Trying to acces if an item is blocked out of range");
+        spdlog::warn("Trying to access if an item is blocked out of range");
         return false;
     }
     return shopPool[index].isBlocked;
@@ -54,7 +54,7 @@ void Shop::AlternateBlockSlot(int index)
 {
     if (index < 0 || index >= MAX_ITEMS_SHOP)
     {
-        spdlog::warn("Trying to acces an item out of range");
+        spdlog::warn("Trying to access an item out of range");
         return;
     }
     shopPool[index].isBlocked = !shopPool[index].isBlocked;
@@ -85,7 +85,7 @@ bool Shop::IsSlotBuyed(int index) const
 {
     if (index < 0 || index >= MAX_ITEMS_SHOP)
     {
-        spdlog::warn("Trying to acces if an item is blocked out of range");
+        spdlog::warn("Trying to access if an item is blocked out of range");
         return false;
     }
     return shopPool[index].isBuyed;
