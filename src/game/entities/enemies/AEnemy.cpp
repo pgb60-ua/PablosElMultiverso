@@ -4,7 +4,6 @@
 #include <limits>
 #include <raymath.h>
 
-
 AEnemy::AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
     : AEntity(stats, hitbox), objectives(objectives), pabloCoinsAtDeath(pabloCoinsAtDeath)
 {
@@ -76,6 +75,17 @@ void AEnemy::CheckCollisions(float deltaTime)
 {
 }
 
+Vector2 AEnemy::CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed)
+{
+    Vector2 toPlayer = Vector2Subtract(playerPos, enemyPos);
+    if (Vector2Length(toPlayer) > 0.0f)
+    {
+        toPlayer = Vector2Scale(Vector2Normalize(toPlayer), baseSpeed * targetWeight);
+        return toPlayer;
+    }
+    return Vector2Zero();
+}
+
 void AEnemy::Move(float deltaTime)
 {
     if (!IsAlive())
@@ -144,12 +154,9 @@ void AEnemy::Move(float deltaTime)
         acceleration = Vector2Add(acceleration, separationForce);
     }
 
-    Vector2 toPlayer = Vector2Subtract(closestPlayer->GetPosition(), enemyPos);
-    if (Vector2Length(toPlayer) > 0.0f)
-    {
-        toPlayer = Vector2Scale(Vector2Normalize(toPlayer), baseSpeed * targetWeight);
-        acceleration = Vector2Add(acceleration, toPlayer);
-    }
+    // Calcular fuerza hacia el objetivo usando método virtual (permite personalización)
+    Vector2 targetForce = CalculateTargetForce(enemyPos, closestPlayer->GetPosition(), baseSpeed);
+    acceleration = Vector2Add(acceleration, targetForce);
 
     const float maxForce = baseSpeed * maxForceMultiplier;
     if (Vector2Length(acceleration) > maxForce)

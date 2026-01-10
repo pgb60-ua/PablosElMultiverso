@@ -1,8 +1,8 @@
 #pragma once
-#include "AWeapon.hpp"
 #include "AProjectile.hpp"
-#include <vector>
+#include "AWeapon.hpp"
 #include <memory>
+#include <vector>
 
 class ARangeWeapon : public AWeapon
 {
@@ -30,13 +30,14 @@ protected:
 
 public:
     /// @brief Constructor de la clase RangeWeapon
-    ARangeWeapon(const std::string &name, const std::string &description,
-                 const Stats &stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2 &position , std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);
+    ARangeWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
+                 int level, size_t poolSize, const Vector2 &position, std::vector<AEnemy *> &enemiesInRange,
+                 std::vector<AEnemy *> &allEnemies);
     virtual ~ARangeWeapon();
 
     /// @brief Método para atacar
     virtual void Attack() override = 0;
-        
+
     /// @brief Sobrecarga del ataque para armas a distancia
     virtual void Attack(const Vector2 &position, float deltaTime) = 0;
 
@@ -56,7 +57,7 @@ public:
 
     float GetAttackInterval() const { return attackInterval; }
 
-    virtual void render();
+    virtual void render() override;
 
     void update(float deltaTime, const Vector2 &position) override;
 };

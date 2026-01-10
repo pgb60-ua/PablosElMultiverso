@@ -1,0 +1,8 @@
+{
+	"name": "Satchel",
+	"description": "A simple bag that provides minor benefits",
+	"price": 50,
+	"rarity": "Common",
+	"max_health": 15,
+	"movement_speed": 5
+}

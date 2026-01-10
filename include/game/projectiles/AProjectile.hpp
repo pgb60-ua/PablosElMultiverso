@@ -20,7 +20,7 @@ protected:
 
 public:
     AProjectile(std::vector<AEnemy *> &allEnemies);
-    virtual ~AProjectile();
+    virtual ~AProjectile() = default;
 
     /// @brief Actualiza la posición del proyectil
     /// @details Mueve el proyectil en la dirección especificada a una velocidad determinada por las estadísticas del proyectil.

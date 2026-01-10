@@ -1,0 +1,9 @@
+{
+	"name": "Spotlight",
+	"description": "Illuminates the battlefield, revealing weaknesses",
+	"price": 140,
+	"rarity": "Uncommon",
+	"critical_chance": 12,
+	"agility": 8,
+	"attack_speed": 0.15
+}
