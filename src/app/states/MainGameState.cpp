@@ -8,6 +8,7 @@
 #include "SpriteLoaderManager.hpp"
 #include "StateMachine.hpp"
 #include "Types.hpp"
+#include "WeaponFactory.hpp"
 #include "WingWeapon.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
@@ -41,10 +42,9 @@ void MainGameState::init()
 
     roundManager.MoveToNextRound();
 
-    players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<SniperWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<EggplosiveWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
+    // No le pongo move porque como devuelve un unique_ptr temporal automaticamente cambia de owner
+    players[0]->AddWeapon(
+        WeaponFactory::CreateStartingWeapon(players[0]->GetPlayerType(), Vector2{400.0f, 300.0f}, enemies, enemies));
 }
 
 void MainGameState::handleInput()
