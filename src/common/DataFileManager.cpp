@@ -97,6 +97,24 @@ std::string DataFileManager::GetFilePath(ITEM_TYPE type) const
         return BASE_PATH_ITEM + "RubyHeart.json";
     case ITEM_TYPE::RAW_MEAT:
         return BASE_PATH_ITEM + "RawMeat.json";
+    case ITEM_TYPE::WEAPON_AXE:
+        return BASE_PATH_WEAPON + "axe.json";
+    case ITEM_TYPE::WEAPON_SWORD:
+        return BASE_PATH_WEAPON + "sword.json";
+    case ITEM_TYPE::WEAPON_SCYTHE:
+        return BASE_PATH_WEAPON + "scythe.json";
+    case ITEM_TYPE::WEAPON_WAND:
+        return BASE_PATH_WEAPON + "wand.json";
+    case ITEM_TYPE::WEAPON_EGGPLOSIVE:
+        return BASE_PATH_WEAPON + "eggplosive.json";
+    case ITEM_TYPE::WEAPON_LASER_RAY:
+        return BASE_PATH_WEAPON + "laser_ray.json";
+    case ITEM_TYPE::WEAPON_SNIPER:
+        return BASE_PATH_WEAPON + "sniper.json";
+    case ITEM_TYPE::WEAPON_WING:
+        return BASE_PATH_WEAPON + "wing.json";
+    case ITEM_TYPE::COIN:
+        throw std::runtime_error("COIN is a sprite-only type and has no data file");
     default:
         throw std::runtime_error("Unknown ITEM type");
     }
