@@ -77,3 +77,6 @@ enum class ROUND_TYPE
     MEDIUM,
     HARD
 };
+
+// Función helper para verificar si un ITEM_TYPE es un arma
+inline bool IsWeaponType(ITEM_TYPE type) { return (type >= ITEM_TYPE::WEAPON_AXE && type <= ITEM_TYPE::WEAPON_WING); }
