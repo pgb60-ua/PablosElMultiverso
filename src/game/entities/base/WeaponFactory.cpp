@@ -1,4 +1,5 @@
 #include "WeaponFactory.hpp"
+#include "AxeWeapon.hpp"
 #include "EggplosiveWeapon.hpp"
 #include "LaserRayWeapon.hpp"
 #include "SniperWeapon.hpp"
@@ -19,6 +20,8 @@ std::unique_ptr<AWeapon> WeaponFactory::CreateWeapon(ITEM_TYPE itemType, const V
         return std::make_unique<SniperWeapon>(position, enemiesInRange, allEnemies);
     case ITEM_TYPE::WEAPON_WING:
         return std::make_unique<WingWeapon>(position, enemiesInRange, allEnemies);
+    case ITEM_TYPE::WEAPON_AXE:
+        return std::make_unique<AxeWeapon>(position, enemiesInRange, allEnemies);
     default:
         return nullptr;
     }
