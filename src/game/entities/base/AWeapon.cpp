@@ -147,7 +147,9 @@ void AWeapon::update(float deltaTime, const Vector2 &position)
     Vector2 finalPos = Vector2Add(position, offset);
     
     SetPosition(finalPos);
-    SetDirection(CalculateDirection());
+    if(!enemiesInRange.empty()) {
+        SetDirection(CalculateDirection());
+    }
 }
 
 void AWeapon::SetStatsFromPlayer(const Stats& statsFromPlayer) {

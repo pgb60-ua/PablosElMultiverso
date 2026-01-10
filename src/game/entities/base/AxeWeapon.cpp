@@ -79,7 +79,7 @@ void AxeWeapon::Attack(float deltaTime)
                         while (angleDiff < 0) angleDiff += 360.0f;
                         while (angleDiff >= 360) angleDiff -= 360.0f;
 
-                        if (angleDiff >= 0 && angleDiff <= swingAngle)
+                        if (angleDiff <= swingAngle)
                         {
                             enemy->TakeDamage(stats);
                             hitEnemies.push_back(enemy);
@@ -97,8 +97,7 @@ void AxeWeapon::Attack(float deltaTime)
 
         float currentDirAngle = atan2(direction.y, direction.x);
         float newAngle = currentDirAngle + (swingAngle * DEG2RAD);
-        direction.x = cos(newAngle);
-        direction.y = sin(newAngle);
+        SetDirection(Vector2{cos(newAngle), sin(newAngle)});
 
         if (timeSinceLastAttack >= totalDuration)
         {
