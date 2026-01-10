@@ -19,7 +19,9 @@ private:
     int selectedItem = 0;
     bool willBuy = false;
     bool willAlternateBlock = false;
+    bool willReroll = false;
     constexpr static int PADDING = 100;
+    constexpr static int REROLL_COST = 5;
     void NextSelectedItem(int direction);
 
 public:
