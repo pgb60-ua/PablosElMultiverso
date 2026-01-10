@@ -78,6 +78,7 @@ const Item *Shop::BuyItem(int index)
         return nullptr;
 
     shopPool[index].isBuyed = true;
+    shopPool[index].isBlocked = false;
     return shopPool[index].item; // Compra exitosa
 }
 
