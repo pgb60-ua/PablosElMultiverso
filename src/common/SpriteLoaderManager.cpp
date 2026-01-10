@@ -95,6 +95,8 @@ std::string SpriteLoaderManager::GetMetadataPath(ITEM_TYPE type) const
         return BASE_PATH_ITEM + "RubyHeart.json";
     case ITEM_TYPE::RAW_MEAT:
         return BASE_PATH_ITEM + "RawMeat.json";
+    case ITEM_TYPE::COIN:
+        return BASE_PATH_ITEM + "Coin.json";
     default:
         throw std::runtime_error("Unknown ITEM type");
     }

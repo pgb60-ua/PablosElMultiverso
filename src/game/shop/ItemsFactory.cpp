@@ -16,9 +16,14 @@ void ItemsFactory::LoadAllItems()
     DataFileManager &dm = DataFileManager::GetInstance();
 
     // Iterar desde el primer item hasta el último
-    for (int i = static_cast<int>(ITEM_TYPE::FIREBALL); i <= static_cast<int>(ITEM_TYPE::RAW_MEAT); ++i)
+    for (int i = static_cast<int>(ITEM_TYPE::FIREBALL); i <= static_cast<int>(ITEM_TYPE::COIN); ++i)
     {
         ITEM_TYPE type = static_cast<ITEM_TYPE>(i);
+
+        // Saltar COIN porque no es un item que se pueda comprar
+        if (type == ITEM_TYPE::COIN)
+            continue;
+
         ItemData itemData = dm.GetItemData(type);
         auto item = std::make_unique<Item>(itemData.name, itemData.description, itemData.stats, itemData.rarity,
                                            itemData.price);

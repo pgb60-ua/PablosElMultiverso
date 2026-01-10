@@ -92,8 +92,8 @@ void ShopState::render()
 
     // Pablo Coins con icono
     int coinsX = screenWidth - 250;
-    DrawCircle(coinsX, 40, 20, Color{255, 200, 0, 255});
-    DrawText("$", coinsX - 7, 28, 25, BLACK);
+    const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+    DrawTextureRec(coinSheet.texture, coinSheet.frames[0], Vector2{(float)coinsX - 20, 20}, WHITE);
     DrawText(TextFormat("%d", player->GetPabloCoins()), coinsX + 30, 30, 25, Color{255, 255, 255, 255});
 
     // Panel de stats del jugador (izquierda)
@@ -261,8 +261,9 @@ void ShopState::render()
 
         // Precio
         int priceX = itemsX + itemsWidth - 120;
-        DrawCircle(priceX, slotY + 50, 15, Color{255, 200, 0, 255});
-        DrawText("$", priceX - 5, slotY + 42, 18, BLACK);
+        Rectangle coinFrame = coinSheet.frames[0];
+        float coinScale = 30.0f / coinFrame.width; // Escalar a 30px
+        DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)slotY + 35}, WHITE);
         DrawText(TextFormat("%d", slot.item->GetPrice()), priceX + 20, slotY + 45, 20, Color{255, 200, 0, 255});
 
         // Indicador si está bloqueado

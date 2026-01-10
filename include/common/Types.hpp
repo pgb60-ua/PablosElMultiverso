@@ -30,7 +30,8 @@ enum class ITEM_TYPE
     SPOTLIGHT,
     CRIMSON_VIAL,
     RUBY_HEART,
-    RAW_MEAT
+    RAW_MEAT,
+    COIN
 };
 
 enum class WEAPON_TYPE
