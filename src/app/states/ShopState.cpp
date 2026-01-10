@@ -11,6 +11,7 @@ ShopState::~ShopState() {}
 void ShopState::init() { player->ModifyPabloCoins(50); }
 void ShopState::handleInput()
 {
+    // Input de teclado
     if (IsKeyPressed(KEY_S))
     {
         NextSelectedItem(1);
@@ -34,6 +35,131 @@ void ShopState::handleInput()
     if (IsKeyPressed(KEY_E))
     {
         passRound = true;
+    }
+
+    // Input de mouse
+    Vector2 mousePos = GetMousePosition();
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+    int headerHeight = 80;
+
+    // Panel de stats del jugador (izquierda)
+    int statsX = 40;
+    int statsY = headerHeight + 20;
+    int statsWidth = screenWidth * 0.35f;
+
+    // Panel de items (derecha)
+    int itemsX = statsX + statsWidth + 30;
+    int itemsY = headerHeight + 20;
+    int itemsWidth = screenWidth - itemsX - 40;
+
+    // Dimensiones de slots
+    int itemSlotHeight = 100;
+    int itemSlotSpacing = 15;
+    int itemStartY = itemsY + 70;
+
+    // Detectar hover sobre items (actualiza selectedItem)
+    for (int i = 0; i < Shop::MAX_ITEMS_SHOP; i++)
+    {
+        const TShopSlot &slot = shop.GetItemsShop()[i];
+        if (slot.isBuyed)
+            continue;
+
+        int slotY = itemStartY + i * (itemSlotHeight + itemSlotSpacing);
+        Rectangle slotRect = {(float)(itemsX + 18), (float)slotY, (float)(itemsWidth - 36), (float)itemSlotHeight};
+
+        if (CheckCollisionPointRec(mousePos, slotRect))
+        {
+            selectedItem = i;
+            break;
+        }
+    }
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+    {
+        // Verificar clic en items
+        for (int i = 0; i < Shop::MAX_ITEMS_SHOP; i++)
+        {
+            const TShopSlot &slot = shop.GetItemsShop()[i];
+            if (slot.isBuyed)
+                continue;
+
+            int slotY = itemStartY + i * (itemSlotHeight + itemSlotSpacing);
+            Rectangle slotRect = {(float)(itemsX + 18), (float)slotY, (float)(itemsWidth - 36), (float)itemSlotHeight};
+
+            if (CheckCollisionPointRec(mousePos, slotRect))
+            {
+                willBuy = true;
+                break;
+            }
+        }
+
+        // Verificar clic en botón de reroll
+        int rerollButtonWidth = 150;
+        int rerollButtonHeight = 40;
+        int rerollButtonX = 50;
+        int rerollButtonY = 20;
+        Rectangle rerollRect = {(float)rerollButtonX, (float)rerollButtonY, (float)rerollButtonWidth,
+                                (float)rerollButtonHeight};
+
+        if (CheckCollisionPointRec(mousePos, rerollRect))
+        {
+            willReroll = true;
+        }
+
+        // Verificar clic en botón Continue
+        int continueButtonWidth = 150;
+        int continueButtonHeight = 40;
+        int continueButtonX = rerollButtonX + rerollButtonWidth + 20;
+        int continueButtonY = 20;
+        Rectangle continueRect = {(float)continueButtonX, (float)continueButtonY, (float)continueButtonWidth,
+                                  (float)continueButtonHeight};
+
+        if (CheckCollisionPointRec(mousePos, continueRect))
+        {
+            passRound = true;
+        }
+    }
+
+    // Clic derecho para bloquear/desbloquear items
+    if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
+    {
+        Vector2 mousePos = GetMousePosition();
+        int screenWidth = GetScreenWidth();
+        int headerHeight = 80;
+
+        // Panel de stats del jugador (izquierda)
+        int statsX = 40;
+        int statsY = headerHeight + 20;
+        int statsWidth = screenWidth * 0.35f;
+
+        // Panel de items (derecha)
+        int itemsX = statsX + statsWidth + 30;
+        int itemsY = headerHeight + 20;
+        int itemsWidth = screenWidth - itemsX - 40;
+
+        // Dimensiones de slots
+        int itemSlotHeight = 100;
+        int itemSlotSpacing = 15;
+        int itemStartY = itemsY + 70;
+
+        // Verificar clic derecho en items para bloquear
+        for (int i = 0; i < Shop::MAX_ITEMS_SHOP; i++)
+        {
+            const TShopSlot &slot = shop.GetItemsShop()[i];
+            if (slot.isBuyed)
+                continue;
+
+            int slotY = itemStartY + i * (itemSlotHeight + itemSlotSpacing);
+            Rectangle slotRect = {(float)(itemsX + 18), (float)slotY, (float)(itemsWidth - 36), (float)itemSlotHeight};
+
+            if (CheckCollisionPointRec(mousePos, slotRect))
+            {
+                selectedItem = i;
+                willAlternateBlock = true;
+                break;
+            }
+        }
     }
 }
 void ShopState::update(float deltaTime)
@@ -336,14 +462,31 @@ void ShopState::render()
     DrawText(rerollText, rerollButtonX + rerollButtonWidth / 2 - MeasureText(rerollText, 16) / 2, rerollButtonY + 12,
              16, WHITE);
 
+    // Botón de Continue (posicionado en el header, al lado del reroll)
+    int continueButtonWidth = 150;
+    int continueButtonHeight = 40;
+    int continueButtonX = rerollButtonX + rerollButtonWidth + 20;
+    int continueButtonY = 20;
+
+    Color continueBgColor = Color{60, 80, 120, 255};
+    Color continueBorderColor = Color{100, 150, 255, 255};
+
+    DrawRectangle(continueButtonX - 3, continueButtonY - 3, continueButtonWidth + 6, continueButtonHeight + 6,
+                  continueBorderColor);
+    DrawRectangle(continueButtonX, continueButtonY, continueButtonWidth, continueButtonHeight, continueBgColor);
+
+    const char *continueText = "[E] Continue";
+    DrawText(continueText, continueButtonX + continueButtonWidth / 2 - MeasureText(continueText, 16) / 2,
+             continueButtonY + 12, 16, WHITE);
+
     // Controles en la parte inferior
     int controlsY = screenHeight - 40;
     DrawRectangle(0, controlsY, screenWidth, 40, Color{40, 40, 60, 255});
     DrawRectangle(0, controlsY, screenWidth, 3, Color{255, 200, 0, 255});
-    DrawText("[W/S] Navigate  [ENTER] Buy  [SPACE] Lock/Unlock  [R] Reroll  [E] Continue",
-             screenWidth / 2 -
-                 MeasureText("[W/S] Navigate  [ENTER] Buy  [SPACE] Lock/Unlock  [R] Reroll  [E] Continue", 16) / 2,
-             controlsY + 12, 16, Color{200, 200, 200, 255});
+    const char *controlsText =
+        "[W/S] Navigate  [ENTER/LEFT-CLICK] Buy  [SPACE/RIGHT-CLICK] Lock  [R] Reroll  [E] Continue";
+    DrawText(controlsText, screenWidth / 2 - MeasureText(controlsText, 16) / 2, controlsY + 12, 16,
+             Color{200, 200, 200, 255});
 
     EndDrawing();
 }
