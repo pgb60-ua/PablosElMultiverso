@@ -3,9 +3,9 @@
         {
             "roundNumber": 1,
             "duration": 60.0,
-            "spawnRate": 0.7,
+            "spawnRate": 1,
             "enemiesToSpawn": {
-                "DARKIN": 20,
+                "DARKIN": 0,
                 "CHEMICAL_DESTRUCTOR": 20
             }
         },

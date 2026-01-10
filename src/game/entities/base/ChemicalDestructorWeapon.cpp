@@ -57,3 +57,11 @@ std::unique_ptr<AProjectile> ChemicalDestructorWeapon::CreateProjectile()
 }
 
 void ChemicalDestructorWeapon::Attack() { return; }
+
+void ChemicalDestructorWeapon::render()
+{
+    for (const auto &projectile : GetActiveProjectiles())
+    {
+        projectile->render();
+    }
+}

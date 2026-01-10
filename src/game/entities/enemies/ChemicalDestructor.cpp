@@ -2,6 +2,7 @@
 #include "AEnemy.hpp"
 #include "ChemicalDestructorWeapon.hpp"
 #include "ScreenConstants.hpp"
+#include "raymath.h"
 #include <vector>
 
 ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
@@ -13,7 +14,11 @@ ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
 // weapon(std::make_unique<ChemicalDestructorWeapon>(this->GetPosition(), {}, players))
 {
     static std::vector<AEnemy *> emptyVector;
-    this->weapon = std::make_unique<ChemicalDestructorWeapon>(this->GetPosition(), emptyVector, this->objectives);
+    Vector2 enemyCenter = {
+        hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
+        hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f
+    };
+    this->weapon = std::make_unique<ChemicalDestructorWeapon>(Vector2Subtract(enemyCenter, Vector2{63, 61}), emptyVector, this->objectives);
 }
 
 bool ChemicalDestructor::Attack()
@@ -28,14 +33,11 @@ void ChemicalDestructor::Update(float deltaTime)
     currentAttackCooldownTime += deltaTime;
     if (weapon)
     {
-        // weapon->SetPosition(this->GetPosition());
-        // weapon->SetDirection(weapon->CalculateDirection());
-        weapon->update(deltaTime, this->GetPosition());
-        // if (currentAttackCooldownTime >= attackCooldown)
-        // {
-        //     weapon->Attack(this->GetPosition(), deltaTime);
-        //     currentAttackCooldownTime = currentAttackCooldownTime - attackCooldown;
-        // }
+        Vector2 enemyCenter = {
+            hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
+            hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f
+        };
+        weapon->update(deltaTime, enemyCenter);
     }
 
     Move(deltaTime);
@@ -69,4 +71,9 @@ void ChemicalDestructor::Render()
 
     DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
     animation.color = WHITE;
+
+    if (weapon)
+    {
+        weapon->render();
+    }
 }

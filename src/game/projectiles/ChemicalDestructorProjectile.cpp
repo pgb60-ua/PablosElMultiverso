@@ -43,7 +43,6 @@ void ChemicalDestructorProjectile::render()
     if (dir.x != 0.0f || dir.y != 0.0f)
     {
         angleDeg = atan2f(dir.y, dir.x) * RAD2DEG;
-        angleDeg += 90.0f;
     }
 
     DrawTexturePro(sheet.texture, src, dest, origin, angleDeg, WHITE);
@@ -53,7 +52,17 @@ void ChemicalDestructorProjectile::update(float deltaTime)
 {
     if (!active)
         return;
-    std::cout << "Updating ChemicalDestructorProjectile" << std::endl;
+    
+        // Actualizar animación
+    animation.timeAccumulator += deltaTime;
+    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::CHEMICAL_BULLET);
+    if (animation.timeAccumulator >= animation.FRAME_DURATION)
+    {
+        animation.timeAccumulator = 0.0f;
+        animation.frameIndex++;
+        animation.frameIndex %= sheet.spriteFrameCount;
+    }
+    
     Vector2 position = getShapePosition(shape);
     position.x += direction.x * stats.GetMovementSpeed() * deltaTime;
     position.y += direction.y * stats.GetMovementSpeed() * deltaTime;
