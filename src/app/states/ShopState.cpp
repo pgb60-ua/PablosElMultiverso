@@ -259,52 +259,35 @@ void ShopState::render()
     Color statColor = Color{200, 200, 220, 255};
     Color valueColor = Color{255, 255, 255, 255};
 
-    DrawText("Max Health:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetMaxHealth()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
+    // Helper para dibujar stat con multiplicador
+    auto drawStatWithMultiplier = [&](const char *name, float value, float multiplier)
+    {
+        Color multColor;
+        if (multiplier < 1.0f)
+            multColor = Color{255, 100, 100, 255}; // Rojo
+        else if (multiplier > 1.0f)
+            multColor = Color{100, 255, 100, 255}; // Verde
+        else
+            multColor = Color{150, 150, 150, 255}; // Gris
 
-    DrawText("Movement Speed:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetMovementSpeed()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
+        DrawText(TextFormat("x%.2f", multiplier), statsX + 20, statY, 14, multColor);
+        DrawText(name, statsX + 75, statY, 18, statColor);
+        DrawText(TextFormat("%.1f", value), statsX + statsWidth - 80, statY, 18, valueColor);
+        statY += statSpacing;
+    };
 
-    DrawText("Agility:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetAgility()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Attack Speed:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetAttackSpeed()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Physical Damage:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetPhysicalDamage()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Magical Damage:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetMagicDamage()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Resistance:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetResistance()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Armor:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetArmor()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Critical Chance:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetCriticalChance()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Critical Damage:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetCriticalDamage()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Health Regen:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetHealthRegeneration()), statsX + statsWidth - 80, statY, 18, valueColor);
-    statY += statSpacing;
-
-    DrawText("Life Steal:", statsX + 20, statY, 18, statColor);
-    DrawText(TextFormat("%.1f", player->GetLifeSteal()), statsX + statsWidth - 80, statY, 18, valueColor);
+    drawStatWithMultiplier("Max Health:", player->GetMaxHealth(), player->GetHealthModifier());
+    drawStatWithMultiplier("Movement Speed:", player->GetMovementSpeed(), player->GetMovementSpeedModifier());
+    drawStatWithMultiplier("Agility:", player->GetAgility(), player->GetAgilityModifier());
+    drawStatWithMultiplier("Attack Speed:", player->GetAttackSpeed(), player->GetAttackSpeedModifier());
+    drawStatWithMultiplier("Physical Damage:", player->GetPhysicalDamage(), player->GetPhysicalDamageModifier());
+    drawStatWithMultiplier("Magical Damage:", player->GetMagicDamage(), player->GetMagicDamageModifier());
+    drawStatWithMultiplier("Resistance:", player->GetResistance(), player->GetResistanceModifier());
+    drawStatWithMultiplier("Armor:", player->GetArmor(), player->GetArmorModifier());
+    drawStatWithMultiplier("Critical Chance:", player->GetCriticalChance(), player->GetCriticalChanceModifier());
+    drawStatWithMultiplier("Critical Damage:", player->GetCriticalDamage(), player->GetCriticalDamageModifier());
+    drawStatWithMultiplier("Health Regen:", player->GetHealthRegeneration(), player->GetHealthRegenerationModifier());
+    drawStatWithMultiplier("Life Steal:", player->GetLifeSteal(), player->GetLifeStealModifier());
 
     // Panel de items (derecha)
     int itemsX = statsX + statsWidth + 30;
