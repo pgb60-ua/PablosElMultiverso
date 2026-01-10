@@ -414,7 +414,16 @@ void ShopState::render()
             rarityText = "UNKNOWN";
             break;
         }
-        DrawText(rarityText, textX, slotY + 55, 12, rarityColor);
+
+        int rarityX = textX;
+        DrawText(rarityText, rarityX, slotY + 55, 12, rarityColor);
+
+        // Etiqueta de WEAPON si es un arma
+        if (isWeapon)
+        {
+            int weaponTagX = rarityX + MeasureText(rarityText, 12) + 10;
+            DrawText("WEAPON", weaponTagX, slotY + 55, 12, Color{255, 200, 100, 255});
+        }
 
         // Precio
         int priceX = itemsX + itemsWidth - 120;
