@@ -1,5 +1,8 @@
 #include "ChemicalDestructor.hpp"
+#include "AEnemy.hpp"
+#include "ChemicalDestructorWeapon.hpp"
 #include "ScreenConstants.hpp"
+#include <vector>
 
 ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
     : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::CHEMICAL_DESTRUCTOR),
@@ -7,8 +10,10 @@ ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
                  ENEMY_TYPE::CHEMICAL_DESTRUCTOR,
                  Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
              players, 75)
+// weapon(std::make_unique<ChemicalDestructorWeapon>(this->GetPosition(), {}, players))
 {
-    // weapon = std::make_unique<SniperWeapon>();
+    static std::vector<AEnemy *> emptyVector;
+    this->weapon = std::make_unique<ChemicalDestructorWeapon>(this->GetPosition(), emptyVector, this->objectives);
 }
 
 bool ChemicalDestructor::Attack()
@@ -21,6 +26,17 @@ void ChemicalDestructor::Update(float deltaTime)
 {
     // Actualiza el cooldown de ataque
     currentAttackCooldownTime += deltaTime;
+    if (weapon)
+    {
+        // weapon->SetPosition(this->GetPosition());
+        // weapon->SetDirection(weapon->CalculateDirection());
+        weapon->update(deltaTime, this->GetPosition());
+        // if (currentAttackCooldownTime >= attackCooldown)
+        // {
+        //     weapon->Attack(this->GetPosition(), deltaTime);
+        //     currentAttackCooldownTime = currentAttackCooldownTime - attackCooldown;
+        // }
+    }
 
     Move(deltaTime);
 

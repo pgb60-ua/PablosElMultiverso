@@ -1,13 +1,15 @@
 #pragma once
 
 #include "AEnemy.hpp"
-#include "AWeapon.hpp"
+#include "ChemicalDestructorWeapon.hpp"
 #include <vector>
 
 class ChemicalDestructor : public AEnemy
 {
 private:
-    std::unique_ptr<AWeapon> weapon;
+    /// @brief Arma del ChemicalDestructor
+    std::unique_ptr<ChemicalDestructorWeapon> weapon;
+
 public:
     /// @brief Constructor del ChemicalDestructor
     /// @param players Referencia al vector de jugadores (objetivos)

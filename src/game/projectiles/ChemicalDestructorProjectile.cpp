@@ -1,13 +1,15 @@
 #include "ChemicalDestructorProjectile.hpp"
-#include <SpriteSheet.hpp>
 #include <SpriteLoaderManager.hpp>
+#include <SpriteSheet.hpp>
 #include <cmath>
+#include <iostream>
 
-ChemicalDestructorProjectile::ChemicalDestructorProjectile(std::vector<AEnemy *> &allEnemies)
-    : AProjectile(allEnemies)
+ChemicalDestructorProjectile::ChemicalDestructorProjectile(std::vector<AEnemy *> &allEnemies,
+                                                           std::vector<Player *> &players)
+    : AProjectile(allEnemies), players(players)
 {
     // Calcular el radio basado en el sprite del proyectil Sniper
-    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::CHEMICAL_DESTRUCTOR);
+    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::CHEMICAL_BULLET);
     if (!sheet.frames.empty())
     {
         const Rectangle &frame = sheet.frames[0];
@@ -19,13 +21,11 @@ ChemicalDestructorProjectile::ChemicalDestructorProjectile(std::vector<AEnemy *>
     }
 }
 
-ChemicalDestructorProjectile::~ChemicalDestructorProjectile()
-{
-}
+ChemicalDestructorProjectile::~ChemicalDestructorProjectile() {}
 
 void ChemicalDestructorProjectile::render()
 {
-    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::CHEMICAL_DESTRUCTOR);
+    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::CHEMICAL_BULLET);
     if (sheet.frames.empty())
         return;
     animation.frameIndex %= sheet.spriteFrameCount;
@@ -35,8 +35,7 @@ void ChemicalDestructorProjectile::render()
     Vector2 origin = {src.width > 0 ? src.width * 0.5f : -src.width * 0.5f,
                       src.height > 0 ? src.height * 0.5f : -src.height * 0.5f};
 
-    Rectangle dest = {getPosition().x, getPosition().y,
-                      src.width, src.height};
+    Rectangle dest = {getPosition().x, getPosition().y, src.width, src.height};
 
     // Rotate according to getDirection()
     Vector2 dir = getDirection();
@@ -48,4 +47,31 @@ void ChemicalDestructorProjectile::render()
     }
 
     DrawTexturePro(sheet.texture, src, dest, origin, angleDeg, WHITE);
+}
+
+void ChemicalDestructorProjectile::update(float deltaTime)
+{
+    if (!active)
+        return;
+    std::cout << "Updating ChemicalDestructorProjectile" << std::endl;
+    Vector2 position = getShapePosition(shape);
+    position.x += direction.x * stats.GetMovementSpeed() * deltaTime;
+    position.y += direction.y * stats.GetMovementSpeed() * deltaTime;
+    setShapePosition(shape, position);
+
+    if (position.x < 0 || position.x > GetScreenWidth() || position.y < 0 || position.y > GetScreenHeight())
+    {
+        deactivate();
+    }
+
+    // Chequear colisión con players
+    for (auto &player : players)
+    {
+        if (player->IsAlive() && checkCollisionShapes(shape, player->GetHitbox()))
+        {
+            player->TakeDamage(stats);
+            deactivate();
+            break;
+        }
+    }
 }
