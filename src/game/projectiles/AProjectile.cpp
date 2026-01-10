@@ -11,10 +11,6 @@ AProjectile::AProjectile(std::vector<AEnemy *> &allEnemies)
     stats = Stats();
 }
 
-AProjectile::~AProjectile()
-{
-}
-
 void AProjectile::setRadius(float radius)
 {
     if (shape.type == ShapeType::SHAPE_CIRCLE)

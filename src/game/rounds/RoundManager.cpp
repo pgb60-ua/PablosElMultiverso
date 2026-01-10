@@ -1,6 +1,7 @@
 #include "RoundManager.hpp"
 #include "Zombie.hpp"
 #include "Darkin.hpp"
+#include "ChemicalDestructor.hpp"
 #include <functional>
 #include <new>
 
@@ -24,7 +25,7 @@ std::vector<AEnemy*> RoundManager::CreateEnemiesForRound(const RoundInfo& roundI
     {
         {ENEMY_TYPE::ZOMBIE,[&]() -> AEnemy*{return new Zombie(players);}},
         {ENEMY_TYPE::DARKIN,[&]() -> AEnemy*{return new Darkin(players);}},
-        //{ENEMY_TYPE::CHEMICAL_DESTRUCTOR,[&]() -> AEnemy*{return new ChemicalDestructor(players);}}
+        {ENEMY_TYPE::CHEMICAL_DESTRUCTOR,[&]() -> AEnemy*{return new ChemicalDestructor(players);}}
 
     };
 

@@ -136,6 +136,8 @@ std::string DataFileManager::GetFilePath(WEAPON_TYPE type) const
         return BASE_PATH_WEAPON + "sniper.json";
     case WEAPON_TYPE::WING:
         return BASE_PATH_WEAPON + "wing.json";
+    case WEAPON_TYPE::CHEMICAL_DESTRUCTOR:
+        return BASE_PATH_WEAPON + "chemical_destructor.json";
     default:
         throw std::runtime_error("Unknown WEAPON type");
     }
@@ -589,7 +591,6 @@ std::vector<RoundInfo> DataFileManager::GetRounds(ROUND_TYPE type)
                         spdlog::warn("DataFileManager::GetRounds: Unknown ENEMY_TYPE '{}'", enemyName);
                         continue; // Ignorar tipos desconocidos
                     }
-
                     roundInfo.enemiesToSpawnCount[enemyType] = enemyCount;
                 }
             }

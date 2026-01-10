@@ -42,7 +42,8 @@ enum class WEAPON_TYPE
     EGGPLOSIVE,
     LASER_RAY,
     SNIPER,
-    WING
+    WING,
+    CHEMICAL_DESTRUCTOR
 };
 
 enum class PROJECTILE_TYPE
