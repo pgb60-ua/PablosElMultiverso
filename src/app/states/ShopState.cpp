@@ -336,12 +336,13 @@ void ShopState::render()
              16, WHITE);
 
     // Controles en la parte inferior
-    int controlsY = screenHeight - 35;
-    DrawRectangle(0, controlsY - 5, screenWidth, 40, Color{40, 40, 60, 200});
+    int controlsY = screenHeight - 40;
+    DrawRectangle(0, controlsY, screenWidth, 40, Color{40, 40, 60, 255});
+    DrawRectangle(0, controlsY, screenWidth, 3, Color{255, 200, 0, 255});
     DrawText("[W/S] Navigate  [ENTER] Buy  [SPACE] Lock/Unlock  [R] Reroll  [E] Continue",
              screenWidth / 2 -
                  MeasureText("[W/S] Navigate  [ENTER] Buy  [SPACE] Lock/Unlock  [R] Reroll  [E] Continue", 16) / 2,
-             controlsY + 5, 16, Color{200, 200, 200, 255});
+             controlsY + 12, 16, Color{200, 200, 200, 255});
 
     EndDrawing();
 }
