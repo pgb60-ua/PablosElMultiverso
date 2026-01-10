@@ -10,7 +10,7 @@
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
 ShopState::~ShopState() {}
-void ShopState::init() { player->ModifyPabloCoins(50); }
+void ShopState::init() { player->ModifyPabloCoins(300); }
 void ShopState::handleInput()
 {
     // Input de teclado
@@ -426,14 +426,18 @@ void ShopState::render()
         const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(slot.item->GetType());
         Rectangle sourceRec = sheet.frames[0];
 
-        // Escalar armas (32x32) a 64x64 para que se vean del mismo tamaño que los items
+        // Normalizar todos los items para que el eje más grande sea aproximadamente 64
         ITEM_TYPE itemType = slot.item->GetType();
         bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
 
         if (isWeapon)
         {
-            // Escalar 2x para armas
-            Rectangle destRec = {(float)(itemsX + 25), (float)(slotY + 18), sourceRec.width * 2, sourceRec.height * 2};
+            // Calcular escala para que el eje más grande sea 64
+            float maxAxis = std::max(sourceRec.width, sourceRec.height);
+            float scale = 64.0f / maxAxis;
+
+            Rectangle destRec = {(float)(itemsX + 25), (float)(slotY + 18), sourceRec.width * scale,
+                                 sourceRec.height * scale};
             DrawTexturePro(sheet.texture, sourceRec, destRec, Vector2{0, 0}, 0.0f, WHITE);
         }
         else

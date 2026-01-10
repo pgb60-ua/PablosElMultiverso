@@ -25,8 +25,7 @@ void ItemsFactory::LoadAllItems()
             continue;
 
         // Saltar armas que aún no tienen datos
-        if (type == ITEM_TYPE::WEAPON_AXE || type == ITEM_TYPE::WEAPON_SWORD || type == ITEM_TYPE::WEAPON_SCYTHE ||
-            type == ITEM_TYPE::WEAPON_WAND)
+        if (type == ITEM_TYPE::WEAPON_SWORD || type == ITEM_TYPE::WEAPON_SCYTHE || type == ITEM_TYPE::WEAPON_WAND)
             continue;
 
         ItemData itemData = dm.GetItemData(type);
