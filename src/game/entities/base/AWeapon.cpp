@@ -61,6 +61,8 @@ ItemRarity AWeapon::GetRarityFromJSON(WEAPON_TYPE type)
                 return ItemRarity::Rare;
             if (*val == "Epic")
                 return ItemRarity::Epic;
+            if (*val == "Legendary")
+                return ItemRarity::Legendary;
         }
     }
     return ItemRarity::Common;
