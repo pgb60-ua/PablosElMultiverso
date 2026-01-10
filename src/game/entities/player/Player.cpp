@@ -171,12 +171,45 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
         weapons.push_back(std::move(newWeapon)); // std::move transfiere ownership
         weaponOffsets.push_back(offset);         // Guardar el offset para esta arma
     }
-    // Si tengo 4, sumo las stats
+    // Si tengo 4, buscar un arma del mismo tipo que no esté al máximo
     else
     {
-        int index = std::rand() % 4;
-        weapons[index]->Upgrade(newWeapon->GetStats().GetOffensiveStats());
+        WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
+        bool upgraded = false;
+
+        for (auto &weapon : weapons)
+        {
+            if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() < weapon->GetMaxLevel())
+            {
+                weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats());
+                upgraded = true;
+                break;
+            }
+        }
+
+        // Si no se pudo mejorar ninguna arma del mismo tipo, no hacer nada
+        // (esto no debería suceder si CanAcceptWeapon se usa correctamente)
     }
+}
+
+bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType) const
+{
+    // Si tengo menos de 4 armas, siempre puedo aceptar
+    if (weapons.size() < WEAPON_MAX)
+    {
+        return true;
+    }
+
+    // Si tengo 4 armas, verificar si hay al menos una del mismo tipo que no esté al máximo
+    for (const auto &weapon : weapons)
+    {
+        if (weapon->GetWeaponType() == weaponType && weapon->GetLevel() < weapon->GetMaxLevel())
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 Player::~Player()
