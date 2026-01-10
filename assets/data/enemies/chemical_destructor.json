@@ -14,6 +14,6 @@
 	"critical_damage": 1.5,
 	"life_steal": 0,
 	"health_regeneration": 1,
-	"is_ranged": false,
+	"is_ranged": true,
 	"description": "A powerful enemy that deals chemical damage and has a high attack speed."
 }
