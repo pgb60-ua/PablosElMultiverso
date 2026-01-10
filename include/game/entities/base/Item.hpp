@@ -12,7 +12,8 @@ enum class ItemRarity
     Common,
     Uncommon,
     Rare,
-    Epic
+    Epic,
+    Legendary
 };
 
 class Item

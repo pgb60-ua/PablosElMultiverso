@@ -49,14 +49,17 @@ std::vector<const Item *> ItemsFactory::GetRandomItems(int count)
             weight = 50.0;
             break; // 50% probabilidad
         case ItemRarity::Uncommon:
-            weight = 30.0;
-            break; // 30%
+            weight = 25.0;
+            break; // 25%
         case ItemRarity::Rare:
             weight = 15.0;
             break; // 15%
         case ItemRarity::Epic:
-            weight = 5.0;
-            break; // 5%
+            weight = 7.0;
+            break; // 7%
+        case ItemRarity::Legendary:
+            weight = 3.0;
+            break; // 3%
         }
         weights.push_back(weight);
     }
