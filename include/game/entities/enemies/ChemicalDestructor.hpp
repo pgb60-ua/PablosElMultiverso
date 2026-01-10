@@ -13,6 +13,10 @@ private:
     /// @brief Distancia objetivo que el enemigo intenta mantener del jugador
     static constexpr float TARGET_DISTANCE = 500.0f; // Ajusta este valor según necesites
 
+    /// @brief Obtiene la posición del centro del hitbox del enemigo
+    /// @return Vector2 con las coordenadas del centro del hitbox
+    Vector2 GetCenterPosition() const;
+
 public:
     /// @brief Constructor del ChemicalDestructor
     /// @param players Referencia al vector de jugadores (objetivos)

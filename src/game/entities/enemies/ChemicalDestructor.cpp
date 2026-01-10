@@ -15,10 +15,7 @@ ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
 {
     targetWeight = 3.5f;
     static std::vector<AEnemy *> emptyVector;
-    Vector2 enemyCenter = {
-        hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
-        hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f
-    };
+    Vector2 enemyCenter = GetCenterPosition();
     this->weapon = std::make_unique<ChemicalDestructorWeapon>(Vector2Subtract(enemyCenter, Vector2{63, 61}), emptyVector, this->objectives);
 }
 
@@ -34,10 +31,7 @@ void ChemicalDestructor::Update(float deltaTime)
     currentAttackCooldownTime += deltaTime;
     if (weapon)
     {
-        Vector2 enemyCenter = {
-            hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
-            hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f
-        };
+        Vector2 enemyCenter = GetCenterPosition();
         weapon->update(deltaTime, enemyCenter);
     }
 
@@ -52,6 +46,14 @@ void ChemicalDestructor::Update(float deltaTime)
         stats.SetHealth(newHealth);
     }
     UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::CHEMICAL_DESTRUCTOR);
+}
+
+Vector2 ChemicalDestructor::GetCenterPosition() const
+{
+    return Vector2{
+        hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
+        hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f
+    };
 }
 
 Vector2 ChemicalDestructor::CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed)
