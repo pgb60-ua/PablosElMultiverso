@@ -120,7 +120,7 @@ void ShopState::render()
         DrawRectangle(minXShop, 100 + i * (heightStats / 5), widthStats, 64, color);
         DrawText(slot.item->GetName().c_str(), minXShop + 70, 100 + i * (heightStats / 5), 20, WHITE);
 
-        DrawTexture(*slot.item->GetIcon(), minXShop, 100 + i * (heightStats / 5), WHITE);
+        // DrawTexture(*slot.item->GetIcon(), minXShop, 100 + i * (heightStats / 5), WHITE);
     }
 
     EndDrawing();
