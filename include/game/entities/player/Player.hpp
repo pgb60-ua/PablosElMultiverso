@@ -20,6 +20,10 @@ class AEnemy;
 // Clase que representa el player
 class Player : public AEntity
 {
+public:
+    std::vector<AEnemy *> enemiesInRange;
+    std::vector<AEnemy *> &allEnemies;
+
 private:
     void ImportModifiers(PLAYER_TYPE player);
     static constexpr float BASE_MULTIPLIER = 1.0f;
@@ -30,8 +34,6 @@ private:
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
     void UpdatePlayerAnimation(float deltaTime);
-    std::vector<AEnemy *> enemiesInRange;
-    std::vector<AEnemy *> &allEnemies;
     void UpdateEnemiesInRange();
     int pabloCoins = 0;
 
