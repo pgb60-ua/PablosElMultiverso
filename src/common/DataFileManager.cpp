@@ -97,6 +97,8 @@ std::string DataFileManager::GetFilePath(ITEM_TYPE type) const
         return BASE_PATH_ITEM + "RubyHeart.json";
     case ITEM_TYPE::RAW_MEAT:
         return BASE_PATH_ITEM + "RawMeat.json";
+    case ITEM_TYPE::VENOMOUS_PLANT:
+        return BASE_PATH_ITEM + "VenomousPlant.json";
     case ITEM_TYPE::WEAPON_AXE:
         return BASE_PATH_WEAPON + "axe.json";
     case ITEM_TYPE::WEAPON_SWORD:

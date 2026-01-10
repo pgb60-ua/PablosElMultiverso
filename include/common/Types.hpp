@@ -31,6 +31,7 @@ enum class ITEM_TYPE
     CRIMSON_VIAL,
     RUBY_HEART,
     RAW_MEAT,
+    VENOMOUS_PLANT,
     COIN,
     WEAPON_AXE,
     WEAPON_SWORD,
