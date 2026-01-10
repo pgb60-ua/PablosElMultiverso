@@ -92,11 +92,29 @@ public:
 
     // Setters de stats
 
-    /// @brief Establece los puntos de vida base
-    void SetHealth(float newHealth) { defensiveStats.health = newHealth; }
+    /// @brief Establece los puntos de vida actual no pueden ser mayor a la maxima
+    void SetHealth(float newHealth)
+    {
+        if (newHealth > GetMaxHealth())
+        {
+            newHealth = GetMaxHealth();
+        }
+        defensiveStats.health = newHealth;
+    }
 
     /// @brief Establece los puntos de vida maxima
-    void SetMaxHealth(float newHealthMax) { defensiveStats.healthMax = newHealthMax; };
+    void SetMaxHealth(float newHealthMax)
+    {
+        if (newHealthMax <= 0)
+        {
+            newHealthMax = 1;
+        }
+        else if (newHealthMax < GetHealth())
+        {
+            newHealthMax = GetHealth();
+        }
+        defensiveStats.healthMax = newHealthMax;
+    };
 
     /// @brief Establece la velocidad de movimiento base
     void SetMovementSpeed(float newSpeed) { defensiveStats.movementSpeed = newSpeed; }

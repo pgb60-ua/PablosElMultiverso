@@ -3,6 +3,6 @@
 	"description": "A simple bag that provides minor benefits",
 	"price": 50,
 	"rarity": "Common",
-	"health": 15,
+	"max_health": 15,
 	"movement_speed": 5
 }

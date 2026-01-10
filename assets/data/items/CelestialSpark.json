@@ -6,5 +6,5 @@
 	"critical_chance": 20,
 	"critical_damage": 40,
 	"attack_speed": 0.2,
-	"health": -15
+	"max_health": -15
 }

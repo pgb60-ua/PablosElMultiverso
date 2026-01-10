@@ -1,8 +1,10 @@
 #pragma once
-#include <string>
 #include "Stats.hpp"
-extern "C" {
-    #include <raylib.h>
+#include "Types.hpp"
+#include <string>
+extern "C"
+{
+#include <raylib.h>
 }
 
 enum class ItemRarity
@@ -10,7 +12,8 @@ enum class ItemRarity
     Common,
     Uncommon,
     Rare,
-    Epic
+    Epic,
+    Legendary
 };
 
 class Item
@@ -24,11 +27,15 @@ protected:
     Stats stats;
     /// @brief Rareza del objeto
     ItemRarity itemRarity;
+    /// @brief Precio del item
+    int price;
+    /// @brief Tipo de item
+    ITEM_TYPE type;
 
 public:
     /// @brief Constructor de la clase Item
 
-    Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity);
+    Item(std::string name, std::string description, Stats stats, ItemRarity itemRarity, int price);
 
     /// @brief Getter del nombre del objeto
     std::string GetName() const { return name; }
@@ -42,6 +49,11 @@ public:
     /// @brief Getter de la rareza del objeto
     ItemRarity GetItemRarity() const { return itemRarity; }
 
+    /// @brief Getter del precio del item
+    int GetPrice() const { return price; }
+
+    ITEM_TYPE GetType() const { return type; };
+
     // Setters
     /// @brief Setter del nombre del objeto
     void SetName(const std::string &newName) { name = newName; }
@@ -54,6 +66,17 @@ public:
 
     /// @brief Setter de la rareza del objeto
     void SetItemRarity(ItemRarity newRarity) { itemRarity = newRarity; }
+
+    void SetPrice(int newPrice)
+    {
+        if (newPrice < 0)
+        {
+            newPrice = 0;
+        }
+        price = newPrice;
+    }
+
+    void SetType(ITEM_TYPE newType) { type = newType; }
 
     virtual ~Item() {}
 };
