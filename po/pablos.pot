@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 11:34+0100\n"
+"POT-Creation-Date: 2026-01-11 12:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,14 +19,6 @@ msgstr ""
 
 #: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
 msgid "Play again"
-msgstr ""
-
-#: src/app/states/MainMenuState.cpp:15
-msgid "Change Language"
-msgstr ""
-
-#: src/app/states/LanguageMenuState.cpp:99
-msgid "SELECT LANGUAGE"
 msgstr ""
 
 #: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
@@ -45,15 +37,23 @@ msgstr ""
 msgid "Arrows: Change | ENTER: Confirm | Q: Back | ESC: Exit Game"
 msgstr ""
 
-#: src/app/states/MainMenuState.cpp:11
+#: src/app/states/LanguageMenuState.cpp:97
+msgid "SELECT LANGUAGE"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:12
 msgid "Play"
 msgstr ""
 
-#: src/app/states/MainMenuState.cpp:11
+#: src/app/states/MainMenuState.cpp:12
+msgid "Change Language"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:12
 msgid "Exit"
 msgstr ""
 
-#: src/app/states/MainMenuState.cpp:83 src/app/states/MainGameState.cpp:147
+#: src/app/states/MainMenuState.cpp:92 src/app/states/MainGameState.cpp:146
 msgid "PABLOS, THE MULTIVERSE"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "YOU WON!"
 msgstr ""
 
-#: src/app/states/MainGameState.cpp:153
+#: src/app/states/MainGameState.cpp:152
 msgid "Health: "
 msgstr ""
 

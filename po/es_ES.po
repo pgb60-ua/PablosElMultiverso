@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 10:58+0100\n"
+"POT-Creation-Date: 2026-01-11 12:24+0100\n"
 "PO-Revision-Date: 2026-01-11 10:59+0100\n"
 "Last-Translator:  <alejandro@asus-alejandro.localdomain>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -20,14 +20,6 @@ msgstr ""
 #: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
 msgid "Play again"
 msgstr "Jugar de nuevo"
-
-#: src/app/states/MainMenuState.cpp:15
-msgid "Change Language"
-msgstr "Cambiar Idioma"
-
-#: src/app/states/LanguageMenuState.cpp:99
-msgid "SELECT LANGUAGE"
-msgstr "SELECCIONA IDIOMA"
 
 #: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
 msgid "Return to main menu"
@@ -45,15 +37,23 @@ msgstr "SELECCIONA TU PERSONAJE"
 msgid "Arrows: Change | ENTER: Confirm | Q: Back | ESC: Exit Game"
 msgstr "Flechas: Cambiar | ENTER: Confirmar | Q: Volver | ESC: Salir"
 
-#: src/app/states/MainMenuState.cpp:11
+#: src/app/states/LanguageMenuState.cpp:97
+msgid "SELECT LANGUAGE"
+msgstr "SELECCIONA IDIOMA"
+
+#: src/app/states/MainMenuState.cpp:12
 msgid "Play"
 msgstr "Jugar"
 
-#: src/app/states/MainMenuState.cpp:11
+#: src/app/states/MainMenuState.cpp:12
+msgid "Change Language"
+msgstr "Cambiar Idioma"
+
+#: src/app/states/MainMenuState.cpp:12
 msgid "Exit"
 msgstr "Salir"
 
-#: src/app/states/MainMenuState.cpp:83 src/app/states/MainGameState.cpp:147
+#: src/app/states/MainMenuState.cpp:92 src/app/states/MainGameState.cpp:146
 msgid "PABLOS, THE MULTIVERSE"
 msgstr "PABLOS, EL MULTIVERSO"
 
@@ -61,7 +61,7 @@ msgstr "PABLOS, EL MULTIVERSO"
 msgid "YOU WON!"
 msgstr "HAS GANADO!"
 
-#: src/app/states/MainGameState.cpp:153
+#: src/app/states/MainGameState.cpp:152
 msgid "Health: "
 msgstr "Salud: "
 
@@ -234,6 +234,261 @@ msgstr ""
 "[W/S] Navegar  [ENTER/CLICK-IZQ] Comprar  [ESPACIO/CLICK-DER] Bloquear  [R] "
 "Renovar  [E] Continuar"
 
+#: src/app/i18n_strings.cpp:6
+msgid "Sniper "
+msgstr "Francotirador "
+
+#: src/app/i18n_strings.cpp:7
+msgid "A long-range rifle designed for precision shooting"
+msgstr "Un rifle de largo alcance diseñado para disparos de precisión"
+
+#: src/app/i18n_strings.cpp:8
+msgid "Wing "
+msgstr "Ala "
+
+#: src/app/i18n_strings.cpp:9
+msgid "A blade imbued with the power of the wind"
+msgstr "Una hoja imbuida con el poder del viento"
+
+#: src/app/i18n_strings.cpp:10
+msgid "Chemical Destructor Weapon"
+msgstr "Arma Destructora Química"
+
+#: src/app/i18n_strings.cpp:11
+msgid ""
+"The Chemical Destructor Weapon is a powerful weapon that can destroy players "
+"with its chemical attacks."
+msgstr ""
+"El Arma Destructora Química es un arma poderosa que puede destruir jugadores "
+"con sus ataques químicos."
+
+#: src/app/i18n_strings.cpp:12
+msgid "Eggplosive"
+msgstr "Huevo Explosivo"
+
+#: src/app/i18n_strings.cpp:13
+msgid ""
+"An explosive egg launcher that fires a single-shot projectile that explodes "
+"on impact, dealing area damage"
+msgstr ""
+"Un lanzador de huevos explosivos que dispara un proyectil de un solo tiro "
+"que explota al impactar, causando daño de área"
+
+#: src/app/i18n_strings.cpp:14
+msgid "Laser Beam"
+msgstr "Rayo Láser"
+
+#: src/app/i18n_strings.cpp:15
+msgid ""
+"Single-shot laser that hits every enemy in the targeted row and then "
+"disappears"
+msgstr ""
+"Láser de un solo disparo que golpea a todos los enemigos en la fila objetivo "
+"y luego desaparece"
+
+#: src/app/i18n_strings.cpp:16
+msgid "Axe"
+msgstr "Hacha"
+
+#: src/app/i18n_strings.cpp:17
+msgid "A heavy axe that 'calls' through enemies"
+msgstr "Un hacha pesada que 'llama' a través de los enemigos"
+
+#: src/app/i18n_strings.cpp:20
+msgid "Spined Breastplate"
+msgstr "Coraza Espinosa"
+
+#: src/app/i18n_strings.cpp:21
+msgid "Heavy armor with spines that damage attackers"
+msgstr "Armadura pesada con espinas que dañan a los atacantes"
+
+#: src/app/i18n_strings.cpp:22
+msgid "Pearl Egg"
+msgstr "Huevo Perlado"
+
+#: src/app/i18n_strings.cpp:23
+msgid "A mysterious egg that enhances regeneration"
+msgstr "Un huevo misterioso que mejora la regeneración"
+
+#: src/app/i18n_strings.cpp:24
+msgid "Fireball"
+msgstr "Bola de Fuego"
+
+#: src/app/i18n_strings.cpp:25
+msgid "A big ball of fire that burns enemies"
+msgstr "Una gran bola de fuego que quema a los enemigos"
+
+#: src/app/i18n_strings.cpp:26
+msgid "Ethereal Dagger"
+msgstr "Daga Etérea"
+
+#: src/app/i18n_strings.cpp:27
+msgid "A ghostly blade that strikes with deadly precision"
+msgstr "Una hoja fantasmal que golpea con precisión mortal"
+
+#: src/app/i18n_strings.cpp:28
+msgid "Celestial Spark"
+msgstr "Chispa Celestial"
+
+#: src/app/i18n_strings.cpp:29
+msgid "A fragment of a star that enhances critical strikes"
+msgstr "Un fragmento de estrella que mejora los golpes críticos"
+
+#: src/app/i18n_strings.cpp:30
+msgid "Venomous Plant"
+msgstr "Planta Venenosa"
+
+#: src/app/i18n_strings.cpp:31
+msgid "A mysterious plant that enhances magical power at the cost of vitality"
+msgstr "Una planta misteriosa que mejora el poder mágico a costa de vitalidad"
+
+#: src/app/i18n_strings.cpp:32
+msgid "Raven's Feather"
+msgstr "Pluma de Cuervo"
+
+#: src/app/i18n_strings.cpp:33
+msgid "Grants incredible speed but weakens defenses"
+msgstr "Otorga una velocidad increíble pero debilita las defensas"
+
+#: src/app/i18n_strings.cpp:34
+msgid "Magical Mirror"
+msgstr "Espejo Mágico"
+
+#: src/app/i18n_strings.cpp:35
+msgid "Reflects magic and enhances magical resistance"
+msgstr "Refleja la magia y mejora la resistencia mágica"
+
+#: src/app/i18n_strings.cpp:36
+msgid "Spotlight"
+msgstr "Linterna"
+
+#: src/app/i18n_strings.cpp:37
+msgid "Illuminates the battlefield, revealing weaknesses"
+msgstr "Ilumina el campo de batalla, revelando debilidades"
+
+#: src/app/i18n_strings.cpp:38
+msgid "Ruby Heart"
+msgstr "Corazón de Rubí"
+
+#: src/app/i18n_strings.cpp:39
+msgid "A crystallized heart that grants vitality"
+msgstr "Un corazón cristalizado que otorga vitalidad"
+
+#: src/app/i18n_strings.cpp:40
+msgid "Spirit Mask"
+msgstr "Máscara Espiritual"
+
+#: src/app/i18n_strings.cpp:41
+msgid "A mystical mask that channels spiritual energy"
+msgstr "Una máscara mística que canaliza energía espiritual"
+
+#: src/app/i18n_strings.cpp:42
+msgid "Crimson Vial"
+msgstr "Vial Carmesí"
+
+#: src/app/i18n_strings.cpp:43
+msgid "A vial of blood that enhances life steal"
+msgstr "Un vial de sangre que mejora el robo de vida"
+
+#: src/app/i18n_strings.cpp:44
+msgid "Explosive Arsenal"
+msgstr "Arsenal Explosivo"
+
+#: src/app/i18n_strings.cpp:45
+msgid "Increases damage output but makes you more vulnerable"
+msgstr "Aumenta el daño infligido pero te hace más vulnerable"
+
+#: src/app/i18n_strings.cpp:46
+msgid "Satchel"
+msgstr "Bolsa"
+
+#: src/app/i18n_strings.cpp:47
+msgid "A simple bag that provides minor benefits"
+msgstr "Una bolsa simple que proporciona beneficios menores"
+
+#: src/app/i18n_strings.cpp:48
+msgid "Void Ring"
+msgstr "Anillo del Vacío"
+
+#: src/app/i18n_strings.cpp:49
+msgid "Dark magic flows through this ring, draining life for power"
+msgstr "Magia oscura fluye a través de este anillo, drenando vida por poder"
+
+#: src/app/i18n_strings.cpp:50
+msgid "Raw Meat"
+msgstr "Carne Cruda"
+
+#: src/app/i18n_strings.cpp:51
+msgid "Fresh meat that restores health and strength"
+msgstr "Carne fresca que restaura salud y fuerza"
+
+#: src/app/i18n_strings.cpp:54
+msgid "Pablo, the Warrior"
+msgstr "Pablo, el Guerrero"
+
+#: src/app/i18n_strings.cpp:55
+msgid ""
+"Yes, you are seeing it right, it is a monkey with a phone that, as if that "
+"were not enough, is called Pablo"
+msgstr ""
+"Sí, lo estás viendo bien, es un mono con un teléfono que, por si fuera poco, "
+"se llama Pablo"
+
+#: src/app/i18n_strings.cpp:56
+msgid "Pablo, the Combat Egg"
+msgstr "Pablo, el Huevo de Combate"
+
+#: src/app/i18n_strings.cpp:57
+msgid ""
+"An extension of the original Pablo, now with powerful magical abilities."
+msgstr ""
+"Una extensión del Pablo original, ahora con poderosas habilidades mágicas."
+
+#: src/app/i18n_strings.cpp:58
+msgid "Healer"
+msgstr "Sanador"
+
+#: src/app/i18n_strings.cpp:59
+msgid "A holy warrior focused on sustain and healing"
+msgstr "Un guerrero santo enfocado en el sostenimiento y la curación"
+
+#: src/app/i18n_strings.cpp:60
+msgid "Pablo, the Duck"
+msgstr "Pablo, el Pato"
+
+#: src/app/i18n_strings.cpp:61
+msgid "An extension of the original Pablo, now with ranged combat abilities."
+msgstr ""
+"Una extensión del Pablo original, ahora con habilidades de combate a "
+"distancia."
+
+#: src/app/i18n_strings.cpp:64
+msgid "Chemical Destructor"
+msgstr "Destructor Químico"
+
+#: src/app/i18n_strings.cpp:65
+msgid ""
+"A powerful enemy that deals chemical damage and has a high attack speed."
+msgstr ""
+"Un enemigo poderoso que inflige daño químico y tiene una alta velocidad de "
+"ataque."
+
+#: src/app/i18n_strings.cpp:66
+msgid "Zombie"
+msgstr "Zombi"
+
+#: src/app/i18n_strings.cpp:67
+msgid "A slow but relentless undead creature"
+msgstr "Una criatura no-muerta lenta pero implacable"
+
+#: src/app/i18n_strings.cpp:68
+msgid "Darkin"
+msgstr "Darkin"
+
+#: src/app/i18n_strings.cpp:69
+msgid "A dark creature that lurks in the shadows"
+msgstr "Una criatura oscura que acecha en las sombras"
+
 #: src/game/rounds/Round.cpp:54
 msgid "Round: "
 msgstr "Ronda: "
@@ -245,177 +500,3 @@ msgstr "Tiempo: "
 #: src/game/rounds/Round.cpp:56
 msgid "Enemies: "
 msgstr "Enemigos: "
-
-msgid "Sniper "
-msgstr "Francotirador "
-
-msgid "A long-range rifle designed for precision shooting"
-msgstr "Un rifle de largo alcance diseñado para disparos de precisión"
-
-msgid "Wing "
-msgstr "Ala "
-
-msgid "A blade imbued with the power of the wind"
-msgstr "Una hoja imbuida con el poder del viento"
-
-msgid "Chemical Destructor Weapon"
-msgstr "Arma Destructora Química"
-
-msgid "The Chemical Destructor Weapon is a powerful weapon that can destroy players with its chemical attacks."
-msgstr "El Arma Destructora Química es un arma poderosa que puede destruir jugadores con sus ataques químicos."
-
-msgid "Eggplosive"
-msgstr "Huevo Explosivo"
-
-msgid "An explosive egg launcher that fires a single-shot projectile that explodes on impact, dealing area damage"
-msgstr "Un lanzador de huevos explosivos que dispara un proyectil de un solo tiro que explota al impactar, causando daño de área"
-
-msgid "Laser Beam"
-msgstr "Rayo Láser"
-
-msgid "Single-shot laser that hits every enemy in the targeted row and then disappears"
-msgstr "Láser de un solo disparo que golpea a todos los enemigos en la fila objetivo y luego desaparece"
-
-msgid "Axe"
-msgstr "Hacha"
-
-msgid "A heavy axe that 'calls' through enemies"
-msgstr "Un hacha pesada que 'llama' a través de los enemigos"
-
-msgid "Spined Breastplate"
-msgstr "Coraza Espinosa"
-
-msgid "Heavy armor with spines that damage attackers"
-msgstr "Armadura pesada con espinas que dañan a los atacantes"
-
-msgid "Pearl Egg"
-msgstr "Huevo Perlado"
-
-msgid "A mysterious egg that enhances regeneration"
-msgstr "Un huevo misterioso que mejora la regeneración"
-
-msgid "Fireball"
-msgstr "Bola de Fuego"
-
-msgid "A big ball of fire that burns enemies"
-msgstr "Una gran bola de fuego que quema a los enemigos"
-
-msgid "Ethereal Dagger"
-msgstr "Daga Etérea"
-
-msgid "A ghostly blade that strikes with deadly precision"
-msgstr "Una hoja fantasmal que golpea con precisión mortal"
-
-msgid "Celestial Spark"
-msgstr "Chispa Celestial"
-
-msgid "A fragment of a star that enhances critical strikes"
-msgstr "Un fragmento de estrella que mejora los golpes críticos"
-
-msgid "Venomous Plant"
-msgstr "Planta Venenosa"
-
-msgid "A mysterious plant that enhances magical power at the cost of vitality"
-msgstr "Una planta misteriosa que mejora el poder mágico a costa de vitalidad"
-
-msgid "Raven's Feather"
-msgstr "Pluma de Cuervo"
-
-msgid "Grants incredible speed but weakens defenses"
-msgstr "Otorga una velocidad increíble pero debilita las defensas"
-
-msgid "Magical Mirror"
-msgstr "Espejo Mágico"
-
-msgid "Reflects magic and enhances magical resistance"
-msgstr "Refleja la magia y mejora la resistencia mágica"
-
-msgid "Spotlight"
-msgstr "Linterna"
-
-msgid "Illuminates the battlefield, revealing weaknesses"
-msgstr "Ilumina el campo de batalla, revelando debilidades"
-
-msgid "Ruby Heart"
-msgstr "Corazón de Rubí"
-
-msgid "A crystallized heart that grants vitality"
-msgstr "Un corazón cristalizado que otorga vitalidad"
-
-msgid "Spirit Mask"
-msgstr "Máscara Espiritual"
-
-msgid "A mystical mask that channels spiritual energy"
-msgstr "Una máscara mística que canaliza energía espiritual"
-
-msgid "Crimson Vial"
-msgstr "Vial Carmesí"
-
-msgid "A vial of blood that enhances life steal"
-msgstr "Un vial de sangre que mejora el robo de vida"
-
-msgid "Explosive Arsenal"
-msgstr "Arsenal Explosivo"
-
-msgid "Increases damage output but makes you more vulnerable"
-msgstr "Aumenta el daño infligido pero te hace más vulnerable"
-
-msgid "Satchel"
-msgstr "Bolsa"
-
-msgid "A simple bag that provides minor benefits"
-msgstr "Una bolsa simple que proporciona beneficios menores"
-
-msgid "Void Ring"
-msgstr "Anillo del Vacío"
-
-msgid "Dark magic flows through this ring, draining life for power"
-msgstr "Magia oscura fluye a través de este anillo, drenando vida por poder"
-
-msgid "Raw Meat"
-msgstr "Carne Cruda"
-
-msgid "Fresh meat that restores health and strength"
-msgstr "Carne fresca que restaura salud y fuerza"
-
-msgid "Pablo, the Warrior"
-msgstr "Pablo, el Guerrero"
-
-msgid "Yes, you are seeing it right, it is a monkey with a phone that, as if that were not enough, is called Pablo"
-msgstr "Sí, lo estás viendo bien, es un mono con un teléfono que, por si fuera poco, se llama Pablo"
-
-msgid "Pablo, the Combat Egg"
-msgstr "Pablo, el Huevo de Combate"
-
-msgid "An extension of the original Pablo, now with powerful magical abilities."
-msgstr "Una extensión del Pablo original, ahora con poderosas habilidades mágicas."
-
-msgid "Healer"
-msgstr "Sanador"
-
-msgid "A holy warrior focused on sustain and healing"
-msgstr "Un guerrero santo enfocado en el sostenimiento y la curación"
-
-msgid "Pablo, the Duck"
-msgstr "Pablo, el Pato"
-
-msgid "An extension of the original Pablo, now with ranged combat abilities."
-msgstr "Una extensión del Pablo original, ahora con habilidades de combate a distancia."
-
-msgid "Chemical Destructor"
-msgstr "Destructor Químico"
-
-msgid "A powerful enemy that deals chemical damage and has a high attack speed."
-msgstr "Un enemigo poderoso que inflige daño químico y tiene una alta velocidad de ataque."
-
-msgid "Zombie"
-msgstr "Zombi"
-
-msgid "A slow but relentless undead creature"
-msgstr "Una criatura no-muerta lenta pero implacable"
-
-msgid "Darkin"
-msgstr "Darkin"
-
-msgid "A dark creature that lurks in the shadows"
-msgstr "Una criatura oscura que acecha en las sombras"

@@ -15,7 +15,6 @@
 #include <MainGameState.hpp>
 #include <memory>
 #include "I18N.hpp"
-#include <iostream>
 
 extern "C"
 {

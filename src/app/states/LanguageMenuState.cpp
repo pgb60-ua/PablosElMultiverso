@@ -13,27 +13,24 @@ extern "C" {
 
 const char *LanguageMenuState::LANG_OPTIONS[3] = { "English", "Español", "Français" };
 
-static void cambiarIdioma(const std::string& idioma) {
-    if (idioma == "en") {
-        setenv("LANGUAGE", "en_US", 1);
-        setenv("LANG", "en_US.UTF-8", 1);
-    } else if (idioma == "es") {
-        setenv("LANGUAGE", "es_ES", 1);
-        setenv("LANG", "es_ES.UTF-8", 1);
-    } else if (idioma == "fr") {
-        setenv("LANGUAGE", "fr_FR", 1);
-        setenv("LANG", "fr_FR.UTF-8", 1);
+static void changeLanguage(const std::string& language) {
+    if (language == "en") {
+        SetEnvironmentVariable("LANGUAGE", "en_US");
+        SetEnvironmentVariable("LANG", "en_US.UTF-8");
+    } else if (language == "es") {
+        SetEnvironmentVariable("LANGUAGE", "es_ES");
+        SetEnvironmentVariable("LANG", "es_ES.UTF-8");
+    } else if (language == "fr") {
+        SetEnvironmentVariable("LANGUAGE", "fr_FR");
+        SetEnvironmentVariable("LANG", "fr_FR.UTF-8");
     }
 
-    std::string locale_str = idioma + "_" + (idioma == "en" ? "US" : (idioma == "fr" ? "FR" : "ES")) + ".UTF-8";
+    std::string locale_str = language + "_" + (language == "en" ? "US" : (language == "fr" ? "FR" : "ES")) + ".UTF-8";
     setlocale(LC_ALL, locale_str.c_str());
 
     bindtextdomain("pablos", GetLocalePath().c_str());
     textdomain("pablos");
     bind_textdomain_codeset("pablos", "UTF-8");
-    
-    extern int _nl_msg_cat_cntr;
-    ++_nl_msg_cat_cntr;
 }
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
@@ -79,9 +76,9 @@ void LanguageMenuState::handleInput() {
     }
 
     if (confirmed) {
-        if (selectedOption == 0) cambiarIdioma("en");
-        else if (selectedOption == 1) cambiarIdioma("es");
-        else if (selectedOption == 2) cambiarIdioma("fr");
+        if (selectedOption == 0) changeLanguage("en");
+        else if (selectedOption == 1) changeLanguage("es");
+        else if (selectedOption == 2) changeLanguage("fr");
         
         // Volver al menú principal tras seleccionar
         state_machine->remove_state(false); 
