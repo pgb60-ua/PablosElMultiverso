@@ -273,3 +273,26 @@ void Player::CheckCollisions(float deltaTime)
         }
     }
 }
+
+void Player::RemoveWeapon(int index)
+{
+    if (index >= weapons.size() || index < 0)
+    {
+        return; // Índice inválido, no hacer nada
+    }
+
+    // Eliminar el arma
+    weapons.erase(weapons.begin() + index);
+
+    // Redistribuir ángulos de las armas restantes
+    size_t totalWeapons = weapons.size();
+    if (totalWeapons > 0)
+    {
+        float angleStep = 360.0f / totalWeapons;
+        for (size_t i = 0; i < totalWeapons; i++)
+        {
+            float angle = i * angleStep;
+            weapons[i]->SetOrbitAngle(angle);
+        }
+    }
+}

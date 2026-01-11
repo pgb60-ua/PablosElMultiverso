@@ -264,6 +264,7 @@ public:
     void HandleInput(Vector2 inputDirection);
     void AddItem(const Item *item);
     void AddWeapon(std::unique_ptr<AWeapon> newWeapon);
+    void RemoveWeapon(int index);
 
     /// @brief Verifica si el jugador puede aceptar un arma del tipo especificado
     /// @param weaponType El tipo de arma a verificar
