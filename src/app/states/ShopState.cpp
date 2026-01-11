@@ -839,49 +839,45 @@ void ShopState::render()
         }
 
         // Stats del item (mostrar solo si está seleccionado)
-        if (i == selectedItem)
+        int statsTextX = textX;
+        int statsTextY = slotY + 72;
+        int statsOffset = 0;
+
+        const Stats &itemStats = slot.item->GetStats();
+        Color positiveColor = Color{100, 255, 100, 255};
+        Color negativeColor = Color{255, 100, 100, 255};
+
+        // Función helper para mostrar stat
+        auto drawStat = [&](const char *name, float value)
         {
-            int statsTextX = textX;
-            int statsTextY = slotY + 72;
-            int statsOffset = 0;
-
-            const Stats &itemStats = slot.item->GetStats();
-            Color positiveColor = Color{100, 255, 100, 255};
-            Color negativeColor = Color{255, 100, 100, 255};
-
-            // Función helper para mostrar stat
-            auto drawStat = [&](const char *name, float value)
+            if (value != 0)
             {
-                if (value != 0)
-                {
-                    Color color = value > 0 ? positiveColor : negativeColor;
-                    const char *sign = value > 0 ? "+" : "";
-                    DrawText(TextFormat("%s%s %.1f", sign, name, value), statsTextX + statsOffset, statsTextY, 11,
-                             color);
-                    statsOffset += MeasureText(TextFormat("%s%s %.1f  ", sign, name, value), 11);
-                }
-            };
+                Color color = value > 0 ? positiveColor : negativeColor;
+                const char *sign = value > 0 ? "+" : "";
+                DrawText(TextFormat("%s%s %.1f", sign, name, value), statsTextX + statsOffset, statsTextY, 11, color);
+                statsOffset += MeasureText(TextFormat("%s%s %.1f  ", sign, name, value), 11);
+            }
+        };
 
-            // Mostrar stats ofensivas
-            drawStat("PHY", itemStats.GetPhysicalDamage());
-            drawStat("MAG", itemStats.GetMagicDamage());
-            drawStat("AS", itemStats.GetAttackSpeed());
-            drawStat("CC", itemStats.GetCriticalChance());
-            drawStat("CD", itemStats.GetCriticalDamage());
-            drawStat("LS", itemStats.GetLifeSteal());
+        // Mostrar stats ofensivas
+        drawStat("PHY", itemStats.GetPhysicalDamage());
+        drawStat("MAG", itemStats.GetMagicDamage());
+        drawStat("AS", itemStats.GetAttackSpeed());
+        drawStat("CC", itemStats.GetCriticalChance());
+        drawStat("CD", itemStats.GetCriticalDamage());
+        drawStat("LS", itemStats.GetLifeSteal());
 
-            // Nueva línea para stats defensivas
-            statsOffset = 0;
-            statsTextY += 13;
+        // Nueva línea para stats defensivas
+        statsOffset = 0;
+        statsTextY += 13;
 
-            drawStat("HP", itemStats.GetHealth());
-            drawStat("MHP", itemStats.GetMaxHealth());
-            drawStat("MS", itemStats.GetMovementSpeed());
-            drawStat("AGI", itemStats.GetAgility());
-            drawStat("ARM", itemStats.GetArmor());
-            drawStat("RES", itemStats.GetResistance());
-            drawStat("HR", itemStats.GetHealthRegeneration());
-        }
+        drawStat("HP", itemStats.GetHealth());
+        drawStat("MHP", itemStats.GetMaxHealth());
+        drawStat("MS", itemStats.GetMovementSpeed());
+        drawStat("AGI", itemStats.GetAgility());
+        drawStat("ARM", itemStats.GetArmor());
+        drawStat("RES", itemStats.GetResistance());
+        drawStat("HR", itemStats.GetHealthRegeneration());
     }
 
     // Botón de reroll (posicionado en el header, al lado izquierdo)
