@@ -954,7 +954,7 @@ void ShopState::NextWeaponSelected(int direction)
     // Va para la izquierda
     if (direction == -1)
     {
-        // etc .... 0, 1, 2, 3ww
+        // etc .... 0, 1, 2, 3
         if (newSelected < Shop::MAX_ITEMS_SHOP - 1)
         {
             selectedItem = Shop::MAX_ITEMS_SHOP + size - 1;
