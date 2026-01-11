@@ -69,13 +69,6 @@ protected:
     /// @brief Velocidad de giro
     const float ORBIT_SPEED = 40.0f;
 
-    /// @brief Ángulo actual 
-    float currentOrbitAngle = 0.0f;
-    /// @brief Radio del giro
-    const float ORBIT_RADIUS = 80.0f;
-    /// @brief Velocidad de giro
-    const float ORBIT_SPEED = 40.0f;
-
 public:
     /// @brief Establece el ángulo inicial de la órbita
     void SetOrbitAngle(float angle) { currentOrbitAngle = angle; }

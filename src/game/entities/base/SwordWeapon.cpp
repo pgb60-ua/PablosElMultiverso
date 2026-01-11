@@ -86,11 +86,9 @@ void SwordWeapon::Attack(float deltaTime)
                         hitEnemies.push_back(enemy);
                     }
                 }
+                SetPosition(Vector2Add(GetPosition(), thrustVec));
             }
         }
-        Vector2 thrustDir = direction;
-        Vector2 thrustVec = Vector2Scale(thrustDir, currentThrustAmount);
-        SetPosition(Vector2Add(GetPosition(), thrustVec));
     }
     else if (timeSinceLastAttack >= attackInterval)
     {
