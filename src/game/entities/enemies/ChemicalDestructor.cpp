@@ -15,7 +15,7 @@ ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
     targetWeight = 3.5f;
     static std::vector<AEnemy *> emptyVector;
     Vector2 enemyCenter = GetCenterPosition();
-    this->weapon = std::make_unique<ChemicalDestructorWeapon>(enemyCenter, emptyVector, players);
+    this->weapon = std::make_unique<ChemicalDestructorWeapon>(enemyCenter, emptyVector, this->objectives);
 }
 
 bool ChemicalDestructor::Attack()

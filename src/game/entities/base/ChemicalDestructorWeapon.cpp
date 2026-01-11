@@ -48,7 +48,7 @@ void ChemicalDestructorWeapon::Attack(const Vector2 &position, float deltaTime)
 {
     timeSinceLastAttack += deltaTime;
     if (timeSinceLastAttack >= attackInterval)
-    {
+    {        
         ShootProjectile(position, direction, allEnemies);
         timeSinceLastAttack -= attackInterval;
     }
@@ -67,4 +67,11 @@ void ChemicalDestructorWeapon::render()
     {
         projectile->render();
     }
+}
+void ChemicalDestructorWeapon::update(float deltaTime, const Vector2 &position)
+{
+    SetPosition(position);
+    SetDirection(CalculateDirection());
+    Attack(this->position, deltaTime); 
+    UpdateProjectiles(deltaTime);
 }
