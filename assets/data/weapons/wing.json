@@ -3,6 +3,7 @@
 	"description": "A blade imbued with the power of the wind",
 	"level": 1,
 	"rarity": "Rare",
+	"price": 10,
 	"pool_size": 50,
 	"health": 0,
 	"max_health": 0,
@@ -14,7 +15,7 @@
 	"resistance": 0,
 	"armor": 0,
 	"critical_chance": 15,
-	"critical_damage": 1.50,
+	"critical_damage": 1.5,
 	"life_steal": 5,
 	"health_regeneration": 0
 }
