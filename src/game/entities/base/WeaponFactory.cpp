@@ -8,7 +8,7 @@
 
 std::unique_ptr<AWeapon> WeaponFactory::CreateWeapon(ITEM_TYPE itemType, const Vector2 &position,
                                                      std::vector<AEnemy *> &enemiesInRange,
-                                                     std::vector<AEnemy *> &allEnemies, int price)
+                                                     std::vector<AEnemy *> &allEnemies, int price, int level)
 {
     std::unique_ptr<AWeapon> weapon;
 
@@ -36,6 +36,7 @@ std::unique_ptr<AWeapon> WeaponFactory::CreateWeapon(ITEM_TYPE itemType, const V
     if (weapon)
     {
         weapon->SetPrice(price);
+        weapon->SetLevel(level);
     }
 
     return weapon;

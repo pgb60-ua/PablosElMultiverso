@@ -84,6 +84,8 @@ public:
     WEAPON_TYPE GetWeaponType() const { return weaponType; }
     /// @brief Getter del nivel del arma
     int GetLevel() const { return level; }
+    /// @brief Setter del nivel del arma (escala las stats base por 2^(level-1))
+    void SetLevel(int newLevel);
     /// @brief Getter del nivel máximo del arma
     int GetMaxLevel() const { return MAXLEVEL; }
     /// @brief Sube de nivel el arma
