@@ -7,6 +7,7 @@
 #include "StateMachine.hpp"
 #include "Types.hpp"
 #include "WeaponFactory.hpp"
+#include <cmath>
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
 ShopState::~ShopState() {}
@@ -909,6 +910,14 @@ void ShopState::render()
         int statsOffset = 0;
 
         const Stats &itemStats = slot.item->GetStats();
+
+        // Si es arma, multiplicar stats por el nivel: 2^(nivel-1)
+        int statsMultiplier = 1;
+        if (isWeapon)
+        {
+            statsMultiplier = static_cast<int>(std::pow(2, slot.weaponLevel - 1));
+        }
+
         Color positiveColor = Color{100, 255, 100, 255};
         Color negativeColor = Color{255, 100, 100, 255};
 
@@ -919,8 +928,10 @@ void ShopState::render()
             {
                 Color color = value > 0 ? positiveColor : negativeColor;
                 const char *sign = value > 0 ? "+" : "";
-                DrawText(TextFormat("%s%s %.1f", sign, name, value), statsTextX + statsOffset, statsTextY, 11, color);
-                statsOffset += MeasureText(TextFormat("%s%s %.1f  ", sign, name, value), 11);
+                float displayValue = value * statsMultiplier;
+                DrawText(TextFormat("%s%s %.1f", sign, name, displayValue), statsTextX + statsOffset, statsTextY, 11,
+                         color);
+                statsOffset += MeasureText(TextFormat("%s%s %.1f  ", sign, name, displayValue), 11);
             }
         };
 
