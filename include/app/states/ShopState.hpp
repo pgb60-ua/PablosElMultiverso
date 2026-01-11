@@ -28,11 +28,11 @@ public:
     ShopState(Player *player);
     ~ShopState();
 
-    void init() override;
+    void init() override {};
     void handleInput() override;
     void update(float deltaTime) override;
     void render() override;
 
-    void pause() {};
-    void resume() {};
+    void pause() override {};
+    void resume() override {};
 };

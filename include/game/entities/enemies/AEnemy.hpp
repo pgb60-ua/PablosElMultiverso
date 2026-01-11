@@ -51,7 +51,7 @@ protected:
     AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
     /// @brief Actualiza la animación del enemigo
     void UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType);
-    
+
     /// @brief Calcula la fuerza hacia el objetivo (jugador)
     virtual Vector2 CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed);
 
@@ -79,9 +79,8 @@ public:
     // Botín y Economía
     /*--------------------------*/
 
-    /// @brief Suelta Pablo Coins al morir
-    /// @return Cantidad de Pablo Coins que suelta
-    virtual int DropLoot() { return pabloCoinsAtDeath; };
+    /// @brief Distribuye Pablo Coins a todos los jugadores vivos al morir
+    virtual void DropLoot();
 
     /// @brief Establece la cantidad de Pablo Coins que suelta al morir
     void SetPabloCoinsAtDeath(int cantidad);

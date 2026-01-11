@@ -1,8 +1,7 @@
 #include "AProjectile.hpp"
 #include <algorithm>
 
-AProjectile::AProjectile(std::vector<AEnemy *> &allEnemies)
-    : enemiesInScene(allEnemies)
+AProjectile::AProjectile(std::vector<AEnemy *> &allEnemies) : enemiesInScene(allEnemies)
 {
     shape.type = ShapeType::SHAPE_CIRCLE;
     shape.data.circle.radius = 5.0f; // Radio por defecto
@@ -41,6 +40,7 @@ void AProjectile::update(float deltaTime)
             enemy->TakeDamage(stats);
             if (!enemy->IsAlive())
             {
+                enemy->DropLoot();
                 delete enemy;
                 enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));
             }
@@ -50,14 +50,9 @@ void AProjectile::update(float deltaTime)
     }
 }
 
-Vector2 AProjectile::getPosition() const
-{
-    return getShapePosition(shape);
-}
-void AProjectile::deactivate()
-{
-    active = false;
-}
+Vector2 AProjectile::getPosition() const { return getShapePosition(shape); }
+
+void AProjectile::deactivate() { active = false; }
 
 void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
 {

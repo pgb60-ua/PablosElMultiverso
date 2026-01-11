@@ -10,7 +10,6 @@
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
 ShopState::~ShopState() {}
-void ShopState::init() { player->ModifyPabloCoins(300); }
 void ShopState::handleInput()
 {
     // Input de teclado
