@@ -21,6 +21,14 @@ msgstr ""
 msgid "Play again"
 msgstr "Jugar de nuevo"
 
+#: src/app/states/MainMenuState.cpp:15
+msgid "Change Language"
+msgstr "Cambiar Idioma"
+
+#: src/app/states/LanguageMenuState.cpp:99
+msgid "SELECT LANGUAGE"
+msgstr "SELECCIONA IDIOMA"
+
 #: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
 msgid "Return to main menu"
 msgstr "Volver al menú principal"

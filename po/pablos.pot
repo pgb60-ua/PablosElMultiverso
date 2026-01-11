@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 10:58+0100\n"
+"POT-Creation-Date: 2026-01-11 11:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,14 @@ msgstr ""
 
 #: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
 msgid "Play again"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:15
+msgid "Change Language"
+msgstr ""
+
+#: src/app/states/LanguageMenuState.cpp:99
+msgid "SELECT LANGUAGE"
 msgstr ""
 
 #: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
@@ -222,6 +230,248 @@ msgstr ""
 msgid ""
 "[W/S] Navigate  [ENTER/LEFT-CLICK] Buy  [SPACE/RIGHT-CLICK] Lock  [R] "
 "Reroll  [E] Continue"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:6
+msgid "Sniper "
+msgstr ""
+
+#: src/app/i18n_strings.cpp:7
+msgid "A long-range rifle designed for precision shooting"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:8
+msgid "Wing "
+msgstr ""
+
+#: src/app/i18n_strings.cpp:9
+msgid "A blade imbued with the power of the wind"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:10
+msgid "Chemical Destructor Weapon"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:11
+msgid ""
+"The Chemical Destructor Weapon is a powerful weapon that can destroy players "
+"with its chemical attacks."
+msgstr ""
+
+#: src/app/i18n_strings.cpp:12
+msgid "Eggplosive"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:13
+msgid ""
+"An explosive egg launcher that fires a single-shot projectile that explodes "
+"on impact, dealing area damage"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:14
+msgid "Laser Beam"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:15
+msgid ""
+"Single-shot laser that hits every enemy in the targeted row and then "
+"disappears"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:16
+msgid "Axe"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:17
+msgid "A heavy axe that 'calls' through enemies"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:20
+msgid "Spined Breastplate"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:21
+msgid "Heavy armor with spines that damage attackers"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:22
+msgid "Pearl Egg"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:23
+msgid "A mysterious egg that enhances regeneration"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:24
+msgid "Fireball"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:25
+msgid "A big ball of fire that burns enemies"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:26
+msgid "Ethereal Dagger"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:27
+msgid "A ghostly blade that strikes with deadly precision"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:28
+msgid "Celestial Spark"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:29
+msgid "A fragment of a star that enhances critical strikes"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:30
+msgid "Venomous Plant"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:31
+msgid "A mysterious plant that enhances magical power at the cost of vitality"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:32
+msgid "Raven's Feather"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:33
+msgid "Grants incredible speed but weakens defenses"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:34
+msgid "Magical Mirror"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:35
+msgid "Reflects magic and enhances magical resistance"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:36
+msgid "Spotlight"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:37
+msgid "Illuminates the battlefield, revealing weaknesses"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:38
+msgid "Ruby Heart"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:39
+msgid "A crystallized heart that grants vitality"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:40
+msgid "Spirit Mask"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:41
+msgid "A mystical mask that channels spiritual energy"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:42
+msgid "Crimson Vial"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:43
+msgid "A vial of blood that enhances life steal"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:44
+msgid "Explosive Arsenal"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:45
+msgid "Increases damage output but makes you more vulnerable"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:46
+msgid "Satchel"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:47
+msgid "A simple bag that provides minor benefits"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:48
+msgid "Void Ring"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:49
+msgid "Dark magic flows through this ring, draining life for power"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:50
+msgid "Raw Meat"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:51
+msgid "Fresh meat that restores health and strength"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:54
+msgid "Pablo, the Warrior"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:55
+msgid ""
+"Yes, you are seeing it right, it is a monkey with a phone that, as if that "
+"were not enough, is called Pablo"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:56
+msgid "Pablo, the Combat Egg"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:57
+msgid ""
+"An extension of the original Pablo, now with powerful magical abilities."
+msgstr ""
+
+#: src/app/i18n_strings.cpp:58
+msgid "Healer"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:59
+msgid "A holy warrior focused on sustain and healing"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:60
+msgid "Pablo, the Duck"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:61
+msgid "An extension of the original Pablo, now with ranged combat abilities."
+msgstr ""
+
+#: src/app/i18n_strings.cpp:64
+msgid "Chemical Destructor"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:65
+msgid ""
+"A powerful enemy that deals chemical damage and has a high attack speed."
+msgstr ""
+
+#: src/app/i18n_strings.cpp:66
+msgid "Zombie"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:67
+msgid "A slow but relentless undead creature"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:68
+msgid "Darkin"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:69
+msgid "A dark creature that lurks in the shadows"
 msgstr ""
 
 #: src/game/rounds/Round.cpp:54
