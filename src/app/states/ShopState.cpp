@@ -838,7 +838,7 @@ void ShopState::render()
             DrawText("BLOCKED", itemsX + 25, slotY + itemSlotHeight - 20, 14, Color{255, 100, 100, 255});
         }
 
-        // Stats del item (mostrar solo si está seleccionado)
+        // Stats del item (mostrar para cada item)
         int statsTextX = textX;
         int statsTextY = slotY + 72;
         int statsOffset = 0;
