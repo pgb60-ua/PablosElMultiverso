@@ -547,9 +547,9 @@ void ShopState::render()
             drawWeaponStat("MAG DMG", weaponStats.GetMagicDamage(), col1Y);
             drawWeaponStat("ATK SPD", weaponStats.GetAttackSpeed(), col1Y);
 
-            // Segunda columna
+            // Segunda columna (más cerca de la primera)
             int col2Y = statsY;
-            int col2X = tooltipX + tooltipWidth / 2;
+            int col2X = tooltipX + 120; // Más cerca de la primera columna
             auto drawWeaponStatCol2 = [&](const char *name, float value, int &currentY)
             {
                 if (value != 0)
@@ -564,6 +564,60 @@ void ShopState::render()
             drawWeaponStatCol2("CRIT CH", weaponStats.GetCriticalChance(), col2Y);
             drawWeaponStatCol2("CRIT DMG", weaponStats.GetCriticalDamage(), col2Y);
             drawWeaponStatCol2("LIFE STEAL", weaponStats.GetLifeSteal(), col2Y);
+
+            // Configuración dinámica de botones (verticalmente apilados)
+            int buttonWidth = 80;
+            int buttonHeight = 45;
+            int buttonSpacing = 10;
+            int totalButtons = 2; // Número total de botones a mostrar
+            int buttonsAreaHeight = (buttonHeight * totalButtons) + (buttonSpacing * (totalButtons - 1));
+            int buttonsX = tooltipX + tooltipWidth - buttonWidth - 10;
+
+            // Centrar verticalmente los botones en el área de stats
+            // Área disponible: desde statsY hasta el final (antes del precio de venta)
+            int statsAreaHeight = (tooltipY + tooltipHeight - 25) - statsY;         // Altura disponible para stats
+            int buttonsStartY = statsY + (statsAreaHeight - buttonsAreaHeight) / 2; // Centrado vertical
+
+            // Botón 1: PLACEHOLDER (arriba)
+            int button1Y = buttonsStartY;
+
+            // Fondo del botón placeholder
+            Color placeholderButtonColor = Color{60, 60, 80, 255};     // Gris oscuro
+            Color placeholderButtonBorder = Color{100, 100, 120, 255}; // Gris claro
+            DrawRectangle(buttonsX - 2, button1Y - 2, buttonWidth + 4, buttonHeight + 4, placeholderButtonBorder);
+            DrawRectangle(buttonsX, button1Y, buttonWidth, buttonHeight, placeholderButtonColor);
+
+            // Texto del botón placeholder
+            const char *placeholderText = "TODO";
+            int placeholderTextWidth = MeasureText(placeholderText, 14);
+            DrawText(placeholderText, buttonsX + (buttonWidth - placeholderTextWidth) / 2, button1Y + 8, 14,
+                     Color{150, 150, 150, 255});
+
+            // Leyenda de tecla dentro del botón
+            const char *placeholderKey = "[?]";
+            int placeholderKeyWidth = MeasureText(placeholderKey, 10);
+            DrawText(placeholderKey, buttonsX + (buttonWidth - placeholderKeyWidth) / 2, button1Y + 26, 10,
+                     Color{120, 120, 120, 255});
+
+            // Botón 2: SELL (abajo)
+            int button2Y = buttonsStartY + buttonHeight + buttonSpacing;
+
+            // Fondo del botón de vender
+            Color sellButtonColor = Color{180, 40, 40, 255};  // Rojo oscuro
+            Color sellButtonBorder = Color{255, 80, 80, 255}; // Rojo brillante
+            DrawRectangle(buttonsX - 2, button2Y - 2, buttonWidth + 4, buttonHeight + 4, sellButtonBorder);
+            DrawRectangle(buttonsX, button2Y, buttonWidth, buttonHeight, sellButtonColor);
+
+            // Texto del botón SELL
+            const char *sellText = "SELL";
+            int sellTextWidth = MeasureText(sellText, 14);
+            DrawText(sellText, buttonsX + (buttonWidth - sellTextWidth) / 2, button2Y + 8, 14, WHITE);
+
+            // Leyenda de tecla dentro del botón
+            const char *spaceText = "[SPACE]";
+            int spaceTextWidth = MeasureText(spaceText, 10);
+            DrawText(spaceText, buttonsX + (buttonWidth - spaceTextWidth) / 2, button2Y + 26, 10,
+                     Color{200, 200, 200, 255});
 
             // Precio de venta
             int sellPrice = CalculateWeaponSellPrice(weaponIndex);
