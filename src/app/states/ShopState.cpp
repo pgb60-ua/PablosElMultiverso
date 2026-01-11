@@ -221,7 +221,7 @@ void ShopState::handleInput()
         }
     }
 
-    // Clic izquierdo en el botón SELL del tooltip
+    // Clic izquierdo en los botones FUSE o SELL del tooltip
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && selectedItem >= Shop::MAX_ITEMS_SHOP)
     {
         int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
@@ -256,9 +256,17 @@ void ShopState::handleInput()
             int statsAreaHeight = (tooltipY + tooltipHeight - 25) - statsY;
             int buttonsStartY = statsY + (statsAreaHeight - buttonsAreaHeight) / 2;
 
+            // Botón FUSE está arriba
+            int button1Y = buttonsStartY;
+            Rectangle fuseButtonRect = {(float)buttonsX, (float)button1Y, (float)buttonWidth, (float)buttonHeight};
+
+            if (CheckCollisionPointRec(mousePos, fuseButtonRect))
+            {
+                willFuse = true;
+            }
+
             // Botón SELL está abajo
             int button2Y = buttonsStartY + buttonHeight + buttonSpacing;
-
             Rectangle sellButtonRect = {(float)buttonsX, (float)button2Y, (float)buttonWidth, (float)buttonHeight};
 
             if (CheckCollisionPointRec(mousePos, sellButtonRect))
@@ -291,7 +299,7 @@ void ShopState::update(float deltaTime)
                 WEAPON_TYPE weaponType = ItemTypeToWeaponType(slot.item->GetType());
                 if (!player->CanAcceptWeapon(weaponType))
                 {
-                    // No puede comprar esta arma (todas las armas del mismo tipo están al máximo)
+                    // No puede comprar esta arma (todas las armas del mismo tipo estan a mas de level 1)
                     willBuy = false;
                     return;
                 }
@@ -334,6 +342,14 @@ void ShopState::update(float deltaTime)
     }
     if (willFuse)
     {
+        if (player->GetWeapons().size() > 1)
+        {
+            int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
+            if (player->CanFuse(weaponIndex))
+            {
+                player->UpgradeWeapon(weaponIndex);
+            }
+        }
         willFuse = false;
     }
     // Vendo si tengo mas de 1 arma
@@ -595,26 +611,37 @@ void ShopState::render()
             int statsAreaHeight = (tooltipY + tooltipHeight - 25) - statsY;         // Altura disponible para stats
             int buttonsStartY = statsY + (statsAreaHeight - buttonsAreaHeight) / 2; // Centrado vertical
 
-            // Botón 1: PLACEHOLDER (arriba)
+            // Botón 1: FUSE (arriba)
             int button1Y = buttonsStartY;
 
-            // Fondo del botón placeholder
-            Color placeholderButtonColor = Color{60, 60, 80, 255};     // Gris oscuro
-            Color placeholderButtonBorder = Color{100, 100, 120, 255}; // Gris claro
-            DrawRectangle(buttonsX - 2, button1Y - 2, buttonWidth + 4, buttonHeight + 4, placeholderButtonBorder);
-            DrawRectangle(buttonsX, button1Y, buttonWidth, buttonHeight, placeholderButtonColor);
+            // Verificar si el arma está al nivel máximo
+            bool isMaxLevel = weapon->GetLevel() >= weapon->GetMaxLevel();
 
-            // Texto del botón placeholder
-            const char *placeholderText = "TODO";
-            int placeholderTextWidth = MeasureText(placeholderText, 14);
-            DrawText(placeholderText, buttonsX + (buttonWidth - placeholderTextWidth) / 2, button1Y + 8, 14,
-                     Color{150, 150, 150, 255});
+            // Fondo del botón fuse
+            Color fuseButtonColor =
+                isMaxLevel ? Color{60, 60, 70, 255} : Color{80, 60, 120, 255}; // Gris si max level, morado si no
+            Color fuseButtonBorder = isMaxLevel
+                                         ? Color{80, 80, 90, 255}
+                                         : Color{150, 100, 255, 255}; // Gris si max level, morado brillante si no
+            DrawRectangle(buttonsX - 2, button1Y - 2, buttonWidth + 4, buttonHeight + 4, fuseButtonBorder);
+            DrawRectangle(buttonsX, button1Y, buttonWidth, buttonHeight, fuseButtonColor);
 
-            // Leyenda de tecla dentro del botón
-            const char *placeholderKey = "[?]";
-            int placeholderKeyWidth = MeasureText(placeholderKey, 10);
-            DrawText(placeholderKey, buttonsX + (buttonWidth - placeholderKeyWidth) / 2, button1Y + 26, 10,
-                     Color{120, 120, 120, 255});
+            // Texto del botón fuse
+            const char *fuseText = isMaxLevel ? "MAX" : "FUSE";
+            int fuseTextWidth = MeasureText(fuseText, 14);
+            Color fuseTextColor = isMaxLevel ? Color{120, 120, 130, 255} : WHITE;
+            DrawText(fuseText, buttonsX + (buttonWidth - fuseTextWidth) / 2, button1Y + 8, 14, fuseTextColor);
+
+            // Si no es el maximo nivel de arma
+            if (!isMaxLevel)
+            {
+
+                // Leyenda de tecla dentro del botón
+                const char *enterText = "[ENTER]";
+                int enterTextWidth = MeasureText(enterText, 10);
+                DrawText(enterText, buttonsX + (buttonWidth - enterTextWidth) / 2, button1Y + 26, 10,
+                         Color{120, 120, 120, 255});
+            }
 
             // Botón 2: SELL (abajo)
             int button2Y = buttonsStartY + buttonHeight + buttonSpacing;

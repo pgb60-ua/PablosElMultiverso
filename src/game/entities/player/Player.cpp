@@ -118,25 +118,10 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
             weapons[i]->SetOrbitAngle(angle);
         }
     }
-    // Si tengo 4, buscar un arma del mismo tipo que no esté al máximo
+    // Si tengo 4, buscar un arma del mismo tipo que tenga el mismo nivel
     else
     {
-        WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
-        int newWeaponPrice = newWeapon->GetPrice(); // Obtener precio antes de que se destruya
-
-        for (auto &weapon : weapons)
-        {
-            if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() < weapon->GetMaxLevel())
-            {
-                // Acumular el precio del arma comprada al precio del arma existente
-                weapon->SetPrice(weapon->GetPrice() + newWeaponPrice);
-                weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats());
-                break;
-            }
-        }
-
-        // Si no se pudo mejorar ninguna arma del mismo tipo, no hacer nada
-        // (esto no debería suceder si CanAcceptWeapon se usa correctamente)
+        UpgradeWeapons(std::move(newWeapon));
     }
 }
 
@@ -148,10 +133,11 @@ bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType) const
         return true;
     }
 
-    // Si tengo 4 armas, verificar si hay al menos una del mismo tipo que no esté al máximo
+    // Si tengo 4 armas, verificar si hay al menos una del mismo tipo que este al 1
     for (const auto &weapon : weapons)
     {
-        if (weapon->GetWeaponType() == weaponType && weapon->GetLevel() < weapon->GetMaxLevel())
+        // Si un arma es del mismo tipo y esta a nivel 1
+        if (weapon->GetWeaponType() == weaponType && weapon->GetLevel() == 1)
         {
             return true;
         }
@@ -296,6 +282,81 @@ void Player::RemoveWeapon(int index)
         {
             float angle = i * angleStep;
             weapons[i]->SetOrbitAngle(angle);
+        }
+    }
+}
+
+void Player::UpgradeWeapons(std::unique_ptr<AWeapon> newWeapon)
+{
+    WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
+    int newWeaponPrice = newWeapon->GetPrice(); // Obtener precio antes de que se destruya
+    int newWeaponLevel = newWeapon->GetLevel();
+
+    for (auto &weapon : weapons)
+    {
+        if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() == newWeaponLevel &&
+            weapon->GetLevel() < weapon->GetMaxLevel())
+        {
+            // Acumular el precio del arma comprada al precio del arma existente
+            weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats(), newWeaponPrice);
+            break;
+        }
+    }
+
+    // Si no se pudo mejorar ninguna arma del mismo tipo, no hacer nada
+    // (esto no debería suceder si CanAcceptWeapon se usa correctamente)
+}
+
+bool Player::CanFuse(int index)
+{
+    if (index >= 0 && static_cast<size_t>(index) < weapons.size())
+    {
+        WEAPON_TYPE indexType = weapons[index]->GetWeaponType();
+        int indexLevel = weapons[index]->GetLevel();
+        if (indexLevel >= weapons[index]->GetMaxLevel())
+        {
+            return false;
+        }
+        for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
+        {
+            if (i == index)
+            {
+                continue;
+            }
+            if (weapons[i]->GetWeaponType() == indexType && weapons[i]->GetLevel() == indexLevel)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void Player::UpgradeWeapon(int index)
+{
+    if (index >= 0 && static_cast<size_t>(index) < weapons.size())
+    {
+        const auto &weapon = weapons[index];
+        int weaponToErase = -1;
+        WEAPON_TYPE indexType = weapon->GetWeaponType();
+        int indexLevel = weapon->GetLevel();
+        // Refactorizar
+        for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
+        {
+            if (i == index)
+            {
+                continue;
+            }
+            if (weapons[i]->GetWeaponType() == indexType && weapons[i]->GetLevel() == indexLevel)
+            {
+                weaponToErase = i;
+                break;
+            }
+        }
+        if (weaponToErase != -1)
+        {
+            weapon->Upgrade(weapons[weaponToErase]->GetStats().GetOffensiveStats(), weapons[weaponToErase]->GetPrice());
+            RemoveWeapon(weaponToErase);
         }
     }
 }
