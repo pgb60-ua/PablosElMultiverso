@@ -286,7 +286,7 @@ void Player::RemoveWeapon(int index)
     }
 }
 
-void Player::UpgradeWeapons(const std::unique_ptr<AWeapon> newWeapon)
+void Player::UpgradeWeapons(std::unique_ptr<AWeapon> newWeapon)
 {
     WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
     int newWeaponPrice = newWeapon->GetPrice(); // Obtener precio antes de que se destruya
@@ -341,7 +341,7 @@ void Player::UpgradeWeapon(int index)
         WEAPON_TYPE indexType = weapon->GetWeaponType();
         int indexLevel = weapon->GetLevel();
         // Refactorizar
-        for (int i = 0; static_cast<std::size_t>(i) < weapons.size(); i++)
+        for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
         {
             if (i == index)
             {
