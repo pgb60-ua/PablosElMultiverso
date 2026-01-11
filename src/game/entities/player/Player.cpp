@@ -122,11 +122,14 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
     else
     {
         WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
+        int newWeaponPrice = newWeapon->GetPrice(); // Obtener precio antes de que se destruya
 
         for (auto &weapon : weapons)
         {
             if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() < weapon->GetMaxLevel())
             {
+                // Acumular el precio del arma comprada al precio del arma existente
+                weapon->SetPrice(weapon->GetPrice() + newWeaponPrice);
                 weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats());
                 break;
             }
@@ -270,6 +273,29 @@ void Player::CheckCollisions(float deltaTime)
         {
             TakeDamage(enemy->GetStats());
             return;
+        }
+    }
+}
+
+void Player::RemoveWeapon(int index)
+{
+    if (index < 0 || static_cast<std::size_t>(index) >= weapons.size())
+    {
+        return; // Índice inválido, no hacer nada
+    }
+
+    // Eliminar el arma
+    weapons.erase(weapons.begin() + index);
+
+    // Redistribuir ángulos de las armas restantes
+    size_t totalWeapons = weapons.size();
+    if (totalWeapons > 0)
+    {
+        float angleStep = 360.0f / totalWeapons;
+        for (size_t i = 0; i < totalWeapons; i++)
+        {
+            float angle = i * angleStep;
+            weapons[i]->SetOrbitAngle(angle);
         }
     }
 }

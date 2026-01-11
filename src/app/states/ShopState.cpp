@@ -1,12 +1,12 @@
 #include "ShopState.hpp"
 #include "Player.hpp"
+#include "Shop.hpp"
 #include "ShopSlot.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "SpriteSheet.hpp"
 #include "StateMachine.hpp"
 #include "Types.hpp"
 #include "WeaponFactory.hpp"
-#include "raylib.h"
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
 ShopState::~ShopState() {}
@@ -15,19 +15,40 @@ void ShopState::handleInput()
     // Input de teclado
     if (IsKeyPressed(KEY_S))
     {
-        NextSelectedItem(1);
+        if (selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            NextSelectedItem(1);
+        }
     }
     else if (IsKeyPressed(KEY_W))
     {
-        NextSelectedItem(-1);
+        if (selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            NextSelectedItem(-1);
+        }
     }
-    if (IsKeyPressed(KEY_ENTER) && selectedItem >= 0 && selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+    if (IsKeyPressed(KEY_ENTER))
     {
-        willBuy = true;
+        // Si es de tienda
+        if (selectedItem >= 0 && selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            willBuy = true;
+        }
+        else
+        {
+            willFuse = true;
+        }
     }
-    if (IsKeyPressed(KEY_SPACE) && selectedItem >= 0 && selectedItem < Shop::MAX_ITEMS_SHOP)
+    if (IsKeyPressed(KEY_SPACE))
     {
-        willAlternateBlock = true;
+        if (selectedItem >= 0 && selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            willAlternateBlock = true;
+        }
+        else
+        {
+            willSell = true;
+        }
     }
     if (IsKeyPressed(KEY_R))
     {
@@ -36,6 +57,14 @@ void ShopState::handleInput()
     if (IsKeyPressed(KEY_E))
     {
         passRound = true;
+    }
+    if (IsKeyPressed(KEY_A))
+    {
+        NextWeaponSelected(-1);
+    }
+    if (IsKeyPressed(KEY_D))
+    {
+        NextWeaponSelected(1);
     }
 
     // Input de mouse
@@ -57,7 +86,8 @@ void ShopState::handleInput()
     int itemSlotSpacing = 15;
     int itemStartY = itemsY + 70;
 
-    // Detectar hover sobre items (actualiza selectedItem)
+    // Detectar hover sobre items de tienda (actualiza selectedItem)
+    bool hoveredOverShopItem = false;
     for (int i = 0; i < Shop::MAX_ITEMS_SHOP; i++)
     {
         const TShopSlot &slot = shop.GetItemsShop()[i];
@@ -70,7 +100,38 @@ void ShopState::handleInput()
         if (CheckCollisionPointRec(mousePos, slotRect))
         {
             selectedItem = i;
+            hoveredOverShopItem = true;
             break;
+        }
+    }
+
+    // Detectar hover sobre armas del inventario solo si no estamos sobre un item de tienda
+    if (!hoveredOverShopItem)
+    {
+        int weaponSlotSize = 70;
+        int weaponSlotSpacing = 10;
+        int weaponsPerRow = 5;
+
+        // Calcular posición del panel de armas (mismo cálculo que en render)
+        int statSpacing = 25;
+        int weaponPanelY = (headerHeight + 20) + 60; // statsY + 60
+        int weaponsY = weaponPanelY + 12 * statSpacing + 20;
+        int weaponStartX = statsX + 20;
+        int weaponStartY = weaponsY + 35;
+
+        const auto &weapons = player->GetWeapons();
+        for (int i = 0; i < player->WEAPON_MAX && static_cast<size_t>(i) < weapons.size(); i++)
+        {
+            int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+            int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+
+            Rectangle weaponRect = {(float)weaponX, (float)weaponY, (float)weaponSlotSize, (float)weaponSlotSize};
+
+            if (CheckCollisionPointRec(mousePos, weaponRect))
+            {
+                selectedItem = Shop::MAX_ITEMS_SHOP + i;
+                break;
+            }
         }
     }
 
@@ -159,6 +220,53 @@ void ShopState::handleInput()
             }
         }
     }
+
+    // Clic izquierdo en el botón SELL del tooltip
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && selectedItem >= Shop::MAX_ITEMS_SHOP)
+    {
+        int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
+        const auto &weapons = player->GetWeapons();
+
+        if (weaponIndex >= 0 && static_cast<size_t>(weaponIndex) < weapons.size())
+        {
+            // Calcular posición del tooltip y botones (mismo cálculo que en render)
+            int statsX = 40;
+            int statsWidth = screenWidth * 0.35f;
+            int tooltipX = statsX + 20;
+            int tooltipWidth = statsWidth - 40;
+            int tooltipHeight = 120;
+
+            int statSpacing = 25;
+            int weaponPanelY = (headerHeight + 20) + 60;
+            int weaponsY = weaponPanelY + 12 * statSpacing + 20;
+            int weaponSlotSize = 70;
+            int weaponSlotSpacing = 10;
+            int weaponStartY = weaponsY + 35;
+            int tooltipY = weaponStartY + weaponSlotSize + weaponSlotSpacing + 15;
+
+            // Configuración de botones
+            int buttonWidth = 80;
+            int buttonHeight = 45;
+            int buttonSpacing = 10;
+            int totalButtons = 2;
+            int buttonsAreaHeight = (buttonHeight * totalButtons) + (buttonSpacing * (totalButtons - 1));
+            int buttonsX = tooltipX + tooltipWidth - buttonWidth - 10;
+
+            int statsY = tooltipY + 30;
+            int statsAreaHeight = (tooltipY + tooltipHeight - 25) - statsY;
+            int buttonsStartY = statsY + (statsAreaHeight - buttonsAreaHeight) / 2;
+
+            // Botón SELL está abajo
+            int button2Y = buttonsStartY + buttonHeight + buttonSpacing;
+
+            Rectangle sellButtonRect = {(float)buttonsX, (float)button2Y, (float)buttonWidth, (float)buttonHeight};
+
+            if (CheckCollisionPointRec(mousePos, sellButtonRect))
+            {
+                willSell = true;
+            }
+        }
+    }
 }
 void ShopState::update(float deltaTime)
 {
@@ -197,8 +305,9 @@ void ShopState::update(float deltaTime)
                     player->ModifyPabloCoins(-item->GetPrice());
 
                     // Crear el arma usando la factory
-                    auto weapon = WeaponFactory::CreateWeapon(item->GetType(), player->GetPosition(),
-                                                              player->enemiesInRange, player->allEnemies);
+                    auto weapon =
+                        WeaponFactory::CreateWeapon(item->GetType(), player->GetPosition(), player->enemiesInRange,
+                                                    player->allEnemies, item->GetPrice());
                     if (weapon != nullptr)
                     {
                         player->AddWeapon(std::move(weapon));
@@ -223,6 +332,26 @@ void ShopState::update(float deltaTime)
         }
         willReroll = false;
     }
+    if (willFuse)
+    {
+        willFuse = false;
+    }
+    // Vendo si tengo mas de 1 arma
+    if (willSell)
+    {
+        if (player->GetWeapons().size() > 1)
+        {
+
+            int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
+            if (weaponIndex >= 0 && static_cast<std::size_t>(weaponIndex) < player->GetWeapons().size())
+            {
+                int sellPrice = CalculateWeaponSellPrice(weaponIndex);
+                player->ModifyPabloCoins(sellPrice);
+                player->RemoveWeapon(weaponIndex);
+            }
+        }
+        willSell = false;
+    }
 }
 void ShopState::render()
 {
@@ -244,7 +373,11 @@ void ShopState::render()
     // Pablo Coins con icono
     int coinsX = screenWidth - 250;
     const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
-    DrawTextureRec(coinSheet.texture, coinSheet.frames[0], Vector2{(float)coinsX - 20, 20}, WHITE);
+    Rectangle coinFrame = coinSheet.frames[0];
+
+    // Centrar verticalmente la moneda con el texto (25 es el tamaño de la fuente, 30 es la Y del texto)
+    int coinYHeader = 30 + (25 - (int)coinFrame.height) / 2;
+    DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)coinsX - 20, (float)coinYHeader}, WHITE);
     DrawText(TextFormat("%d", player->GetPabloCoins()), coinsX + 30, 30, 25, Color{255, 255, 255, 255});
 
     // Panel de stats del jugador (izquierda)
@@ -307,42 +440,62 @@ void ShopState::render()
     int weaponSlotSpacing = 10;
     int weaponStartX = statsX + 20;
     int weaponStartY = weaponsY + 35;
+    int weaponsPerRow = 5; // 5 armas por fila
 
     const auto &weapons = player->GetWeapons();
-    for (size_t i = 0; i < 4; i++)
+    for (int i = 0; i < player->WEAPON_MAX; i++)
     {
-        int weaponX = weaponStartX + (i % 2) * (weaponSlotSize + weaponSlotSpacing);
-        int weaponY = weaponStartY + (i / 2) * (weaponSlotSize + weaponSlotSpacing);
+        int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+        int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
 
-        if (i < weapons.size())
+        if (static_cast<size_t>(i) < weapons.size())
         {
             // Dibujar arma existente
             const auto &weapon = weapons[i];
 
             // Color del borde según el nivel
             Color borderColor;
+            Color tintColor;
             switch (weapon->GetLevel())
             {
             case 1:
                 borderColor = Color{150, 150, 150, 255}; // Gris
+                tintColor = Color{150, 150, 150, 80};    // Gris transparente
                 break;
             case 2:
                 borderColor = Color{100, 255, 100, 255}; // Verde
+                tintColor = Color{100, 255, 100, 80};    // Verde transparente
                 break;
             case 3:
-                borderColor = Color{100, 150, 255, 255}; // Azul
+                borderColor = Color{200, 100, 255, 255}; // Morado (cambiado de azul)
+                tintColor = Color{200, 100, 255, 80};    // Morado transparente
                 break;
             case 4:
-                borderColor = Color{255, 200, 50, 255}; // Amarillo
+                borderColor = Color{255, 200, 50, 255}; // Amarillo/Dorado
+                tintColor = Color{255, 200, 50, 80};    // Amarillo transparente
                 break;
             default:
                 borderColor = Color{150, 150, 150, 255}; // Gris por defecto
+                tintColor = Color{150, 150, 150, 80};    // Gris transparente
                 break;
             }
 
-            // Borde
-            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, borderColor);
+            // Si está seleccionado, aumentar la opacidad del borde
+            Color selectedBorderColor = borderColor;
+            if (i + Shop::MAX_ITEMS_SHOP == selectedItem)
+            {
+                selectedBorderColor = Color{borderColor.r, borderColor.g, borderColor.b, 255};
+                // Borde más grueso cuando está seleccionado
+                DrawRectangle(weaponX - 4, weaponY - 4, weaponSlotSize + 8, weaponSlotSize + 8,
+                              Color{100, 150, 255, 255});
+            }
+
+            // Borde del nivel
+            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, selectedBorderColor);
             DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{45, 45, 65, 255});
+
+            // Overlay de color del nivel (fondo transparente)
+            DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, tintColor);
 
             // Sprite del arma
             const SpriteSheet &weaponSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(weapon->GetWeaponType());
@@ -356,9 +509,9 @@ void ShopState::render()
                 DrawTexturePro(weaponSheet.texture, sourceRec, destRec, origin, 0.0f, WHITE);
             }
 
-            // Nivel del arma
+            // Nivel del arma con el color del borde
             const char *levelText = TextFormat("Lv%d", weapon->GetLevel());
-            DrawText(levelText, weaponX + 5, weaponY + weaponSlotSize - 18, 14, Color{255, 255, 100, 255});
+            DrawText(levelText, weaponX + 5, weaponY + weaponSlotSize - 18, 14, borderColor);
         }
         else
         {
@@ -366,6 +519,141 @@ void ShopState::render()
             DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, Color{80, 80, 100, 255});
             DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{60, 60, 70, 255});
             DrawText("EMPTY", weaponX + 10, weaponY + weaponSlotSize / 2 - 7, 12, Color{120, 120, 130, 255});
+        }
+    }
+
+    // Tooltip de arma seleccionada (si está sobre un arma del inventario)
+    if (selectedItem >= Shop::MAX_ITEMS_SHOP)
+    {
+        int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
+        if (weaponIndex >= 0 && static_cast<size_t>(weaponIndex) < weapons.size())
+        {
+            const auto &weapon = weapons[weaponIndex];
+
+            // Posición del tooltip (debajo de las armas)
+            int tooltipX = statsX + 20;
+            int tooltipY = weaponStartY + weaponSlotSize + weaponSlotSpacing + 15;
+            int tooltipWidth = statsWidth - 40;
+            int tooltipHeight = 120;
+
+            // Fondo del tooltip
+            DrawRectangle(tooltipX - 5, tooltipY - 5, tooltipWidth + 10, tooltipHeight + 10, Color{100, 150, 255, 255});
+            DrawRectangle(tooltipX, tooltipY, tooltipWidth, tooltipHeight, Color{40, 40, 60, 255});
+
+            // Título
+            DrawText(weapon->GetName().c_str(), tooltipX + 10, tooltipY + 5, 16, Color{255, 200, 0, 255});
+
+            // Stats del arma
+            int statsY = tooltipY + 30;
+            const Stats &weaponStats = weapon->GetStats();
+
+            auto drawWeaponStat = [&](const char *name, float value, int &currentY)
+            {
+                if (value != 0)
+                {
+                    Color color = value > 0 ? Color{100, 255, 100, 255} : Color{255, 100, 100, 255};
+                    const char *sign = value > 0 ? "+" : "";
+                    DrawText(TextFormat("%s%s: %.1f", sign, name, value), tooltipX + 10, currentY, 12, color);
+                    currentY += 15;
+                }
+            };
+
+            // Primera columna
+            int col1Y = statsY;
+            drawWeaponStat("PHY DMG", weaponStats.GetPhysicalDamage(), col1Y);
+            drawWeaponStat("MAG DMG", weaponStats.GetMagicDamage(), col1Y);
+            drawWeaponStat("ATK SPD", weaponStats.GetAttackSpeed(), col1Y);
+
+            // Segunda columna (más cerca de la primera)
+            int col2Y = statsY;
+            int col2X = tooltipX + 120; // Más cerca de la primera columna
+            auto drawWeaponStatCol2 = [&](const char *name, float value, int &currentY)
+            {
+                if (value != 0)
+                {
+                    Color color = value > 0 ? Color{100, 255, 100, 255} : Color{255, 100, 100, 255};
+                    const char *sign = value > 0 ? "+" : "";
+                    DrawText(TextFormat("%s%s: %.1f", sign, name, value), col2X, currentY, 12, color);
+                    currentY += 15;
+                }
+            };
+
+            drawWeaponStatCol2("CRIT CH", weaponStats.GetCriticalChance(), col2Y);
+            drawWeaponStatCol2("CRIT DMG", weaponStats.GetCriticalDamage(), col2Y);
+            drawWeaponStatCol2("LIFE STEAL", weaponStats.GetLifeSteal(), col2Y);
+
+            // Configuración dinámica de botones (verticalmente apilados)
+            int buttonWidth = 80;
+            int buttonHeight = 45;
+            int buttonSpacing = 10;
+            int totalButtons = 2; // Número total de botones a mostrar
+            int buttonsAreaHeight = (buttonHeight * totalButtons) + (buttonSpacing * (totalButtons - 1));
+            int buttonsX = tooltipX + tooltipWidth - buttonWidth - 10;
+
+            // Centrar verticalmente los botones en el área de stats
+            // Área disponible: desde statsY hasta el final (antes del precio de venta)
+            int statsAreaHeight = (tooltipY + tooltipHeight - 25) - statsY;         // Altura disponible para stats
+            int buttonsStartY = statsY + (statsAreaHeight - buttonsAreaHeight) / 2; // Centrado vertical
+
+            // Botón 1: PLACEHOLDER (arriba)
+            int button1Y = buttonsStartY;
+
+            // Fondo del botón placeholder
+            Color placeholderButtonColor = Color{60, 60, 80, 255};     // Gris oscuro
+            Color placeholderButtonBorder = Color{100, 100, 120, 255}; // Gris claro
+            DrawRectangle(buttonsX - 2, button1Y - 2, buttonWidth + 4, buttonHeight + 4, placeholderButtonBorder);
+            DrawRectangle(buttonsX, button1Y, buttonWidth, buttonHeight, placeholderButtonColor);
+
+            // Texto del botón placeholder
+            const char *placeholderText = "TODO";
+            int placeholderTextWidth = MeasureText(placeholderText, 14);
+            DrawText(placeholderText, buttonsX + (buttonWidth - placeholderTextWidth) / 2, button1Y + 8, 14,
+                     Color{150, 150, 150, 255});
+
+            // Leyenda de tecla dentro del botón
+            const char *placeholderKey = "[?]";
+            int placeholderKeyWidth = MeasureText(placeholderKey, 10);
+            DrawText(placeholderKey, buttonsX + (buttonWidth - placeholderKeyWidth) / 2, button1Y + 26, 10,
+                     Color{120, 120, 120, 255});
+
+            // Botón 2: SELL (abajo)
+            int button2Y = buttonsStartY + buttonHeight + buttonSpacing;
+
+            // Fondo del botón de vender
+            Color sellButtonColor = Color{180, 40, 40, 255};  // Rojo oscuro
+            Color sellButtonBorder = Color{255, 80, 80, 255}; // Rojo brillante
+            DrawRectangle(buttonsX - 2, button2Y - 2, buttonWidth + 4, buttonHeight + 4, sellButtonBorder);
+            DrawRectangle(buttonsX, button2Y, buttonWidth, buttonHeight, sellButtonColor);
+
+            // Texto del botón SELL
+            const char *sellText = "SELL";
+            int sellTextWidth = MeasureText(sellText, 14);
+            DrawText(sellText, buttonsX + (buttonWidth - sellTextWidth) / 2, button2Y + 8, 14, WHITE);
+
+            // Leyenda de tecla dentro del botón
+            const char *spaceText = "[SPACE]";
+            int spaceTextWidth = MeasureText(spaceText, 10);
+            DrawText(spaceText, buttonsX + (buttonWidth - spaceTextWidth) / 2, button2Y + 26, 10,
+                     Color{200, 200, 200, 255});
+
+            // Precio de venta
+            int sellPrice = CalculateWeaponSellPrice(weaponIndex);
+            DrawText("Sell Price:", tooltipX + 10, tooltipY + tooltipHeight - 25, 14, Color{200, 200, 220, 255});
+
+            // Dibujar sprite de moneda
+            const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+            int coinTextX = tooltipX + 10 + MeasureText("Sell Price: ", 14);
+            Rectangle coinFrame = coinSheet.frames[0];
+
+            // Centrar verticalmente la moneda con el texto (14 es el tamaño de la fuente)
+            int textHeight = 14;
+            int coinY = (tooltipY + tooltipHeight - 25) + (textHeight - (int)coinFrame.height) / 2;
+            DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)coinTextX, (float)coinY}, WHITE);
+
+            // Dibujar cantidad con porcentaje (ajustar el espaciado según el ancho del sprite)
+            int priceTextX = coinTextX + (int)coinFrame.width + 5;
+            DrawText(TextFormat("%d (50%%)", sellPrice), priceTextX, tooltipY + tooltipHeight - 25, 14,
+                     Color{255, 200, 0, 255});
         }
     }
 
@@ -511,7 +799,10 @@ void ShopState::render()
         // Precio
         int priceX = itemsX + itemsWidth - 120;
         Rectangle coinFrame = coinSheet.frames[0];
-        DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)slotY + 35}, WHITE);
+
+        // Centrar verticalmente la moneda con el texto (20 es el tamaño de la fuente, slotY + 45 es la Y del texto)
+        int coinYPrice = (slotY + 45) + (20 - (int)coinFrame.height) / 2;
+        DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)coinYPrice}, WHITE);
         DrawText(TextFormat("%d", slot.item->GetPrice()), priceX + 20, slotY + 45, 20, Color{255, 200, 0, 255});
 
         // Indicador si está bloqueado
@@ -631,4 +922,63 @@ void ShopState::NextSelectedItem(int direction)
     }
 
     // Si llegamos aquí, no hay items válidos en esa dirección, no hacemos nada
+}
+
+// Navigate weapon selection: direction = -1 for left, 1 for right
+void ShopState::NextWeaponSelected(int direction)
+{
+    int size = player->GetWeapons().size();
+    int newSelected = selectedItem + direction;
+    // Va para la derecha
+    if (direction == 1)
+    {
+        // 0, 1, 2, 3, 4, 5
+        if (newSelected <= Shop::MAX_ITEMS_SHOP)
+        {
+            selectedItem = 5;
+        }
+        // 6, 7, 8
+        else if (newSelected < Shop::MAX_ITEMS_SHOP + size)
+        {
+            selectedItem = newSelected;
+        }
+        // 9 ... etc
+        else
+        {
+            selectedItem = -1;
+            NextSelectedItem(1);
+        }
+    }
+    // Va para la izquierda
+    else if (direction == -1)
+    {
+        // etc .... 0, 1, 2, 3
+        if (newSelected < Shop::MAX_ITEMS_SHOP - 1)
+        {
+            selectedItem = Shop::MAX_ITEMS_SHOP + size - 1;
+        }
+        // 4
+        else if (newSelected == Shop::MAX_ITEMS_SHOP - 1)
+        {
+            selectedItem = -1;
+            NextSelectedItem(1);
+        }
+        else
+        {
+            selectedItem = newSelected;
+        }
+    }
+}
+
+int ShopState::CalculateWeaponSellPrice(int weaponIndex)
+{
+    const auto &weapons = player->GetWeapons();
+    if (weaponIndex < 0 || static_cast<std::size_t>(weaponIndex) >= weapons.size())
+    {
+        return 0;
+    }
+
+    const auto &weapon = weapons[weaponIndex];
+    int price = weapon->GetPrice(); // Precio total del arma
+    return price / 2;               // Te devuelve la mitad de lo que te ha costado comprarla en total
 }
