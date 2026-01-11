@@ -633,9 +633,9 @@ void ShopState::render()
             DrawText(fuseText, buttonsX + (buttonWidth - fuseTextWidth) / 2, button1Y + 8, 14, fuseTextColor);
 
             // Leyenda de tecla dentro del botón
-            const char *placeholderKey = "[ENTER]";
-            int placeholderKeyWidth = MeasureText(placeholderKey, 10);
-            DrawText(placeholderKey, buttonsX + (buttonWidth - placeholderKeyWidth) / 2, button1Y + 26, 10,
+            const char *enterText = "[ENTER]";
+            int enterTextWidth = MeasureText(enterText, 10);
+            DrawText(enterText, buttonsX + (buttonWidth - enterTextWidth) / 2, button1Y + 26, 10,
                      Color{120, 120, 120, 255});
 
             // Botón 2: SELL (abajo)

@@ -313,12 +313,16 @@ bool Player::CanFuse(int index)
     {
         WEAPON_TYPE indexType = weapons[index]->GetWeaponType();
         int indexLevel = weapons[index]->GetLevel();
-        if (indexLevel >= 4)
+        if (indexLevel >= weapons[index]->GetMaxLevel())
         {
             return false;
         }
         for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
         {
+            if (i == index)
+            {
+                continue;
+            }
             if (weapons[i]->GetWeaponType() == indexType && weapons[i]->GetLevel() == indexLevel)
             {
                 return true;
@@ -326,7 +330,7 @@ bool Player::CanFuse(int index)
         }
     }
     return false;
-};
+}
 
 void Player::UpgradeWeapon(int index)
 {
@@ -346,6 +350,7 @@ void Player::UpgradeWeapon(int index)
             if (weapons[i]->GetWeaponType() == indexType && weapons[i]->GetLevel() == indexLevel)
             {
                 weaponToErase = i;
+                break;
             }
         }
         if (weaponToErase != -1)
