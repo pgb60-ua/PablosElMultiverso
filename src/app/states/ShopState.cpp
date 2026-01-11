@@ -974,7 +974,13 @@ void ShopState::NextWeaponSelected(int direction)
 
 int ShopState::CalculateWeaponSellPrice(int weaponIndex)
 {
-    const auto &weapon = player->GetWeapons()[weaponIndex];
+    const auto &weapons = player->GetWeapons();
+    if (weaponIndex < 0 || static_cast<std::size_t>(weaponIndex) >= weapons.size())
+    {
+        return 0;
+    }
+
+    const auto &weapon = weapons[weaponIndex];
     int price = weapon->GetPrice(); // Precio total del arma
     return price / 2;               // Te devuelve la mitad de lo que te ha costado comprarla en total
 }
