@@ -2,21 +2,39 @@
 #include "Item.hpp"
 #include "ItemsFactory.hpp"
 #include "ShopSlot.hpp"
+#include "Types.hpp"
+#include <random>
 #include <spdlog/spdlog.h>
 
 Shop::Shop()
 {
     std::vector<const Item *> randomItems = ItemsFactory::GetInstance().GetRandomItems(MAX_ITEMS_SHOP);
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> levelDist(1, 4); // Niveles entre 1 y 4
+
     for (size_t i = 0; i < randomItems.size() && i < MAX_ITEMS_SHOP; ++i)
     {
-        shopPool[i] = {randomItems[i], false, false};
+        // Generar nivel aleatorio para armas
+        int weaponLevel = 1;
+        if (randomItems[i] != nullptr)
+        {
+            ITEM_TYPE itemType = randomItems[i]->GetType();
+            bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
+            if (isWeapon)
+            {
+                weaponLevel = levelDist(gen);
+            }
+        }
+
+        shopPool[i] = {randomItems[i], false, false, weaponLevel};
     }
 
     // Si no hay suficientes items, llenar el resto con nullptr
     for (size_t i = randomItems.size(); i < MAX_ITEMS_SHOP; ++i)
     {
-        shopPool[i] = {nullptr, false, false};
+        shopPool[i] = {nullptr, false, false, 1};
     }
 };
 Shop::~Shop() {};
@@ -28,6 +46,10 @@ void Shop::reRoll()
     std::vector<const Item *> randomItems = ItemsFactory::GetInstance().GetRandomItems(MAX_ITEMS_SHOP);
     size_t randomIndex = 0;
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> levelDist(1, 4); // Niveles entre 1 y 4
+
     for (size_t i = 0; i < MAX_ITEMS_SHOP; ++i)
     {
         // Solo cambiar items que NO estén bloqueados
@@ -35,6 +57,20 @@ void Shop::reRoll()
         {
             shopPool[i].item = randomItems[randomIndex];
             shopPool[i].isBuyed = false; // Resetear estado de compra
+
+            // Generar nivel aleatorio para armas
+            int weaponLevel = 1;
+            if (randomItems[randomIndex] != nullptr)
+            {
+                ITEM_TYPE itemType = randomItems[randomIndex]->GetType();
+                bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
+                if (isWeapon)
+                {
+                    weaponLevel = levelDist(gen);
+                }
+            }
+            shopPool[i].weaponLevel = weaponLevel;
+
             randomIndex++;
         }
     }
