@@ -35,6 +35,17 @@ void AEnemy::SetPabloCoinsAtDeath(int cantidad) { pabloCoinsAtDeath = cantidad; 
 
 int AEnemy::GetPabloCoinsAtDeath() const { return pabloCoinsAtDeath; }
 
+void AEnemy::DropLoot()
+{
+    for (Player *player : objectives)
+    {
+        if (player->IsAlive())
+        {
+            player->ModifyPabloCoins(pabloCoinsAtDeath);
+        }
+    }
+}
+
 Player *AEnemy::GetClosestPlayer()
 {
     if (objectives.empty())
@@ -71,9 +82,7 @@ void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
     }
 }
 
-void AEnemy::CheckCollisions(float deltaTime)
-{
-}
+void AEnemy::CheckCollisions(float deltaTime) {}
 
 Vector2 AEnemy::CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed)
 {
