@@ -220,6 +220,34 @@ void ShopState::handleInput()
                 break;
             }
         }
+
+        // Verificar clic derecho en armas del inventario para vender
+        int weaponSlotSize = 70;
+        int weaponSlotSpacing = 10;
+        int weaponsPerRow = 5;
+
+        // Calcular posición del panel de armas (mismo cálculo que en render)
+        int statSpacing = 25;
+        int weaponPanelY = (headerHeight + 20) + 60;
+        int weaponsY = weaponPanelY + 12 * statSpacing + 20;
+        int weaponStartX = statsX + 20;
+        int weaponStartY = weaponsY + 35;
+
+        const auto &weapons = player->GetWeapons();
+        for (int i = 0; i < player->WEAPON_MAX && i < weapons.size(); i++)
+        {
+            int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+            int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+
+            Rectangle weaponRect = {(float)weaponX, (float)weaponY, (float)weaponSlotSize, (float)weaponSlotSize};
+
+            if (CheckCollisionPointRec(mousePos, weaponRect))
+            {
+                selectedItem = Shop::MAX_ITEMS_SHOP + i;
+                willSell = true;
+                break;
+            }
+        }
     }
 }
 void ShopState::update(float deltaTime)
