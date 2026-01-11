@@ -745,14 +745,40 @@ void ShopState::render()
 
         int slotY = itemStartY + i * (itemSlotHeight + itemSlotSpacing);
 
+        // Determinar si es un arma
+        ITEM_TYPE itemType = slot.item->GetType();
+        bool isWeaponSlot = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
+
         // Color del slot según estado
         Color slotBgColor;
         Color borderColor;
 
+        // Determinar color del borde base (por nivel si es arma)
+        Color weaponLevelBorderColor = Color{80, 80, 100, 255}; // Default
+        if (isWeaponSlot)
+        {
+            switch (slot.weaponLevel)
+            {
+            case 1:
+                weaponLevelBorderColor = Color{150, 150, 150, 255}; // Gris
+                break;
+            case 2:
+                weaponLevelBorderColor = Color{100, 255, 100, 255}; // Verde
+                break;
+            case 3:
+                weaponLevelBorderColor = Color{200, 100, 255, 255}; // Morado
+                break;
+            case 4:
+                weaponLevelBorderColor = Color{255, 200, 50, 255}; // Amarillo/Dorado
+                break;
+            }
+        }
+
         if (i == selectedItem)
         {
             slotBgColor = Color{60, 80, 120, 255};
-            borderColor = Color{100, 150, 255, 255};
+            // Mantener el color del nivel si es arma, sino usar azul
+            borderColor = isWeaponSlot ? weaponLevelBorderColor : Color{100, 150, 255, 255};
         }
         else if (slot.isBlocked)
         {
@@ -762,7 +788,7 @@ void ShopState::render()
         else
         {
             slotBgColor = Color{45, 45, 65, 255};
-            borderColor = Color{80, 80, 100, 255};
+            borderColor = weaponLevelBorderColor;
         }
 
         // Borde del slot
@@ -774,7 +800,7 @@ void ShopState::render()
         Rectangle sourceRec = sheet.frames[0];
 
         // Normalizar todos los items para que el eje más grande sea aproximadamente 64
-        ITEM_TYPE itemType = slot.item->GetType();
+        itemType = slot.item->GetType();
         bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
 
         if (isWeapon)
