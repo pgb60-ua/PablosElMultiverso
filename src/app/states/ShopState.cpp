@@ -228,7 +228,7 @@ void ShopState::handleInput()
         int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
         const auto &weapons = player->GetWeapons();
 
-        if (weaponIndex >= 0 && weaponIndex < weapons.size())
+        if (weaponIndex >= 0 && static_cast<size_t>(weaponIndex) < weapons.size())
         {
             // Calcular posición del tooltip y botones (mismo cálculo que en render)
             int statsX = 40;
