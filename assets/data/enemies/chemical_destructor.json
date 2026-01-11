@@ -1,0 +1,19 @@
+{
+	"name": "Chemical Destructor",
+	"level": 1,
+	"health": 100,
+	"max_health": 140,
+	"movement_speed": 60.0,
+	"agility": 10,
+	"attack_speed": 1.0,
+	"physical_damage": 2,
+	"magical_damage": 12,
+	"resistance": 1.0,
+	"armor": 30,
+	"critical_chance": 10,
+	"critical_damage": 1.5,
+	"life_steal": 0,
+	"health_regeneration": 1,
+	"is_ranged": true,
+	"description": "A powerful enemy that deals chemical damage and has a high attack speed."
+}

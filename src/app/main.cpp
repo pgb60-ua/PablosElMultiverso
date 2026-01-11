@@ -1,3 +1,5 @@
+#include "ItemsFactory.hpp"
+#include "ScreenConstants.hpp"
 #include "WindowFlags.hpp"
 #include <MainGameState.hpp>
 #include <MainMenuState.hpp>
@@ -5,6 +7,8 @@
 #include <memory>
 #include "I18N.hpp"
 
+#include <cstdlib>
+#include <ctime>
 extern "C"
 {
 #include <raylib.h>
@@ -16,7 +20,9 @@ int main()
     bindtextdomain("pablos", "./locale");
     textdomain("pablos");
     // Crear ventana con el tamaño del monitor
-    InitWindow(1200, 800, "Pablos, El Multiverso");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pablos, El Multiverso");
+
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     float delta_time = 0.0f;
 
@@ -27,7 +33,7 @@ int main()
     InitAudioDevice();
     DataFileManager::GetInstance().DetectAndSetAssetsPath();
     SpriteLoaderManager::GetInstance().DetectAndSetAssetsPath();
-
+    ItemsFactory::GetInstance().LoadAllItems();
     while (!state_machine.is_game_ending() && !WindowShouldClose())
     {
         HandleWindowFlags();

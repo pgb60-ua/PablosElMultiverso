@@ -1,0 +1,10 @@
+{
+	"name": "Void Ring",
+	"description": "Dark magic flows through this ring, draining life for power",
+	"price": 250,
+	"rarity": "Epic",
+	"magical_damage": 35,
+	"critical_chance": 10,
+	"life_steal": 12,
+	"max_health": -20
+}

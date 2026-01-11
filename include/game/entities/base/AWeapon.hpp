@@ -1,9 +1,9 @@
 #pragma once
-#include "Item.hpp"
-#include "DataFileManager.hpp"
 #include "AEnemy.hpp"
-#include <string>
+#include "DataFileManager.hpp"
+#include "Item.hpp"
 #include <SpriteAnimation.hpp>
+#include <string>
 
 class AEnemy;
 
@@ -60,11 +60,23 @@ protected:
     /// @brief Obtiene la rareza del JSON
     static ItemRarity GetRarityFromJSON(WEAPON_TYPE type);
     /// @brief Calcula la dirección de ataque normalizada
-    Vector2 CalculateDirection();
+    virtual Vector2 CalculateDirection();
+
+    /// @brief Ángulo actual 
+    float currentOrbitAngle = 0.0f;
+    /// @brief Radio del giro
+    const float ORBIT_RADIUS = 80.0f;
+    /// @brief Velocidad de giro
+    const float ORBIT_SPEED = 40.0f;
 
 public:
+    /// @brief Establece el ángulo inicial de la órbita
+    void SetOrbitAngle(float angle) { currentOrbitAngle = angle; }
+
     /// @brief Constructor de la clase Weapon
-    AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity, int level,const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies);
+    AWeapon(const std::string &name, const std::string &description, const Stats &stats, ItemRarity itemRarity,
+            int level, const Vector2 &position, std::vector<AEnemy *> &enemiesInRange,
+            std::vector<AEnemy *> &allEnemies);
 
     /// @brief Getter del tipo de arma
     WEAPON_TYPE GetWeaponType() const { return weaponType; }
@@ -84,7 +96,7 @@ public:
     void SetDirection(const Vector2 &newDirection) { direction = newDirection; }
 
     /// @brief Método para ajustar las stats del arma según las stats del jugador
-    void SetStatsFromPlayer(const Stats& playerStats);
+    void SetStatsFromPlayer(const Stats &playerStats);
 
     /// @brief Método para atacar
     virtual void Attack() = 0;

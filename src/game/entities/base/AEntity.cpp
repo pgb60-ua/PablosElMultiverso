@@ -1,7 +1,12 @@
 #include "AEntity.hpp"
-#include <utility>
-#include <random>
 #include <iostream>
+#include <random>
+#include <utility>
+
+bool AEntity::Attack()
+{
+    return false;
+}
 
 AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hitbox(hitbox)
 {
@@ -24,13 +29,6 @@ AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hi
 void AEntity::Render() {}
 
 bool AEntity::IsAlive() { return stats.GetHealth() > 0; }
-
-void AEntity::SetHealthMax(float newHealthMax)
-{
-    if (newHealthMax <= 0)
-        newHealthMax = 1;
-    this->stats.SetMaxHealth(newHealthMax);
-}
 
 void AEntity::SetAttackSpeed(float newAttackSpeed)
 {
@@ -87,7 +85,8 @@ void AEntity::TakeDamage(const Stats &stats)
 
     float totalDamage = physicalDamageAfterArmor + magicalDamageAfterResistance;
     float newHealth = this->stats.GetHealth() - totalDamage;
-    if (animation.color.r == WHITE.r && animation.color.g == WHITE.g && animation.color.b == WHITE.b && animation.color.a == WHITE.a)
+    if (animation.color.r == WHITE.r && animation.color.g == WHITE.g && animation.color.b == WHITE.b &&
+        animation.color.a == WHITE.a)
         animation.color = RED;
     this->stats.SetHealth(newHealth > 0 ? newHealth : 0);
 }

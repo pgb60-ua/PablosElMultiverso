@@ -1,6 +1,6 @@
 #include "MainMenuState.hpp"
-#include <MainGameState.hpp>
-#include <StateMachine.hpp>
+#include "ChooseNPCMenuState.hpp"
+#include "StateMachine.hpp"
 #include <string>
 #include "I18N.hpp"
 extern "C"
@@ -39,7 +39,7 @@ void MainMenuState::handleInput()
     {
         if (selectedOption == 0)
         {
-            state_machine->add_state(std::make_unique<MainGameState>(), true);
+            state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
         }
         else
         {
@@ -60,7 +60,7 @@ void MainMenuState::handleInput()
             {
                 if (selectedOption == 0)
                 {
-                    state_machine->add_state(std::make_unique<MainGameState>(), true);
+                    state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
                 }
                 else
                 {

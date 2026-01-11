@@ -23,10 +23,38 @@ protected:
     /// @brief Cantidad de Pablo Coins que suelta al morir
     int pabloCoinsAtDeath;
 
+    /// @brief Registra todas las instancias activas para aplicar las reglas de Boids
+    inline static std::vector<AEnemy *> s_allEnemies;
+
+    /// @brief Velocidad actual acumulada del enemigo para suavizar el movimiento
+    Vector2 velocity;
+
+    /*--------------------------*/
+    // Parámetros de Boids (personalizables por cada enemigo)
+    /*--------------------------*/
+
+    /// @brief Radio de percepción para detectar otros enemigos cercanos
+    float perceptionRadius = 250.0f;
+    /// @brief Radio de separación para evitar aglomeración con otros enemigos
+    float separationRadius = 80.0f;
+    /// @brief Peso de la regla de alineación (seguir dirección del grupo)
+    float alignmentWeight = 0.5f;
+    /// @brief Peso de la regla de cohesión (moverse hacia el centro del grupo)
+    float cohesionWeight = 0.45f;
+    /// @brief Peso de la regla de separación (evitar colisiones con otros enemigos)
+    float separationWeight = 0.75f;
+    /// @brief Peso de atracción hacia el objetivo (jugador)
+    float targetWeight = 1.2f;
+    /// @brief Multiplicador máximo de fuerza para limitar aceleraciones abruptas
+    float maxForceMultiplier = 1.6f;
+
     /// @brief Constructor protegido para clases derivadas
     AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
     /// @brief Actualiza la animación del enemigo
     void UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType);
+    
+    /// @brief Calcula la fuerza hacia el objetivo (jugador)
+    virtual Vector2 CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed);
 
 public:
     /*--------------------------*/
@@ -34,11 +62,11 @@ public:
     /*--------------------------*/
 
     /// @brief Actualiza el estado del enemigo (animación, cooldowns, etc.)
-    virtual void Update(float deltaTime) = 0;
+    virtual void Update(float deltaTime) override = 0;
 
-    /// @brief Mueve el enemigo hacia su objetivo
+    /// @brief Mueve el enemigo hacia su objetivo usando algoritmo de Boids
     /// @param deltaTime Tiempo transcurrido desde el último frame
-    virtual void Move(float deltaTime) = 0;
+    virtual void Move(float deltaTime);
 
     /// @brief Establece la posición objetivo del enemigo (generalmente el jugador)
     /// @param nuevoObjetivo Posición hacia donde debe moverse el enemigo
@@ -73,7 +101,7 @@ public:
     Stats GetStats() const { return stats; }
 
     /// @brief Destructor virtual
-    virtual ~AEnemy() = default;
+    virtual ~AEnemy();
 
     virtual void CheckCollisions(float deltaTime) override;
 };
