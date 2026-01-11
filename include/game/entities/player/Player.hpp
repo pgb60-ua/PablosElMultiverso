@@ -24,13 +24,13 @@ public:
     std::vector<AEnemy *> enemiesInRange;
     std::vector<AEnemy *> &allEnemies;
     const std::vector<std::unique_ptr<AWeapon>> &GetWeapons() const { return weapons; }
+    static constexpr int WEAPON_MAX = 4;
 
 private:
     void ImportModifiers(PLAYER_TYPE player);
     static constexpr float BASE_MULTIPLIER = 1.0f;
     std::vector<const Item *> inventory;
     std::vector<std::unique_ptr<AWeapon>> weapons;
-    static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
     void UpdatePlayerAnimation(float deltaTime);

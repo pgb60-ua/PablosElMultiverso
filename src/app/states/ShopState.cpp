@@ -1,12 +1,12 @@
 #include "ShopState.hpp"
 #include "Player.hpp"
+#include "Shop.hpp"
 #include "ShopSlot.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "SpriteSheet.hpp"
 #include "StateMachine.hpp"
 #include "Types.hpp"
 #include "WeaponFactory.hpp"
-#include "raylib.h"
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
 ShopState::~ShopState() {}
@@ -37,6 +37,57 @@ void ShopState::handleInput()
     if (IsKeyPressed(KEY_E))
     {
         passRound = true;
+    }
+    if (IsKeyPressed(KEY_A))
+    {
+        // Si estoy en la tienda paso al inventario
+        if (selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            // TODO : ver a cual salto puede ser que salte al 6
+            selectedItem = 5;
+        }
+        // Si estoy en el inventario y no estoy en la izquierda
+        // TODO : comprobar que no estoy en la izquierda conmtando que la izquierda no tiene arma
+        else if (selectedItem != Shop::MAX_ITEMS_SHOP)
+        {
+            // Si por ejemplo estoy en el 6 -> 5
+            // TODO : Comprobar a cual salto porque si estoy en el 8 y el 7 no tiene arma no tengo que saltar
+            // NextWeaponSelected(-1);
+            selectedItem--;
+        }
+        // Si estoy en el inventario y estoy en la izquierda paso a la derecha
+        else
+        {
+            selectedItem = 0;
+            if (shop.IsSlotBuyed(selectedItem))
+            {
+                NextSelectedItem(1);
+            }
+        }
+    }
+    if (IsKeyPressed(KEY_D))
+    {
+        // Si estoy en la tienda paso al inventario
+        if (selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            // Salto al 5 porque SIEMPRE VA A HABER 1 ARMA
+            selectedItem = 5;
+        }
+        else if (selectedItem != Shop::MAX_ITEMS_SHOP)
+        {
+            // Si por ejemplo estoy en el 5 -> 6
+            // TODO : Comprobar a cual salto porque si estoy en el 7 y el 8 no tiene arma no tengo que saltar
+            // NextWeaponSelected(1);
+            selectedItem++;
+        }
+        else
+        {
+            selectedItem = 0;
+            if (shop.IsSlotBuyed(selectedItem))
+            {
+                NextSelectedItem(1);
+            }
+        }
     }
 
     // Input de mouse
@@ -310,7 +361,7 @@ void ShopState::render()
     int weaponStartY = weaponsY + 35;
 
     const auto &weapons = player->GetWeapons();
-    for (size_t i = 0; i < 4; i++)
+    for (int i = 0; i < player->WEAPON_MAX; i++)
     {
         int weaponX = weaponStartX + (i % 2) * (weaponSlotSize + weaponSlotSpacing);
         int weaponY = weaponStartY + (i / 2) * (weaponSlotSize + weaponSlotSpacing);
@@ -341,6 +392,11 @@ void ShopState::render()
                 break;
             }
 
+            if (i + Shop::MAX_ITEMS_SHOP == selectedItem)
+            {
+                borderColor = Color{100, 150, 255, 255};
+            }
+
             // Borde
             DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, borderColor);
             DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{45, 45, 65, 255});
@@ -354,7 +410,7 @@ void ShopState::render()
                 Rectangle destRec = {(float)(weaponX + weaponSlotSize / 2), (float)(weaponY + weaponSlotSize / 2),
                                      sourceRec.width * scale, sourceRec.height * scale};
                 Vector2 origin = {destRec.width / 2, destRec.height / 2};
-                DrawTexturePro(weaponSheet.texture, sourceRec, destRec, origin, 0.0f, WHITE);
+                DrawTexturePro(weaponSheet.texture, sourceRec, destRec, origin, 0.0f, borderColor);
             }
 
             // Nivel del arma
@@ -633,3 +689,15 @@ void ShopState::NextSelectedItem(int direction)
 
     // Si llegamos aquí, no hay items válidos en esa dirección, no hacemos nada
 }
+
+// Me pasan -1 / 1 para izquierda derecha
+void ShopState::NextWeaponSelected(int direction)
+{
+    int newSelection = Shop::MAX_ITEMS_SHOP - 1 + direction;
+    while (newSelection >= Shop::MAX_ITEMS_SHOP)
+    {
+        // if (player.)
+        // {
+        // }
+    }
+};
