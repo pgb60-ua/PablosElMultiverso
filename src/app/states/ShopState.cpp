@@ -87,7 +87,8 @@ void ShopState::handleInput()
     int itemSlotSpacing = 15;
     int itemStartY = itemsY + 70;
 
-    // Detectar hover sobre items (actualiza selectedItem)
+    // Detectar hover sobre items de tienda (actualiza selectedItem)
+    bool hoveredOverShopItem = false;
     for (int i = 0; i < Shop::MAX_ITEMS_SHOP; i++)
     {
         const TShopSlot &slot = shop.GetItemsShop()[i];
@@ -100,7 +101,38 @@ void ShopState::handleInput()
         if (CheckCollisionPointRec(mousePos, slotRect))
         {
             selectedItem = i;
+            hoveredOverShopItem = true;
             break;
+        }
+    }
+
+    // Detectar hover sobre armas del inventario solo si no estamos sobre un item de tienda
+    if (!hoveredOverShopItem)
+    {
+        int weaponSlotSize = 70;
+        int weaponSlotSpacing = 10;
+        int weaponsPerRow = 5;
+
+        // Calcular posición del panel de armas (mismo cálculo que en render)
+        int statSpacing = 25;
+        int weaponPanelY = (headerHeight + 20) + 60; // statsY + 60
+        int weaponsY = weaponPanelY + 12 * statSpacing + 20;
+        int weaponStartX = statsX + 20;
+        int weaponStartY = weaponsY + 35;
+
+        const auto &weapons = player->GetWeapons();
+        for (int i = 0; i < player->WEAPON_MAX && i < weapons.size(); i++)
+        {
+            int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+            int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+
+            Rectangle weaponRect = {(float)weaponX, (float)weaponY, (float)weaponSlotSize, (float)weaponSlotSize};
+
+            if (CheckCollisionPointRec(mousePos, weaponRect))
+            {
+                selectedItem = Shop::MAX_ITEMS_SHOP + i;
+                break;
+            }
         }
     }
 
@@ -295,7 +327,11 @@ void ShopState::render()
     // Pablo Coins con icono
     int coinsX = screenWidth - 250;
     const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
-    DrawTextureRec(coinSheet.texture, coinSheet.frames[0], Vector2{(float)coinsX - 20, 20}, WHITE);
+    Rectangle coinFrame = coinSheet.frames[0];
+
+    // Centrar verticalmente la moneda con el texto (25 es el tamaño de la fuente, 30 es la Y del texto)
+    int coinYHeader = 30 + (25 - (int)coinFrame.height) / 2;
+    DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)coinsX - 20, (float)coinYHeader}, WHITE);
     DrawText(TextFormat("%d", player->GetPabloCoins()), coinsX + 30, 30, 25, Color{255, 255, 255, 255});
 
     // Panel de stats del jugador (izquierda)
@@ -437,6 +473,88 @@ void ShopState::render()
             DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, Color{80, 80, 100, 255});
             DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{60, 60, 70, 255});
             DrawText("EMPTY", weaponX + 10, weaponY + weaponSlotSize / 2 - 7, 12, Color{120, 120, 130, 255});
+        }
+    }
+
+    // Tooltip de arma seleccionada (si está sobre un arma del inventario)
+    if (selectedItem >= Shop::MAX_ITEMS_SHOP)
+    {
+        int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
+        if (weaponIndex >= 0 && weaponIndex < weapons.size())
+        {
+            const auto &weapon = weapons[weaponIndex];
+
+            // Posición del tooltip (debajo de las armas)
+            int tooltipX = statsX + 20;
+            int tooltipY = weaponStartY + weaponSlotSize + weaponSlotSpacing + 15;
+            int tooltipWidth = statsWidth - 40;
+            int tooltipHeight = 120;
+
+            // Fondo del tooltip
+            DrawRectangle(tooltipX - 5, tooltipY - 5, tooltipWidth + 10, tooltipHeight + 10, Color{100, 150, 255, 255});
+            DrawRectangle(tooltipX, tooltipY, tooltipWidth, tooltipHeight, Color{40, 40, 60, 255});
+
+            // Título
+            DrawText(weapon->GetName().c_str(), tooltipX + 10, tooltipY + 5, 16, Color{255, 200, 0, 255});
+
+            // Stats del arma
+            int statsY = tooltipY + 30;
+            const Stats &weaponStats = weapon->GetStats();
+            Color statColor = Color{200, 200, 220, 255};
+
+            auto drawWeaponStat = [&](const char *name, float value, int &currentY)
+            {
+                if (value != 0)
+                {
+                    Color color = value > 0 ? Color{100, 255, 100, 255} : Color{255, 100, 100, 255};
+                    const char *sign = value > 0 ? "+" : "";
+                    DrawText(TextFormat("%s%s: %.1f", sign, name, value), tooltipX + 10, currentY, 12, color);
+                    currentY += 15;
+                }
+            };
+
+            // Primera columna
+            int col1Y = statsY;
+            drawWeaponStat("PHY DMG", weaponStats.GetPhysicalDamage(), col1Y);
+            drawWeaponStat("MAG DMG", weaponStats.GetMagicDamage(), col1Y);
+            drawWeaponStat("ATK SPD", weaponStats.GetAttackSpeed(), col1Y);
+
+            // Segunda columna
+            int col2Y = statsY;
+            int col2X = tooltipX + tooltipWidth / 2;
+            auto drawWeaponStatCol2 = [&](const char *name, float value, int &currentY)
+            {
+                if (value != 0)
+                {
+                    Color color = value > 0 ? Color{100, 255, 100, 255} : Color{255, 100, 100, 255};
+                    const char *sign = value > 0 ? "+" : "";
+                    DrawText(TextFormat("%s%s: %.1f", sign, name, value), col2X, currentY, 12, color);
+                    currentY += 15;
+                }
+            };
+
+            drawWeaponStatCol2("CRIT CH", weaponStats.GetCriticalChance(), col2Y);
+            drawWeaponStatCol2("CRIT DMG", weaponStats.GetCriticalDamage(), col2Y);
+            drawWeaponStatCol2("LIFE STEAL", weaponStats.GetLifeSteal(), col2Y);
+
+            // Precio de venta
+            int sellPrice = CalculateWeaponSellPrice(weaponIndex);
+            DrawText("Sell Price:", tooltipX + 10, tooltipY + tooltipHeight - 25, 14, Color{200, 200, 220, 255});
+
+            // Dibujar sprite de moneda
+            const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+            int coinTextX = tooltipX + 10 + MeasureText("Sell Price: ", 14);
+            Rectangle coinFrame = coinSheet.frames[0];
+
+            // Centrar verticalmente la moneda con el texto (14 es el tamaño de la fuente)
+            int textHeight = 14;
+            int coinY = (tooltipY + tooltipHeight - 25) + (textHeight - (int)coinFrame.height) / 2;
+            DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)coinTextX, (float)coinY}, WHITE);
+
+            // Dibujar cantidad con porcentaje (ajustar el espaciado según el ancho del sprite)
+            int priceTextX = coinTextX + (int)coinFrame.width + 5;
+            DrawText(TextFormat("%d (50%%)", sellPrice), priceTextX, tooltipY + tooltipHeight - 25, 14,
+                     Color{255, 200, 0, 255});
         }
     }
 
@@ -582,7 +700,10 @@ void ShopState::render()
         // Precio
         int priceX = itemsX + itemsWidth - 120;
         Rectangle coinFrame = coinSheet.frames[0];
-        DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)slotY + 35}, WHITE);
+
+        // Centrar verticalmente la moneda con el texto (20 es el tamaño de la fuente, slotY + 45 es la Y del texto)
+        int coinYPrice = (slotY + 45) + (20 - (int)coinFrame.height) / 2;
+        DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)coinYPrice}, WHITE);
         DrawText(TextFormat("%d", slot.item->GetPrice()), priceX + 20, slotY + 45, 20, Color{255, 200, 0, 255});
 
         // Indicador si está bloqueado
