@@ -125,7 +125,7 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
     }
 }
 
-bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType) const
+bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType, int weaponLevel) const
 {
     // Si tengo menos de 4 armas, siempre puedo aceptar
     if (weapons.size() < WEAPON_MAX)
@@ -136,8 +136,9 @@ bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType) const
     // Si tengo 4 armas, verificar si hay al menos una del mismo tipo que este al 1
     for (const auto &weapon : weapons)
     {
-        // Si un arma es del mismo tipo y esta a nivel 1
-        if (weapon->GetWeaponType() == weaponType && weapon->GetLevel() == 1)
+        // Si un arma es del mismo tipo y mismo nivel y no es nivel maximo
+        if (weapon->GetWeaponType() == weaponType && weapon->GetLevel() == weaponLevel &&
+            weapon->GetLevel() < weapon->GetMaxLevel())
         {
             return true;
         }

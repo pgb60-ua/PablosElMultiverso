@@ -272,7 +272,7 @@ public:
     /// @brief Verifica si el jugador puede aceptar un arma del tipo especificado
     /// @param weaponType El tipo de arma a verificar
     /// @return true si puede aceptar (tiene espacio o tiene armas del mismo tipo no maximizadas), false si no
-    bool CanAcceptWeapon(WEAPON_TYPE weaponType) const;
+    bool CanAcceptWeapon(WEAPON_TYPE weaponType, int weaponLevel) const;
 
     void CheckCollisions(float deltaTime) override;
     void Render() override;
