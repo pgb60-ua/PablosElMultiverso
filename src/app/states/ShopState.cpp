@@ -970,11 +970,11 @@ void ShopState::NextWeaponSelected(int direction)
             selectedItem = newSelected;
         }
     }
-};
+}
 
 int ShopState::CalculateWeaponSellPrice(int weaponIndex)
 {
     const auto &weapon = player->GetWeapons()[weaponIndex];
     int price = weapon->GetPrice(); // Precio total del arma
     return price / 2;               // Te devuelve la mitad de lo que te ha costado comprarla en total
-};
+}
