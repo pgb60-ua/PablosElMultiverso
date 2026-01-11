@@ -49,7 +49,11 @@ void ChemicalDestructorWeapon::Attack(const Vector2 &position, float deltaTime)
     timeSinceLastAttack += deltaTime;
     if (timeSinceLastAttack >= attackInterval)
     {
-        ShootProjectile(position, direction, allEnemies);
+        // Actualizar la dirección antes de disparar
+        Vector2 newDirection = CalculateDirection();
+        SetDirection(newDirection);
+        
+        ShootProjectile(position, newDirection, allEnemies);
         timeSinceLastAttack -= attackInterval;
     }
 }
@@ -61,10 +65,10 @@ std::unique_ptr<AProjectile> ChemicalDestructorWeapon::CreateProjectile()
 
 void ChemicalDestructorWeapon::Attack() { return; }
 
-void ChemicalDestructorWeapon::render()
-{
-    for (const auto &projectile : GetActiveProjectiles())
-    {
-        projectile->render();
-    }
-}
+// void ChemicalDestructorWeapon::render()
+// {
+//     for (const auto &projectile : GetActiveProjectiles())
+//     {
+//         projectile->render();
+//     }
+// }

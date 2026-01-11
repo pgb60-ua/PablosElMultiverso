@@ -178,6 +178,8 @@ std::string SpriteLoaderManager::GetMetadataPath(WEAPON_TYPE type) const
         return BASE_PATH_WEAPON + "sniper.json";
     case WEAPON_TYPE::WING:
         return BASE_PATH_WEAPON + "wing.json";
+    case WEAPON_TYPE::CHEMICAL_DESTRUCTOR:
+        return BASE_PATH_WEAPON + "wing.json";
     default:
         throw std::runtime_error("Unknown WEAPON type");
     }

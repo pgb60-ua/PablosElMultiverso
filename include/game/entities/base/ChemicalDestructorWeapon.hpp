@@ -26,6 +26,6 @@ public:
     /// @brief Método para crear proyectiles
     std::unique_ptr<AProjectile> CreateProjectile() override;
 
-    /// @brief Renderiza solo los proyectiles, no el sprite del arma
-    void render() override;
+    // /// @brief Renderiza solo los proyectiles, no el sprite del arma
+    // void render() override;
 };

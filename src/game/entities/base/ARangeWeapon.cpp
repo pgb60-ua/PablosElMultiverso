@@ -1,4 +1,5 @@
 #include "ARangeWeapon.hpp"
+#include <iostream>
 
 ARangeWeapon::ARangeWeapon(const std::string &name, const std::string &description,
                            const Stats &stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2 &position,
@@ -29,6 +30,7 @@ void ARangeWeapon::UpdateProjectiles(float deltaTime)
     {
         if (projectile->isActive())
         {
+            std::cout << "Updating projectile" << std::endl;
             projectile->update(deltaTime);
         }
     }

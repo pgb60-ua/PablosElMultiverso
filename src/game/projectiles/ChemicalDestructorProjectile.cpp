@@ -2,6 +2,7 @@
 #include <SpriteLoaderManager.hpp>
 #include <SpriteSheet.hpp>
 #include <cmath>
+#include <iostream>
 
 ChemicalDestructorProjectile::ChemicalDestructorProjectile(std::vector<AEnemy *> &allEnemies,
                                                            std::vector<Player *> &players)
@@ -51,7 +52,6 @@ void ChemicalDestructorProjectile::update(float deltaTime)
 {
     if (!active)
         return;
-    
     // Actualizar animación
     animation.timeAccumulator += deltaTime;
     const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(PROJECTILE_TYPE::CHEMICAL_BULLET);
