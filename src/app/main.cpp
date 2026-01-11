@@ -1,5 +1,6 @@
-#include "WindowFlags.hpp"
+#include "ItemsFactory.hpp"
 #include "ScreenConstants.hpp"
+#include "WindowFlags.hpp"
 #include <MainGameState.hpp>
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
@@ -27,7 +28,7 @@ int main()
     InitAudioDevice();
     DataFileManager::GetInstance().DetectAndSetAssetsPath();
     SpriteLoaderManager::GetInstance().DetectAndSetAssetsPath();
-
+    ItemsFactory::GetInstance().LoadAllItems();
     while (!state_machine.is_game_ending() && !WindowShouldClose())
     {
         HandleWindowFlags();

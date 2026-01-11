@@ -1,7 +1,7 @@
 #pragma once
+#include "RoundInfo.hpp"
 #include "Stats.hpp"
 #include "Types.hpp"
-#include "RoundInfo.hpp"
 #include <string>
 #include <unordered_map>
 #include <variant>
@@ -11,6 +11,19 @@
 using DataValue = std::variant<std::string, int, float, bool>;
 // Tipo para el diccionario de datos
 using DataMap = std::unordered_map<std::string, DataValue>;
+
+// Forward declaration
+enum class ItemRarity;
+
+// Estructura para datos completos de un item
+struct ItemData
+{
+    std::string name;
+    std::string description;
+    Stats stats;
+    ItemRarity rarity;
+    int price;
+};
 
 class DataFileManager
 {
@@ -53,6 +66,8 @@ public:
     Stats GetPlayerStats(PLAYER_TYPE type);
     Stats GetEnemyStats(ENEMY_TYPE type);
     Stats GetWeaponStats(WEAPON_TYPE type);
+    Stats GetItemStats(ITEM_TYPE type);
+    ItemData GetItemData(ITEM_TYPE type);
     std::vector<RoundInfo> GetRounds(ROUND_TYPE type);
 
 private:
