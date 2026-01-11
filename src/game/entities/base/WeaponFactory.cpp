@@ -8,7 +8,7 @@
 
 std::unique_ptr<AWeapon> WeaponFactory::CreateWeapon(ITEM_TYPE itemType, const Vector2 &position,
                                                      std::vector<AEnemy *> &enemiesInRange,
-                                                     std::vector<AEnemy *> &allEnemies, int price = 0)
+                                                     std::vector<AEnemy *> &allEnemies, int price)
 {
     std::unique_ptr<AWeapon> weapon;
 
@@ -43,7 +43,7 @@ std::unique_ptr<AWeapon> WeaponFactory::CreateWeapon(ITEM_TYPE itemType, const V
 
 std::unique_ptr<AWeapon> WeaponFactory::CreateStartingWeapon(PLAYER_TYPE playerType, const Vector2 &position,
                                                              std::vector<AEnemy *> &enemiesInRange,
-                                                             std::vector<AEnemy *> &allEnemies, int price = 0)
+                                                             std::vector<AEnemy *> &allEnemies, int price)
 {
     std::unique_ptr<AWeapon> weapon;
 
