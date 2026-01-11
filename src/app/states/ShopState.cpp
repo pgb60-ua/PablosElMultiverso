@@ -617,12 +617,23 @@ void ShopState::render()
             // Verificar si el arma está al nivel máximo
             bool isMaxLevel = weapon->GetLevel() >= weapon->GetMaxLevel();
 
+            // Verificar hover en botón FUSE
+            Rectangle fuseButtonRect = {(float)buttonsX, (float)button1Y, (float)buttonWidth, (float)buttonHeight};
+            bool isHoveringFuse = CheckCollisionPointRec(GetMousePosition(), fuseButtonRect);
+
             // Fondo del botón fuse
             Color fuseButtonColor =
                 isMaxLevel ? Color{60, 60, 70, 255} : Color{80, 60, 120, 255}; // Gris si max level, morado si no
             Color fuseButtonBorder = isMaxLevel
                                          ? Color{80, 80, 90, 255}
                                          : Color{150, 100, 255, 255}; // Gris si max level, morado brillante si no
+
+            // Borde negro si está en hover
+            if (isHoveringFuse)
+            {
+                fuseButtonBorder = Color{0, 0, 0, 255};
+            }
+
             DrawRectangle(buttonsX - 2, button1Y - 2, buttonWidth + 4, buttonHeight + 4, fuseButtonBorder);
             DrawRectangle(buttonsX, button1Y, buttonWidth, buttonHeight, fuseButtonColor);
 
@@ -646,9 +657,20 @@ void ShopState::render()
             // Botón 2: SELL (abajo)
             int button2Y = buttonsStartY + buttonHeight + buttonSpacing;
 
+            // Verificar hover en botón SELL
+            Rectangle sellButtonRect = {(float)buttonsX, (float)button2Y, (float)buttonWidth, (float)buttonHeight};
+            bool isHoveringSell = CheckCollisionPointRec(GetMousePosition(), sellButtonRect);
+
             // Fondo del botón de vender
             Color sellButtonColor = Color{180, 40, 40, 255};  // Rojo oscuro
             Color sellButtonBorder = Color{255, 80, 80, 255}; // Rojo brillante
+
+            // Borde negro si está en hover
+            if (isHoveringSell)
+            {
+                sellButtonBorder = Color{0, 0, 0, 255};
+            }
+
             DrawRectangle(buttonsX - 2, button2Y - 2, buttonWidth + 4, buttonHeight + 4, sellButtonBorder);
             DrawRectangle(buttonsX, button2Y, buttonWidth, buttonHeight, sellButtonColor);
 
@@ -886,9 +908,19 @@ void ShopState::render()
     int rerollButtonX = 50;
     int rerollButtonY = 20;
 
+    Rectangle rerollButtonRect = {(float)rerollButtonX, (float)rerollButtonY, (float)rerollButtonWidth,
+                                  (float)rerollButtonHeight};
+    bool isHoveringReroll = CheckCollisionPointRec(GetMousePosition(), rerollButtonRect);
+
     Color rerollBgColor = player->GetPabloCoins() >= REROLL_COST ? Color{60, 100, 60, 255} : Color{80, 40, 40, 255};
     Color rerollBorderColor =
         player->GetPabloCoins() >= REROLL_COST ? Color{100, 200, 100, 255} : Color{180, 60, 60, 255};
+
+    // Borde negro si está en hover
+    if (isHoveringReroll)
+    {
+        rerollBorderColor = Color{0, 0, 0, 255};
+    }
 
     DrawRectangle(rerollButtonX - 3, rerollButtonY - 3, rerollButtonWidth + 6, rerollButtonHeight + 6,
                   rerollBorderColor);
@@ -904,8 +936,18 @@ void ShopState::render()
     int continueButtonX = rerollButtonX + rerollButtonWidth + 20;
     int continueButtonY = 20;
 
+    Rectangle continueButtonRect = {(float)continueButtonX, (float)continueButtonY, (float)continueButtonWidth,
+                                    (float)continueButtonHeight};
+    bool isHoveringContinue = CheckCollisionPointRec(GetMousePosition(), continueButtonRect);
+
     Color continueBgColor = Color{60, 80, 120, 255};
     Color continueBorderColor = Color{100, 150, 255, 255};
+
+    // Borde negro si está en hover
+    if (isHoveringContinue)
+    {
+        continueBorderColor = Color{0, 0, 0, 255};
+    }
 
     DrawRectangle(continueButtonX - 3, continueButtonY - 3, continueButtonWidth + 6, continueButtonHeight + 6,
                   continueBorderColor);
