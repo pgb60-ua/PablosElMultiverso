@@ -69,6 +69,30 @@ ItemRarity AWeapon::GetRarityFromJSON(WEAPON_TYPE type)
     return ItemRarity::Common;
 }
 
+void AWeapon::SetLevel(int newLevel)
+{
+    if (newLevel < 1 || newLevel > MAXLEVEL)
+    {
+        return;
+    }
+
+    // Las stats actuales son las stats base (nivel 1)
+    // Multiplicar por 2^(newLevel-1) para obtener las stats del nivel deseado
+    // Nivel 1: multiplier = 1, Nivel 2: multiplier = 2, Nivel 3: multiplier = 4, Nivel 4: multiplier = 8
+    int multiplier = static_cast<int>(std::pow(2, newLevel - 1));
+
+    OffensiveStats baseStats = stats.GetOffensiveStats();
+    OffensiveStats scaledStats = {baseStats.physicalDamage * multiplier,
+                                  baseStats.magicDamage * multiplier,
+                                  baseStats.attackSpeed * multiplier,
+                                  std::min(baseStats.criticalChance * multiplier, MAX_CRITICAL_CHANCE),
+                                  std::min(baseStats.criticalDamage * multiplier, MAX_CRITICAL_DAMAGE),
+                                  std::min(baseStats.lifeSteal * multiplier, MAX_LIFE_STEAL)};
+
+    stats.SetOffensiveStats(scaledStats);
+    level = newLevel;
+}
+
 bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats, int addPrice)
 {
     if (level >= MAXLEVEL)
