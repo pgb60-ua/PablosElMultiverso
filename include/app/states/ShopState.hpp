@@ -21,11 +21,14 @@ private:
     bool willBuy = false;
     bool willAlternateBlock = false;
     bool willReroll = false;
+    bool willFuse = false;
+    bool willSell = false;
     constexpr static int PADDING = 100;
     constexpr static int REROLL_COST = 5;
     void NextSelectedItem(int direction);
     /// @brief devuelve a que arma salto del inventario
     void NextWeaponSelected(int direction);
+    int CalculateWeaponSellPrice(int weaponIndex);
 
 public:
     ShopState(Player *player);

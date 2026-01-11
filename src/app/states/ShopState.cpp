@@ -28,13 +28,28 @@ void ShopState::handleInput()
             NextSelectedItem(-1);
         }
     }
-    if (IsKeyPressed(KEY_ENTER) && selectedItem >= 0 && selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+    if (IsKeyPressed(KEY_ENTER))
     {
-        willBuy = true;
+        // Si es de tienda
+        if (selectedItem >= 0 && selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            willBuy = true;
+        }
+        else
+        {
+            willFuse = true;
+        }
     }
-    if (IsKeyPressed(KEY_SPACE) && selectedItem >= 0 && selectedItem < Shop::MAX_ITEMS_SHOP)
+    if (IsKeyPressed(KEY_SPACE))
     {
-        willAlternateBlock = true;
+        if (selectedItem >= 0 && selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            willAlternateBlock = true;
+        }
+        else
+        {
+            willSell = true;
+        }
     }
     if (IsKeyPressed(KEY_R))
     {
@@ -216,6 +231,7 @@ void ShopState::update(float deltaTime)
                                                               player->enemiesInRange, player->allEnemies);
                     if (weapon != nullptr)
                     {
+                        weapon->SetPrice(item->GetPrice());
                         player->AddWeapon(std::move(weapon));
                     }
                 }
@@ -237,6 +253,26 @@ void ShopState::update(float deltaTime)
             selectedItem = 0;
         }
         willReroll = false;
+    }
+    if (willFuse)
+    {
+        willFuse = false;
+    }
+    // Vendo si tengo mas de 1 arma
+    if (willSell)
+    {
+        if (player->GetWeapons().size() > 1)
+        {
+
+            int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
+            if (weaponIndex >= 0 && weaponIndex < player->GetWeapons().size())
+            {
+                int sellPrice = CalculateWeaponSellPrice(weaponIndex);
+                player->ModifyPabloCoins(sellPrice);
+                player->RemoveWeapon(weaponIndex);
+            }
+        }
+        willSell = false;
     }
 }
 void ShopState::render()
@@ -337,33 +373,47 @@ void ShopState::render()
 
             // Color del borde según el nivel
             Color borderColor;
+            Color tintColor;
             switch (weapon->GetLevel())
             {
             case 1:
                 borderColor = Color{150, 150, 150, 255}; // Gris
+                tintColor = Color{150, 150, 150, 80};    // Gris transparente
                 break;
             case 2:
                 borderColor = Color{100, 255, 100, 255}; // Verde
+                tintColor = Color{100, 255, 100, 80};    // Verde transparente
                 break;
             case 3:
-                borderColor = Color{100, 150, 255, 255}; // Azul
+                borderColor = Color{200, 100, 255, 255}; // Morado (cambiado de azul)
+                tintColor = Color{200, 100, 255, 80};    // Morado transparente
                 break;
             case 4:
-                borderColor = Color{255, 200, 50, 255}; // Amarillo
+                borderColor = Color{255, 200, 50, 255}; // Amarillo/Dorado
+                tintColor = Color{255, 200, 50, 80};    // Amarillo transparente
                 break;
             default:
                 borderColor = Color{150, 150, 150, 255}; // Gris por defecto
+                tintColor = Color{150, 150, 150, 80};    // Gris transparente
                 break;
             }
 
+            // Si está seleccionado, aumentar la opacidad del borde
+            Color selectedBorderColor = borderColor;
             if (i + Shop::MAX_ITEMS_SHOP == selectedItem)
             {
-                borderColor = Color{100, 150, 255, 255};
+                selectedBorderColor = Color{borderColor.r, borderColor.g, borderColor.b, 255};
+                // Borde más grueso cuando está seleccionado
+                DrawRectangle(weaponX - 4, weaponY - 4, weaponSlotSize + 8, weaponSlotSize + 8,
+                              Color{100, 150, 255, 255});
             }
 
-            // Borde
-            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, borderColor);
+            // Borde del nivel
+            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, selectedBorderColor);
             DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{45, 45, 65, 255});
+
+            // Overlay de color del nivel (fondo transparente)
+            DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, tintColor);
 
             // Sprite del arma
             const SpriteSheet &weaponSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(weapon->GetWeaponType());
@@ -374,12 +424,12 @@ void ShopState::render()
                 Rectangle destRec = {(float)(weaponX + weaponSlotSize / 2), (float)(weaponY + weaponSlotSize / 2),
                                      sourceRec.width * scale, sourceRec.height * scale};
                 Vector2 origin = {destRec.width / 2, destRec.height / 2};
-                DrawTexturePro(weaponSheet.texture, sourceRec, destRec, origin, 0.0f, borderColor);
+                DrawTexturePro(weaponSheet.texture, sourceRec, destRec, origin, 0.0f, WHITE);
             }
 
-            // Nivel del arma
+            // Nivel del arma con el color del borde
             const char *levelText = TextFormat("Lv%d", weapon->GetLevel());
-            DrawText(levelText, weaponX + 5, weaponY + weaponSlotSize - 18, 14, Color{255, 255, 100, 255});
+            DrawText(levelText, weaponX + 5, weaponY + weaponSlotSize - 18, 14, borderColor);
         }
         else
         {
@@ -698,4 +748,11 @@ void ShopState::NextWeaponSelected(int direction)
             selectedItem = newSelected;
         }
     }
+};
+
+int ShopState::CalculateWeaponSellPrice(int weaponIndex)
+{
+    const auto &weapon = player->GetWeapons()[weaponIndex];
+    int price = weapon->GetPrice() * weapon->GetLevel(); // Precio total del arma
+    return price / 2; // Te devuelve la mitad de lo que te ha costado comrparla en total
 };
