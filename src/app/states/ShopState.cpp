@@ -344,7 +344,7 @@ void ShopState::update(float deltaTime)
         {
 
             int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
-            if (weaponIndex >= 0 && weaponIndex < player->GetWeapons().size())
+            if (weaponIndex >= 0 && static_cast<std::size_t>(weaponIndex) < player->GetWeapons().size())
             {
                 int sellPrice = CalculateWeaponSellPrice(weaponIndex);
                 player->ModifyPabloCoins(sellPrice);
