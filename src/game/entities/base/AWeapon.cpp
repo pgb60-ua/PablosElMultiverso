@@ -1,8 +1,8 @@
 #include "AWeapon.hpp"
 #include "SpriteLoaderManager.hpp"
+#include "raymath.h"
 #include <SpriteSheet.hpp>
 #include <cmath>
-#include "raymath.h"
 
 class AEnemy;
 
@@ -69,12 +69,13 @@ ItemRarity AWeapon::GetRarityFromJSON(WEAPON_TYPE type)
     return ItemRarity::Common;
 }
 
-bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
+bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats, int addPrice)
 {
     if (level >= MAXLEVEL)
     {
         return false;
     }
+    SetPrice(GetPrice() + addPrice);
     level++;
 
     OffensiveStats currentStats = stats.GetOffensiveStats();
@@ -142,15 +143,17 @@ Vector2 AWeapon::CalculateDirection()
 void AWeapon::update(float deltaTime, const Vector2 &position)
 {
     currentOrbitAngle += ORBIT_SPEED * deltaTime;
-    if (currentOrbitAngle >= 360.0f) currentOrbitAngle -= 360.0f;
+    if (currentOrbitAngle >= 360.0f)
+        currentOrbitAngle -= 360.0f;
 
     float rad = currentOrbitAngle * DEG2RAD;
-    Vector2 offset = { cosf(rad) * ORBIT_RADIUS, sinf(rad) * ORBIT_RADIUS };
-    
+    Vector2 offset = {cosf(rad) * ORBIT_RADIUS, sinf(rad) * ORBIT_RADIUS};
+
     Vector2 finalPos = Vector2Add(position, offset);
-    
+
     SetPosition(finalPos);
-    if(!enemiesInRange.empty()) {
+    if (!enemiesInRange.empty())
+    {
         SetDirection(CalculateDirection());
     }
 }

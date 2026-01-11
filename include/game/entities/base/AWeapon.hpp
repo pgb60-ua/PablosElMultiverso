@@ -87,7 +87,7 @@ public:
     /// @brief Getter del nivel máximo del arma
     int GetMaxLevel() const { return MAXLEVEL; }
     /// @brief Sube de nivel el arma
-    bool Upgrade(const OffensiveStats &newOffensiveStats);
+    bool Upgrade(const OffensiveStats &newOffensiveStats, int addPrice);
     /// @brief Getter de la posición del arma
     Vector2 GetPosition() const { return position; }
     /// @brief Setter de la posición del arma
