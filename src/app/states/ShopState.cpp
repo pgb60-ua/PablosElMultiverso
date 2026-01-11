@@ -16,11 +16,17 @@ void ShopState::handleInput()
     // Input de teclado
     if (IsKeyPressed(KEY_S))
     {
-        NextSelectedItem(1);
+        if (selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            NextSelectedItem(1);
+        }
     }
     else if (IsKeyPressed(KEY_W))
     {
-        NextSelectedItem(-1);
+        if (selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
+        {
+            NextSelectedItem(-1);
+        }
     }
     if (IsKeyPressed(KEY_ENTER) && selectedItem >= 0 && selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
     {
@@ -40,54 +46,11 @@ void ShopState::handleInput()
     }
     if (IsKeyPressed(KEY_A))
     {
-        // Si estoy en la tienda paso al inventario
-        if (selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
-        {
-            // TODO : ver a cual salto puede ser que salte al 6
-            selectedItem = 5;
-        }
-        // Si estoy en el inventario y no estoy en la izquierda
-        // TODO : comprobar que no estoy en la izquierda conmtando que la izquierda no tiene arma
-        else if (selectedItem != Shop::MAX_ITEMS_SHOP)
-        {
-            // Si por ejemplo estoy en el 6 -> 5
-            // TODO : Comprobar a cual salto porque si estoy en el 8 y el 7 no tiene arma no tengo que saltar
-            // NextWeaponSelected(-1);
-            selectedItem--;
-        }
-        // Si estoy en el inventario y estoy en la izquierda paso a la derecha
-        else
-        {
-            selectedItem = 0;
-            if (shop.IsSlotBuyed(selectedItem))
-            {
-                NextSelectedItem(1);
-            }
-        }
+        NextWeaponSelected(-1);
     }
     if (IsKeyPressed(KEY_D))
     {
-        // Si estoy en la tienda paso al inventario
-        if (selectedItem <= Shop::MAX_ITEMS_SHOP - 1)
-        {
-            // Salto al 5 porque SIEMPRE VA A HABER 1 ARMA
-            selectedItem = 5;
-        }
-        else if (selectedItem != Shop::MAX_ITEMS_SHOP)
-        {
-            // Si por ejemplo estoy en el 5 -> 6
-            // TODO : Comprobar a cual salto porque si estoy en el 7 y el 8 no tiene arma no tengo que saltar
-            // NextWeaponSelected(1);
-            selectedItem++;
-        }
-        else
-        {
-            selectedItem = 0;
-            if (shop.IsSlotBuyed(selectedItem))
-            {
-                NextSelectedItem(1);
-            }
-        }
+        NextWeaponSelected(1);
     }
 
     // Input de mouse
@@ -359,12 +322,13 @@ void ShopState::render()
     int weaponSlotSpacing = 10;
     int weaponStartX = statsX + 20;
     int weaponStartY = weaponsY + 35;
+    int weaponsPerRow = 5; // 5 armas por fila
 
     const auto &weapons = player->GetWeapons();
     for (int i = 0; i < player->WEAPON_MAX; i++)
     {
-        int weaponX = weaponStartX + (i % 2) * (weaponSlotSize + weaponSlotSpacing);
-        int weaponY = weaponStartY + (i / 2) * (weaponSlotSize + weaponSlotSpacing);
+        int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+        int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
 
         if (i < weapons.size())
         {
@@ -690,14 +654,48 @@ void ShopState::NextSelectedItem(int direction)
     // Si llegamos aquí, no hay items válidos en esa dirección, no hacemos nada
 }
 
-// Me pasan -1 / 1 para izquierda derecha
+// Me pasan -1 / 1 para izquierda
 void ShopState::NextWeaponSelected(int direction)
 {
-    int newSelection = Shop::MAX_ITEMS_SHOP - 1 + direction;
-    while (newSelection >= Shop::MAX_ITEMS_SHOP)
+    int size = player->GetWeapons().size();
+    int newSelected = selectedItem + direction;
+    // Va para la derecha
+    if (direction == 1)
     {
-        // if (player.)
-        // {
-        // }
+        // 0, 1, 2, 3, 4, 5
+        if (newSelected <= Shop::MAX_ITEMS_SHOP)
+        {
+            selectedItem = 5;
+        }
+        // 6, 7, 8
+        else if (newSelected < Shop::MAX_ITEMS_SHOP + size)
+        {
+            selectedItem = newSelected;
+        }
+        // 9 ... etc
+        else
+        {
+            selectedItem = -1;
+            NextSelectedItem(1);
+        }
+    }
+    // Va para la izquierda
+    if (direction == -1)
+    {
+        // etc .... 0, 1, 2, 3ww
+        if (newSelected < Shop::MAX_ITEMS_SHOP - 1)
+        {
+            selectedItem = Shop::MAX_ITEMS_SHOP + size - 1;
+        }
+        // 4
+        else if (newSelected == Shop::MAX_ITEMS_SHOP - 1)
+        {
+            selectedItem = -1;
+            NextSelectedItem(1);
+        }
+        else
+        {
+            selectedItem = newSelected;
+        }
     }
 };
