@@ -279,7 +279,7 @@ void Player::CheckCollisions(float deltaTime)
 
 void Player::RemoveWeapon(int index)
 {
-    if (index >= weapons.size() || index < 0)
+    if (index < 0 || static_cast<std::size_t>(index) >= weapons.size())
     {
         return; // Índice inválido, no hacer nada
     }
