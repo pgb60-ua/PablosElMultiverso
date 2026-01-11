@@ -1,8 +1,9 @@
 {
-	"name": "Sniper ",
+	"name": "Sniper",
 	"description": "A long-range rifle designed for precision shooting",
 	"level": 1,
 	"rarity": "Rare",
+	"price": 10,
 	"pool_size": 50,
 	"health": 0,
 	"max_health": 0,
