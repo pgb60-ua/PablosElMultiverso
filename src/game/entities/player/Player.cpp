@@ -133,7 +133,7 @@ bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType, int weaponLevel) const
         return true;
     }
 
-    // Si tengo 4 armas, verificar si hay al menos una del mismo tipo que este al 1
+    // Si tengo 4 armas, verificar si hay al menos una del mismo tipo y mismo nivel que el arma entrante
     for (const auto &weapon : weapons)
     {
         // Si un arma es del mismo tipo y mismo nivel y no es nivel maximo
