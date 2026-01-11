@@ -22,4 +22,9 @@ public:
     // Pongo private abajo porque necesito la constante
 private:
     std::array<TShopSlot, MAX_ITEMS_SHOP> shopPool;
+
+    /// @brief Genera un nivel aleatorio para un arma según las probabilidades definidas
+    /// @param item El item para el cual generar el nivel
+    /// @return El nivel del arma (1-4), o 1 si no es un arma
+    int GenerateWeaponLevel(const Item *item);
 };

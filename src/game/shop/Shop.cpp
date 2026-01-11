@@ -6,28 +6,37 @@
 #include <random>
 #include <spdlog/spdlog.h>
 
+// Generador estático para evitar reinicialización
+static std::random_device rd;
+static std::mt19937 generator(rd());
+
+int Shop::GenerateWeaponLevel(const Item *item)
+{
+    if (item == nullptr)
+    {
+        return 1;
+    }
+
+    ITEM_TYPE itemType = item->GetType();
+    bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
+
+    if (!isWeapon)
+    {
+        return 1;
+    }
+
+    // Generar nivel con distribución de probabilidad
+    std::discrete_distribution<> levelDist(std::begin(WEAPON_LEVEL_WEIGHTS), std::end(WEAPON_LEVEL_WEIGHTS));
+    return levelDist(generator) + 1; // +1 porque devuelve 0-3 y queremos 1-4
+}
+
 Shop::Shop()
 {
     std::vector<const Item *> randomItems = ItemsFactory::GetInstance().GetRandomItems(MAX_ITEMS_SHOP);
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::discrete_distribution<> levelDist(std::begin(WEAPON_LEVEL_WEIGHTS), std::end(WEAPON_LEVEL_WEIGHTS));
-
     for (size_t i = 0; i < randomItems.size() && i < MAX_ITEMS_SHOP; ++i)
     {
-        // Generar nivel aleatorio para armas
-        int weaponLevel = 1;
-        if (randomItems[i] != nullptr)
-        {
-            ITEM_TYPE itemType = randomItems[i]->GetType();
-            bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
-            if (isWeapon)
-            {
-                weaponLevel = levelDist(gen) + 1; // +1 porque devuelve 0-3 y queremos 1-4
-            }
-        }
-
+        int weaponLevel = GenerateWeaponLevel(randomItems[i]);
         shopPool[i] = {randomItems[i], false, false, weaponLevel};
     }
 
@@ -46,10 +55,6 @@ void Shop::reRoll()
     std::vector<const Item *> randomItems = ItemsFactory::GetInstance().GetRandomItems(MAX_ITEMS_SHOP);
     size_t randomIndex = 0;
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::discrete_distribution<> levelDist(std::begin(WEAPON_LEVEL_WEIGHTS), std::end(WEAPON_LEVEL_WEIGHTS));
-
     for (size_t i = 0; i < MAX_ITEMS_SHOP; ++i)
     {
         // Solo cambiar items que NO estén bloqueados
@@ -57,20 +62,7 @@ void Shop::reRoll()
         {
             shopPool[i].item = randomItems[randomIndex];
             shopPool[i].isBuyed = false; // Resetear estado de compra
-
-            // Generar nivel aleatorio para armas
-            int weaponLevel = 1;
-            if (randomItems[randomIndex] != nullptr)
-            {
-                ITEM_TYPE itemType = randomItems[randomIndex]->GetType();
-                bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
-                if (isWeapon)
-                {
-                    weaponLevel = levelDist(gen) + 1; // +1 porque devuelve 0-3 y queremos 1-4
-                }
-            }
-            shopPool[i].weaponLevel = weaponLevel;
-
+            shopPool[i].weaponLevel = GenerateWeaponLevel(randomItems[randomIndex]);
             randomIndex++;
         }
     }
