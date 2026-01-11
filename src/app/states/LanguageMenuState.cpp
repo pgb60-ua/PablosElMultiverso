@@ -28,7 +28,7 @@ static void cambiarIdioma(const std::string& idioma) {
     std::string locale_str = idioma + "_" + (idioma == "en" ? "US" : (idioma == "fr" ? "FR" : "ES")) + ".UTF-8";
     setlocale(LC_ALL, locale_str.c_str());
 
-    bindtextdomain("pablos", "./locale");
+    bindtextdomain("pablos", GetLocalePath().c_str());
     textdomain("pablos");
     bind_textdomain_codeset("pablos", "UTF-8");
     

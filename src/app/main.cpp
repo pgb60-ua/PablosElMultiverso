@@ -23,7 +23,7 @@ int main()
     }
     
     // Configuración específica para la localización
-    bindtextdomain("pablos", "./locale");
+    bindtextdomain("pablos", GetLocalePath().c_str());
     textdomain("pablos");
 
     // Crear ventana con el tamaño del monitor
