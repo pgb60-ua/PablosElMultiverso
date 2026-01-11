@@ -264,6 +264,9 @@ public:
     void HandleInput(Vector2 inputDirection);
     void AddItem(const Item *item);
     void AddWeapon(std::unique_ptr<AWeapon> newWeapon);
+    void UpgradeWeapons(const std::unique_ptr<AWeapon> newWeapon);
+    bool CanFuse(int index);
+    void UpgradeWeapon(int index);
     void RemoveWeapon(int index);
 
     /// @brief Verifica si el jugador puede aceptar un arma del tipo especificado
