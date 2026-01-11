@@ -527,7 +527,7 @@ void ShopState::render()
     if (selectedItem >= Shop::MAX_ITEMS_SHOP)
     {
         int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
-        if (weaponIndex >= 0 && weaponIndex < weapons.size())
+        if (weaponIndex >= 0 && static_cast<size_t>(weaponIndex) < weapons.size())
         {
             const auto &weapon = weapons[weaponIndex];
 
