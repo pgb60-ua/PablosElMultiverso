@@ -65,10 +65,10 @@ std::unique_ptr<AProjectile> ChemicalDestructorWeapon::CreateProjectile()
 
 void ChemicalDestructorWeapon::Attack() { return; }
 
-// void ChemicalDestructorWeapon::render()
-// {
-//     for (const auto &projectile : GetActiveProjectiles())
-//     {
-//         projectile->render();
-//     }
-// }
+void ChemicalDestructorWeapon::update(float deltaTime, const Vector2 &position)
+{
+    SetPosition(position);
+    SetDirection(CalculateDirection());
+    Attack(this->position, deltaTime); 
+    UpdateProjectiles(deltaTime);
+}

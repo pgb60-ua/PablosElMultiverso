@@ -31,7 +31,7 @@ void ChemicalDestructor::Update(float deltaTime)
     if (weapon)
     {
         Vector2 enemyCenter = GetCenterPosition();
-        weapon->update(deltaTime, this->GetPosition());
+        weapon->update(deltaTime, enemyCenter);
     }
 
     Move(deltaTime);
