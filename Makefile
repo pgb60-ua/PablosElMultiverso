@@ -120,10 +120,10 @@ run: $(TARGET)
 	@./$(TARGET)
 
 run_FR: $(TARGET) msgfmt_FR
-	@LANG=fr_FR.UTF-8 ./$(TARGET)
+	@LANGUAGE=fr_FR LANG=fr_FR.UTF-8 ./$(TARGET)
 
-run_EN: $(TARGET) msgfmt_EN
-	@LANG=en_US.UTF-8 ./$(TARGET)
+run_ES: $(TARGET) msgfmt_ES
+	@LANGUAGE=es_ES LANG=es_ES.UTF-8 ./$(TARGET)
 
 # Mostrar información de compilación
 info:
@@ -184,8 +184,8 @@ pot:
 	@mkdir -p po
 	xgettext --keyword=_ --keyword=N_ --from-code=UTF-8 --output=po/pablos.pot $(SRCS)
 
-msginit_EN:
-	msginit -i po/pablos.pot -l en_US -o po/en_US.po
+msginit_ES:
+	msginit -i po/pablos.pot -l es_ES -o po/es_ES.po
 
 msginit_FR:
 	msginit -i po/pablos.pot -l fr_FR -o po/fr_FR.po
@@ -193,9 +193,9 @@ msginit_FR:
 msgfmt_FR:
 	@mkdir -p locale/fr_FR/LC_MESSAGES
 	msgfmt po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
-msgfmt_EN:
-	@mkdir -p locale/en_US/LC_MESSAGES
-	msgfmt po/en_US.po -o locale/en_US/LC_MESSAGES/pablos.mo
+msgfmt_ES:
+	@mkdir -p locale/es_ES/LC_MESSAGES
+	msgfmt po/es_ES.po -o locale/es_ES/LC_MESSAGES/pablos.mo
 
 # Declarar reglas que no son archivos
-.PHONY: all clean rebuild run info stats clean-cache check-raylib pot msginit_FR msginit_EN msgfmt_FR msgfmt_EN
+.PHONY: all clean rebuild run info stats clean-cache check-raylib pot msginit_FR msginit_ES msgfmt_FR msgfmt_ES

@@ -9,7 +9,7 @@ extern "C" {
     #include <raylib.h>
 }
 
-const char* GameWonState::MENU_OPTIONS[2] = { N_("Volver a jugar"), N_("Volver al menú principal") };
+const char* GameWonState::MENU_OPTIONS[2] = { N_("Play again"), N_("Return to main menu") };
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
     int startY = screenHeight / 2;
@@ -66,7 +66,7 @@ void GameWonState::render() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
     
-    const char* title = _("¡HAS GANADO!");
+    const char* title = _("YOU WON!");
     int titleFontSize = 50;
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
     Vector2 titlePos = { (screenWidth - titleSize.x) / 2.0f, (float)screenHeight / 4.0f - titleSize.y / 2.0f };

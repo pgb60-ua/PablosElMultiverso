@@ -6,6 +6,7 @@
 #include "StateMachine.hpp"
 #include "Types.hpp"
 #include "WeaponFactory.hpp"
+#include "I18N.hpp"
 #include "raylib.h"
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
@@ -240,7 +241,7 @@ void ShopState::render()
     DrawRectangle(0, 0, screenWidth, headerHeight, Color{40, 40, 60, 255});
     DrawRectangle(0, headerHeight - 3, screenWidth, 3, Color{255, 200, 0, 255});
 
-    DrawText("SHOP", screenWidth / 2 - MeasureText("SHOP", 40) / 2, 20, 40, Color{255, 200, 0, 255});
+    DrawText(_("SHOP"), screenWidth / 2 - MeasureText(_("SHOP"), 40) / 2, 20, 40, Color{255, 200, 0, 255});
 
     // Pablo Coins con icono
     int coinsX = screenWidth - 250;
@@ -259,7 +260,7 @@ void ShopState::render()
     DrawRectangle(statsX, statsY, statsWidth, statsHeight, Color{30, 30, 45, 255});
 
     // Título del panel
-    DrawText("PLAYER STATS", statsX + 20, statsY + 15, 24, Color{255, 200, 0, 255});
+    DrawText(_("PLAYER STATS"), statsX + 20, statsY + 15, 24, Color{255, 200, 0, 255});
     DrawLine(statsX + 20, statsY + 45, statsX + statsWidth - 20, statsY + 45, Color{255, 200, 0, 255});
 
     // Stats con mejor formato
@@ -286,22 +287,22 @@ void ShopState::render()
         statY += statSpacing;
     };
 
-    drawStatWithMultiplier("Max Health:", player->GetMaxHealth(), player->GetHealthModifier());
-    drawStatWithMultiplier("Movement Speed:", player->GetMovementSpeed(), player->GetMovementSpeedModifier());
-    drawStatWithMultiplier("Agility:", player->GetAgility(), player->GetAgilityModifier());
-    drawStatWithMultiplier("Attack Speed:", player->GetAttackSpeed(), player->GetAttackSpeedModifier());
-    drawStatWithMultiplier("Physical Damage:", player->GetPhysicalDamage(), player->GetPhysicalDamageModifier());
-    drawStatWithMultiplier("Magical Damage:", player->GetMagicDamage(), player->GetMagicDamageModifier());
-    drawStatWithMultiplier("Resistance:", player->GetResistance(), player->GetResistanceModifier());
-    drawStatWithMultiplier("Armor:", player->GetArmor(), player->GetArmorModifier());
-    drawStatWithMultiplier("Critical Chance:", player->GetCriticalChance(), player->GetCriticalChanceModifier());
-    drawStatWithMultiplier("Critical Damage:", player->GetCriticalDamage(), player->GetCriticalDamageModifier());
-    drawStatWithMultiplier("Health Regen:", player->GetHealthRegeneration(), player->GetHealthRegenerationModifier());
-    drawStatWithMultiplier("Life Steal:", player->GetLifeSteal(), player->GetLifeStealModifier());
+    drawStatWithMultiplier(_("Max Health:"), player->GetMaxHealth(), player->GetHealthModifier());
+    drawStatWithMultiplier(_("Movement Speed:"), player->GetMovementSpeed(), player->GetMovementSpeedModifier());
+    drawStatWithMultiplier(_("Agility:"), player->GetAgility(), player->GetAgilityModifier());
+    drawStatWithMultiplier(_("Attack Speed:"), player->GetAttackSpeed(), player->GetAttackSpeedModifier());
+    drawStatWithMultiplier(_("Physical Damage:"), player->GetPhysicalDamage(), player->GetPhysicalDamageModifier());
+    drawStatWithMultiplier(_("Magical Damage:"), player->GetMagicDamage(), player->GetMagicDamageModifier());
+    drawStatWithMultiplier(_("Resistance:"), player->GetResistance(), player->GetResistanceModifier());
+    drawStatWithMultiplier(_("Armor:"), player->GetArmor(), player->GetArmorModifier());
+    drawStatWithMultiplier(_("Critical Chance:"), player->GetCriticalChance(), player->GetCriticalChanceModifier());
+    drawStatWithMultiplier(_("Critical Damage:"), player->GetCriticalDamage(), player->GetCriticalDamageModifier());
+    drawStatWithMultiplier(_("Health Regen:"), player->GetHealthRegeneration(), player->GetHealthRegenerationModifier());
+    drawStatWithMultiplier(_("Life Steal:"), player->GetLifeSteal(), player->GetLifeStealModifier());
 
     // Panel de armas del jugador (debajo del panel de stats)
     int weaponsY = statY + 20;
-    DrawText("WEAPONS", statsX + 20, weaponsY, 20, Color{255, 200, 0, 255});
+    DrawText(_("WEAPONS"), statsX + 20, weaponsY, 20, Color{255, 200, 0, 255});
     DrawLine(statsX + 20, weaponsY + 25, statsX + statsWidth - 20, weaponsY + 25, Color{255, 200, 0, 255});
 
     int weaponSlotSize = 70;
@@ -366,7 +367,7 @@ void ShopState::render()
             // Dibujar slot vacío
             DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, Color{80, 80, 100, 255});
             DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{60, 60, 70, 255});
-            DrawText("EMPTY", weaponX + 10, weaponY + weaponSlotSize / 2 - 7, 12, Color{120, 120, 130, 255});
+            DrawText(_("EMPTY"), weaponX + 10, weaponY + weaponSlotSize / 2 - 7, 12, Color{120, 120, 130, 255});
         }
     }
 
@@ -381,7 +382,7 @@ void ShopState::render()
     DrawRectangle(itemsX, itemsY, itemsWidth, itemsHeight, Color{30, 30, 45, 255});
 
     // Título del panel
-    DrawText("AVAILABLE ITEMS", itemsX + 20, itemsY + 15, 24, Color{255, 200, 0, 255});
+    DrawText(_("AVAILABLE ITEMS"), itemsX + 20, itemsY + 15, 24, Color{255, 200, 0, 255});
     DrawLine(itemsX + 20, itemsY + 45, itemsX + itemsWidth - 20, itemsY + 45, Color{255, 200, 0, 255});
 
     // Items
@@ -448,10 +449,10 @@ void ShopState::render()
 
         // Nombre del item
         int textX = itemsX + 100;
-        DrawText(slot.item->GetName().c_str(), textX, slotY + 10, 22, Color{255, 255, 255, 255});
+        DrawText(_(slot.item->GetName().c_str()), textX, slotY + 10, 22, Color{255, 255, 255, 255});
 
         // Descripción del item (truncada si es muy larga)
-        std::string description = slot.item->GetDescription();
+        std::string description = _(slot.item->GetDescription().c_str());
         int maxDescriptionWidth = itemsWidth - 220; // Dejar espacio para el precio
         int descriptionWidth = MeasureText(description.c_str(), 14);
 
@@ -475,27 +476,27 @@ void ShopState::render()
         {
         case ItemRarity::Common:
             rarityColor = Color{150, 150, 150, 255};
-            rarityText = "COMMON";
+            rarityText = _("COMMON");
             break;
         case ItemRarity::Uncommon:
             rarityColor = Color{100, 255, 100, 255};
-            rarityText = "UNCOMMON";
+            rarityText = _("UNCOMMON");
             break;
         case ItemRarity::Rare:
             rarityColor = Color{100, 150, 255, 255};
-            rarityText = "RARE";
+            rarityText = _("RARE");
             break;
         case ItemRarity::Epic:
             rarityColor = Color{200, 100, 255, 255};
-            rarityText = "EPIC";
+            rarityText = _("EPIC");
             break;
         case ItemRarity::Legendary:
             rarityColor = Color{255, 180, 50, 255};
-            rarityText = "LEGENDARY";
+            rarityText = _("LEGENDARY");
             break;
         default:
             rarityColor = WHITE;
-            rarityText = "UNKNOWN";
+            rarityText = _("UNKNOWN");
             break;
         }
 
@@ -506,7 +507,7 @@ void ShopState::render()
         if (isWeapon)
         {
             int weaponTagX = rarityX + MeasureText(rarityText, 12) + 10;
-            DrawText("WEAPON", weaponTagX, slotY + 55, 12, Color{255, 200, 100, 255});
+            DrawText(_("WEAPON"), weaponTagX, slotY + 55, 12, Color{255, 200, 100, 255});
         }
 
         // Precio
@@ -518,7 +519,7 @@ void ShopState::render()
         // Indicador si está bloqueado
         if (slot.isBlocked)
         {
-            DrawText("BLOCKED", itemsX + 25, slotY + itemSlotHeight - 20, 14, Color{255, 100, 100, 255});
+            DrawText(_("BLOCKED"), itemsX + 25, slotY + itemSlotHeight - 20, 14, Color{255, 100, 100, 255});
         }
 
         // Stats del item (mostrar solo si está seleccionado)
@@ -546,24 +547,24 @@ void ShopState::render()
             };
 
             // Mostrar stats ofensivas
-            drawStat("PHY", itemStats.GetPhysicalDamage());
-            drawStat("MAG", itemStats.GetMagicDamage());
-            drawStat("AS", itemStats.GetAttackSpeed());
-            drawStat("CC", itemStats.GetCriticalChance());
-            drawStat("CD", itemStats.GetCriticalDamage());
-            drawStat("LS", itemStats.GetLifeSteal());
+            drawStat(_("PHY"), itemStats.GetPhysicalDamage());
+            drawStat(_("MAG"), itemStats.GetMagicDamage());
+            drawStat(_("AS"), itemStats.GetAttackSpeed());
+            drawStat(_("CC"), itemStats.GetCriticalChance());
+            drawStat(_("CD"), itemStats.GetCriticalDamage());
+            drawStat(_("LS"), itemStats.GetLifeSteal());
 
             // Nueva línea para stats defensivas
             statsOffset = 0;
             statsTextY += 13;
 
-            drawStat("HP", itemStats.GetHealth());
-            drawStat("MHP", itemStats.GetMaxHealth());
-            drawStat("MS", itemStats.GetMovementSpeed());
-            drawStat("AGI", itemStats.GetAgility());
-            drawStat("ARM", itemStats.GetArmor());
-            drawStat("RES", itemStats.GetResistance());
-            drawStat("HR", itemStats.GetHealthRegeneration());
+            drawStat(_("HP"), itemStats.GetHealth());
+            drawStat(_("MHP"), itemStats.GetMaxHealth());
+            drawStat(_("MS"), itemStats.GetMovementSpeed());
+            drawStat(_("AGI"), itemStats.GetAgility());
+            drawStat(_("ARM"), itemStats.GetArmor());
+            drawStat(_("RES"), itemStats.GetResistance());
+            drawStat(_("HR"), itemStats.GetHealthRegeneration());
         }
     }
 
@@ -581,7 +582,7 @@ void ShopState::render()
                   rerollBorderColor);
     DrawRectangle(rerollButtonX, rerollButtonY, rerollButtonWidth, rerollButtonHeight, rerollBgColor);
 
-    const char *rerollText = TextFormat("[R] Reroll $%d", REROLL_COST);
+    const char *rerollText = TextFormat(_("[R] Reroll $%d"), REROLL_COST);
     DrawText(rerollText, rerollButtonX + rerollButtonWidth / 2 - MeasureText(rerollText, 16) / 2, rerollButtonY + 12,
              16, WHITE);
 
@@ -598,7 +599,7 @@ void ShopState::render()
                   continueBorderColor);
     DrawRectangle(continueButtonX, continueButtonY, continueButtonWidth, continueButtonHeight, continueBgColor);
 
-    const char *continueText = "[E] Continue";
+    const char *continueText = _("[E] Continue");
     DrawText(continueText, continueButtonX + continueButtonWidth / 2 - MeasureText(continueText, 16) / 2,
              continueButtonY + 12, 16, WHITE);
 
@@ -607,7 +608,7 @@ void ShopState::render()
     DrawRectangle(0, controlsY, screenWidth, 40, Color{40, 40, 60, 255});
     DrawRectangle(0, controlsY, screenWidth, 3, Color{255, 200, 0, 255});
     const char *controlsText =
-        "[W/S] Navigate  [ENTER/LEFT-CLICK] Buy  [SPACE/RIGHT-CLICK] Lock  [R] Reroll  [E] Continue";
+        _("[W/S] Navigate  [ENTER/LEFT-CLICK] Buy  [SPACE/RIGHT-CLICK] Lock  [R] Reroll  [E] Continue");
     DrawText(controlsText, screenWidth / 2 - MeasureText(controlsText, 16) / 2, controlsY + 12, 16,
              Color{200, 200, 200, 255});
 

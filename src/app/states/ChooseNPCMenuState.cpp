@@ -4,6 +4,7 @@
 #include "MainMenuState.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "StateMachine.hpp"
+#include "I18N.hpp"
 #include <string>
 extern "C"
 {
@@ -240,7 +241,7 @@ void ChooseNPCMenuState::render()
     int screenHeight = GetScreenHeight();
 
     // Dibujar título
-    DrawCenteredText("SELECCIONA TU PERSONAJE", 50.0f, 40, RAYWHITE);
+    DrawCenteredText(_("SELECT YOUR CHARACTER"), 50.0f, 40, RAYWHITE);
 
     if (!characters.empty() && currentCharacterIndex < static_cast<int>(characters.size()))
     {
@@ -272,13 +273,13 @@ void ChooseNPCMenuState::render()
         }
 
         // Dibujar nombre del personaje
-        DrawCenteredText(currentChar.name.c_str(), containerPos.y + DISPLAY_SIZE + 30.0f, 35, YELLOW);
+        DrawCenteredText(_(currentChar.name.c_str()), containerPos.y + DISPLAY_SIZE + 30.0f, 35, YELLOW);
 
         // Dibujar descripción si existe
         if (!currentChar.description.empty())
         {
             float descY = containerPos.y + DISPLAY_SIZE + 70.0f; // 30 + 40
-            DrawCenteredText(currentChar.description.c_str(), descY, 18, GRAY);
+            DrawCenteredText(_(currentChar.description.c_str()), descY, 18, GRAY);
         }
 
         // Dibujar flechas de navegación
@@ -290,7 +291,7 @@ void ChooseNPCMenuState::render()
     }
 
     // Instrucciones
-    DrawCenteredText("Flechas: Cambiar | ENTER: Confirmar | Q: Volver | ESC: Salir del Juego", screenHeight - 50.0f, 20,
+    DrawCenteredText(_("Arrows: Change | ENTER: Confirm | Q: Back | ESC: Exit Game"), screenHeight - 50.0f, 20,
                      DARKGRAY);
 
     DrawFPS(GetScreenWidth() - 100, 10);

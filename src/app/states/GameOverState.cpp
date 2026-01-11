@@ -9,7 +9,7 @@ extern "C" {
     #include <raylib.h>
 }
 
-const char* GameOverState::MENU_OPTIONS[2] = { N_("Volver a jugar"), N_("Volver al menú principal") };
+const char* GameOverState::MENU_OPTIONS[2] = { N_("Play again"), N_("Return to main menu") };
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
     int startY = screenHeight / 2;
@@ -67,7 +67,7 @@ void GameOverState::render() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
     
-    const char* title = _("¡HAS PERDIDO!");
+    const char* title = _("YOU LOST!");
     int titleFontSize = 50;
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
     Vector2 titlePos = { (screenWidth - titleSize.x) / 2.0f, (float)screenHeight / 4.0f - titleSize.y / 2.0f };

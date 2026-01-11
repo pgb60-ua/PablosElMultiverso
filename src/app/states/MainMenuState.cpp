@@ -8,7 +8,7 @@ extern "C"
 #include <raylib.h>
 }
 
-const char *MainMenuState::MENU_OPTIONS[2] = { N_("Jugar"), N_("Salir") };
+const char *MainMenuState::MENU_OPTIONS[2] = { N_("Play"), N_("Exit") };
 
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight)
@@ -80,7 +80,7 @@ void MainMenuState::render()
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    const char *title = _("PABLOS, EL MULTIVERSO");
+    const char *title = _("PABLOS, THE MULTIVERSE");
     int titleFontSize = 50;
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
     Vector2 titlePos = {(screenWidth - titleSize.x) / 2.0f, (float)screenHeight / 4.0f - titleSize.y / 2.0f};
