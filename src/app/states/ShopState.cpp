@@ -121,7 +121,7 @@ void ShopState::handleInput()
         int weaponStartY = weaponsY + 35;
 
         const auto &weapons = player->GetWeapons();
-        for (int i = 0; i < player->WEAPON_MAX && i < weapons.size(); i++)
+        for (int i = 0; i < player->WEAPON_MAX && static_cast<size_t>(i) < weapons.size(); i++)
         {
             int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
             int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
@@ -449,7 +449,7 @@ void ShopState::render()
         int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
         int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
 
-        if (i < weapons.size())
+        if (static_cast<size_t>(i) < weapons.size())
         {
             // Dibujar arma existente
             const auto &weapon = weapons[i];
@@ -547,7 +547,6 @@ void ShopState::render()
             // Stats del arma
             int statsY = tooltipY + 30;
             const Stats &weaponStats = weapon->GetStats();
-            Color statColor = Color{200, 200, 220, 255};
 
             auto drawWeaponStat = [&](const char *name, float value, int &currentY)
             {
