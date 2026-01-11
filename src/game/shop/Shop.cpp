@@ -12,7 +12,7 @@ Shop::Shop()
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> levelDist(1, 4); // Niveles entre 1 y 4
+    std::discrete_distribution<> levelDist(std::begin(WEAPON_LEVEL_WEIGHTS), std::end(WEAPON_LEVEL_WEIGHTS));
 
     for (size_t i = 0; i < randomItems.size() && i < MAX_ITEMS_SHOP; ++i)
     {
@@ -24,7 +24,7 @@ Shop::Shop()
             bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
             if (isWeapon)
             {
-                weaponLevel = levelDist(gen);
+                weaponLevel = levelDist(gen) + 1; // +1 porque devuelve 0-3 y queremos 1-4
             }
         }
 
@@ -48,7 +48,7 @@ void Shop::reRoll()
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> levelDist(1, 4); // Niveles entre 1 y 4
+    std::discrete_distribution<> levelDist(std::begin(WEAPON_LEVEL_WEIGHTS), std::end(WEAPON_LEVEL_WEIGHTS));
 
     for (size_t i = 0; i < MAX_ITEMS_SHOP; ++i)
     {
@@ -66,7 +66,7 @@ void Shop::reRoll()
                 bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
                 if (isWeapon)
                 {
-                    weaponLevel = levelDist(gen);
+                    weaponLevel = levelDist(gen) + 1; // +1 porque devuelve 0-3 y queremos 1-4
                 }
             }
             shopPool[i].weaponLevel = weaponLevel;

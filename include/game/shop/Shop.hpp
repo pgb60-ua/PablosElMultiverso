@@ -8,6 +8,9 @@ class Shop
 
 public:
     constexpr static int MAX_ITEMS_SHOP = 5;
+    // Distribución de probabilidad de niveles de armas: Nivel 1 (50%), Nivel 2 (30%), Nivel 3 (15%), Nivel 4 (5%)
+    constexpr static int WEAPON_LEVEL_WEIGHTS[4] = {70, 15, 10, 5};
+
     Shop();
     ~Shop();
     void reRoll();
