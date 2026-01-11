@@ -7,6 +7,7 @@
 #include "StateMachine.hpp"
 #include "Types.hpp"
 #include "WeaponFactory.hpp"
+#include "spdlog/spdlog.h"
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
 ShopState::~ShopState() {}
@@ -291,7 +292,7 @@ void ShopState::update(float deltaTime)
                 WEAPON_TYPE weaponType = ItemTypeToWeaponType(slot.item->GetType());
                 if (!player->CanAcceptWeapon(weaponType))
                 {
-                    // No puede comprar esta arma (todas las armas del mismo tipo están al máximo)
+                    // No puede comprar esta arma (todas las armas del mismo tipo estan a mas de level 1)
                     willBuy = false;
                     return;
                 }
@@ -334,6 +335,14 @@ void ShopState::update(float deltaTime)
     }
     if (willFuse)
     {
+        if (player->GetWeapons().size() > 1)
+        {
+            int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
+            if (player->CanFuse(weaponIndex))
+            {
+                player->UpgradeWeapon(weaponIndex);
+            }
+        }
         willFuse = false;
     }
     // Vendo si tengo mas de 1 arma
