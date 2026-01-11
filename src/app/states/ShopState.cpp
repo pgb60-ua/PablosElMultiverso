@@ -632,11 +632,16 @@ void ShopState::render()
             Color fuseTextColor = isMaxLevel ? Color{120, 120, 130, 255} : WHITE;
             DrawText(fuseText, buttonsX + (buttonWidth - fuseTextWidth) / 2, button1Y + 8, 14, fuseTextColor);
 
-            // Leyenda de tecla dentro del botón
-            const char *enterText = "[ENTER]";
-            int enterTextWidth = MeasureText(enterText, 10);
-            DrawText(enterText, buttonsX + (buttonWidth - enterTextWidth) / 2, button1Y + 26, 10,
-                     Color{120, 120, 120, 255});
+            // Si no es el maximo nivel de arma
+            if (!isMaxLevel)
+            {
+
+                // Leyenda de tecla dentro del botón
+                const char *enterText = "[ENTER]";
+                int enterTextWidth = MeasureText(enterText, 10);
+                DrawText(enterText, buttonsX + (buttonWidth - enterTextWidth) / 2, button1Y + 26, 10,
+                         Color{120, 120, 120, 255});
+            }
 
             // Botón 2: SELL (abajo)
             int button2Y = buttonsStartY + buttonHeight + buttonSpacing;
