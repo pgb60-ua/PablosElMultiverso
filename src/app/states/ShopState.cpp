@@ -220,32 +220,51 @@ void ShopState::handleInput()
                 break;
             }
         }
+    }
 
-        // Verificar clic derecho en armas del inventario para vender
-        int weaponSlotSize = 70;
-        int weaponSlotSpacing = 10;
-        int weaponsPerRow = 5;
-
-        // Calcular posición del panel de armas (mismo cálculo que en render)
-        int statSpacing = 25;
-        int weaponPanelY = (headerHeight + 20) + 60;
-        int weaponsY = weaponPanelY + 12 * statSpacing + 20;
-        int weaponStartX = statsX + 20;
-        int weaponStartY = weaponsY + 35;
-
+    // Clic izquierdo en el botón SELL del tooltip
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && selectedItem >= Shop::MAX_ITEMS_SHOP)
+    {
+        int weaponIndex = selectedItem - Shop::MAX_ITEMS_SHOP;
         const auto &weapons = player->GetWeapons();
-        for (int i = 0; i < player->WEAPON_MAX && i < weapons.size(); i++)
+
+        if (weaponIndex >= 0 && weaponIndex < weapons.size())
         {
-            int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
-            int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+            // Calcular posición del tooltip y botones (mismo cálculo que en render)
+            int statsX = 40;
+            int statsWidth = screenWidth * 0.35f;
+            int tooltipX = statsX + 20;
+            int tooltipWidth = statsWidth - 40;
+            int tooltipHeight = 120;
 
-            Rectangle weaponRect = {(float)weaponX, (float)weaponY, (float)weaponSlotSize, (float)weaponSlotSize};
+            int statSpacing = 25;
+            int weaponPanelY = (headerHeight + 20) + 60;
+            int weaponsY = weaponPanelY + 12 * statSpacing + 20;
+            int weaponSlotSize = 70;
+            int weaponSlotSpacing = 10;
+            int weaponStartY = weaponsY + 35;
+            int tooltipY = weaponStartY + weaponSlotSize + weaponSlotSpacing + 15;
 
-            if (CheckCollisionPointRec(mousePos, weaponRect))
+            // Configuración de botones
+            int buttonWidth = 80;
+            int buttonHeight = 45;
+            int buttonSpacing = 10;
+            int totalButtons = 2;
+            int buttonsAreaHeight = (buttonHeight * totalButtons) + (buttonSpacing * (totalButtons - 1));
+            int buttonsX = tooltipX + tooltipWidth - buttonWidth - 10;
+
+            int statsY = tooltipY + 30;
+            int statsAreaHeight = (tooltipY + tooltipHeight - 25) - statsY;
+            int buttonsStartY = statsY + (statsAreaHeight - buttonsAreaHeight) / 2;
+
+            // Botón SELL está abajo
+            int button2Y = buttonsStartY + buttonHeight + buttonSpacing;
+
+            Rectangle sellButtonRect = {(float)buttonsX, (float)button2Y, (float)buttonWidth, (float)buttonHeight};
+
+            if (CheckCollisionPointRec(mousePos, sellButtonRect))
             {
-                selectedItem = Shop::MAX_ITEMS_SHOP + i;
                 willSell = true;
-                break;
             }
         }
     }
