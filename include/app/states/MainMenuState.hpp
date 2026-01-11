@@ -7,8 +7,8 @@ extern "C" {
 class MainMenuState : public GameState {
 
     protected:
-        static const char *MENU_OPTIONS[2];
-        static constexpr int OPTION_COUNT = 2;
+        static const char *MENU_OPTIONS[3];
+        static constexpr int OPTION_COUNT = 3;
         int selectedOption = 0;
         const Color SELECTED_BOX_COLOR = {150, 30, 30, 255};
         const Color UNSELECTED_BOX_COLOR = {60, 60, 60, 255};
@@ -28,7 +28,7 @@ class MainMenuState : public GameState {
         virtual void pause() override;
         virtual void resume() override;
 
-        static const int BOX_WIDTH = 200;
+        static const int BOX_WIDTH = 350;
         static const int BOX_HEIGHT = 60;
         static const int BOX_SPACING = 40;
 };

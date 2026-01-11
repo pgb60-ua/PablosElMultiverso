@@ -1,5 +1,6 @@
 #include "MainMenuState.hpp"
 #include "ChooseNPCMenuState.hpp"
+#include "LanguageMenuState.hpp"
 #include "StateMachine.hpp"
 #include <string>
 #include "I18N.hpp"
@@ -8,7 +9,7 @@ extern "C"
 #include <raylib.h>
 }
 
-const char *MainMenuState::MENU_OPTIONS[2] = { N_("Play"), N_("Exit") };
+const char *MainMenuState::MENU_OPTIONS[3] = { N_("Play"), N_("Change Language"), N_("Exit") };
 
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight)
@@ -41,6 +42,10 @@ void MainMenuState::handleInput()
         {
             state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
         }
+        else if (selectedOption == 1)
+        {
+            state_machine->add_state(std::make_unique<LanguageMenuState>(), false);
+        }
         else
         {
             state_machine->remove_state(true);
@@ -61,6 +66,10 @@ void MainMenuState::handleInput()
                 if (selectedOption == 0)
                 {
                     state_machine->add_state(std::make_unique<ChooseNPCMenuState>(), true);
+                }
+                else if (selectedOption == 1)
+                {
+                    state_machine->add_state(std::make_unique<LanguageMenuState>(), false);
                 }
                 else
                 {
@@ -97,8 +106,10 @@ void MainMenuState::render()
         DrawRectangleLinesEx(btn, 2, outlineColor);
         Vector2 textSize = MeasureTextEx(GetFontDefault(), _(MainMenuState::MENU_OPTIONS[i]), 30, 1);
 
-        DrawText(_(MainMenuState::MENU_OPTIONS[i]), (int)btn.x + (btn.width - textSize.x) / 2, (int)btn.y + (btn.height - textSize.y) / 2,
-                 30, textColor);
+        float textX = btn.x + (btn.width - textSize.x) / 2.0f;
+        float textY = btn.y + (btn.height - textSize.y) / 2.0f;
+
+        DrawTextEx(GetFontDefault(), _(MainMenuState::MENU_OPTIONS[i]), {textX, textY}, 30, 1, textColor);
     }
     DrawFPS(GetScreenWidth() - 100, 10);
     EndDrawing();
