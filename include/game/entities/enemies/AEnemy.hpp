@@ -79,8 +79,7 @@ public:
     // Botín y Economía
     /*--------------------------*/
 
-    /// @brief Suelta Pablo Coins al morir
-    /// @return Cantidad de Pablo Coins que suelta
+    /// @brief Distribuye Pablo Coins a todos los jugadores vivos al morir
     virtual void DropLoot();
 
     /// @brief Establece la cantidad de Pablo Coins que suelta al morir
