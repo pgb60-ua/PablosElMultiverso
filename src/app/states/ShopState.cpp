@@ -227,11 +227,11 @@ void ShopState::update(float deltaTime)
                     player->ModifyPabloCoins(-item->GetPrice());
 
                     // Crear el arma usando la factory
-                    auto weapon = WeaponFactory::CreateWeapon(item->GetType(), player->GetPosition(),
-                                                              player->enemiesInRange, player->allEnemies);
+                    auto weapon =
+                        WeaponFactory::CreateWeapon(item->GetType(), player->GetPosition(), player->enemiesInRange,
+                                                    player->allEnemies, item->GetPrice());
                     if (weapon != nullptr)
                     {
-                        weapon->SetPrice(item->GetPrice());
                         player->AddWeapon(std::move(weapon));
                     }
                 }
