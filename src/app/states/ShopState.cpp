@@ -926,7 +926,7 @@ void ShopState::NextSelectedItem(int direction)
     // Si llegamos aquí, no hay items válidos en esa dirección, no hacemos nada
 }
 
-// Me pasan -1 / 1 para izquierda
+// Navigate weapon selection: direction = -1 for left, 1 for right
 void ShopState::NextWeaponSelected(int direction)
 {
     int size = player->GetWeapons().size();
