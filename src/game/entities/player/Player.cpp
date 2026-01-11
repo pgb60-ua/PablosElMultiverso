@@ -122,11 +122,14 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
     else
     {
         WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
+        int newWeaponPrice = newWeapon->GetPrice(); // Obtener precio antes de que se destruya
 
         for (auto &weapon : weapons)
         {
             if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() < weapon->GetMaxLevel())
             {
+                // Acumular el precio del arma comprada al precio del arma existente
+                weapon->SetPrice(weapon->GetPrice() + newWeaponPrice);
                 weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats());
                 break;
             }
