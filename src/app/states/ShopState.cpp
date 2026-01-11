@@ -291,15 +291,25 @@ void ShopState::update(float deltaTime)
     if (willBuy)
     {
         const TShopSlot &slot = shop.GetItemsShop()[selectedItem];
-        if (slot.item != nullptr && !slot.isBuyed && player->GetPabloCoins() >= slot.item->GetPrice())
+
+        // Calcular precio final (ajustado por nivel si es arma)
+        int finalPrice = slot.item->GetPrice();
+        bool isWeapon = IsWeaponType(slot.item->GetType());
+        if (isWeapon)
+        {
+            finalPrice *= slot.weaponLevel;
+        }
+
+        if (slot.item != nullptr && !slot.isBuyed && player->GetPabloCoins() >= finalPrice)
         {
             // Verificar ANTES de comprar si es un arma y si se puede aceptar
-            if (IsWeaponType(slot.item->GetType()))
+            if (isWeapon)
             {
                 WEAPON_TYPE weaponType = ItemTypeToWeaponType(slot.item->GetType());
-                if (!player->CanAcceptWeapon(weaponType))
+                int weaponLevel = slot.weaponLevel;
+                if (!player->CanAcceptWeapon(weaponType, weaponLevel))
                 {
-                    // No puede comprar esta arma (todas las armas del mismo tipo estan a mas de level 1)
+                    // No puede comprar esta arma (todas las armas del mismo tipo estan a mas de level que este)
                     willBuy = false;
                     return;
                 }
@@ -308,14 +318,14 @@ void ShopState::update(float deltaTime)
             const Item *item = shop.BuyItem(selectedItem);
             if (item != nullptr)
             {
-                if (IsWeaponType(item->GetType()))
+                if (isWeapon)
                 {
-                    player->ModifyPabloCoins(-item->GetPrice());
+                    player->ModifyPabloCoins(-finalPrice);
 
-                    // Crear el arma usando la factory
+                    // Crear el arma usando la factory con el nivel del slot
                     auto weapon =
                         WeaponFactory::CreateWeapon(item->GetType(), player->GetPosition(), player->enemiesInRange,
-                                                    player->allEnemies, item->GetPrice());
+                                                    player->allEnemies, finalPrice, slot.weaponLevel);
                     if (weapon != nullptr)
                     {
                         player->AddWeapon(std::move(weapon));
@@ -323,7 +333,7 @@ void ShopState::update(float deltaTime)
                 }
                 else
                 {
-                    player->ModifyPabloCoins(-item->GetPrice());
+                    player->ModifyPabloCoins(-finalPrice);
                     player->AddItem(item);
                 }
             }
@@ -843,16 +853,49 @@ void ShopState::render()
         {
             int weaponTagX = rarityX + MeasureText(rarityText, 12) + 10;
             DrawText("WEAPON", weaponTagX, slotY + 55, 12, Color{255, 200, 100, 255});
+
+            // Mostrar nivel del arma
+            int levelTagX = weaponTagX + MeasureText("WEAPON", 12) + 10;
+
+            // Color del nivel según el nivel
+            Color levelColor;
+            switch (slot.weaponLevel)
+            {
+            case 1:
+                levelColor = Color{150, 150, 150, 255}; // Gris
+                break;
+            case 2:
+                levelColor = Color{100, 255, 100, 255}; // Verde
+                break;
+            case 3:
+                levelColor = Color{200, 100, 255, 255}; // Morado
+                break;
+            case 4:
+                levelColor = Color{255, 200, 50, 255}; // Amarillo/Dorado
+                break;
+            default:
+                levelColor = Color{150, 150, 150, 255}; // Gris por defecto
+                break;
+            }
+
+            DrawText(TextFormat("Lv%d", slot.weaponLevel), levelTagX, slotY + 55, 12, levelColor);
         }
 
-        // Precio
+        // Precio (ajustado por nivel si es arma)
+        int finalPrice = slot.item->GetPrice();
+        if (isWeapon)
+        {
+            // Multiplicador de precio por nivel: x1 (nivel 1), x2 (nivel 2), x3 (nivel 3), x4 (nivel 4)
+            finalPrice *= slot.weaponLevel;
+        }
+
         int priceX = itemsX + itemsWidth - 120;
         Rectangle coinFrame = coinSheet.frames[0];
 
         // Centrar verticalmente la moneda con el texto (20 es el tamaño de la fuente, slotY + 45 es la Y del texto)
         int coinYPrice = (slotY + 45) + (20 - (int)coinFrame.height) / 2;
         DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)coinYPrice}, WHITE);
-        DrawText(TextFormat("%d", slot.item->GetPrice()), priceX + 20, slotY + 45, 20, Color{255, 200, 0, 255});
+        DrawText(TextFormat("%d", finalPrice), priceX + 20, slotY + 45, 20, Color{255, 200, 0, 255});
 
         // Indicador si está bloqueado
         if (slot.isBlocked)
