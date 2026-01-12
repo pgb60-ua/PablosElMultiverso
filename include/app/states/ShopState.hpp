@@ -15,6 +15,33 @@ typedef struct
     Color tintColor;
 } TWeaponColor;
 
+// Struct para almacenar las constantes de layout de la tienda
+struct ShopLayout
+{
+    int screenWidth;
+    int screenHeight;
+    int headerHeight;
+    int statsX;
+    int statsY;
+    int statsWidth;
+    int statsHeight;
+    int itemsX;
+    int itemsY;
+    int itemsWidth;
+    int itemsHeight;
+    int itemSlotHeight;
+    int itemSlotSpacing;
+    int itemStartY;
+    int weaponSlotSize;
+    int weaponSlotSpacing;
+    int weaponsPerRow;
+    int statSpacing;
+    int weaponPanelY;
+    int weaponsY;
+    int weaponStartX;
+    int weaponStartY;
+};
+
 // Struct unificado para renderizar cualquier tipo de item (tienda o inventario)
 struct RenderableItem
 {
@@ -52,6 +79,7 @@ private:
     int CalculateWeaponSellPrice(int weaponIndex);
 
     // Funciones helper para renderizado unificado
+    ShopLayout CalculateLayout();
     TWeaponColor GetColorBasedOnWeaponLevel(int level);
     void RenderItemSlot(const RenderableItem &item, Rectangle slotRect, bool showFullInfo);
     void DrawItemSprite(const RenderableItem &item, int x, int y, int maxSize);
