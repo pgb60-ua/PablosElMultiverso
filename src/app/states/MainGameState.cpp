@@ -1,4 +1,5 @@
 #include "AxeWeapon.hpp"
+#include "SwordWeapon.hpp"
 #include "EggplosiveWeapon.hpp"
 #include "GameOverState.hpp"
 #include "GameWonState.hpp"

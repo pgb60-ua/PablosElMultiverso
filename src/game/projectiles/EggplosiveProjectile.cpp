@@ -37,6 +37,11 @@ void EggplosiveProjectile::update(float deltaTime)
     position.y += direction.y * stats.GetMovementSpeed() * deltaTime;
     setShapePosition(shape, position);
 
+    if (position.x < 0 || position.x > GetScreenWidth() || position.y < 0 || position.y > GetScreenHeight()){
+        deactivate();
+        return;
+    }
+
     for (auto &enemy : enemiesInScene)
     {
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
