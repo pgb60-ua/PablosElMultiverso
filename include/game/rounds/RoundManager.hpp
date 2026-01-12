@@ -15,6 +15,7 @@ private:
     std::vector<AEnemy*>& enemiesOnMap;
     std::vector<Player*>& players;
     std::vector<AEnemy*> CreateEnemiesForRound(const RoundInfo& roundInfo);
+    void ClearEnemiesFromMap();
     Round currentRound;
 public:
     RoundManager(const ROUND_TYPE roundType, std::vector<AEnemy*>& enemiesOnMap, std::vector<Player*>& players);
