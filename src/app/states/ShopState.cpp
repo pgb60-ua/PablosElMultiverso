@@ -175,7 +175,8 @@ void ShopState::DrawButton(Rectangle rect, const char *text, bool isEnabled, Col
     }
 }
 
-void ShopState::DrawStatWithMultiplier(const char *name, float value, float multiplier, int &y, int x, int spacing)
+void ShopState::DrawStatWithMultiplier(const char *name, float value, float multiplier, int &y, int x, int spacing,
+                                       int statsWidth)
 {
     Color multColor;
     if (multiplier < 1.0f)
@@ -190,7 +191,6 @@ void ShopState::DrawStatWithMultiplier(const char *name, float value, float mult
 
     DrawText(TextFormat("x%.2f", multiplier), x + 20, y, 12, multColor);
     DrawText(name, x + 75, y, 14, statColor);
-    int statsWidth = GetScreenWidth() * 0.35f;
     DrawText(TextFormat("%.1f", value), x + statsWidth - 80, y, 14, valueColor);
     y += spacing;
 }
@@ -786,29 +786,29 @@ void ShopState::render()
     int statY = layout.statsY + 60;
 
     DrawStatWithMultiplier("Max Health:", player->GetMaxHealth(), player->GetHealthModifier(), statY, layout.statsX,
-                           layout.statSpacing);
+                           layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Movement Speed:", player->GetMovementSpeed(), player->GetMovementSpeedModifier(), statY,
-                           layout.statsX, layout.statSpacing);
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Agility:", player->GetAgility(), player->GetAgilityModifier(), statY, layout.statsX,
-                           layout.statSpacing);
+                           layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Attack Speed:", player->GetAttackSpeed(), player->GetAttackSpeedModifier(), statY,
-                           layout.statsX, layout.statSpacing);
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Physical Damage:", player->GetPhysicalDamage(), player->GetPhysicalDamageModifier(), statY,
-                           layout.statsX, layout.statSpacing);
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Magical Damage:", player->GetMagicDamage(), player->GetMagicDamageModifier(), statY,
-                           layout.statsX, layout.statSpacing);
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Resistance:", player->GetResistance(), player->GetResistanceModifier(), statY,
-                           layout.statsX, layout.statSpacing);
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Armor:", player->GetArmor(), player->GetArmorModifier(), statY, layout.statsX,
-                           layout.statSpacing);
+                           layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Critical Chance:", player->GetCriticalChance(), player->GetCriticalChanceModifier(), statY,
-                           layout.statsX, layout.statSpacing);
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Critical Damage:", player->GetCriticalDamage(), player->GetCriticalDamageModifier(), statY,
-                           layout.statsX, layout.statSpacing);
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Health Regen:", player->GetHealthRegeneration(), player->GetHealthRegenerationModifier(),
-                           statY, layout.statsX, layout.statSpacing);
+                           statY, layout.statsX, layout.statSpacing, layout.statsWidth);
     DrawStatWithMultiplier("Life Steal:", player->GetLifeSteal(), player->GetLifeStealModifier(), statY, layout.statsX,
-                           layout.statSpacing);
+                           layout.statSpacing, layout.statsWidth);
 
     // Panel de armas del jugador (debajo del panel de stats)
     DrawText("WEAPONS", layout.statsX + 20, layout.weaponsY, 20, Color{255, 200, 0, 255});

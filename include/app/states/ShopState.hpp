@@ -9,11 +9,11 @@ extern "C"
 #include "raylib.h"
 }
 
-typedef struct
+struct TWeaponColor
 {
     Color borderColor;
     Color tintColor;
-} TWeaponColor;
+};
 
 // Struct para almacenar las constantes de layout de la tienda
 struct ShopLayout
@@ -85,7 +85,8 @@ private:
     void DrawItemSprite(const RenderableItem &item, int x, int y, int maxSize);
     void DrawButton(Rectangle rect, const char *text, bool isEnabled, Color enabledBg, Color disabledBg,
                     Color enabledBorder, Color disabledBorder, const char *keyHint = nullptr, int price = -1);
-    void DrawStatWithMultiplier(const char *name, float value, float multiplier, int &y, int x, int spacing);
+    void DrawStatWithMultiplier(const char *name, float value, float multiplier, int &y, int x, int spacing,
+                                int statsWidth);
 
 public:
     ShopState(Player *player);
