@@ -1,21 +1,21 @@
 #include "AxeWeapon.hpp"
-#include "SwordWeapon.hpp"
 #include "EggplosiveWeapon.hpp"
 #include "GameOverState.hpp"
 #include "GameWonState.hpp"
+#include "I18N.hpp"
 #include "LaserRayWeapon.hpp"
 #include "Player.hpp"
 #include "ShopState.hpp"
 #include "SniperWeapon.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "StateMachine.hpp"
+#include "SwordWeapon.hpp"
 #include "Types.hpp"
 #include "WeaponFactory.hpp"
 #include "WingWeapon.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
 #include <memory>
-#include "I18N.hpp"
 
 extern "C"
 {
@@ -156,22 +156,20 @@ void MainGameState::render()
     float textY = yBase + (rowH - fontSize) / 2.0f;
     float iconY = yBase + (rowH - iconH) / 2.0f;
     int textWidth = MeasureText(coinsText.c_str(), fontSize);
-    DrawText(coinsText.c_str(), 10, (int)textY, fontSize, YELLOW);
-    DrawTextureRec(coinSheet.texture, coinSheet.frames[0], {10.0f + textWidth + 6, iconY}, WHITE);
 
     // Renderizar todos los jugadores
+    const SpriteSheet &mapUpperSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
+    DrawTextureRec(mapUpperSprite.texture, mapUpperSprite.frames[0], {0, 0}, WHITE);
     for (auto &player : players)
     {
         player->Render();
         std::string healthText = _("Health: ") + std::to_string(static_cast<int>(player->GetHealth()));
-        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
-                 static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
+        DrawText(healthText.c_str(), 10, textY + 30, fontSize, GREEN);
     }
+    DrawText(coinsText.c_str(), 10, (int)textY, fontSize, YELLOW);
+    DrawTextureRec(coinSheet.texture, coinSheet.frames[0], {10.0f + textWidth + 6, iconY}, WHITE);
     roundManager.Render();
     DrawFPS(GetScreenWidth() - 100, 10);
-
-    const SpriteSheet &mapUpperSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
-    DrawTextureRec(mapUpperSprite.texture, mapUpperSprite.frames[0], {0, 0}, WHITE);
     EndDrawing();
 }
 
