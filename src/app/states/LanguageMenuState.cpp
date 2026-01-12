@@ -5,10 +5,9 @@
 #include <string>
 #include <cstdlib>
 #include <clocale>
-
+#include <libintl.h>
 extern "C" {
 #include <raylib.h>
-#include <libintl.h>
 }
 
 const char *LanguageMenuState::LANG_OPTIONS[3] = { "English", "Español", "Français" };

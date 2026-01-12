@@ -94,8 +94,8 @@ install: $(TARGET)
 	install -m 0755 $(TARGET) $(DESTDIR)$(BINDIR)/$(APP_NAME)
 	install -d $(DESTDIR)$(DATADIR)/assets
 	if [ -d "$(ASSETS_DIR)" ]; then cp -r $(ASSETS_DIR)/* $(DESTDIR)$(DATADIR)/assets/; fi
-	install -d $(DESTDIR)$(PREFIX)/share/locale
-	if [ -d "locale" ]; then cp -r locale/* $(DESTDIR)$(PREFIX)/share/locale/; fi
+	install -d $(DESTDIR)$(DATADIR)/share/locale
+	if [ -d "locale" ]; then cp -r locale/* $(DESTDIR)$(DATADIR)/share/locale/; fi
 
 # Regla de distribución
 dist:

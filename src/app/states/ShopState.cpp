@@ -8,7 +8,10 @@
 #include "Types.hpp"
 #include "WeaponFactory.hpp"
 #include "I18N.hpp"
+extern "C"
+{
 #include "raylib.h"
+}
 #include <cmath>
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
