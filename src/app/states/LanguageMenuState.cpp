@@ -13,28 +13,29 @@ extern "C" {
 const char *LanguageMenuState::LANG_OPTIONS[3] = { "English", "Español", "Français" };
 
 static void changeLanguage(const std::string& language) {
-    if (language == "en") {
-        SetEnvironmentVariable("LANGUAGE", "en_US");
-        SetEnvironmentVariable("LANG", "en_US.UTF-8");
-        SetEnvironmentVariable("LC_ALL", "en_US.UTF-8");
-    } else if (language == "es") {
-        SetEnvironmentVariable("LANGUAGE", "es_ES");
-        SetEnvironmentVariable("LANG", "es_ES.UTF-8");
-        SetEnvironmentVariable("LC_ALL", "es_ES.UTF-8");
-    } else if (language == "fr") {
-        SetEnvironmentVariable("LANGUAGE", "fr_FR");
-        SetEnvironmentVariable("LANG", "fr_FR.UTF-8");
-        SetEnvironmentVariable("LC_ALL", "fr_FR.UTF-8");
-    }
+    // Configurar LANGUAGE con prioridad: fr_FR:fr
+    std::string langCode = language; 
+    std::string countryCode = (language == "en" ? "US" : (language == "fr" ? "FR" : "ES")); 
+    std::string fullCode = langCode + "_" + countryCode; 
+    std::string langVar = fullCode + ":" + langCode;
+    
+    SetEnvironmentVariable("LANGUAGE", langVar);
 
-    std::string locale_str = language + "_" + (language == "en" ? "US" : (language == "fr" ? "FR" : "ES")) + ".UTF-8";
-    if (setlocale(LC_ALL, locale_str.c_str()) == nullptr) {
-        setlocale(LC_ALL, ""); 
+    // Intentar activar un locale UTF-8
+    std::string target = fullCode + ".UTF-8";
+    
+    if (setlocale(LC_ALL, target.c_str()) == nullptr) {
+        // Fallback robusto a cualquier UTF-8 disponible
+        if (setlocale(LC_ALL, "C.UTF-8") == nullptr) {
+             if (setlocale(LC_ALL, "en_US.UTF-8") == nullptr) {
+                 setlocale(LC_ALL, ""); 
+             }
+        }
     }
 
     bindtextdomain("pablos", GetLocalePath().c_str());
-    textdomain("pablos");
     bind_textdomain_codeset("pablos", "UTF-8");
+    textdomain("pablos");
 }
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
