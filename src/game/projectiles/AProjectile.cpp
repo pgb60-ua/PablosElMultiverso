@@ -20,7 +20,7 @@ void AProjectile::setRadius(float radius)
 
 void AProjectile::update(float deltaTime)
 {
-    if (!active || enemiesInScene.empty())
+    if (!active)
     {
         return;
     }
