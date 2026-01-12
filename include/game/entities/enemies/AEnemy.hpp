@@ -102,6 +102,8 @@ public:
 
     Stats GetStats() const { return stats; }
 
+    void Render() override;
+
     /// @brief Destructor virtual
     virtual ~AEnemy();
 };
