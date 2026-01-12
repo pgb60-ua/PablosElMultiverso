@@ -9,12 +9,12 @@
 	"movement_speed": 200,
 	"agility": 0,
 	"attack_speed": 1.0,
-	"physical_damage": 60,
-	"magical_damage": 10,
+	"physical_damage": 0,
+	"magical_damage": 50,
 	"resistance": 0,
 	"armor": 0,
 	"critical_chance": 15,
-	"critical_damage": 150,
+	"critical_damage": 1.5,
 	"life_steal": 5,
 	"health_regeneration": 0
 }

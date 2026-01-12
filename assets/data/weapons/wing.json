@@ -2,9 +2,9 @@
 	"name": "Wing",
 	"description": "A blade imbued with the power of the wind",
 	"level": 1,
-	"rarity": "Rare",
-	"price": 10,
-	"pool_size": 50,
+	"rarity": "Common",
+	"price": 100,
+	"pool_size": 150,
 	"health": 0,
 	"max_health": 0,
 	"movement_speed": 250,
@@ -15,7 +15,7 @@
 	"resistance": 0,
 	"armor": 0,
 	"critical_chance": 15,
-	"critical_damage": 1.5,
-	"life_steal": 5,
+	"critical_damage": 1.23,
+	"life_steal": 0,
 	"health_regeneration": 0
 }

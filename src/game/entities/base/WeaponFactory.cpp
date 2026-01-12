@@ -61,7 +61,7 @@ std::unique_ptr<AWeapon> WeaponFactory::CreateStartingWeapon(PLAYER_TYPE playerT
         weapon = std::make_unique<LaserRayWeapon>(position, enemiesInRange, allEnemies);
         break;
     case PLAYER_TYPE::RANGE:
-        weapon = std::make_unique<SniperWeapon>(position, enemiesInRange, allEnemies);
+        weapon = std::make_unique<WingWeapon>(position, enemiesInRange, allEnemies);
         break;
     case PLAYER_TYPE::HEALER:
         weapon = std::make_unique<EggplosiveWeapon>(position, enemiesInRange, allEnemies);

@@ -7,6 +7,6 @@ Darkin::Darkin(std::vector<Player *> players)
              SpriteLoaderManager::GetInstance().GetSpriteHitbox(
                  ENEMY_TYPE::DARKIN,
                  Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
-             ENEMY_TYPE::DARKIN, players, 30)
+             ENEMY_TYPE::DARKIN, players, 15)
 {
 }

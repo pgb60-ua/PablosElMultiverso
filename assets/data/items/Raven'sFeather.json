@@ -1,11 +1,11 @@
 {
 	"name": "Raven's Feather",
 	"description": "Grants incredible speed but weakens defenses",
-	"price": 180,
+	"price": 185,
 	"rarity": "Rare",
-	"movement_speed": 25,
-	"agility": 15,
-	"attack_speed": 0.3,
-	"armor": -10,
-	"resistance": -5
+	"movement_speed": 28,
+	"agility": 18,
+	"attack_speed": 0.35,
+	"armor": -12,
+	"resistance": -8
 }
