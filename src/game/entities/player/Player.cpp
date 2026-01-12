@@ -82,6 +82,8 @@ void Player::Update(float deltaTime)
     {
         weapons[i]->update(deltaTime, playerPos);
     }
+
+    Regeneration(deltaTime);
 }
 
 void Player::HandleInput(Vector2 newInputDirection)
