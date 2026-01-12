@@ -10,7 +10,7 @@ Zombie::Zombie(std::vector<Player *> objectives)
              SpriteLoaderManager::GetInstance().GetSpriteHitbox(
                  ENEMY_TYPE::ZOMBIE,
                  Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
-             objectives, 15)
+             ENEMY_TYPE::ZOMBIE, objectives, 15)
 {
     // Las stats se cargan automáticamente desde zombie.json en la lista de inicialización
 }
@@ -35,4 +35,4 @@ void Zombie::Render()
     animation.color = WHITE;
 }
 
-void Zombie::Update(float deltaTime) { AEnemy::Update(deltaTime, ENEMY_TYPE::ZOMBIE); }
+void Zombie::Update(float deltaTime) { AEnemy::Update(deltaTime); }

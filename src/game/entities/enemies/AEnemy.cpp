@@ -6,8 +6,9 @@
 #include <limits>
 #include <raymath.h>
 
-AEnemy::AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
-    : AEntity(stats, hitbox), objectives(objectives), pabloCoinsAtDeath(pabloCoinsAtDeath)
+AEnemy::AEnemy(Stats stats, const Shape &hitbox, ENEMY_TYPE type, std::vector<Player *> objectives,
+               int pabloCoinsAtDeath)
+    : AEntity(stats, hitbox), objectives(objectives), pabloCoinsAtDeath(pabloCoinsAtDeath), type(type)
 {
     s_allEnemies.push_back(this);
 
@@ -83,8 +84,6 @@ void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
         animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(enemyType).spriteFrameCount;
     }
 }
-
-void AEnemy::CheckCollisions(float deltaTime) {}
 
 Vector2 AEnemy::CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed)
 {
@@ -188,7 +187,7 @@ void AEnemy::Move(float deltaTime)
     SetPosition(newPos);
 }
 
-void AEnemy::Update(float deltaTime, ENEMY_TYPE type)
+void AEnemy::Update(float deltaTime)
 {
     currentAttackCooldownTime += deltaTime;
     Move(deltaTime);
