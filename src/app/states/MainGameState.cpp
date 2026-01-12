@@ -41,7 +41,7 @@ MainGameState::MainGameState() : MainGameState(PLAYER_TYPE::MAGE) {}
 void MainGameState::init()
 {
     // Reproducir música de fondo
-    AudioManager::GetInstance().PlayBackgroundMusic("bg_music.wav");
+    AudioManager::GetInstance().PlayBackgroundMusic("bg_music.ogg");
     
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
