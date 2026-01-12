@@ -22,6 +22,7 @@ void DataFileManager::SetAssetsRoot(const std::string &assetsRoot)
     BASE_PATH_ITEM = root + "data/items/";
     BASE_PATH_ENEMY = root + "data/enemies/";
     BASE_PATH_WEAPON = root + "data/weapons/";
+    BASE_PATH_ROUND = root + "data/rounds/";
 }
 
 void DataFileManager::DetectAndSetAssetsPath()

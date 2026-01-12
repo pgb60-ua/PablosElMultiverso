@@ -21,7 +21,9 @@ void AProjectile::setRadius(float radius)
 void AProjectile::update(float deltaTime)
 {
     if (!active)
+    {
         return;
+    }
 
     Vector2 position = getShapePosition(shape);
     position.x += direction.x * stats.GetMovementSpeed() * deltaTime;
