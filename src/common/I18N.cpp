@@ -21,8 +21,8 @@ std::string GetLocalePath() {
     else if (fs::exists("../locale") && fs::is_directory("../locale")) {
         p = "../locale";
     }
-    else if (fs::exists("/usr/share/pablos-el-multiverso/locale")) {
-        return "/usr/share/pablos-el-multiverso/locale";
+    else if (fs::exists("/usr/share/PablosElMultiverso/locale")) {
+        return "/usr/share/PablosElMultiverso/locale";
     }
     else if (fs::exists("/usr/share/locale")) {
         return "/usr/share/locale";

@@ -33,9 +33,9 @@ void SpriteLoaderManager::DetectAndSetAssetsPath()
             SetAssetsRoot("assets");
             return;
         }
-        if (fs::is_directory("/usr/share/pablos-el-multiverso/assets"))
+        if (fs::is_directory("/usr/share/PablosElMultiverso/assets"))
         {
-            SetAssetsRoot("/usr/share/pablos-el-multiverso/assets");
+            SetAssetsRoot("/usr/share/PablosElMultiverso/assets");
             return;
         }
     }
