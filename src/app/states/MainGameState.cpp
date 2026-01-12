@@ -171,7 +171,7 @@ void MainGameState::render()
     DrawTextureRec(mapUpperSprite.texture, mapUpperSprite.frames[0], {0, 0}, WHITE);
     for (auto &player : players)
     {
-        std::string healthText = "Vida: " + std::to_string(static_cast<int>(player->GetHealth()));
+        std::string healthText = _("Health: ") + std::to_string(static_cast<int>(player->GetHealth()));
         DrawText(healthText.c_str(), 10, textY + 30, fontSize, GREEN);
     }
     EndDrawing();
