@@ -38,12 +38,7 @@ void AProjectile::update(float deltaTime)
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
             enemy->TakeDamage(stats);
-            if (!enemy->IsAlive())
-            {
-                enemy->DropLoot();
-                delete enemy;
-                enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));
-            }
+            // La limpieza de enemigos muertos es responsabilidad de Round::Update
             deactivate();
             break;
         }
