@@ -29,10 +29,10 @@ public:
     void PlaySound(WEAPON_TYPE type);
 
     /// @brief Obtiene el sonido para un tipo de enemigo
-    const Sound &GetEnemySound(ENEMY_TYPE type);
+    const Sound &GetEnemySound();
 
     /// @brief Reproduce un sonido por tipo de enemigo
-    void PlayEnemySound(ENEMY_TYPE type);
+    void PlayEnemySound();
 
     /// @brief Carga y reproduce música de fondo en loop
     void PlayBackgroundMusic(const std::string &musicFile);
@@ -73,7 +73,7 @@ private:
 
     std::string GetFilePath(PROJECTILE_TYPE type) const;
     std::string GetFilePath(WEAPON_TYPE type) const;
-    std::string GetFilePath(ENEMY_TYPE type) const;
+    std::string GetFilePathEnemy() const;
 
     std::unordered_map<int, Sound> weaponSoundsCache;
     std::unordered_map<int, Sound> enemySoundsCache;

@@ -174,9 +174,9 @@ std::string AudioManager::GetFilePath(WEAPON_TYPE type) const
     }
 }
 
-const Sound &AudioManager::GetEnemySound(ENEMY_TYPE type)
+const Sound &AudioManager::GetEnemySound()
 {
-    int typeKey = static_cast<int>(type);
+    int typeKey = 0;
 
     // Verificar si el sonido ya está en caché
     if (enemySoundsCache.find(typeKey) != enemySoundsCache.end())
@@ -185,7 +185,7 @@ const Sound &AudioManager::GetEnemySound(ENEMY_TYPE type)
     }
 
     // Cargar el sonido
-    std::string filePath = GetFilePath(type);
+    std::string filePath = GetFilePathEnemy();
     Sound sound = LoadSound(filePath.c_str());
 
     if (!IsSoundValid(sound))
@@ -197,12 +197,12 @@ const Sound &AudioManager::GetEnemySound(ENEMY_TYPE type)
     return enemySoundsCache[typeKey];
 }
 
-void AudioManager::PlayEnemySound(ENEMY_TYPE type)
+void AudioManager::PlayEnemySound()
 {
     try
     {
-        const Sound &sound = GetEnemySound(type);
-        int typeKey = static_cast<int>(type);
+        const Sound &sound = GetEnemySound();
+        int typeKey = 0;
         
         if (enemyAliasPools.find(typeKey) == enemyAliasPools.end())
         {
@@ -263,7 +263,7 @@ void AudioManager::UpdateMusic()
     }
 }
 
-std::string AudioManager::GetFilePath(ENEMY_TYPE type) const
+std::string AudioManager::GetFilePathEnemy() const
 {
     std::string basePath = assetsRoot.empty() ? BASE_PATH_ENEMY_SOUNDS : assetsRoot + BASE_PATH_ENEMY_SOUNDS;
     return basePath + "enemy.wav";
