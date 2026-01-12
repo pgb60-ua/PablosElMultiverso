@@ -3,6 +3,7 @@
 #include "EggplosiveWeapon.hpp"
 #include "LaserRayWeapon.hpp"
 #include "SniperWeapon.hpp"
+#include "SwordWeapon.hpp"
 #include "Types.hpp"
 #include "WingWeapon.hpp"
 
@@ -29,6 +30,9 @@ std::unique_ptr<AWeapon> WeaponFactory::CreateWeapon(ITEM_TYPE itemType, const V
     case ITEM_TYPE::WEAPON_AXE:
         weapon = std::make_unique<AxeWeapon>(position, enemiesInRange, allEnemies);
         break;
+    case ITEM_TYPE::WEAPON_SWORD:
+        weapon = std::make_unique<SwordWeapon>(position, enemiesInRange, allEnemies);
+        break;
     default:
         return nullptr;
     }
@@ -51,7 +55,7 @@ std::unique_ptr<AWeapon> WeaponFactory::CreateStartingWeapon(PLAYER_TYPE playerT
     switch (playerType)
     {
     case PLAYER_TYPE::WARRIOR:
-        weapon = std::make_unique<AxeWeapon>(position, enemiesInRange, allEnemies);
+        weapon = std::make_unique<SwordWeapon>(position, enemiesInRange, allEnemies);
         break;
     case PLAYER_TYPE::MAGE:
         weapon = std::make_unique<LaserRayWeapon>(position, enemiesInRange, allEnemies);
