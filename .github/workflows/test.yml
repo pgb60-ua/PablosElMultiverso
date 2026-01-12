@@ -1,4 +1,4 @@
-name: C++ Tests
+name: Test PablosElMultiverso
 
 on:
   pull_request:
