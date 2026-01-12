@@ -16,16 +16,21 @@ static void changeLanguage(const std::string& language) {
     if (language == "en") {
         SetEnvironmentVariable("LANGUAGE", "en_US");
         SetEnvironmentVariable("LANG", "en_US.UTF-8");
+        SetEnvironmentVariable("LC_ALL", "en_US.UTF-8");
     } else if (language == "es") {
         SetEnvironmentVariable("LANGUAGE", "es_ES");
         SetEnvironmentVariable("LANG", "es_ES.UTF-8");
+        SetEnvironmentVariable("LC_ALL", "es_ES.UTF-8");
     } else if (language == "fr") {
         SetEnvironmentVariable("LANGUAGE", "fr_FR");
         SetEnvironmentVariable("LANG", "fr_FR.UTF-8");
+        SetEnvironmentVariable("LC_ALL", "fr_FR.UTF-8");
     }
 
     std::string locale_str = language + "_" + (language == "en" ? "US" : (language == "fr" ? "FR" : "ES")) + ".UTF-8";
-    setlocale(LC_ALL, locale_str.c_str());
+    if (setlocale(LC_ALL, locale_str.c_str()) == nullptr) {
+        setlocale(LC_ALL, ""); 
+    }
 
     bindtextdomain("pablos", GetLocalePath().c_str());
     textdomain("pablos");

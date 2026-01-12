@@ -14,21 +14,26 @@ void SetEnvironmentVariable(const std::string& name, const std::string& value) {
 }
 
 std::string GetLocalePath() {
+    fs::path p;
     if (fs::exists("locale") && fs::is_directory("locale")) {
-        return "./locale";
+        p = "locale";
     }
-
-    if (fs::exists("../locale") && fs::is_directory("../locale")) {
-        return "../locale";
+    else if (fs::exists("../locale") && fs::is_directory("../locale")) {
+        p = "../locale";
     }
-
-    if (fs::exists("/usr/share/pablos-el-multiverso/locale")) {
+    else if (fs::exists("/usr/share/pablos-el-multiverso/locale")) {
         return "/usr/share/pablos-el-multiverso/locale";
     }
-    
-    if (fs::exists("/usr/share/locale")) {
+    else if (fs::exists("/usr/share/locale")) {
         return "/usr/share/locale";
     }
-
-    return "./locale";
+    else {
+        p = "./locale"; // Default fallback
+    }
+    
+    try {
+        return fs::absolute(p).string();
+    } catch (...) {
+        return p.string();
+    }
 }
