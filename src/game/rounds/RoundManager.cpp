@@ -58,9 +58,9 @@ bool RoundManager::MoveToNextRound()
     int nextRoundNumber = currentRound.GetRoundNumber() + 1;
     auto it = std::find_if(roundInfos.begin(), roundInfos.end(),
                            [nextRoundNumber](const RoundInfo &info) { return info.roundNumber == nextRoundNumber; });
-    ClearEnemiesFromMap();
     if (it != roundInfos.end())
     {
+        ClearEnemiesFromMap();
         RoundInfo &roundInfo = *it;
         std::vector<AEnemy *> enemiesToSpawn = CreateEnemiesForRound(roundInfo);
         currentRound.~Round();
