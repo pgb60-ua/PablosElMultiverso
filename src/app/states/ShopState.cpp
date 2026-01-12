@@ -1069,8 +1069,7 @@ void ShopState::render()
 
         // Determinar si es un arma
         ITEM_TYPE itemType = slot.item->GetType();
-        bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
-
+        bool isWeapon = IsWeaponType(itemType);
         // Calcular precio final (ajustado por nivel si es arma)
         int finalPrice = slot.item->GetPrice();
         if (isWeapon)
