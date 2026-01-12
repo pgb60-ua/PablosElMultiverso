@@ -281,6 +281,7 @@ void ShopState::update(float deltaTime)
 {
     if (passRound)
     {
+        player->SetHealth(player->GetMaxHealth());
         passRound = false;
         state_machine->remove_state(false);
     }
