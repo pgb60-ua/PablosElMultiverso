@@ -54,7 +54,7 @@ struct AudioManagerFixture
     void createTestWavFile(const fs::path& filePath)
     {
         Wave wave = { 0 };
-        wave.frameCount = 4410;
+        wave.frameCount = 4410; 
         wave.sampleRate = 44100;
         wave.sampleSize = 16;
         wave.channels = 1;
@@ -65,7 +65,7 @@ struct AudioManagerFixture
         
         ExportWave(wave, filePath.string().c_str());
         
-        free(wave.data);
+        free(wave.data); 
     }
 };
 
@@ -73,32 +73,17 @@ BOOST_FIXTURE_TEST_SUITE(AudioManagerTests, AudioManagerFixture)
 
 BOOST_AUTO_TEST_CASE(GetSound_ValidType_ReturnsSound)
 {
-    if (!IsAudioDeviceReady())
-    {
-        BOOST_TEST_MESSAGE("Skipping test: Audio device not available");
-        return;
-    }
     const Sound& sound = AudioManager::GetInstance().GetSound(WEAPON_TYPE::SWORD);
     BOOST_CHECK(sound.frameCount > 0);
 }
 
 BOOST_AUTO_TEST_CASE(GetSound_InvalidFile_ThrowsException)
 {
-    if (!IsAudioDeviceReady())
-    {
-        BOOST_TEST_MESSAGE("Skipping test: Audio device not available");
-        return;
-    }
     BOOST_CHECK_THROW(AudioManager::GetInstance().GetSound(WEAPON_TYPE::AXE), std::runtime_error);
 }
 
 BOOST_AUTO_TEST_CASE(GetSound_CacheWorks)
 {
-    if (!IsAudioDeviceReady())
-    {
-        BOOST_TEST_MESSAGE("Skipping test: Audio device not available");
-        return;
-    }
     const Sound& sound1 = AudioManager::GetInstance().GetSound(WEAPON_TYPE::SWORD);
     const Sound& sound2 = AudioManager::GetInstance().GetSound(WEAPON_TYPE::SWORD);
     
@@ -107,40 +92,23 @@ BOOST_AUTO_TEST_CASE(GetSound_CacheWorks)
 
 BOOST_AUTO_TEST_CASE(GetEnemySound_ReturnsSound)
 {
-    if (!IsAudioDeviceReady())
-    {
-        BOOST_TEST_MESSAGE("Skipping test: Audio device not available");
-        return;
-    }
     const Sound& sound = AudioManager::GetInstance().GetEnemySound();
     BOOST_CHECK(sound.frameCount > 0);
 }
 
 BOOST_AUTO_TEST_CASE(PlayBackgroundMusic_LoadsMusic)
 {
-    if (!IsAudioDeviceReady())
-    {
-        BOOST_TEST_MESSAGE("Skipping test: Audio device not available");
-        return;
-    }
-    
     BOOST_CHECK_NO_THROW(AudioManager::GetInstance().PlayBackgroundMusic("background.wav"));
 }
 
 BOOST_AUTO_TEST_CASE(ClearCache_ClearsEverything)
 {
-    if (!IsAudioDeviceReady())
-    {
-        BOOST_TEST_MESSAGE("Skipping test: Audio device not available");
-        return;
-    }
     AudioManager::GetInstance().GetSound(WEAPON_TYPE::SWORD);
     AudioManager::GetInstance().GetEnemySound();
     
     AudioManager::GetInstance().ClearCache();
     
     const Sound& soundNew = AudioManager::GetInstance().GetSound(WEAPON_TYPE::SWORD);
-    
     BOOST_CHECK(soundNew.frameCount > 0);
 }
 
