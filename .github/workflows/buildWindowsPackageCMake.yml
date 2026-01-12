@@ -59,16 +59,13 @@ jobs:
       - name: Install NSIS
         run: choco install nsis -y
 
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgGitCommitId: 'c8696863d371ab7f46e213d8f5ca923c4ff5ecc8'
-          
-      - name: Install gettext via vcpkg
+      - name: Setup vcpkg and install gettext
         run: |
-          vcpkg install gettext:x64-windows
-          
-      - name: Setup MSYS2 for msgfmt
+          git clone https://github.com/Microsoft/vcpkg.git
+          .\vcpkg\bootstrap-vcpkg.bat
+          .\vcpkg\vcpkg install gettext:x64-windows
+
+      - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
           update: false
