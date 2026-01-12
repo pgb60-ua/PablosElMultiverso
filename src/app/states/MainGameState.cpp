@@ -162,8 +162,6 @@ void MainGameState::render()
     for (auto &player : players)
     {
         player->Render();
-        std::string healthText = "Vida: " + std::to_string(static_cast<int>(player->GetHealth()));
-        DrawText(healthText.c_str(), 10, textY + 30, fontSize, GREEN);
     }
     roundManager.Render();
     DrawFPS(GetScreenWidth() - 100, 10);
