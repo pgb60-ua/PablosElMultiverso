@@ -28,6 +28,14 @@ public:
 
 private:
     void ImportModifiers(PLAYER_TYPE player);
+
+    /// @brief Busca un arma del mismo tipo y nivel que la especificada, excluyendo un índice
+    /// @param weaponType Tipo de arma a buscar
+    /// @param weaponLevel Nivel del arma a buscar
+    /// @param excludeIndex Índice a excluir de la búsqueda (-1 para no excluir ninguno)
+    /// @return Índice del arma encontrada, o -1 si no se encuentra
+    int FindMatchingWeapon(WEAPON_TYPE weaponType, int weaponLevel, int excludeIndex = -1) const;
+
     static constexpr float BASE_MULTIPLIER = 1.0f;
     std::vector<const Item *> inventory;
     std::vector<std::unique_ptr<AWeapon>> weapons;

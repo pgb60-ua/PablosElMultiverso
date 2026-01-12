@@ -13,6 +13,418 @@
 
 ShopState::ShopState(Player *player) : player(player), shop() {}
 ShopState::~ShopState() {}
+
+// FUNCIONES HELPER DE RENDERIZADO
+
+ShopLayout ShopState::CalculateLayout()
+{
+    ShopLayout layout;
+
+    layout.screenWidth = GetScreenWidth();
+    layout.screenHeight = GetScreenHeight();
+    layout.headerHeight = 80;
+    layout.statsX = 40;
+    layout.statsY = layout.headerHeight + 20;
+    layout.statsWidth = layout.screenWidth * 0.35f;
+    layout.statsHeight = layout.screenHeight - layout.headerHeight - 60;
+    layout.itemsX = layout.statsX + layout.statsWidth + 30;
+    layout.itemsY = layout.headerHeight + 20;
+    layout.itemsWidth = layout.screenWidth - layout.itemsX - 40;
+    layout.itemsHeight = layout.statsHeight;
+    layout.itemSlotHeight = 100;
+    layout.itemSlotSpacing = 15;
+    layout.itemStartY = layout.itemsY + 70;
+    layout.weaponSlotSize = 70;
+    layout.weaponSlotSpacing = 10;
+    layout.weaponsPerRow = 5;
+    layout.statSpacing = 25;
+    layout.weaponPanelY = layout.statsY + 60;
+    layout.weaponsY = layout.weaponPanelY + 12 * layout.statSpacing + 20;
+    layout.weaponStartX = layout.statsX + 20;
+    layout.weaponStartY = layout.weaponsY + 35;
+
+    return layout;
+}
+
+TWeaponColor ShopState::GetColorBasedOnWeaponLevel(int level)
+{
+    switch (level)
+    {
+    case 1:
+        return TWeaponColor{
+            WEAPON_LEVEL1_BORDER, // Gris
+            WEAPON_LEVEL1_TINT,   // Gris transparente
+        };
+    case 2:
+        return TWeaponColor{
+            WEAPON_LEVEL2_BORDER, // Verde
+            WEAPON_LEVEL2_TINT,   // Verde transparente
+        };
+    case 3:
+        return TWeaponColor{
+            WEAPON_LEVEL3_BORDER, // Morado (cambiado de azul)
+            WEAPON_LEVEL3_TINT,   // Morado transparente
+        };
+    case 4:
+        return TWeaponColor{
+            WEAPON_LEVEL4_BORDER, // Amarillo/Dorado
+            WEAPON_LEVEL4_TINT,   // Amarillo transparente
+        };
+    default:
+        return TWeaponColor{
+            WEAPON_LEVEL1_BORDER, // Gris por defecto
+            WEAPON_LEVEL1_TINT,   // Gris transparente
+        };
+    }
+}
+
+void ShopState::DrawItemSprite(const RenderableItem &item, int x, int y, int maxSize)
+{
+    const SpriteSheet *sheetPtr = nullptr;
+
+    if (item.isWeapon)
+    {
+        // Para armas, convertir ITEM_TYPE a WEAPON_TYPE
+        WEAPON_TYPE weaponType = ItemTypeToWeaponType(item.itemType);
+        sheetPtr = &SpriteLoaderManager::GetInstance().GetSpriteSheet(weaponType);
+    }
+    else
+    {
+        // Para items normales, usar ITEM_TYPE directamente
+        sheetPtr = &SpriteLoaderManager::GetInstance().GetSpriteSheet(item.itemType);
+    }
+
+    if (sheetPtr->frames.empty())
+        return;
+
+    Rectangle sourceRec = sheetPtr->frames[0];
+
+    if (item.isWeapon)
+    {
+        // Calcular escala para que el eje más grande sea maxSize
+        float maxAxis = std::max(sourceRec.width, sourceRec.height);
+        float scale = (float)maxSize / maxAxis;
+
+        Rectangle destRec = {(float)x, (float)y, sourceRec.width * scale, sourceRec.height * scale};
+        DrawTexturePro(sheetPtr->texture, sourceRec, destRec, Vector2{0, 0}, 0.0f, WHITE);
+    }
+    else
+    {
+        // Items normales sin escalar
+        DrawTextureRec(sheetPtr->texture, sourceRec, Vector2{(float)x, (float)y}, WHITE);
+    }
+}
+
+void ShopState::DrawButton(Rectangle rect, const char *text, bool isEnabled, Color enabledBg, Color disabledBg,
+                           Color enabledBorder, Color disabledBorder, const char *keyHint, int price)
+{
+    Vector2 mousePos = GetMousePosition();
+    bool isHovering = CheckCollisionPointRec(mousePos, rect);
+
+    Color bgColor = isEnabled ? enabledBg : disabledBg;
+    Color borderColor = isEnabled ? enabledBorder : disabledBorder;
+
+    // Borde negro si está en hover y está habilitado
+    if (isHovering && isEnabled)
+    {
+        borderColor = BORDER_HOVER;
+    }
+
+    // Dibujar borde y fondo
+    DrawRectangle(rect.x - 3, rect.y - 3, rect.width + 6, rect.height + 6, borderColor);
+    DrawRectangle(rect.x, rect.y, rect.width, rect.height, bgColor);
+
+    Color textColor = isEnabled ? WHITE : TEXT_DISABLED;
+    int textY = keyHint != nullptr ? rect.y + 8 : rect.y + (rect.height - 16) / 2;
+
+    // Si hay precio, dibujar texto + sprite + precio en la misma línea
+    if (price >= 0)
+    {
+        const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+        Rectangle coinFrame = coinSheet.frames[0];
+        const char *priceText = TextFormat("%d", price);
+        int textWidth = MeasureText(text, 16);
+        int priceTextWidth = MeasureText(priceText, 16);
+
+        // Calcular ancho total (texto + espacio + moneda + espacio + precio)
+        int totalWidth = textWidth + 5 + (int)coinFrame.width + 3 + priceTextWidth;
+        int startX = rect.x + (rect.width - totalWidth) / 2;
+
+        // Dibujar texto principal
+        DrawText(text, startX, textY, 16, textColor);
+
+        // Dibujar sprite de moneda (centrado verticalmente con el texto)
+        int coinX = startX + textWidth + 5;
+        int coinY = textY + (16 - (int)coinFrame.height) / 2;
+        DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)coinX, (float)coinY}, WHITE);
+
+        // Dibujar precio
+        int priceX = coinX + (int)coinFrame.width + 3;
+        DrawText(priceText, priceX, textY, 16, TEXT_ACCENT);
+    }
+    else
+    {
+        // Sin precio, solo centrar el texto
+        int textWidth = MeasureText(text, 16);
+        DrawText(text, rect.x + (rect.width - textWidth) / 2, textY, 16, textColor);
+    }
+
+    // Dibujar hint de tecla si existe
+    if (keyHint != nullptr && isEnabled)
+    {
+        int hintWidth = MeasureText(keyHint, 10);
+        DrawText(keyHint, rect.x + (rect.width - hintWidth) / 2, rect.y + 26, 10, TEXT_HINT);
+    }
+}
+
+void ShopState::DrawStatWithMultiplier(const char *name, float value, float multiplier, int &y, int x, int spacing,
+                                       int statsWidth)
+{
+    Color multColor;
+    if (multiplier < 1.0f)
+        multColor = MULTIPLIER_NEGATIVE; // Rojo
+    else if (multiplier > 1.0f)
+        multColor = MULTIPLIER_POSITIVE; // Verde
+    else
+        multColor = MULTIPLIER_NEUTRAL; // Gris
+
+    Color statColor = TEXT_SECONDARY;
+    Color valueColor = TEXT_PRIMARY;
+
+    DrawText(TextFormat("x%.2f", multiplier), x + 20, y, 12, multColor);
+    DrawText(name, x + 75, y, 14, statColor);
+    DrawText(TextFormat("%.1f", value), x + statsWidth - 80, y, 14, valueColor);
+    y += spacing;
+}
+
+void ShopState::RenderItemSlot(const RenderableItem &item, Rectangle slotRect, bool showFullInfo)
+{
+    // Determinar colores del slot según estado
+    Color slotBgColor;
+    Color borderColor;
+
+    // Color del borde base (por nivel si es arma)
+    Color weaponLevelBorderColor = BORDER_DEFAULT; // Default
+    if (item.isWeapon)
+    {
+        TWeaponColor weaponColor = GetColorBasedOnWeaponLevel(item.level);
+        weaponLevelBorderColor = weaponColor.borderColor;
+    }
+
+    if (item.isSelected)
+    {
+        slotBgColor = BG_SLOT_SELECTED;
+        borderColor = item.isWeapon ? weaponLevelBorderColor : BORDER_SELECTED;
+    }
+    else if (item.isBlocked)
+    {
+        slotBgColor = BG_SLOT_BLOCKED;
+        borderColor = BORDER_BLOCKED;
+    }
+    else
+    {
+        slotBgColor = BG_SLOT;
+        borderColor = weaponLevelBorderColor;
+    }
+
+    // Dibujar slot
+    DrawRectangle(slotRect.x - 3, slotRect.y - 3, slotRect.width + 6, slotRect.height + 6, borderColor);
+    DrawRectangle(slotRect.x, slotRect.y, slotRect.width, slotRect.height, slotBgColor);
+
+    if (showFullInfo)
+    {
+        // Renderizado completo para items de tienda
+        int iconX = slotRect.x + 7;
+        int iconY = slotRect.y + 18;
+        DrawItemSprite(item, iconX, iconY, 64);
+
+        // Nombre del item
+        int textX = slotRect.x + 82;
+        DrawText(item.name.c_str(), textX, slotRect.y + 10, 22, TEXT_PRIMARY);
+
+        // Descripción del item (truncada si es muy larga)
+        if (!item.description.empty())
+        {
+            std::string description = item.description;
+            int maxDescriptionWidth = slotRect.width - 220;
+            int descriptionWidth = MeasureText(description.c_str(), 14);
+
+            if (descriptionWidth > maxDescriptionWidth)
+            {
+                while (descriptionWidth > maxDescriptionWidth && !description.empty())
+                {
+                    description.pop_back();
+                    descriptionWidth = MeasureText((description + "...").c_str(), 14);
+                }
+                description += "...";
+            }
+
+            DrawText(description.c_str(), textX, slotRect.y + 35, 14, TEXT_TERTIARY);
+        }
+
+        // Rareza con color
+        Color rarityColor;
+        const char *rarityText;
+        switch (item.rarity)
+        {
+        case ItemRarity::Common:
+            rarityColor = RARITY_COMMON;
+            rarityText = "COMMON";
+            break;
+        case ItemRarity::Uncommon:
+            rarityColor = RARITY_UNCOMMON;
+            rarityText = "UNCOMMON";
+            break;
+        case ItemRarity::Rare:
+            rarityColor = RARITY_RARE;
+            rarityText = "RARE";
+            break;
+        case ItemRarity::Epic:
+            rarityColor = RARITY_EPIC;
+            rarityText = "EPIC";
+            break;
+        case ItemRarity::Legendary:
+            rarityColor = RARITY_LEGENDARY;
+            rarityText = "LEGENDARY";
+            break;
+        default:
+            rarityColor = WHITE;
+            rarityText = "UNKNOWN";
+            break;
+        }
+
+        int rarityX = textX;
+        DrawText(rarityText, rarityX, slotRect.y + 55, 12, rarityColor);
+
+        // Etiqueta de WEAPON si es un arma
+        if (item.isWeapon)
+        {
+            int weaponTagX = rarityX + MeasureText(rarityText, 12) + 10;
+            DrawText("WEAPON", weaponTagX, slotRect.y + 55, 12, WEAPON_TAG_COLOR);
+
+            // Mostrar nivel del arma
+            int levelTagX = weaponTagX + MeasureText("WEAPON", 12) + 10;
+            Color levelColor = GetColorBasedOnWeaponLevel(item.level).borderColor;
+            DrawText(TextFormat("Lv%d", item.level), levelTagX, slotRect.y + 55, 12, levelColor);
+        }
+
+        // Precio (si existe)
+        if (item.price > 0)
+        {
+            const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+            int priceX = slotRect.x + slotRect.width - 120;
+            Rectangle coinFrame = coinSheet.frames[0];
+            int coinYPrice = (slotRect.y + 45) + (20 - (int)coinFrame.height) / 2;
+            DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)coinYPrice}, WHITE);
+            DrawText(TextFormat("%d", item.price), priceX + 20, slotRect.y + 45, 20, TEXT_ACCENT);
+        }
+
+        // Indicador si está bloqueado
+        if (item.isBlocked)
+        {
+            DrawText("BLOCKED", slotRect.x + 7, slotRect.y + slotRect.height - 20, 14, TEXT_NEGATIVE);
+        }
+
+        // Stats del item
+        if (item.stats != nullptr)
+        {
+            int statsTextX = textX;
+            int statsTextY = slotRect.y + 72;
+            int statsOffset = 0;
+
+            // Si es arma, multiplicar stats por el nivel: 2^(nivel-1)
+            int statsMultiplier = 1;
+            if (item.isWeapon)
+            {
+                statsMultiplier = static_cast<int>(std::pow(2, item.level - 1));
+            }
+
+            Color positiveColor = TEXT_POSITIVE;
+            Color negativeColor = TEXT_NEGATIVE;
+
+            // Función helper para mostrar stat
+            auto drawStat = [&](const char *name, float value)
+            {
+                if (value != 0)
+                {
+                    Color color = value > 0 ? positiveColor : negativeColor;
+                    const char *sign = value > 0 ? "+" : "";
+                    float displayValue = value * statsMultiplier;
+                    DrawText(TextFormat("%s%s %.1f", sign, name, displayValue), statsTextX + statsOffset, statsTextY,
+                             11, color);
+                    statsOffset += MeasureText(TextFormat("%s%s %.1f  ", sign, name, displayValue), 11);
+                }
+            };
+
+            // Mostrar stats ofensivas
+            drawStat("PHY", item.stats->GetPhysicalDamage());
+            drawStat("MAG", item.stats->GetMagicDamage());
+            drawStat("AS", item.stats->GetAttackSpeed());
+            drawStat("CC", item.stats->GetCriticalChance());
+            drawStat("CD", item.stats->GetCriticalDamage());
+            drawStat("LS", item.stats->GetLifeSteal());
+
+            // Nueva línea para stats defensivas
+            statsOffset = 0;
+            statsTextY += 13;
+
+            drawStat("HP", item.stats->GetHealth());
+            drawStat("MHP", item.stats->GetMaxHealth());
+            drawStat("MS", item.stats->GetMovementSpeed());
+            drawStat("AGI", item.stats->GetAgility());
+            drawStat("ARM", item.stats->GetArmor());
+            drawStat("RES", item.stats->GetResistance());
+            drawStat("HR", item.stats->GetHealthRegeneration());
+        }
+    }
+    else
+    {
+        // Renderizado compacto para slots de inventario (cuadrados)
+        TWeaponColor weaponColor = GetColorBasedOnWeaponLevel(item.level);
+
+        // Si está seleccionado, borde más grueso
+        if (item.isSelected)
+        {
+            DrawRectangle(slotRect.x - 4, slotRect.y - 4, slotRect.width + 8, slotRect.height + 8, BORDER_SELECTED);
+        }
+
+        // Borde del nivel
+        DrawRectangle(slotRect.x - 2, slotRect.y - 2, slotRect.width + 4, slotRect.height + 4, weaponColor.borderColor);
+        DrawRectangle(slotRect.x, slotRect.y, slotRect.width, slotRect.height, BG_SLOT);
+
+        // Overlay de color del nivel (fondo transparente)
+        DrawRectangle(slotRect.x, slotRect.y, slotRect.width, slotRect.height, weaponColor.tintColor);
+
+        // Sprite del item centrado
+        const SpriteSheet *sheetPtr = nullptr;
+        if (item.isWeapon)
+        {
+            WEAPON_TYPE weaponType = ItemTypeToWeaponType(item.itemType);
+            sheetPtr = &SpriteLoaderManager::GetInstance().GetSpriteSheet(weaponType);
+        }
+        else
+        {
+            sheetPtr = &SpriteLoaderManager::GetInstance().GetSpriteSheet(item.itemType);
+        }
+
+        if (!sheetPtr->frames.empty())
+        {
+            Rectangle sourceRec = sheetPtr->frames[0];
+            float scale = (slotRect.width - 10) / std::max(sourceRec.width, sourceRec.height);
+            Rectangle destRec = {slotRect.x + slotRect.width / 2, slotRect.y + slotRect.height / 2,
+                                 sourceRec.width * scale, sourceRec.height * scale};
+            Vector2 origin = {destRec.width / 2, destRec.height / 2};
+            DrawTexturePro(sheetPtr->texture, sourceRec, destRec, origin, 0.0f, WHITE);
+        }
+
+        // Nivel del arma con el color del borde
+        const char *levelText = TextFormat("Lv%d", item.level);
+        DrawText(levelText, slotRect.x + 5, slotRect.y + slotRect.height - 18, 14, weaponColor.borderColor);
+    }
+}
+
+// END FUNCIONES HELPER DE RENDERIZADO
+
 void ShopState::handleInput()
 {
     // Input de teclado
@@ -72,22 +484,7 @@ void ShopState::handleInput()
 
     // Input de mouse
     Vector2 mousePos = GetMousePosition();
-    int screenWidth = GetScreenWidth();
-    int headerHeight = 80;
-
-    // Panel de stats del jugador (izquierda)
-    int statsX = 40;
-    int statsWidth = screenWidth * 0.35f;
-
-    // Panel de items (derecha)
-    int itemsX = statsX + statsWidth + 30;
-    int itemsY = headerHeight + 20;
-    int itemsWidth = screenWidth - itemsX - 40;
-
-    // Dimensiones de slots
-    int itemSlotHeight = 100;
-    int itemSlotSpacing = 15;
-    int itemStartY = itemsY + 70;
+    ShopLayout layout = CalculateLayout();
 
     // Detectar hover sobre items de tienda (actualiza selectedItem)
     bool hoveredOverShopItem = false;
@@ -97,8 +494,9 @@ void ShopState::handleInput()
         if (slot.isBuyed)
             continue;
 
-        int slotY = itemStartY + i * (itemSlotHeight + itemSlotSpacing);
-        Rectangle slotRect = {(float)(itemsX + 18), (float)slotY, (float)(itemsWidth - 36), (float)itemSlotHeight};
+        int slotY = layout.itemStartY + i * (layout.itemSlotHeight + layout.itemSlotSpacing);
+        Rectangle slotRect = {(float)(layout.itemsX + 18), (float)slotY, (float)(layout.itemsWidth - 36),
+                              (float)layout.itemSlotHeight};
 
         if (CheckCollisionPointRec(mousePos, slotRect))
         {
@@ -111,24 +509,16 @@ void ShopState::handleInput()
     // Detectar hover sobre armas del inventario solo si no estamos sobre un item de tienda
     if (!hoveredOverShopItem)
     {
-        int weaponSlotSize = 70;
-        int weaponSlotSpacing = 10;
-        int weaponsPerRow = 5;
-
-        // Calcular posición del panel de armas (mismo cálculo que en render)
-        int statSpacing = 25;
-        int weaponPanelY = (headerHeight + 20) + 60; // statsY + 60
-        int weaponsY = weaponPanelY + 12 * statSpacing + 20;
-        int weaponStartX = statsX + 20;
-        int weaponStartY = weaponsY + 35;
-
         const auto &weapons = player->GetWeapons();
         for (int i = 0; i < player->WEAPON_MAX && static_cast<size_t>(i) < weapons.size(); i++)
         {
-            int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
-            int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+            int weaponX =
+                layout.weaponStartX + (i % layout.weaponsPerRow) * (layout.weaponSlotSize + layout.weaponSlotSpacing);
+            int weaponY =
+                layout.weaponStartY + (i / layout.weaponsPerRow) * (layout.weaponSlotSize + layout.weaponSlotSpacing);
 
-            Rectangle weaponRect = {(float)weaponX, (float)weaponY, (float)weaponSlotSize, (float)weaponSlotSize};
+            Rectangle weaponRect = {(float)weaponX, (float)weaponY, (float)layout.weaponSlotSize,
+                                    (float)layout.weaponSlotSize};
 
             if (CheckCollisionPointRec(mousePos, weaponRect))
             {
@@ -147,8 +537,9 @@ void ShopState::handleInput()
             if (slot.isBuyed)
                 continue;
 
-            int slotY = itemStartY + i * (itemSlotHeight + itemSlotSpacing);
-            Rectangle slotRect = {(float)(itemsX + 18), (float)slotY, (float)(itemsWidth - 36), (float)itemSlotHeight};
+            int slotY = layout.itemStartY + i * (layout.itemSlotHeight + layout.itemSlotSpacing);
+            Rectangle slotRect = {(float)(layout.itemsX + 18), (float)slotY, (float)(layout.itemsWidth - 36),
+                                  (float)layout.itemSlotHeight};
 
             if (CheckCollisionPointRec(mousePos, slotRect))
             {
@@ -187,24 +578,6 @@ void ShopState::handleInput()
     // Clic derecho para bloquear/desbloquear items
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
     {
-        Vector2 mousePos = GetMousePosition();
-        int screenWidth = GetScreenWidth();
-        int headerHeight = 80;
-
-        // Panel de stats del jugador (izquierda)
-        int statsX = 40;
-        int statsWidth = screenWidth * 0.35f;
-
-        // Panel de items (derecha)
-        int itemsX = statsX + statsWidth + 30;
-        int itemsY = headerHeight + 20;
-        int itemsWidth = screenWidth - itemsX - 40;
-
-        // Dimensiones de slots
-        int itemSlotHeight = 100;
-        int itemSlotSpacing = 15;
-        int itemStartY = itemsY + 70;
-
         // Verificar clic derecho en items para bloquear
         for (int i = 0; i < Shop::MAX_ITEMS_SHOP; i++)
         {
@@ -212,8 +585,9 @@ void ShopState::handleInput()
             if (slot.isBuyed)
                 continue;
 
-            int slotY = itemStartY + i * (itemSlotHeight + itemSlotSpacing);
-            Rectangle slotRect = {(float)(itemsX + 18), (float)slotY, (float)(itemsWidth - 36), (float)itemSlotHeight};
+            int slotY = layout.itemStartY + i * (layout.itemSlotHeight + layout.itemSlotSpacing);
+            Rectangle slotRect = {(float)(layout.itemsX + 18), (float)slotY, (float)(layout.itemsWidth - 36),
+                                  (float)layout.itemSlotHeight};
 
             if (CheckCollisionPointRec(mousePos, slotRect))
             {
@@ -232,20 +606,11 @@ void ShopState::handleInput()
 
         if (weaponIndex >= 0 && static_cast<size_t>(weaponIndex) < weapons.size())
         {
-            // Calcular posición del tooltip y botones (mismo cálculo que en render)
-            int statsX = 40;
-            int statsWidth = screenWidth * 0.35f;
-            int tooltipX = statsX + 20;
-            int tooltipWidth = statsWidth - 40;
+            // Calcular posición del tooltip y botones
+            int tooltipX = layout.statsX + 20;
+            int tooltipWidth = layout.statsWidth - 40;
             int tooltipHeight = 120;
-
-            int statSpacing = 25;
-            int weaponPanelY = (headerHeight + 20) + 60;
-            int weaponsY = weaponPanelY + 12 * statSpacing + 20;
-            int weaponSlotSize = 70;
-            int weaponSlotSpacing = 10;
-            int weaponStartY = weaponsY + 35;
-            int tooltipY = weaponStartY + weaponSlotSize + weaponSlotSpacing + 15;
+            int tooltipY = layout.weaponStartY + layout.weaponSlotSize + layout.weaponSlotSpacing + 15;
 
             // Configuración de botones
             int buttonWidth = 80;
@@ -283,6 +648,7 @@ void ShopState::update(float deltaTime)
 {
     if (passRound)
     {
+        player->SetHealth(player->GetMaxHealth());
         passRound = false;
         state_machine->remove_state(false);
     }
@@ -384,170 +750,109 @@ void ShopState::update(float deltaTime)
 }
 void ShopState::render()
 {
-    int screenWidth = GetScreenWidth();
-    int screenHeight = GetScreenHeight();
+    // Constantes de layout calculadas una sola vez
+    ShopLayout layout = CalculateLayout();
+
+    // Obtener sprite de moneda una sola vez
+    const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+    Rectangle coinFrame = coinSheet.frames[0];
 
     BeginDrawing();
 
     // Fondo con gradiente simulado
-    DrawRectangle(0, 0, screenWidth, screenHeight, Color{20, 20, 30, 255});
+    DrawRectangle(0, 0, layout.screenWidth, layout.screenHeight, BG_MAIN);
 
     // Header de la tienda
-    int headerHeight = 80;
-    DrawRectangle(0, 0, screenWidth, headerHeight, Color{40, 40, 60, 255});
-    DrawRectangle(0, headerHeight - 3, screenWidth, 3, Color{255, 200, 0, 255});
+    DrawRectangle(0, 0, layout.screenWidth, layout.headerHeight, BG_HEADER);
+    DrawRectangle(0, layout.headerHeight - 3, layout.screenWidth, 3, BORDER_ACCENT);
 
-    DrawText(_("SHOP"), screenWidth / 2 - MeasureText(_("SHOP"), 40) / 2, 20, 40, Color{255, 200, 0, 255});
+    DrawText("SHOP", layout.screenWidth / 2 - MeasureText("SHOP", 40) / 2, 20, 40, TEXT_ACCENT);
 
     // Pablo Coins con icono
-    int coinsX = screenWidth - 250;
-    const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
-    Rectangle coinFrame = coinSheet.frames[0];
-
-    // Centrar verticalmente la moneda con el texto (25 es el tamaño de la fuente, 30 es la Y del texto)
+    int coinsX = layout.screenWidth - 250;
     int coinYHeader = 30 + (25 - (int)coinFrame.height) / 2;
     DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)coinsX - 20, (float)coinYHeader}, WHITE);
-    DrawText(TextFormat("%d", player->GetPabloCoins()), coinsX + 30, 30, 25, Color{255, 255, 255, 255});
-
-    // Panel de stats del jugador (izquierda)
-    int statsX = 40;
-    int statsY = headerHeight + 20;
-    int statsWidth = screenWidth * 0.35f;
-    int statsHeight = screenHeight - headerHeight - 60;
+    DrawText(TextFormat("%d", player->GetPabloCoins()), coinsX + 30, 30, 25, TEXT_PRIMARY);
 
     // Fondo del panel de stats
-    DrawRectangle(statsX - 5, statsY - 5, statsWidth + 10, statsHeight + 10, Color{255, 200, 0, 255});
-    DrawRectangle(statsX, statsY, statsWidth, statsHeight, Color{30, 30, 45, 255});
+    DrawRectangle(layout.statsX - 5, layout.statsY - 5, layout.statsWidth + 10, layout.statsHeight + 10, BORDER_ACCENT);
+    DrawRectangle(layout.statsX, layout.statsY, layout.statsWidth, layout.statsHeight, BG_PANEL);
 
     // Título del panel
-    DrawText(_("PLAYER STATS"), statsX + 20, statsY + 15, 24, Color{255, 200, 0, 255});
-    DrawLine(statsX + 20, statsY + 45, statsX + statsWidth - 20, statsY + 45, Color{255, 200, 0, 255});
+    DrawText("PLAYER STATS", layout.statsX + 20, layout.statsY + 15, 24, TEXT_ACCENT);
+    DrawLine(layout.statsX + 20, layout.statsY + 45, layout.statsX + layout.statsWidth - 20, layout.statsY + 45,
+             BORDER_ACCENT);
 
     // Stats con mejor formato
-    int statY = statsY + 60;
-    int statSpacing = 25; // Espaciado fijo más compacto
+    int statY = layout.statsY + 60;
 
-    Color statColor = Color{200, 200, 220, 255};
-    Color valueColor = Color{255, 255, 255, 255};
-
-    // Helper para dibujar stat con multiplicador
-    auto drawStatWithMultiplier = [&](const char *name, float value, float multiplier)
-    {
-        Color multColor;
-        if (multiplier < 1.0f)
-            multColor = Color{255, 100, 100, 255}; // Rojo
-        else if (multiplier > 1.0f)
-            multColor = Color{100, 255, 100, 255}; // Verde
-        else
-            multColor = Color{150, 150, 150, 255}; // Gris
-
-        DrawText(TextFormat("x%.2f", multiplier), statsX + 20, statY, 12, multColor);
-        DrawText(name, statsX + 75, statY, 14, statColor);
-        DrawText(TextFormat("%.1f", value), statsX + statsWidth - 80, statY, 14, valueColor);
-        statY += statSpacing;
-    };
-
-    drawStatWithMultiplier(_("Max Health:"), player->GetMaxHealth(), player->GetHealthModifier());
-    drawStatWithMultiplier(_("Movement Speed:"), player->GetMovementSpeed(), player->GetMovementSpeedModifier());
-    drawStatWithMultiplier(_("Agility:"), player->GetAgility(), player->GetAgilityModifier());
-    drawStatWithMultiplier(_("Attack Speed:"), player->GetAttackSpeed(), player->GetAttackSpeedModifier());
-    drawStatWithMultiplier(_("Physical Damage:"), player->GetPhysicalDamage(), player->GetPhysicalDamageModifier());
-    drawStatWithMultiplier(_("Magical Damage:"), player->GetMagicDamage(), player->GetMagicDamageModifier());
-    drawStatWithMultiplier(_("Resistance:"), player->GetResistance(), player->GetResistanceModifier());
-    drawStatWithMultiplier(_("Armor:"), player->GetArmor(), player->GetArmorModifier());
-    drawStatWithMultiplier(_("Critical Chance:"), player->GetCriticalChance(), player->GetCriticalChanceModifier());
-    drawStatWithMultiplier(_("Critical Damage:"), player->GetCriticalDamage(), player->GetCriticalDamageModifier());
-    drawStatWithMultiplier(_("Health Regen:"), player->GetHealthRegeneration(), player->GetHealthRegenerationModifier());
-    drawStatWithMultiplier(_("Life Steal:"), player->GetLifeSteal(), player->GetLifeStealModifier());
+    DrawStatWithMultiplier("Max Health:", player->GetMaxHealth(), player->GetHealthModifier(), statY, layout.statsX,
+                           layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Movement Speed:", player->GetMovementSpeed(), player->GetMovementSpeedModifier(), statY,
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Agility:", player->GetAgility(), player->GetAgilityModifier(), statY, layout.statsX,
+                           layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Attack Speed:", player->GetAttackSpeed(), player->GetAttackSpeedModifier(), statY,
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Physical Damage:", player->GetPhysicalDamage(), player->GetPhysicalDamageModifier(), statY,
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Magical Damage:", player->GetMagicDamage(), player->GetMagicDamageModifier(), statY,
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Resistance:", player->GetResistance(), player->GetResistanceModifier(), statY,
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Armor:", player->GetArmor(), player->GetArmorModifier(), statY, layout.statsX,
+                           layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Critical Chance:", player->GetCriticalChance(), player->GetCriticalChanceModifier(), statY,
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Critical Damage:", player->GetCriticalDamage(), player->GetCriticalDamageModifier(), statY,
+                           layout.statsX, layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Health Regen:", player->GetHealthRegeneration(), player->GetHealthRegenerationModifier(),
+                           statY, layout.statsX, layout.statSpacing, layout.statsWidth);
+    DrawStatWithMultiplier("Life Steal:", player->GetLifeSteal(), player->GetLifeStealModifier(), statY, layout.statsX,
+                           layout.statSpacing, layout.statsWidth);
 
     // Panel de armas del jugador (debajo del panel de stats)
-    int weaponsY = statY + 20;
-    DrawText(_("WEAPONS"), statsX + 20, weaponsY, 20, Color{255, 200, 0, 255});
-    DrawLine(statsX + 20, weaponsY + 25, statsX + statsWidth - 20, weaponsY + 25, Color{255, 200, 0, 255});
-
-    int weaponSlotSize = 70;
-    int weaponSlotSpacing = 10;
-    int weaponStartX = statsX + 20;
-    int weaponStartY = weaponsY + 35;
-    int weaponsPerRow = 5; // 5 armas por fila
+    DrawText("WEAPONS", layout.statsX + 20, layout.weaponsY, 20, TEXT_ACCENT);
+    DrawLine(layout.statsX + 20, layout.weaponsY + 25, layout.statsX + layout.statsWidth - 20, layout.weaponsY + 25,
+             BORDER_ACCENT);
 
     const auto &weapons = player->GetWeapons();
     for (int i = 0; i < player->WEAPON_MAX; i++)
     {
-        int weaponX = weaponStartX + (i % weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
-        int weaponY = weaponStartY + (i / weaponsPerRow) * (weaponSlotSize + weaponSlotSpacing);
+        int weaponX =
+            layout.weaponStartX + (i % layout.weaponsPerRow) * (layout.weaponSlotSize + layout.weaponSlotSpacing);
+        int weaponY =
+            layout.weaponStartY + (i / layout.weaponsPerRow) * (layout.weaponSlotSize + layout.weaponSlotSpacing);
 
         if (static_cast<size_t>(i) < weapons.size())
         {
-            // Dibujar arma existente
+            // Dibujar arma existente usando el struct unificado
             const auto &weapon = weapons[i];
 
-            // Color del borde según el nivel
-            Color borderColor;
-            Color tintColor;
-            switch (weapon->GetLevel())
-            {
-            case 1:
-                borderColor = Color{150, 150, 150, 255}; // Gris
-                tintColor = Color{150, 150, 150, 80};    // Gris transparente
-                break;
-            case 2:
-                borderColor = Color{100, 255, 100, 255}; // Verde
-                tintColor = Color{100, 255, 100, 80};    // Verde transparente
-                break;
-            case 3:
-                borderColor = Color{200, 100, 255, 255}; // Morado (cambiado de azul)
-                tintColor = Color{200, 100, 255, 80};    // Morado transparente
-                break;
-            case 4:
-                borderColor = Color{255, 200, 50, 255}; // Amarillo/Dorado
-                tintColor = Color{255, 200, 50, 80};    // Amarillo transparente
-                break;
-            default:
-                borderColor = Color{150, 150, 150, 255}; // Gris por defecto
-                tintColor = Color{150, 150, 150, 80};    // Gris transparente
-                break;
-            }
+            RenderableItem item = {
+                WeaponTypeToItemType(weapon->GetWeaponType()), // itemType (convertir WEAPON_TYPE a ITEM_TYPE)
+                weapon->GetName(),                             // name
+                weapon->GetLevel(),                            // level
+                true,                                          // isWeapon
+                (i + Shop::MAX_ITEMS_SHOP == selectedItem),    // isSelected
+                false,                                         // isBlocked
+                0,                                             // price
+                nullptr,                                       // stats
+                "",                                            // description
+                ItemRarity::Common                             // rarity
+            };
 
-            // Si está seleccionado, aumentar la opacidad del borde
-            Color selectedBorderColor = borderColor;
-            if (i + Shop::MAX_ITEMS_SHOP == selectedItem)
-            {
-                selectedBorderColor = Color{borderColor.r, borderColor.g, borderColor.b, 255};
-                // Borde más grueso cuando está seleccionado
-                DrawRectangle(weaponX - 4, weaponY - 4, weaponSlotSize + 8, weaponSlotSize + 8,
-                              Color{100, 150, 255, 255});
-            }
-
-            // Borde del nivel
-            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, selectedBorderColor);
-            DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{45, 45, 65, 255});
-
-            // Overlay de color del nivel (fondo transparente)
-            DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, tintColor);
-
-            // Sprite del arma
-            const SpriteSheet &weaponSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(weapon->GetWeaponType());
-            if (!weaponSheet.frames.empty())
-            {
-                Rectangle sourceRec = weaponSheet.frames[0];
-                float scale = (weaponSlotSize - 10) / std::max(sourceRec.width, sourceRec.height);
-                Rectangle destRec = {(float)(weaponX + weaponSlotSize / 2), (float)(weaponY + weaponSlotSize / 2),
-                                     sourceRec.width * scale, sourceRec.height * scale};
-                Vector2 origin = {destRec.width / 2, destRec.height / 2};
-                DrawTexturePro(weaponSheet.texture, sourceRec, destRec, origin, 0.0f, WHITE);
-            }
-
-            // Nivel del arma con el color del borde
-            const char *levelText = TextFormat("Lv%d", weapon->GetLevel());
-            DrawText(levelText, weaponX + 5, weaponY + weaponSlotSize - 18, 14, borderColor);
+            Rectangle slotRect = {(float)weaponX, (float)weaponY, (float)layout.weaponSlotSize,
+                                  (float)layout.weaponSlotSize};
+            RenderItemSlot(item, slotRect, false); // false = renderizado compacto
         }
         else
         {
             // Dibujar slot vacío
-            DrawRectangle(weaponX - 2, weaponY - 2, weaponSlotSize + 4, weaponSlotSize + 4, Color{80, 80, 100, 255});
-            DrawRectangle(weaponX, weaponY, weaponSlotSize, weaponSlotSize, Color{60, 60, 70, 255});
-            DrawText(_("EMPTY"), weaponX + 10, weaponY + weaponSlotSize / 2 - 7, 12, Color{120, 120, 130, 255});
+            DrawRectangle(weaponX - 2, weaponY - 2, layout.weaponSlotSize + 4, layout.weaponSlotSize + 4,
+                          BORDER_SLOT_EMPTY);
+            DrawRectangle(weaponX, weaponY, layout.weaponSlotSize, layout.weaponSlotSize, BG_SLOT_EMPTY);
+            DrawText("EMPTY", weaponX + 10, weaponY + layout.weaponSlotSize / 2 - 7, 12, TEXT_DISABLED);
         }
     }
 
@@ -560,17 +865,17 @@ void ShopState::render()
             const auto &weapon = weapons[weaponIndex];
 
             // Posición del tooltip (debajo de las armas)
-            int tooltipX = statsX + 20;
-            int tooltipY = weaponStartY + weaponSlotSize + weaponSlotSpacing + 15;
-            int tooltipWidth = statsWidth - 40;
+            int tooltipX = layout.statsX + 20;
+            int tooltipY = layout.weaponStartY + layout.weaponSlotSize + layout.weaponSlotSpacing + 15;
+            int tooltipWidth = layout.statsWidth - 40;
             int tooltipHeight = 120;
 
             // Fondo del tooltip
-            DrawRectangle(tooltipX - 5, tooltipY - 5, tooltipWidth + 10, tooltipHeight + 10, Color{100, 150, 255, 255});
-            DrawRectangle(tooltipX, tooltipY, tooltipWidth, tooltipHeight, Color{40, 40, 60, 255});
+            DrawRectangle(tooltipX - 5, tooltipY - 5, tooltipWidth + 10, tooltipHeight + 10, BORDER_TOOLTIP);
+            DrawRectangle(tooltipX, tooltipY, tooltipWidth, tooltipHeight, BG_TOOLTIP);
 
             // Título
-            DrawText(weapon->GetName().c_str(), tooltipX + 10, tooltipY + 5, 16, Color{255, 200, 0, 255});
+            DrawText(weapon->GetName().c_str(), tooltipX + 10, tooltipY + 5, 16, TEXT_ACCENT);
 
             // Stats del arma
             int statsY = tooltipY + 30;
@@ -580,7 +885,7 @@ void ShopState::render()
             {
                 if (value != 0)
                 {
-                    Color color = value > 0 ? Color{100, 255, 100, 255} : Color{255, 100, 100, 255};
+                    Color color = value > 0 ? TEXT_POSITIVE : TEXT_NEGATIVE;
                     const char *sign = value > 0 ? "+" : "";
                     DrawText(TextFormat("%s%s: %.1f", sign, name, value), tooltipX + 10, currentY, 12, color);
                     currentY += 15;
@@ -600,7 +905,7 @@ void ShopState::render()
             {
                 if (value != 0)
                 {
-                    Color color = value > 0 ? Color{100, 255, 100, 255} : Color{255, 100, 100, 255};
+                    Color color = value > 0 ? TEXT_POSITIVE : TEXT_NEGATIVE;
                     const char *sign = value > 0 ? "+" : "";
                     DrawText(TextFormat("%s%s: %.1f", sign, name, value), col2X, currentY, 12, color);
                     currentY += 15;
@@ -636,15 +941,14 @@ void ShopState::render()
 
             // Fondo del botón fuse
             Color fuseButtonColor =
-                isMaxLevel ? Color{60, 60, 70, 255} : Color{80, 60, 120, 255}; // Gris si max level, morado si no
-            Color fuseButtonBorder = isMaxLevel
-                                         ? Color{80, 80, 90, 255}
-                                         : Color{150, 100, 255, 255}; // Gris si max level, morado brillante si no
+                isMaxLevel ? BG_BUTTON_FUSE_DISABLED : BG_BUTTON_FUSE; // Gris si max level, morado si no
+            Color fuseButtonBorder = isMaxLevel ? BORDER_BUTTON_FUSE_DISABLED
+                                                : BORDER_BUTTON_FUSE; // Gris si max level, morado brillante si no
 
             // Borde negro si está en hover
             if (isHoveringFuse)
             {
-                fuseButtonBorder = Color{0, 0, 0, 255};
+                fuseButtonBorder = BORDER_HOVER;
             }
 
             DrawRectangle(buttonsX - 2, button1Y - 2, buttonWidth + 4, buttonHeight + 4, fuseButtonBorder);
@@ -653,7 +957,7 @@ void ShopState::render()
             // Texto del botón fuse
             const char *fuseText = isMaxLevel ? "MAX" : "FUSE";
             int fuseTextWidth = MeasureText(fuseText, 14);
-            Color fuseTextColor = isMaxLevel ? Color{120, 120, 130, 255} : WHITE;
+            Color fuseTextColor = isMaxLevel ? TEXT_DISABLED : WHITE;
             DrawText(fuseText, buttonsX + (buttonWidth - fuseTextWidth) / 2, button1Y + 8, 14, fuseTextColor);
 
             // Si no es el maximo nivel de arma
@@ -663,8 +967,7 @@ void ShopState::render()
                 // Leyenda de tecla dentro del botón
                 const char *enterText = "[ENTER]";
                 int enterTextWidth = MeasureText(enterText, 10);
-                DrawText(enterText, buttonsX + (buttonWidth - enterTextWidth) / 2, button1Y + 26, 10,
-                         Color{120, 120, 120, 255});
+                DrawText(enterText, buttonsX + (buttonWidth - enterTextWidth) / 2, button1Y + 26, 10, TEXT_HINT);
             }
 
             // Botón 2: SELL (abajo)
@@ -675,13 +978,13 @@ void ShopState::render()
             bool isHoveringSell = CheckCollisionPointRec(GetMousePosition(), sellButtonRect);
 
             // Fondo del botón de vender
-            Color sellButtonColor = Color{180, 40, 40, 255};  // Rojo oscuro
-            Color sellButtonBorder = Color{255, 80, 80, 255}; // Rojo brillante
+            Color sellButtonColor = BG_BUTTON_SELL;      // Rojo oscuro
+            Color sellButtonBorder = BORDER_BUTTON_SELL; // Rojo brillante
 
             // Borde negro si está en hover
             if (isHoveringSell)
             {
-                sellButtonBorder = Color{0, 0, 0, 255};
+                sellButtonBorder = BORDER_HOVER;
             }
 
             DrawRectangle(buttonsX - 2, button2Y - 2, buttonWidth + 4, buttonHeight + 4, sellButtonBorder);
@@ -695,15 +998,13 @@ void ShopState::render()
             // Leyenda de tecla dentro del botón
             const char *spaceText = "[SPACE]";
             int spaceTextWidth = MeasureText(spaceText, 10);
-            DrawText(spaceText, buttonsX + (buttonWidth - spaceTextWidth) / 2, button2Y + 26, 10,
-                     Color{200, 200, 200, 255});
+            DrawText(spaceText, buttonsX + (buttonWidth - spaceTextWidth) / 2, button2Y + 26, 10, TEXT_CONTROLS);
 
             // Precio de venta
             int sellPrice = CalculateWeaponSellPrice(weaponIndex);
-            DrawText("Sell Price:", tooltipX + 10, tooltipY + tooltipHeight - 25, 14, Color{200, 200, 220, 255});
+            DrawText("Sell Price:", tooltipX + 10, tooltipY + tooltipHeight - 25, 14, TEXT_SECONDARY);
 
             // Dibujar sprite de moneda
-            const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
             int coinTextX = tooltipX + 10 + MeasureText("Sell Price: ", 14);
             Rectangle coinFrame = coinSheet.frames[0];
 
@@ -714,30 +1015,20 @@ void ShopState::render()
 
             // Dibujar cantidad con porcentaje (ajustar el espaciado según el ancho del sprite)
             int priceTextX = coinTextX + (int)coinFrame.width + 5;
-            DrawText(TextFormat("%d (50%%)", sellPrice), priceTextX, tooltipY + tooltipHeight - 25, 14,
-                     Color{255, 200, 0, 255});
+            DrawText(TextFormat("%d (50%%)", sellPrice), priceTextX, tooltipY + tooltipHeight - 25, 14, TEXT_ACCENT);
         }
     }
 
-    // Panel de items (derecha)
-    int itemsX = statsX + statsWidth + 30;
-    int itemsY = headerHeight + 20;
-    int itemsWidth = screenWidth - itemsX - 40;
-    int itemsHeight = statsHeight;
-
     // Fondo del panel de items
-    DrawRectangle(itemsX - 5, itemsY - 5, itemsWidth + 10, itemsHeight + 10, Color{255, 200, 0, 255});
-    DrawRectangle(itemsX, itemsY, itemsWidth, itemsHeight, Color{30, 30, 45, 255});
+    DrawRectangle(layout.itemsX - 5, layout.itemsY - 5, layout.itemsWidth + 10, layout.itemsHeight + 10, BORDER_ACCENT);
+    DrawRectangle(layout.itemsX, layout.itemsY, layout.itemsWidth, layout.itemsHeight, BG_PANEL);
 
     // Título del panel
-    DrawText(_("AVAILABLE ITEMS"), itemsX + 20, itemsY + 15, 24, Color{255, 200, 0, 255});
-    DrawLine(itemsX + 20, itemsY + 45, itemsX + itemsWidth - 20, itemsY + 45, Color{255, 200, 0, 255});
+    DrawText("AVAILABLE ITEMS", layout.itemsX + 20, layout.itemsY + 15, 24, TEXT_ACCENT);
+    DrawLine(layout.itemsX + 20, layout.itemsY + 45, layout.itemsX + layout.itemsWidth - 20, layout.itemsY + 45,
+             BORDER_ACCENT);
 
     // Items
-    int itemSlotHeight = 100;
-    int itemSlotSpacing = 15;
-    int itemStartY = itemsY + 70;
-
     for (int i = 0; i < Shop::MAX_ITEMS_SHOP; i++)
     {
         const TShopSlot &slot = shop.GetItemsShop()[i];
@@ -745,308 +1036,59 @@ void ShopState::render()
         if (slot.isBuyed)
             continue;
 
-        int slotY = itemStartY + i * (itemSlotHeight + itemSlotSpacing);
+        int slotY = layout.itemStartY + i * (layout.itemSlotHeight + layout.itemSlotSpacing);
 
         // Determinar si es un arma
         ITEM_TYPE itemType = slot.item->GetType();
-        bool isWeaponSlot = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
-
-        // Color del slot según estado
-        Color slotBgColor;
-        Color borderColor;
-
-        // Determinar color del borde base (por nivel si es arma)
-        Color weaponLevelBorderColor = Color{80, 80, 100, 255}; // Default
-        if (isWeaponSlot)
-        {
-            switch (slot.weaponLevel)
-            {
-            case 1:
-                weaponLevelBorderColor = Color{150, 150, 150, 255}; // Gris
-                break;
-            case 2:
-                weaponLevelBorderColor = Color{100, 255, 100, 255}; // Verde
-                break;
-            case 3:
-                weaponLevelBorderColor = Color{200, 100, 255, 255}; // Morado
-                break;
-            case 4:
-                weaponLevelBorderColor = Color{255, 200, 50, 255}; // Amarillo/Dorado
-                break;
-            }
-        }
-
-        if (i == selectedItem)
-        {
-            slotBgColor = Color{60, 80, 120, 255};
-            // Mantener el color del nivel si es arma, sino usar azul
-            borderColor = isWeaponSlot ? weaponLevelBorderColor : Color{100, 150, 255, 255};
-        }
-        else if (slot.isBlocked)
-        {
-            slotBgColor = Color{80, 40, 40, 255};
-            borderColor = Color{180, 60, 60, 255};
-        }
-        else
-        {
-            slotBgColor = Color{45, 45, 65, 255};
-            borderColor = weaponLevelBorderColor;
-        }
-
-        // Borde del slot
-        DrawRectangle(itemsX + 15, slotY - 3, itemsWidth - 30, itemSlotHeight + 6, borderColor);
-        DrawRectangle(itemsX + 18, slotY, itemsWidth - 36, itemSlotHeight, slotBgColor);
-
-        // Icono del item
-        const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(slot.item->GetType());
-        Rectangle sourceRec = sheet.frames[0];
-
-        // Normalizar todos los items para que el eje más grande sea aproximadamente 64
-        itemType = slot.item->GetType();
-        bool isWeapon = (itemType >= ITEM_TYPE::WEAPON_AXE && itemType <= ITEM_TYPE::WEAPON_WING);
-
-        if (isWeapon)
-        {
-            // Calcular escala para que el eje más grande sea 64
-            float maxAxis = std::max(sourceRec.width, sourceRec.height);
-            float scale = 64.0f / maxAxis;
-
-            Rectangle destRec = {(float)(itemsX + 25), (float)(slotY + 18), sourceRec.width * scale,
-                                 sourceRec.height * scale};
-            DrawTexturePro(sheet.texture, sourceRec, destRec, Vector2{0, 0}, 0.0f, WHITE);
-        }
-        else
-        {
-            // Items normales sin escalar
-            DrawTextureRec(sheet.texture, sourceRec, Vector2{(float)(itemsX + 25), (float)(slotY + 18)}, WHITE);
-        }
-
-        // Nombre del item
-        int textX = itemsX + 100;
-        DrawText(_(slot.item->GetName().c_str()), textX, slotY + 10, 22, Color{255, 255, 255, 255});
-
-        // Descripción del item (truncada si es muy larga)
-        std::string description = _(slot.item->GetDescription().c_str());
-        int maxDescriptionWidth = itemsWidth - 220; // Dejar espacio para el precio
-        int descriptionWidth = MeasureText(description.c_str(), 14);
-
-        if (descriptionWidth > maxDescriptionWidth)
-        {
-            // Truncar y agregar "..."
-            while (descriptionWidth > maxDescriptionWidth && !description.empty())
-            {
-                description.pop_back();
-                descriptionWidth = MeasureText((description + "...").c_str(), 14);
-            }
-            description += "...";
-        }
-
-        DrawText(description.c_str(), textX, slotY + 35, 14, Color{180, 180, 200, 255});
-
-        // Rareza con color
-        Color rarityColor;
-        const char *rarityText;
-        switch (slot.item->GetItemRarity())
-        {
-        case ItemRarity::Common:
-            rarityColor = Color{150, 150, 150, 255};
-            rarityText = _("COMMON");
-            break;
-        case ItemRarity::Uncommon:
-            rarityColor = Color{100, 255, 100, 255};
-            rarityText = _("UNCOMMON");
-            break;
-        case ItemRarity::Rare:
-            rarityColor = Color{100, 150, 255, 255};
-            rarityText = _("RARE");
-            break;
-        case ItemRarity::Epic:
-            rarityColor = Color{200, 100, 255, 255};
-            rarityText = _("EPIC");
-            break;
-        case ItemRarity::Legendary:
-            rarityColor = Color{255, 180, 50, 255};
-            rarityText = _("LEGENDARY");
-            break;
-        default:
-            rarityColor = WHITE;
-            rarityText = _("UNKNOWN");
-            break;
-        }
-
-        int rarityX = textX;
-        DrawText(rarityText, rarityX, slotY + 55, 12, rarityColor);
-
-        // Etiqueta de WEAPON si es un arma
-        if (isWeapon)
-        {
-            int weaponTagX = rarityX + MeasureText(rarityText, 12) + 10;
-            DrawText("WEAPON", weaponTagX, slotY + 55, 12, Color{255, 200, 100, 255});
-
-            // Mostrar nivel del arma
-            int levelTagX = weaponTagX + MeasureText("WEAPON", 12) + 10;
-
-            // Color del nivel según el nivel
-            Color levelColor;
-            switch (slot.weaponLevel)
-            {
-            case 1:
-                levelColor = Color{150, 150, 150, 255}; // Gris
-                break;
-            case 2:
-                levelColor = Color{100, 255, 100, 255}; // Verde
-                break;
-            case 3:
-                levelColor = Color{200, 100, 255, 255}; // Morado
-                break;
-            case 4:
-                levelColor = Color{255, 200, 50, 255}; // Amarillo/Dorado
-                break;
-            default:
-                levelColor = Color{150, 150, 150, 255}; // Gris por defecto
-                break;
-            }
-
-            DrawText(TextFormat("Lv%d", slot.weaponLevel), levelTagX, slotY + 55, 12, levelColor);
-        }
-
-        // Precio (ajustado por nivel si es arma)
+        bool isWeapon = IsWeaponType(itemType);
+        // Calcular precio final (ajustado por nivel si es arma)
         int finalPrice = slot.item->GetPrice();
         if (isWeapon)
         {
-            // Multiplicador de precio por nivel: x1 (nivel 1), x2 (nivel 2), x3 (nivel 3), x4 (nivel 4)
             finalPrice *= slot.weaponLevel;
         }
 
-        int priceX = itemsX + itemsWidth - 120;
-        Rectangle coinFrame = coinSheet.frames[0];
-
-        // Centrar verticalmente la moneda con el texto (20 es el tamaño de la fuente, slotY + 45 es la Y del texto)
-        int coinYPrice = (slotY + 45) + (20 - (int)coinFrame.height) / 2;
-        DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)priceX - 15, (float)coinYPrice}, WHITE);
-        DrawText(TextFormat("%d", finalPrice), priceX + 20, slotY + 45, 20, Color{255, 200, 0, 255});
-
-        // Indicador si está bloqueado
-        if (slot.isBlocked)
-        {
-            DrawText(_("BLOCKED"), itemsX + 25, slotY + itemSlotHeight - 20, 14, Color{255, 100, 100, 255});
-        }
-
-        // Stats del item (mostrar para cada item)
-        int statsTextX = textX;
-        int statsTextY = slotY + 72;
-        int statsOffset = 0;
-
+        // Crear item renderizable usando el struct unificado
         const Stats &itemStats = slot.item->GetStats();
 
-        // Si es arma, multiplicar stats por el nivel: 2^(nivel-1)
-        int statsMultiplier = 1;
-        if (isWeapon)
-        {
-            statsMultiplier = static_cast<int>(std::pow(2, slot.weaponLevel - 1));
-        }
+        RenderableItem item = {
+            itemType,                        // itemType
+            slot.item->GetName(),            // name
+            isWeapon ? slot.weaponLevel : 0, // level
+            isWeapon,                        // isWeapon
+            (i == selectedItem),             // isSelected
+            slot.isBlocked,                  // isBlocked
+            finalPrice,                      // price
+            &itemStats,                      // stats
+            slot.item->GetDescription(),     // description
+            slot.item->GetItemRarity()       // rarity
+        };
 
-        Color positiveColor = Color{100, 255, 100, 255};
-        Color negativeColor = Color{255, 100, 100, 255};
+        Rectangle slotRect = {(float)(layout.itemsX + 18), (float)slotY, (float)(layout.itemsWidth - 36),
+                              (float)layout.itemSlotHeight};
+        RenderItemSlot(item, slotRect, true); // true = renderizado completo con toda la info
+    }
 
-        // Función helper para mostrar stat
-        auto drawStat = [&](const char *name, float value)
-        {
-                if (value != 0)
-                {
-                    Color color = value > 0 ? positiveColor : negativeColor;
-                    const char *sign = value > 0 ? "+" : "";
-                    float displayValue = value * statsMultiplier;
-                    DrawText(TextFormat("%s%s %.1f", sign, name, displayValue), statsTextX + statsOffset, statsTextY, 11,
-                             color);
-                    statsOffset += MeasureText(TextFormat("%s%s %.1f  ", sign, name, displayValue), 11);
-                }
-            };
-
-            // Mostrar stats ofensivas
-            drawStat(_("PHY"), itemStats.GetPhysicalDamage());
-            drawStat(_("MAG"), itemStats.GetMagicDamage());
-            drawStat(_("AS"), itemStats.GetAttackSpeed());
-            drawStat(_("CC"), itemStats.GetCriticalChance());
-            drawStat(_("CD"), itemStats.GetCriticalDamage());
-            drawStat(_("LS"), itemStats.GetLifeSteal());
-
-            // Nueva línea para stats defensivas
-            statsOffset = 0;
-            statsTextY += 13;
-
-            drawStat(_("HP"), itemStats.GetHealth());
-            drawStat(_("MHP"), itemStats.GetMaxHealth());
-            drawStat(_("MS"), itemStats.GetMovementSpeed());
-            drawStat(_("AGI"), itemStats.GetAgility());
-            drawStat(_("ARM"), itemStats.GetArmor());
-            drawStat(_("RES"), itemStats.GetResistance());
-            drawStat(_("HR"), itemStats.GetHealthRegeneration());
-        }
-
-    // Botón de reroll (posicionado en el header, al lado izquierdo)
-    int rerollButtonWidth = 150;
-    int rerollButtonHeight = 40;
+    // Botones de header
     int rerollButtonX = 50;
     int rerollButtonY = 20;
+    Rectangle rerollButtonRect = {(float)rerollButtonX, (float)rerollButtonY, 150, 40};
+    DrawButton(rerollButtonRect, "Reroll", player->GetPabloCoins() >= REROLL_COST, BG_BUTTON_ENABLED,
+               BG_BUTTON_DISABLED, BORDER_BUTTON_ENABLED, BORDER_BUTTON_DISABLED, "[R]", REROLL_COST);
 
-    Rectangle rerollButtonRect = {(float)rerollButtonX, (float)rerollButtonY, (float)rerollButtonWidth,
-                                  (float)rerollButtonHeight};
-    bool isHoveringReroll = CheckCollisionPointRec(GetMousePosition(), rerollButtonRect);
-
-    Color rerollBgColor = player->GetPabloCoins() >= REROLL_COST ? Color{60, 100, 60, 255} : Color{80, 40, 40, 255};
-    Color rerollBorderColor =
-        player->GetPabloCoins() >= REROLL_COST ? Color{100, 200, 100, 255} : Color{180, 60, 60, 255};
-
-    // Borde negro si está en hover
-    if (isHoveringReroll)
-    {
-        rerollBorderColor = Color{0, 0, 0, 255};
-    }
-
-    DrawRectangle(rerollButtonX - 3, rerollButtonY - 3, rerollButtonWidth + 6, rerollButtonHeight + 6,
-                  rerollBorderColor);
-    DrawRectangle(rerollButtonX, rerollButtonY, rerollButtonWidth, rerollButtonHeight, rerollBgColor);
-
-    const char *rerollText = TextFormat(_("[R] Reroll $%d"), REROLL_COST);
-    DrawText(rerollText, rerollButtonX + rerollButtonWidth / 2 - MeasureText(rerollText, 16) / 2, rerollButtonY + 12,
-             16, WHITE);
-
-    // Botón de Continue (posicionado en el header, al lado del reroll)
-    int continueButtonWidth = 150;
-    int continueButtonHeight = 40;
-    int continueButtonX = rerollButtonX + rerollButtonWidth + 20;
-    int continueButtonY = 20;
-
-    Rectangle continueButtonRect = {(float)continueButtonX, (float)continueButtonY, (float)continueButtonWidth,
-                                    (float)continueButtonHeight};
-    bool isHoveringContinue = CheckCollisionPointRec(GetMousePosition(), continueButtonRect);
-
-    Color continueBgColor = Color{60, 80, 120, 255};
-    Color continueBorderColor = Color{100, 150, 255, 255};
-
-    // Borde negro si está en hover
-    if (isHoveringContinue)
-    {
-        continueBorderColor = Color{0, 0, 0, 255};
-    }
-
-    DrawRectangle(continueButtonX - 3, continueButtonY - 3, continueButtonWidth + 6, continueButtonHeight + 6,
-                  continueBorderColor);
-    DrawRectangle(continueButtonX, continueButtonY, continueButtonWidth, continueButtonHeight, continueBgColor);
-
-    const char *continueText = _("[E] Continue");
-    DrawText(continueText, continueButtonX + continueButtonWidth / 2 - MeasureText(continueText, 16) / 2,
-             continueButtonY + 12, 16, WHITE);
+    int continueButtonX = rerollButtonX + 150 + 20;
+    Rectangle continueButtonRect = {(float)continueButtonX, (float)rerollButtonY, 150, 40};
+    DrawButton(continueButtonRect, "Continue", true, BG_BUTTON_CONTINUE, BG_BUTTON_CONTINUE, BORDER_BUTTON_CONTINUE,
+               BORDER_BUTTON_CONTINUE, "[E]");
 
     // Controles en la parte inferior
-    int controlsY = screenHeight - 40;
-    DrawRectangle(0, controlsY, screenWidth, 40, Color{40, 40, 60, 255});
-    DrawRectangle(0, controlsY, screenWidth, 3, Color{255, 200, 0, 255});
+    int controlsY = layout.screenHeight - 40;
+    DrawRectangle(0, controlsY, layout.screenWidth, 40, BG_HEADER);
+    DrawRectangle(0, controlsY, layout.screenWidth, 3, BORDER_ACCENT);
     const char *controlsText =
-        _("[W/S] Navigate  [ENTER/LEFT-CLICK] Buy  [SPACE/RIGHT-CLICK] Lock  [R] Reroll  [E] Continue");
-    DrawText(controlsText, screenWidth / 2 - MeasureText(controlsText, 16) / 2, controlsY + 12, 16,
-             Color{200, 200, 200, 255});
+        "[W/S] Navigate  [ENTER/LEFT-CLICK] Buy  [SPACE/RIGHT-CLICK] Lock  [R] Reroll  [E] Continue";
+    DrawText(controlsText, layout.screenWidth / 2 - MeasureText(controlsText, 16) / 2, controlsY + 12, 16,
+             TEXT_CONTROLS);
 
     EndDrawing();
 }

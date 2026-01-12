@@ -10,6 +10,16 @@
 static std::random_device rd;
 static std::mt19937 generator(rd());
 
+bool Shop::IsValidIndex(int index) const
+{
+    if (index < 0 || index >= MAX_ITEMS_SHOP)
+    {
+        spdlog::warn("Trying to access shop slot out of range: index={}", index);
+        return false;
+    }
+    return true;
+}
+
 int Shop::GenerateWeaponLevel(const Item *item)
 {
     if (item == nullptr)
@@ -70,35 +80,27 @@ void Shop::reRoll()
 
 bool Shop::IsSlotBlocked(int index) const
 {
-    if (index < 0 || index >= MAX_ITEMS_SHOP)
-    {
-        spdlog::warn("Trying to access if an item is blocked out of range");
+    if (!IsValidIndex(index))
         return false;
-    }
+
     return shopPool[index].isBlocked;
 }
 
 void Shop::AlternateBlockSlot(int index)
 {
-    if (index < 0 || index >= MAX_ITEMS_SHOP)
-    {
-        spdlog::warn("Trying to access an item out of range");
+    if (!IsValidIndex(index))
         return;
-    }
+
     shopPool[index].isBlocked = !shopPool[index].isBlocked;
-};
+}
 
 const Item *Shop::BuyItem(int index)
 {
-    if (index < 0 || index >= MAX_ITEMS_SHOP)
-    {
-        spdlog::warn("Trying to buy an item out of range");
-        return nullptr; // Compra fallida
-    }
-    if (shopPool[index].isBuyed)
-    {
+    if (!IsValidIndex(index))
         return nullptr;
-    }
+
+    if (shopPool[index].isBuyed)
+        return nullptr;
 
     // Validacion mas que nada por bugs porque deberian ser siempre validos los items
     const Item *item = shopPool[index].item;
@@ -112,10 +114,8 @@ const Item *Shop::BuyItem(int index)
 
 bool Shop::IsSlotBuyed(int index) const
 {
-    if (index < 0 || index >= MAX_ITEMS_SHOP)
-    {
-        spdlog::warn("Trying to access if an item is buyed out of range");
+    if (!IsValidIndex(index))
         return false;
-    }
+
     return shopPool[index].isBuyed;
 }
