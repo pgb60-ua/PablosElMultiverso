@@ -54,6 +54,7 @@ protected:
 
     /// @brief Calcula la fuerza hacia el objetivo (jugador)
     virtual Vector2 CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed);
+    void Regeneration(int deltaTime);
 
 public:
     /*--------------------------*/

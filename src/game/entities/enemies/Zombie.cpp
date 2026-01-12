@@ -40,13 +40,7 @@ void Zombie::Update(float deltaTime)
 
     Move(deltaTime);
 
-    // Regeneración de vida
-    if (stats.GetHealthRegeneration() > 0 && IsAlive())
-    {
-        float newHealth = stats.GetHealth() + (stats.GetHealthRegeneration() * deltaTime);
-        if (newHealth > stats.GetMaxHealth())
-            newHealth = stats.GetMaxHealth();
-        stats.SetHealth(newHealth);
-    }
+    Regeneration(deltaTime);
+
     UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::ZOMBIE);
 }

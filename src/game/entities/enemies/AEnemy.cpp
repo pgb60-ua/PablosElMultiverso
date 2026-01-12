@@ -46,6 +46,19 @@ void AEnemy::DropLoot()
     }
 }
 
+void AEnemy::Regeneration(int deltaTime)
+{
+
+    // Regeneración de vida
+    if (stats.GetHealthRegeneration() > 0 && IsAlive())
+    {
+        float newHealth = stats.GetHealth() + (stats.GetHealthRegeneration() * deltaTime);
+        if (newHealth > stats.GetMaxHealth())
+            newHealth = stats.GetMaxHealth();
+        stats.SetHealth(newHealth);
+    }
+};
+
 Player *AEnemy::GetClosestPlayer()
 {
     if (objectives.empty())
