@@ -33,7 +33,7 @@ protected:
     SpriteAnimation animation;
 
     AEntity(Stats stats, const Shape &hitbox);
-    void Regeneration(int deltaTime);
+    void Regeneration(float deltaTime);
 
 public:
     /// @brief Establece la estadistica de attackSpeed con logica previa

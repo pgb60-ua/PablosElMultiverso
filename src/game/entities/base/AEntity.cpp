@@ -88,7 +88,7 @@ void AEntity::TakeDamage(const Stats &stats)
     this->stats.SetHealth(newHealth > 0 ? newHealth : 0);
 }
 
-void AEntity::Regeneration(int deltaTime)
+void AEntity::Regeneration(float deltaTime)
 {
     // Regeneración de vida
     if (stats.GetHealthRegeneration() > 0 && IsAlive())
