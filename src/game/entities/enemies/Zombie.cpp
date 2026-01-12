@@ -4,7 +4,6 @@
 #include "Types.hpp"
 #include <cmath>
 #include <raymath.h>
-#include "AudioManager.hpp"
 
 Zombie::Zombie(std::vector<Player *> objectives)
     : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::ZOMBIE),

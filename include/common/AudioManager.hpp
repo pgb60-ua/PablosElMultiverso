@@ -71,7 +71,6 @@ private:
     AudioManager(AudioManager &&) = delete;
     AudioManager &operator=(AudioManager &&) = delete;
 
-    std::string GetFilePath(PROJECTILE_TYPE type) const;
     std::string GetFilePath(WEAPON_TYPE type) const;
     std::string GetFilePathEnemy() const;
 
