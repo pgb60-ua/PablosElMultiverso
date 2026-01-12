@@ -98,6 +98,6 @@ void AEntity::Regeneration(float deltaTime)
             newHealth = stats.GetMaxHealth();
         stats.SetHealth(newHealth);
     }
-};
+}
 
 void AEntity::Update(float deltaTime) { Regeneration(deltaTime); }
