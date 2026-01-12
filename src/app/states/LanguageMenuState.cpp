@@ -13,26 +13,37 @@ extern "C" {
 const char *LanguageMenuState::LANG_OPTIONS[3] = { "English", "Español", "Français" };
 
 static void changeLanguage(const std::string& language) {
-    // Configurar LANGUAGE con prioridad: fr_FR:fr
-    std::string langCode = language; 
-    std::string countryCode = (language == "en" ? "US" : (language == "fr" ? "FR" : "ES")); 
-    std::string fullCode = langCode + "_" + countryCode; 
-    std::string langVar = fullCode + ":" + langCode;
+    // 1. Configurar la variable de entorno LANGUAGE.
+    // Esto es lo que GNU gettext mira para decidir qué archivo .mo cargar.
+    // Tiene prioridad sobre el locale configurado (LC_MESSAGES), SIEMPRE que el locale no sea "C".
+    std::string langCode = language;
+    std::string countryCode = (language == "en" ? "US" : (language == "fr" ? "FR" : "ES"));
+    std::string fullCode = langCode + "_" + countryCode; // ej: es_ES
     
-    SetEnvironmentVariable("LANGUAGE", langVar);
+    // Prioridad: idioma_PAIS -> idioma -> fallback inglés
+    std::string langPriority = fullCode + ":" + langCode + ":en_US:en";
+    SetEnvironmentVariable("LANGUAGE", langPriority);
 
-    // Intentar activar un locale UTF-8
-    std::string target = fullCode + ".UTF-8";
+    // 2. Intentar establecer un locale UTF-8 válido.
+    // Es CRÍTICO salir del locale "C", porque en "C", gettext ignora la variable LANGUAGE.
     
-    if (setlocale(LC_ALL, target.c_str()) == nullptr) {
-        // Fallback robusto a cualquier UTF-8 disponible
+    // Opción A: Intentar el idioma nativo (ej: fr_FR.UTF-8)
+    std::string targetLocale = fullCode + ".UTF-8";
+    char* res = setlocale(LC_ALL, targetLocale.c_str());
+    
+    if (res == nullptr) {
+        // Opción B: Si el nativo falta, usar C.UTF-8 (existente en la mayoría de Linux modernos)
+        // Esto permite manejar caracteres especiales y activa gettext.
         if (setlocale(LC_ALL, "C.UTF-8") == nullptr) {
-             if (setlocale(LC_ALL, "en_US.UTF-8") == nullptr) {
-                 setlocale(LC_ALL, ""); 
-             }
+            // Opción C: Usar en_US.UTF-8 (muy común)
+            if (setlocale(LC_ALL, "en_US.UTF-8") == nullptr) {
+                // Opción D: Lo que tenga el sistema por defecto
+                setlocale(LC_ALL, "");
+            }
         }
     }
 
+    // 3. Recargar dominios
     bindtextdomain("pablos", GetLocalePath().c_str());
     bind_textdomain_codeset("pablos", "UTF-8");
     textdomain("pablos");
