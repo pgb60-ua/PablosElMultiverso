@@ -5,7 +5,7 @@
 #include "Types.hpp"
 #include <filesystem>
 #include <fstream>
-#include <../vendor/include/nlohmann/json.hpp>
+#include <nlohmann/json.hpp>
 
 namespace fs = std::filesystem;
 
