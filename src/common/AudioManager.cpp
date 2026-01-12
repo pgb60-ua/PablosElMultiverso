@@ -266,19 +266,5 @@ void AudioManager::UpdateMusic()
 std::string AudioManager::GetFilePath(ENEMY_TYPE type) const
 {
     std::string basePath = assetsRoot.empty() ? BASE_PATH_ENEMY_SOUNDS : assetsRoot + BASE_PATH_ENEMY_SOUNDS;
-
-    switch (type)
-    {
-        //esto cuando metamos a los siguientes enemigos lo cambiamos
-    case ENEMY_TYPE::ZOMBIE:
-        return basePath + "enemy.wav";
-    case ENEMY_TYPE::ENEMY2:
-        return basePath + "enemy2.wav";
-    case ENEMY_TYPE::ENEMY3:
-        return basePath + "enemy3.wav";
-    case ENEMY_TYPE::ENEMY4:
-        return basePath + "enemy4.wav";
-    default:
-        throw std::runtime_error("Tipo de enemigo desconocido");
-    }
+    return basePath + "enemy.wav";
 }

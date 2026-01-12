@@ -78,7 +78,7 @@ private:
     std::unordered_map<int, Sound> weaponSoundsCache;
     std::unordered_map<int, Sound> enemySoundsCache;
     
-    static constexpr int MAX_CONCURRENT_SOUNDS = 4;
+    static constexpr int MAX_CONCURRENT_SOUNDS = 6;
     struct SoundAliasPool {
         std::vector<Sound> aliases;
     };
