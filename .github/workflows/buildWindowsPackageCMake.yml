@@ -60,7 +60,7 @@ jobs:
         run: choco install nsis -y
 
       - name: Configure CMake
-        run: cmake -S . -B build
+        run: cmake -S . -B build -DBUILD_TESTS=OFF
 
       - name: Build
         run: cmake --build build --config Release --parallel
