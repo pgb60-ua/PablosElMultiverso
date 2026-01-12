@@ -64,9 +64,9 @@ jobs:
       - name: Compile locale files
         shell: bash
         run: |
-          mkdir -p locale/en_US/LC_MESSAGES
+          mkdir -p locale/es_ES/LC_MESSAGES
           mkdir -p locale/fr_FR/LC_MESSAGES
-          msgfmt po/en_US.po -o locale/en_US/LC_MESSAGES/pablos.mo
+          msgfmt po/es_ES.po -o locale/es_ES/LC_MESSAGES/pablos.mo
           msgfmt po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
 
       - name: Configure CMake
