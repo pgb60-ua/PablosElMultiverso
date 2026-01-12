@@ -9,6 +9,29 @@ extern "C"
 #include "raylib.h"
 }
 
+typedef struct
+{
+    Color borderColor;
+    Color tintColor;
+} TWeaponColor;
+
+// Struct unificado para renderizar cualquier tipo de item (tienda o inventario)
+struct RenderableItem
+{
+    ITEM_TYPE itemType;
+    std::string name;
+    Rectangle spriteFrame;
+    Texture2D texture;
+    int level; // Para armas (0 si no es arma)
+    bool isWeapon;
+    bool isSelected;
+    bool isBlocked;          // Para items de tienda
+    int price;               // Para items de tienda (0 si es inventario)
+    const Stats *stats;      // Puntero a las stats del item
+    std::string description; // Para items de tienda (vacío si es inventario)
+    ItemRarity rarity;       // Para items de tienda
+};
+
 class ShopState : public GameState
 {
 private:
@@ -29,6 +52,11 @@ private:
     /// @brief devuelve a que arma salto del inventario
     void NextWeaponSelected(int direction);
     int CalculateWeaponSellPrice(int weaponIndex);
+
+    // Funciones helper para renderizado unificado
+    TWeaponColor GetColorBasedOnWeaponLevel(int level);
+    void RenderItemSlot(const RenderableItem &item, Rectangle slotRect, bool showFullInfo);
+    void DrawItemSprite(const RenderableItem &item, int x, int y, int maxSize);
 
 public:
     ShopState(Player *player);
