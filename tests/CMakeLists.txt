@@ -50,3 +50,24 @@ target_include_directories(SpriteLoaderManager_test
 )
 
 add_test(NAME SpriteLoaderManagerTest COMMAND SpriteLoaderManager_test)
+
+# AudioManager Test
+add_executable(AudioManager_test AudioManager_test.cpp
+    ${CMAKE_SOURCE_DIR}/src/common/AudioManager.cpp
+)
+
+target_link_libraries(AudioManager_test 
+    PRIVATE 
+    Boost::unit_test_framework
+    raylib
+)
+
+target_include_directories(AudioManager_test 
+    PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/common
+    ${CMAKE_SOURCE_DIR}/include/utils
+    ${VENDOR_INCLUDE}
+)
+
+add_test(NAME AudioManagerTest COMMAND AudioManager_test)

@@ -1,4 +1,5 @@
 #include "EggplosiveWeapon.hpp"
+#include "AudioManager.hpp"
 
 EggplosiveWeapon::EggplosiveWeapon(const Vector2& position, std::vector<AEnemy *>& enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : ARangeWeapon(
@@ -28,6 +29,7 @@ void EggplosiveWeapon::Attack(const Vector2& position, float deltaTime)
     if (timeSinceLastAttack >= attackInterval) 
     {
         ShootProjectile(position, direction, allEnemies);
+        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::EGGPLOSIVE);
         timeSinceLastAttack -= attackInterval;
     }
 }

@@ -1,3 +1,10 @@
+#include "Player.hpp"
+#include "SpriteLoaderManager.hpp"
+#include "AudioManager.hpp"
+#include "Types.hpp"
+#include "WingWeapon.hpp"
+#include "LaserRayWeapon.hpp"
+#include "SniperWeapon.hpp"
 #include "AxeWeapon.hpp"
 #include "EggplosiveWeapon.hpp"
 #include "GameOverState.hpp"
@@ -33,6 +40,9 @@ MainGameState::MainGameState() : MainGameState(PLAYER_TYPE::MAGE) {}
 
 void MainGameState::init()
 {
+    // Reproducir música de fondo
+    AudioManager::GetInstance().PlayBackgroundMusic("bg_music.ogg");
+    
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     players.push_back(std::make_unique<Player>(selectedPlayerType, initialPosition, enemies));
@@ -103,6 +113,9 @@ void MainGameState::handleInput()
 
 void MainGameState::update(float deltaTime)
 {
+    // Actualizar la música de fondo
+    AudioManager::GetInstance().UpdateMusic();
+    
     int numero_vivo = 0;
     // Actualizar todos los jugadores (esto llamará internamente a Move si hay dirección)
     for (auto &player : players)
