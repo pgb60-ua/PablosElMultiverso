@@ -102,6 +102,6 @@ public:
     /// @brief Comprueba las colisiones de la entidad
     virtual void CheckCollisions(float deltaTime) = 0;
 
-    virtual void Update(float deltaTime) = 0;
+    virtual void Update(float deltaTime);
     virtual ~AEntity() {};
 };
