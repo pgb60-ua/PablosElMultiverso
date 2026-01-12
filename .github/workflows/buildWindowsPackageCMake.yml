@@ -80,7 +80,7 @@ jobs:
           msgfmt po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
 
       - name: Configure CMake
-        run: cmake -S . -B build -DBUILD_TESTS=OFF
+        run: cmake -S . -B build -DBUILD_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
 
       - name: Build
         run: cmake --build build --config Release --parallel
