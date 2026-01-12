@@ -421,6 +421,9 @@ void ShopState::RenderItemSlot(const RenderableItem &item, Rectangle slotRect, b
         DrawText(levelText, slotRect.x + 5, slotRect.y + slotRect.height - 18, 14, weaponColor.borderColor);
     }
 }
+
+// END FUNCIONES HELPER DE RENDERIZADO
+
 void ShopState::handleInput()
 {
     // Input de teclado
