@@ -114,6 +114,38 @@ target_link_libraries(pablos-el-multiverso PRIVATE
     raylib
 )
 
+# Soporte para dependencias de VCPKG local (libintl/gettext)
+if(WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows")
+    message(STATUS "Configurando rutas de VCPKG local...")
+    target_include_directories(pablos-el-multiverso PRIVATE "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/include")
+    target_link_directories(pablos-el-multiverso PRIVATE "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/lib")
+
+    find_library(INTL_LIB NAMES intl libintl PATHS "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/lib" NO_DEFAULT_PATH)
+    if(INTL_LIB)
+        target_link_libraries(pablos-el-multiverso PRIVATE ${INTL_LIB})
+        message(STATUS "Librería Linkada: ${INTL_LIB}")
+    endif()
+
+    find_library(ICONV_LIB NAMES iconv libiconv PATHS "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/lib" NO_DEFAULT_PATH)
+    if(ICONV_LIB)
+        target_link_libraries(pablos-el-multiverso PRIVATE ${ICONV_LIB})
+    endif()
+
+    # Copiar DLLs necesarias al directorio del ejecutable
+    file(GLOB VCPKG_DLLS "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/bin/*.dll")
+    if(VCPKG_DLLS)
+        add_custom_command(TARGET pablos-el-multiverso POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${VCPKG_DLLS}
+                $<TARGET_FILE_DIR:pablos-el-multiverso>
+            COMMENT "Copiando DLLs de vcpkg..."
+        )
+        
+        # Instalar DLLs junto al ejecutable
+        install(FILES ${VCPKG_DLLS} DESTINATION .)
+    endif()
+endif()
+
 
 #===========================================================================
 # CONFIGURACIÓN CPACK
