@@ -33,10 +33,10 @@ Todas las Pull Requests se integrarán en la rama principal mediante un **squash
 
 - **CMake** (versión 3.15 o superior): [Descargar CMake](https://cmake.org/download/)
 - **Visual Studio** (2019 o superior) con herramientas de desarrollo de C++
-- **Gettext** para internacionalización:
+- **Gettext** para internacionalización (opcional, solo necesario si quieres generar/actualizar traducciones y ejecutar el juego en varios idiomas):
     - Opción 1: Instalar via vcpkg: `vcpkg install gettext:x64-windows`
     - Opción 2: Descargar binarios desde [gnuwin32](http://gnuwin32.sourceforge.net/packages/gettext.htm)
-
+    - Si no lo instalas, el proyecto debería compilarse igualmente, pero solo estará disponible el idioma por defecto configurado en el juego y no podrás gestionar archivos de traducción (`.po`/`.mo`).
 #### Compilación con CMake y Visual Studio
 
 Desde el directorio raíz del proyecto en PowerShell o CMD:
