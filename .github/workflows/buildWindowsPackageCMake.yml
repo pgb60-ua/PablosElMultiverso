@@ -59,13 +59,16 @@ jobs:
       - name: Install NSIS
         run: choco install nsis -y
 
-      - name: Setup vcpkg and install gettext
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: 'c8696863d371ab7f46e213d8f5ca923c4ff5ecc8'
+          
+      - name: Install gettext via vcpkg
         run: |
-          git clone https://github.com/Microsoft/vcpkg.git
-          .\vcpkg\bootstrap-vcpkg.bat
-          .\vcpkg\vcpkg install gettext:x64-windows
-
-      - name: Setup MSYS2
+          vcpkg install gettext:x64-windows
+          
+      - name: Setup MSYS2 for msgfmt
         uses: msys2/setup-msys2@v2
         with:
           update: false
@@ -80,7 +83,7 @@ jobs:
           msgfmt po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
 
       - name: Configure CMake
-        run: cmake -S . -B build -DBUILD_TESTS=OFF
+        run: cmake -S . -B build -DBUILD_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
 
       - name: Build
         run: cmake --build build --config Release --parallel
