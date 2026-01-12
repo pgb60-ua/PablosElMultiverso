@@ -1,9 +1,15 @@
-#include "WindowFlags.hpp"
+#include "ItemsFactory.hpp"
 #include "ScreenConstants.hpp"
+#include "WindowFlags.hpp"
 #include <MainGameState.hpp>
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
 #include <memory>
+#include "I18N.hpp"
+
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
 extern "C"
 {
 #include <raylib.h>
@@ -11,8 +17,19 @@ extern "C"
 
 int main()
 {
+    if (setlocale(LC_ALL, "") == nullptr)
+    {
+        std::cerr << "Warning: Failed to set locale from environment." << std::endl;
+    }
+    
+    // Configuración específica para la localización
+    bindtextdomain("pablos", GetLocalePath().c_str());
+    textdomain("pablos");
+
     // Crear ventana con el tamaño del monitor
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pablos, El Multiverso");
+
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     float delta_time = 0.0f;
 
@@ -23,7 +40,7 @@ int main()
     InitAudioDevice();
     DataFileManager::GetInstance().DetectAndSetAssetsPath();
     SpriteLoaderManager::GetInstance().DetectAndSetAssetsPath();
-
+    ItemsFactory::GetInstance().LoadAllItems();
     while (!state_machine.is_game_ending() && !WindowShouldClose())
     {
         HandleWindowFlags();

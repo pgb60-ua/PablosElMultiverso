@@ -1,0 +1,9 @@
+{
+	"name": "Pearl Egg",
+	"description": "A mysterious egg that enhances regeneration",
+	"price": 120,
+	"rarity": "Uncommon",
+	"health_regeneration": 5.0,
+	"max_health": 25,
+	"resistance": 10
+}

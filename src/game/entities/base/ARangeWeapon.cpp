@@ -1,20 +1,19 @@
 #include "ARangeWeapon.hpp"
 
-ARangeWeapon::ARangeWeapon(const std::string &name, const std::string &description,
-                           const Stats &stats, ItemRarity itemRarity, int level, size_t poolSize, const Vector2 &position,
+ARangeWeapon::ARangeWeapon(const std::string &name, const std::string &description, const Stats &stats,
+                           ItemRarity itemRarity, int level, size_t poolSize, const Vector2 &position,
                            std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : AWeapon(name, description, stats, itemRarity, level, position, enemiesInRange, allEnemies), POOL_SIZE(poolSize)
 {
     UpdateAttackInterval();
 }
 
-ARangeWeapon::~ARangeWeapon()
-{
-}
+ARangeWeapon::~ARangeWeapon() {}
 
-// AQUI CONSIDERO QUE ACTIVATE DEBERIA LLEVAR TAMBIÉN UNA DIRECCIÓN HACIA DONDE SE DISPARA, PERO MANUEL NO LO HIZO ASÍ, EN LA PR QUE SE REVISE
-// Le dijo la sarten al cazo
-void ARangeWeapon::ShootProjectile(const Vector2 &position, const Vector2 &direction, const std::vector<AEnemy *> &allEnemies)
+// AQUI CONSIDERO QUE ACTIVATE DEBERIA LLEVAR TAMBIÉN UNA DIRECCIÓN HACIA DONDE SE DISPARA, PERO MANUEL NO LO HIZO ASÍ,
+// EN LA PR QUE SE REVISE Le dijo la sarten al cazo
+void ARangeWeapon::ShootProjectile(const Vector2 &position, const Vector2 &direction,
+                                   const std::vector<AEnemy *> &allEnemies)
 {
     AProjectile *projectile = GetProjectileFromPool();
     if (projectile)
@@ -95,6 +94,9 @@ void ARangeWeapon::render()
 void ARangeWeapon::update(float deltaTime, const Vector2 &position)
 {
     AWeapon::update(deltaTime, position);
-    Attack(position, deltaTime); // TODO : La dirección debería de ser calculada
+    if (!enemiesInRange.empty())
+    {
+        Attack(this->position, deltaTime);
+    }
     UpdateProjectiles(deltaTime);
 }

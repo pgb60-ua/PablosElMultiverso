@@ -1,15 +1,21 @@
-#include "Player.hpp"
-#include "SpriteLoaderManager.hpp"
-#include "Types.hpp"
-#include "WingWeapon.hpp"
-#include "LaserRayWeapon.hpp"
-#include "SniperWeapon.hpp"
+#include "AxeWeapon.hpp"
+#include "SwordWeapon.hpp"
 #include "EggplosiveWeapon.hpp"
 #include "GameOverState.hpp"
 #include "GameWonState.hpp"
+#include "LaserRayWeapon.hpp"
+#include "Player.hpp"
+#include "ShopState.hpp"
+#include "SniperWeapon.hpp"
+#include "SpriteLoaderManager.hpp"
 #include "StateMachine.hpp"
+#include "Types.hpp"
+#include "WeaponFactory.hpp"
+#include "WingWeapon.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
+#include <memory>
+#include "I18N.hpp"
 
 extern "C"
 {
@@ -23,30 +29,25 @@ MainGameState::MainGameState(PLAYER_TYPE playerType)
 }
 
 // Constructor por defecto con tipo de jugador por defecto (Mage)
-MainGameState::MainGameState()
-    : MainGameState(PLAYER_TYPE::MAGE)
-{
-}
+MainGameState::MainGameState() : MainGameState(PLAYER_TYPE::MAGE) {}
 
 void MainGameState::init()
-{  
+{
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
     players.push_back(std::make_unique<Player>(selectedPlayerType, initialPosition, enemies));
-    
+
     playerPointers.clear();
-    for (const auto& player : players)
+    for (const auto &player : players)
     {
         playerPointers.push_back(player.get());
     }
 
     roundManager.MoveToNextRound();
 
-    players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<SniperWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<EggplosiveWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-
+    // No le pongo move porque como devuelve un unique_ptr temporal automaticamente cambia de owner
+    players[0]->AddWeapon(
+        WeaponFactory::CreateStartingWeapon(players[0]->GetPlayerType(), Vector2{400.0f, 300.0f}, enemies, enemies));
 }
 
 void MainGameState::handleInput()
@@ -112,7 +113,6 @@ void MainGameState::update(float deltaTime)
         {
             numero_vivo++;
         }
-
     }
 
     if (numero_vivo == (int)players.size())
@@ -122,10 +122,14 @@ void MainGameState::update(float deltaTime)
     }
     else if (roundManager.IsCurrentRoundOver())
     {
-        if(!roundManager.MoveToNextRound()){
+        if (!roundManager.MoveToNextRound())
+        {
             state_machine->add_state(std::make_unique<GameWonState>(), true);
-        }else{
-            //TODO: Lanzar pantalla de tienda
+        }
+        else
+        {
+            // Lo pongo en false para no eliminar el MainGameState
+            state_machine->add_state(std::make_unique<ShopState>(players[0].get()), false);
         }
     }
 
@@ -139,14 +143,27 @@ void MainGameState::render()
 
     const SpriteSheet &mapSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT);
     DrawTextureRec(mapSprite.texture, mapSprite.frames[0], {0, 0}, WHITE);
-    
-    DrawText("Pablos El Multiverso", 10, 10, 20, LIGHTGRAY);
+
+    DrawText(_("PABLOS, THE MULTIVERSE"), 10, 10, 20, LIGHTGRAY);
+
+    // Mostrar monedas del jugador 0
+    const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+    std::string coinsText = std::to_string(players[0]->GetPabloCoins());
+    int fontSize = 20;
+    int yBase = 35;
+    float iconH = coinSheet.frames[0].height;
+    float rowH = std::max((float)fontSize, iconH);
+    float textY = yBase + (rowH - fontSize) / 2.0f;
+    float iconY = yBase + (rowH - iconH) / 2.0f;
+    int textWidth = MeasureText(coinsText.c_str(), fontSize);
+    DrawText(coinsText.c_str(), 10, (int)textY, fontSize, YELLOW);
+    DrawTextureRec(coinSheet.texture, coinSheet.frames[0], {10.0f + textWidth + 6, iconY}, WHITE);
 
     // Renderizar todos los jugadores
     for (auto &player : players)
     {
         player->Render();
-        std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
+        std::string healthText = _("Health: ") + std::to_string(static_cast<int>(player->GetHealth()));
         DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
                  static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }

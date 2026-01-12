@@ -1,0 +1,10 @@
+{
+	"name": "Venomous Plant",
+	"description": "A mysterious plant that enhances magical power at the cost of vitality",
+	"rarity": "Rare",
+	"price": 35,
+	"magical_damage": 15,
+	"max_health": -20,
+	"health_regeneration": 2,
+	"resistance": 5
+}

@@ -1,18 +1,13 @@
 #include "AProjectile.hpp"
 #include <algorithm>
 
-AProjectile::AProjectile(std::vector<AEnemy *> &allEnemies)
-    : enemiesInScene(allEnemies)
+AProjectile::AProjectile(std::vector<AEnemy *> &allEnemies) : enemiesInScene(allEnemies)
 {
     shape.type = ShapeType::SHAPE_CIRCLE;
     shape.data.circle.radius = 5.0f; // Radio por defecto
     setShapePosition(shape, {-110, -110});
     direction = {-110, -110};
     stats = Stats();
-}
-
-AProjectile::~AProjectile()
-{
 }
 
 void AProjectile::setRadius(float radius)
@@ -26,7 +21,9 @@ void AProjectile::setRadius(float radius)
 void AProjectile::update(float deltaTime)
 {
     if (!active)
+    {
         return;
+    }
 
     Vector2 position = getShapePosition(shape);
     position.x += direction.x * stats.GetMovementSpeed() * deltaTime;
@@ -43,25 +40,16 @@ void AProjectile::update(float deltaTime)
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
             enemy->TakeDamage(stats);
-            if (!enemy->IsAlive())
-            {
-                delete enemy;
-                enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));
-            }
+            // La limpieza de enemigos muertos es responsabilidad de Round::Update
             deactivate();
             break;
         }
     }
 }
 
-Vector2 AProjectile::getPosition() const
-{
-    return getShapePosition(shape);
-}
-void AProjectile::deactivate()
-{
-    active = false;
-}
+Vector2 AProjectile::getPosition() const { return getShapePosition(shape); }
+
+void AProjectile::deactivate() { active = false; }
 
 void AProjectile::activate(Vector2 position, Vector2 direction, const Stats &stats)
 {

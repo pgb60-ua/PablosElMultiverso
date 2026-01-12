@@ -17,6 +17,9 @@
 # Debugger Files
 *.pdb
 
+# Translation files
+*.mo
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -44,6 +47,7 @@ game-dev
 .vscode
 .vs
 .clangd
+.cache
 
 # Build folders
 build/

@@ -4,6 +4,7 @@
 #include "MainMenuState.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "StateMachine.hpp"
+#include "I18N.hpp"
 #include <string>
 extern "C"
 {
@@ -113,15 +114,9 @@ void ChooseNPCMenuState::handleInput()
 
     if (!characters.empty() && currentCharacterIndex < static_cast<int>(characters.size()))
     {
-        CharacterOption &currentChar = characters[currentCharacterIndex];
-        const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(currentChar.type);
-        Rectangle frame = sheet.frames[currentChar.spriteAnimation.frameIndex];
 
-        // Calcular posiciones para los botones usando el frame real
+        // Calcular posición del contenedor
         Vector2 containerPos = GetContainerPos(screenWidth, screenHeight);
-        float spriteWidth = frame.width * CONTAINER_SCALE;
-        float spriteHeight = frame.height * CONTAINER_SCALE;
-        Vector2 spritePos = GetSpritePos(containerPos, spriteWidth, spriteHeight);
 
         // Resetear el array de hover
         arrowHovered[0] = false;
@@ -130,7 +125,7 @@ void ChooseNPCMenuState::handleInput()
         // Verificar hover sobre cada botón
         for (int i = 0; i < 2; i++)
         {
-            Rectangle btn = GetArrowButtonRect(i, spritePos, spriteWidth, screenHeight);
+            Rectangle btn = GetArrowButtonRect(i, containerPos, screenHeight);
             if (CheckCollisionPointRec(mousePosition, btn))
             {
                 arrowHovered[i] = true;
@@ -200,21 +195,20 @@ Vector2 ChooseNPCMenuState::GetSpritePos(const Vector2 &containerPos, float spri
                    containerPos.y + (DISPLAY_SIZE - spriteHeight) / 2.0f};
 }
 
-Rectangle ChooseNPCMenuState::GetArrowButtonRect(int index, const Vector2 &spritePos, float spriteWidth,
-                                                 int screenHeight)
+Rectangle ChooseNPCMenuState::GetArrowButtonRect(int index, const Vector2 &containerPos, int screenHeight)
 {
     const char *arrow = (index == 0) ? "<" : ">";
     Vector2 arrowSize = MeasureTextEx(GetFontDefault(), arrow, ARROW_FONT_SIZE, 1);
 
-    float xPos = (index == 0) ? spritePos.x - ARROW_DISTANCE
-                              : spritePos.x + spriteWidth + ARROW_DISTANCE - arrowSize.x;
+    float xPos = (index == 0) ? containerPos.x - ARROW_DISTANCE
+                              : containerPos.x + DISPLAY_SIZE + ARROW_DISTANCE - arrowSize.x;
     float yPos = (screenHeight - arrowSize.y) / 2.0f;
 
     return Rectangle{xPos - ARROW_PADDING, yPos - ARROW_PADDING,
                      arrowSize.x + ARROW_PADDING * 2, arrowSize.y + ARROW_PADDING * 2};
 }
 
-void ChooseNPCMenuState::DrawNavigationArrows(const Vector2 &spritePos, float spriteWidth) const
+void ChooseNPCMenuState::DrawNavigationArrows(const Vector2 &containerPos) const
 {
     int screenHeight = GetScreenHeight();
     Color fillColor = {60, 60, 60, 255};
@@ -222,12 +216,12 @@ void ChooseNPCMenuState::DrawNavigationArrows(const Vector2 &spritePos, float sp
 
     for (int i = 0; i < 2; i++)
     {
-        Rectangle rect = GetArrowButtonRect(i, spritePos, spriteWidth, screenHeight);
+        Rectangle rect = GetArrowButtonRect(i, containerPos, screenHeight);
         Vector2 arrowSize = MeasureTextEx(GetFontDefault(), arrows[i], ARROW_FONT_SIZE, 1);
 
         // Calcular posición del texto
-        float xPos = (i == 0) ? spritePos.x - ARROW_DISTANCE
-                              : spritePos.x + spriteWidth + ARROW_DISTANCE - arrowSize.x;
+        float xPos = (i == 0) ? containerPos.x - ARROW_DISTANCE
+                              : containerPos.x + DISPLAY_SIZE + ARROW_DISTANCE - arrowSize.x;
         Vector2 arrowPos = {xPos, (screenHeight - arrowSize.y) / 2.0f};
 
         // Color según hover
@@ -238,7 +232,6 @@ void ChooseNPCMenuState::DrawNavigationArrows(const Vector2 &spritePos, float sp
         DrawTextEx(GetFontDefault(), arrows[i], arrowPos, (float)ARROW_FONT_SIZE, 1.0f, arrowColor);
     }
 }
-
 void ChooseNPCMenuState::render()
 {
     BeginDrawing();
@@ -248,7 +241,7 @@ void ChooseNPCMenuState::render()
     int screenHeight = GetScreenHeight();
 
     // Dibujar título
-    DrawCenteredText("SELECCIONA TU PERSONAJE", 50.0f, 40, RAYWHITE);
+    DrawCenteredText(_("SELECT YOUR CHARACTER"), 50.0f, 40, RAYWHITE);
 
     if (!characters.empty() && currentCharacterIndex < static_cast<int>(characters.size()))
     {
@@ -280,17 +273,17 @@ void ChooseNPCMenuState::render()
         }
 
         // Dibujar nombre del personaje
-        DrawCenteredText(currentChar.name.c_str(), containerPos.y + DISPLAY_SIZE + 30.0f, 35, YELLOW);
+        DrawCenteredText(_(currentChar.name.c_str()), containerPos.y + DISPLAY_SIZE + 30.0f, 35, YELLOW);
 
         // Dibujar descripción si existe
         if (!currentChar.description.empty())
         {
             float descY = containerPos.y + DISPLAY_SIZE + 70.0f; // 30 + 40
-            DrawCenteredText(currentChar.description.c_str(), descY, 18, GRAY);
+            DrawCenteredText(_(currentChar.description.c_str()), descY, 18, GRAY);
         }
 
         // Dibujar flechas de navegación
-        DrawNavigationArrows(containerPos, DISPLAY_SIZE);
+        DrawNavigationArrows(containerPos);
 
         // Indicador de personaje actual
         const char *indicator = TextFormat("%d / %d", currentCharacterIndex + 1, (int)characters.size());
@@ -298,7 +291,7 @@ void ChooseNPCMenuState::render()
     }
 
     // Instrucciones
-    DrawCenteredText("Flechas: Cambiar | ENTER: Confirmar | Q: Volver | ESC: Salir del Juego", screenHeight - 50.0f, 20,
+    DrawCenteredText(_("Arrows: Change | ENTER: Confirm | Q: Back | ESC: Exit Game"), screenHeight - 50.0f, 20,
                      DARKGRAY);
 
     DrawFPS(GetScreenWidth() - 100, 10);

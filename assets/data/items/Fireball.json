@@ -1,0 +1,9 @@
+{
+	"name": "Fireball",
+	"description": "A big ball of fire that burns enemies",
+	"price": 150,
+	"rarity": "Rare",
+	"magical_damage": 25,
+	"critical_damage": 15,
+	"max_health": -10
+}

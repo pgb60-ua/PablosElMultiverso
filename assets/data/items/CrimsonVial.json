@@ -1,0 +1,9 @@
+{
+	"name": "Crimson Vial",
+	"description": "A vial of blood that enhances life steal",
+	"price": 160,
+	"rarity": "Rare",
+	"life_steal": 15,
+	"health_regeneration": 4.0,
+	"max_health": 20
+}

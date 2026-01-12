@@ -1,7 +1,8 @@
 #include "Player.hpp"
+#include "AEnemy.hpp"
+#include "AEntity.hpp"
 #include "Types.hpp"
 #include "raylib.h"
-#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <raymath.h>
@@ -29,39 +30,6 @@ void Player::UpdateEnemiesInRange()
         {
             enemiesInRange.push_back(enemy);
         }
-    }
-}
-
-Vector2 Player::CalculateWeaponOffset(size_t weaponIndex, float playerSpriteWidth, float playerSpriteHeight,
-                                      float weaponSpriteWidth, float weaponSpriteHeight) const
-{
-    // Calcular el centro del sprite del jugador
-    float playerCenterX = playerSpriteWidth * 0.5f;
-    float playerCenterY = playerSpriteHeight * 0.5f;
-
-    // Calcular mitad del tamaño del arma para usarlo como offset base
-    float weaponHalfWidth = weaponSpriteWidth * 0.5f;
-    float weaponHalfHeight = weaponSpriteHeight * 0.5f;
-
-    // Calcular offsets basándose en el índice del arma y su tamaño
-    // Las armas se distribuyen en un patrón de 2x2 alrededor del centro del jugador
-    // Cada arma se posiciona teniendo en cuenta su propio tamaño
-    switch (weaponIndex)
-    {
-    case 0: // Arriba-Izquierda
-        return {playerCenterX - weaponHalfWidth - WEAPON_OFFSET_DISTANCE,
-                playerCenterY - weaponHalfHeight - WEAPON_OFFSET_DISTANCE};
-    case 1: // Arriba-Derecha
-        return {playerCenterX + weaponHalfWidth + WEAPON_OFFSET_DISTANCE,
-                playerCenterY - weaponHalfHeight - WEAPON_OFFSET_DISTANCE};
-    case 2: // Abajo-Izquierda
-        return {playerCenterX - weaponHalfWidth - WEAPON_OFFSET_DISTANCE,
-                playerCenterY + weaponHalfHeight + WEAPON_OFFSET_DISTANCE};
-    case 3: // Abajo-Derecha
-        return {playerCenterX + weaponHalfWidth + WEAPON_OFFSET_DISTANCE,
-                playerCenterY + weaponHalfHeight + WEAPON_OFFSET_DISTANCE};
-    default:
-        return {playerCenterX, playerCenterY};
     }
 }
 
@@ -109,11 +77,15 @@ void Player::Update(float deltaTime)
 
     // Actualizar posición de las armas usando los offsets almacenados
     Vector2 playerPos = GetPosition();
+    playerPos.x += hitbox.data.rectangle.width * 0.5f;
+    playerPos.y += hitbox.data.rectangle.height * 0.5f;
+
     for (size_t i = 0; i < weapons.size(); i++)
     {
-        Vector2 weaponPos = {playerPos.x + weaponOffsets[i].x, playerPos.y + weaponOffsets[i].y};
-        weapons[i]->update(deltaTime, weaponPos);
+        weapons[i]->update(deltaTime, playerPos);
     }
+
+    AEntity::Update(deltaTime);
 }
 
 void Player::HandleInput(Vector2 newInputDirection)
@@ -122,15 +94,14 @@ void Player::HandleInput(Vector2 newInputDirection)
     inputDirection = newInputDirection;
 }
 
-void Player::AddItem(std::shared_ptr<Item> item)
+void Player::AddItem(const Item *item)
 {
-    Stats itemStats = item->GetStats();
+    const Stats itemStats = item->GetStats();
 
     // Añadir las stats del item aplicando los modificadores
     SetOffensiveStatsWithModifiers(itemStats.GetOffensiveStats());
     SetDefensiveStatsWithModifiers(itemStats.GetDefensiveStats());
 
-    // Añadir el item al inventario (shared_ptr se copia, incrementa ref count)
     inventory.push_back(item);
 }
 
@@ -139,52 +110,51 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
     // Si tengo menos de 4
     if (weapons.size() < WEAPON_MAX)
     {
-        // Obtener el tamaño del sprite del jugador para calcular el offset
-        const SpriteSheet &playerSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(player);
-        Vector2 offset = {0.0f, 0.0f};
-
-        if (!playerSheet.frames.empty())
-        {
-            // Obtener dimensiones del sprite del jugador
-            Rectangle playerFrame = playerSheet.frames[0]; // Usar el primer frame como referencia
-            float playerSpriteWidth = std::abs(playerFrame.width);
-            float playerSpriteHeight = std::abs(playerFrame.height);
-
-            // Obtener dimensiones del sprite del arma
-            const SpriteSheet &weaponSheet =
-                SpriteLoaderManager::GetInstance().GetSpriteSheet(newWeapon->GetWeaponType());
-            float weaponSpriteWidth = 0.0f;
-            float weaponSpriteHeight = 0.0f;
-
-            if (!weaponSheet.frames.empty())
-            {
-                Rectangle weaponFrame = weaponSheet.frames[0];
-                weaponSpriteWidth = std::abs(weaponFrame.width);
-                weaponSpriteHeight = std::abs(weaponFrame.height);
-            }
-
-            // Calcular offset para esta arma basándose en su índice y tamaños
-            size_t weaponIndex = weapons.size();
-            offset = CalculateWeaponOffset(weaponIndex, playerSpriteWidth, playerSpriteHeight, weaponSpriteWidth,
-                                           weaponSpriteHeight);
-        }
-
         weapons.push_back(std::move(newWeapon)); // std::move transfiere ownership
-        weaponOffsets.push_back(offset);         // Guardar el offset para esta arma
+
+        // Redistribuir todas las armas equitativamente en el círculo
+        size_t totalWeapons = weapons.size();
+        float angleStep = 360.0f / totalWeapons; // Separación uniforme
+
+        for (size_t i = 0; i < totalWeapons; i++)
+        {
+            float angle = i * angleStep; // 0°, angleStep°, 2*angleStep°, ...
+            weapons[i]->SetOrbitAngle(angle);
+        }
     }
-    // Si tengo 4, sumo las stats
+    // Si tengo 4, buscar un arma del mismo tipo que tenga el mismo nivel
     else
     {
-        int index = std::rand() % 4;
-        weapons[index]->Upgrade(newWeapon->GetStats().GetOffensiveStats());
+        UpgradeWeapons(std::move(newWeapon));
     }
+}
+
+bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType, int weaponLevel) const
+{
+    // Si tengo menos de 4 armas, siempre puedo aceptar
+    if (weapons.size() < WEAPON_MAX)
+    {
+        return true;
+    }
+
+    // Si tengo 4 armas, verificar si hay al menos una del mismo tipo y mismo nivel que el arma entrante
+    for (const auto &weapon : weapons)
+    {
+        // Si un arma es del mismo tipo y mismo nivel y no es nivel maximo
+        if (weapon->GetWeaponType() == weaponType && weapon->GetLevel() == weaponLevel &&
+            weapon->GetLevel() < weapon->GetMaxLevel())
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 Player::~Player()
 {
     inventory.clear();
     weapons.clear();
-    weaponOffsets.clear();
 }
 
 void Player::ImportModifiers(PLAYER_TYPE player)
@@ -295,5 +265,95 @@ void Player::CheckCollisions(float deltaTime)
             TakeDamage(enemy->GetStats());
             return;
         }
+    }
+}
+
+int Player::FindMatchingWeapon(WEAPON_TYPE weaponType, int weaponLevel, int excludeIndex) const
+{
+    for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
+    {
+        if (i == excludeIndex)
+        {
+            continue;
+        }
+        if (weapons[i]->GetWeaponType() == weaponType && weapons[i]->GetLevel() == weaponLevel)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void Player::RemoveWeapon(int index)
+{
+    if (index < 0 || static_cast<std::size_t>(index) >= weapons.size())
+    {
+        return; // Índice inválido, no hacer nada
+    }
+
+    // Eliminar el arma
+    weapons.erase(weapons.begin() + index);
+
+    // Redistribuir ángulos de las armas restantes
+    size_t totalWeapons = weapons.size();
+    if (totalWeapons > 0)
+    {
+        float angleStep = 360.0f / totalWeapons;
+        for (size_t i = 0; i < totalWeapons; i++)
+        {
+            float angle = i * angleStep;
+            weapons[i]->SetOrbitAngle(angle);
+        }
+    }
+}
+
+void Player::UpgradeWeapons(std::unique_ptr<AWeapon> newWeapon)
+{
+    WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
+    int newWeaponPrice = newWeapon->GetPrice();
+    int newWeaponLevel = newWeapon->GetLevel();
+
+    int matchingIndex = FindMatchingWeapon(newWeaponType, newWeaponLevel);
+
+    if (matchingIndex != -1 && weapons[matchingIndex]->GetLevel() < weapons[matchingIndex]->GetMaxLevel())
+    {
+        // Acumular el precio del arma comprada al precio del arma existente
+        weapons[matchingIndex]->Upgrade(newWeapon->GetStats().GetOffensiveStats(), newWeaponPrice);
+    }
+
+    // Si no se pudo mejorar ninguna arma del mismo tipo, no hacer nada
+    // (esto no debería suceder si CanAcceptWeapon se usa correctamente)
+}
+
+bool Player::CanFuse(int index)
+{
+    if (index < 0 || static_cast<size_t>(index) >= weapons.size())
+    {
+        return false;
+    }
+
+    const auto &weapon = weapons[index];
+    if (weapon->GetLevel() >= weapon->GetMaxLevel())
+    {
+        return false;
+    }
+
+    return FindMatchingWeapon(weapon->GetWeaponType(), weapon->GetLevel(), index) != -1;
+}
+
+void Player::UpgradeWeapon(int index)
+{
+    if (index < 0 || static_cast<size_t>(index) >= weapons.size())
+    {
+        return;
+    }
+
+    const auto &weapon = weapons[index];
+    int matchingIndex = FindMatchingWeapon(weapon->GetWeaponType(), weapon->GetLevel(), index);
+
+    if (matchingIndex != -1)
+    {
+        weapon->Upgrade(weapons[matchingIndex]->GetStats().GetOffensiveStats(), weapons[matchingIndex]->GetPrice());
+        RemoveWeapon(matchingIndex);
     }
 }

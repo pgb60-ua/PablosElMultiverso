@@ -20,32 +20,31 @@ class AEnemy;
 // Clase que representa el player
 class Player : public AEntity
 {
+public:
+    std::vector<AEnemy *> enemiesInRange;
+    std::vector<AEnemy *> &allEnemies;
+    const std::vector<std::unique_ptr<AWeapon>> &GetWeapons() const { return weapons; }
+    static constexpr int WEAPON_MAX = 4;
+
 private:
     void ImportModifiers(PLAYER_TYPE player);
+
+    /// @brief Busca un arma del mismo tipo y nivel que la especificada, excluyendo un índice
+    /// @param weaponType Tipo de arma a buscar
+    /// @param weaponLevel Nivel del arma a buscar
+    /// @param excludeIndex Índice a excluir de la búsqueda (-1 para no excluir ninguno)
+    /// @return Índice del arma encontrada, o -1 si no se encuentra
+    int FindMatchingWeapon(WEAPON_TYPE weaponType, int weaponLevel, int excludeIndex = -1) const;
+
     static constexpr float BASE_MULTIPLIER = 1.0f;
-    std::vector<std::shared_ptr<Item>> inventory;
+    std::vector<const Item *> inventory;
     std::vector<std::unique_ptr<AWeapon>> weapons;
-    std::vector<Vector2> weaponOffsets; // Offset individual para cada arma
-    static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
     void UpdatePlayerAnimation(float deltaTime);
-    std::vector<AEnemy *> enemiesInRange;
-    std::vector<AEnemy *> &allEnemies;
     void UpdateEnemiesInRange();
+    int pabloCoins = 0;
 
-    /// @brief Calcula el offset de posición para un arma basándose en sus dimensiones y el tamaño del sprite del
-    /// jugador
-    /// @param weaponIndex Índice del arma (0-3)
-    /// @param playerSpriteWidth Ancho del frame del sprite del jugador
-    /// @param playerSpriteHeight Alto del frame del sprite del jugador
-    /// @param weaponSpriteWidth Ancho del sprite del arma
-    /// @param weaponSpriteHeight Alto del sprite del arma
-    /// @return Offset de posición relativa desde la esquina superior izquierda
-    Vector2 CalculateWeaponOffset(size_t weaponIndex, float playerSpriteWidth, float playerSpriteHeight,
-                                  float weaponSpriteWidth, float weaponSpriteHeight) const;
-
-    inline const static float WEAPON_OFFSET_DISTANCE = 35.0f; // Distancia desde el centro del sprite
     inline const static float DISTANCE_RANGE = 800.0f;
     inline const static float COOLDOWN_DAMAGE_TIME = 0.5f;
 
@@ -91,6 +90,9 @@ public:
     // Getters de stats
     /// @brief Obtiene los puntos de vida actuales
     float GetHealth() const { return stats.GetHealth(); }
+
+    /// @brief Obtiene los puntos de vida totales
+    float GetMaxHealth() const { return stats.GetMaxHealth(); }
 
     /// @brief Obtiene la velocidad de movimiento actual
     float GetMovementSpeed() const { return stats.GetMovementSpeed(); }
@@ -165,8 +167,11 @@ public:
     /**/
     // Setters de stats (aplican modificador automáticamente)
 
-    /// @brief Establece los puntos de vida base y aplica modificador
-    void SetHealth(float newHealth) { stats.SetHealth(newHealth * healthModifier); }
+    /// @brief Establece los puntos de vida actuales
+    void SetHealth(float newHealth) { stats.SetHealth(newHealth); }
+
+    /// @brief Obtiene los puntos de vida actuales
+    void SetMaxHealth(float newMaxHealt) { stats.SetMaxHealth(newMaxHealt * healthModifier); }
 
     /// @brief Establece la velocidad de movimiento base y aplica modificador
     void SetMovementSpeed(float newSpeed) { stats.SetMovementSpeed(newSpeed * movementSpeedModifier); }
@@ -247,14 +252,36 @@ public:
     void SetOffensiveStatsWithModifiers(const OffensiveStats &offensiveStats);
     void SetDefensiveStatsWithModifiers(const DefensiveStats &defensiveStats);
 
+    /// @brief Devuelve el numero de monedas que tiene el jugador
+    int GetPabloCoins() const { return pabloCoins; }
+    /// @brief Modifica el numero de monedas que tiene el jugador
+    void ModifyPabloCoins(int coins)
+    {
+        pabloCoins += coins;
+        if (pabloCoins < 0)
+        {
+            pabloCoins = 0;
+        }
+    }
+
     PLAYER_TYPE GetPlayerType() { return player; }
     void SetPlayerType(PLAYER_TYPE player) { this->player = player; }
 
     void Move(Vector2 newDirection, float deltaTime);
     void Update(float deltaTime) override;
     void HandleInput(Vector2 inputDirection);
-    void AddItem(std::shared_ptr<Item> item);
+    void AddItem(const Item *item);
     void AddWeapon(std::unique_ptr<AWeapon> newWeapon);
+    void UpgradeWeapons(std::unique_ptr<AWeapon> newWeapon);
+    bool CanFuse(int index);
+    void UpgradeWeapon(int index);
+    void RemoveWeapon(int index);
+
+    /// @brief Verifica si el jugador puede aceptar un arma del tipo especificado
+    /// @param weaponType El tipo de arma a verificar
+    /// @return true si puede aceptar (tiene espacio o tiene armas del mismo tipo no maximizadas), false si no
+    bool CanAcceptWeapon(WEAPON_TYPE weaponType, int weaponLevel) const;
+
     void CheckCollisions(float deltaTime) override;
     void Render() override;
     bool Attack() override;

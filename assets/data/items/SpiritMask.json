@@ -1,0 +1,10 @@
+{
+	"name": "Spirit Mask",
+	"description": "A mystical mask that channels spiritual energy",
+	"price": 220,
+	"rarity": "Epic",
+	"magical_damage": 30,
+	"resistance": 25,
+	"health_regeneration": 3.0,
+	"physical_damage": -10
+}

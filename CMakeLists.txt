@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
-project(PablosElMultiverso 
-    VERSION 0.4.0 
+project(PablosElMultiverso
+    VERSION 0.4.0
     DESCRIPTION "Es un juego estilo vampire survivor desarrollado en C++ con la libreria Raylib."
     HOMEPAGE_URL "https://github.com/pgb60-ua/PablosElMultiverso"
     LANGUAGES CXX C
@@ -65,6 +65,12 @@ add_executable(pablos-el-multiverso)
 
 target_sources(pablos-el-multiverso PRIVATE ${SOURCES})
 
+if(WIN32 AND MSVC)
+    set_target_properties(pablos-el-multiverso PROPERTIES
+        LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
+    )
+    target_compile_definitions(pablos-el-multiverso PRIVATE NOGDI NOUSER)     # Evitar conflictos entre raylib y Windows API
+endif()
 
 add_custom_command(TARGET pablos-el-multiverso POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -90,13 +96,13 @@ find_package(raylib)
 # Si no se encuentra, descargarla automáticamente
 if(NOT raylib_FOUND)
     message(STATUS "Raylib no encontrada. Descargando automáticamente...")
-    
+
     FetchContent_Declare(
         raylib
         GIT_REPOSITORY https://github.com/raysan5/raylib
         GIT_TAG 5.5
     )
-    
+
     FetchContent_MakeAvailable(raylib)
     message(STATUS "Raylib descargada e integrada correctamente.")
 else()
@@ -121,16 +127,18 @@ set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt")
 
 if(WIN32)
     install(TARGETS pablos-el-multiverso RUNTIME DESTINATION .)
-    install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets DESTINATION .)
-    install(FILES 
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets DESTINATION .
+        PATTERN "*.aseprite" EXCLUDE)
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/locale DESTINATION .)
+    install(FILES
         ${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt
         ${PROJECT_SOURCE_DIR}/NOTICES.md
         DESTINATION .)
-    
-    set(CPACK_GENERATOR "NSIS")  
+
+    set(CPACK_GENERATOR "NSIS")
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "PablosElMultiverso")
     set(CPACK_NSIS_DISPLAY_NAME "PablosElMultiverso")
-    set(CPACK_NSIS_PACKAGE_NAME "PablosElMultiverso")   
+    set(CPACK_NSIS_PACKAGE_NAME "PablosElMultiverso")
     set(CPACK_NSIS_INSTALLED_ICON_NAME "pablos-el-multiverso.exe")
     set(CPACK_NSIS_MENU_LINKS "pablos-el-multiverso.exe" "PablosElMultiverso")
 
@@ -138,9 +146,12 @@ endif()
 
 if(UNIX AND NOT APPLE)
     install(TARGETS pablos-el-multiverso DESTINATION bin)
-    install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets 
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}
+        PATTERN "*.aseprite" EXCLUDE)
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/locale
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
-    install(FILES 
+    install(FILES
         ${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt
         ${PROJECT_SOURCE_DIR}/NOTICES.md
         DESTINATION ${CMAKE_INSTALL_DOCDIR})
@@ -151,3 +162,15 @@ if(UNIX AND NOT APPLE)
 endif()
 
 include(CPack)
+
+
+# ============================================================================
+# Testing
+# ============================================================================
+
+option(BUILD_TESTS "Build tests" ON)
+
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()

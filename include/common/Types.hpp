@@ -16,10 +16,31 @@ enum class ENEMY_TYPE
 
 enum class ITEM_TYPE
 {
-    ITEM1,
-    ITEM2,
-    ITEM3,
-    WEAPON
+    FIREBALL,
+    SPINED_BREASTPLATE,
+    PEARL_EGG,
+    RAVENS_FEATHER,
+    VOID_RING,
+    SATCHEL,
+    SPIRIT_MASK,
+    CELESTIAL_SPARK,
+    EXPLOSIVE_ARSENAL,
+    MAGICAL_MIRROR,
+    ETHEREAL_DAGGER,
+    SPOTLIGHT,
+    CRIMSON_VIAL,
+    RUBY_HEART,
+    RAW_MEAT,
+    VENOMOUS_PLANT,
+    COIN,
+    WEAPON_AXE,
+    WEAPON_SWORD,
+    WEAPON_SCYTHE,
+    WEAPON_WAND,
+    WEAPON_EGGPLOSIVE,
+    WEAPON_LASER_RAY,
+    WEAPON_SNIPER,
+    WEAPON_WING
 };
 
 enum class WEAPON_TYPE
@@ -31,7 +52,8 @@ enum class WEAPON_TYPE
     EGGPLOSIVE,
     LASER_RAY,
     SNIPER,
-    WING
+    WING,
+    CHEMICAL_DESTRUCTOR
 };
 
 enum class PROJECTILE_TYPE
@@ -57,3 +79,58 @@ enum class ROUND_TYPE
     MEDIUM,
     HARD
 };
+
+// Función helper para verificar si un ITEM_TYPE es un arma
+inline bool IsWeaponType(ITEM_TYPE type) { return (type >= ITEM_TYPE::WEAPON_AXE && type <= ITEM_TYPE::WEAPON_WING); }
+
+// Función helper para convertir WEAPON_TYPE a ITEM_TYPE
+inline ITEM_TYPE WeaponTypeToItemType(WEAPON_TYPE weaponType)
+{
+    switch (weaponType)
+    {
+    case WEAPON_TYPE::AXE:
+        return ITEM_TYPE::WEAPON_AXE;
+    case WEAPON_TYPE::SWORD:
+        return ITEM_TYPE::WEAPON_SWORD;
+    case WEAPON_TYPE::SCYTHE:
+        return ITEM_TYPE::WEAPON_SCYTHE;
+    case WEAPON_TYPE::WAND:
+        return ITEM_TYPE::WEAPON_WAND;
+    case WEAPON_TYPE::EGGPLOSIVE:
+        return ITEM_TYPE::WEAPON_EGGPLOSIVE;
+    case WEAPON_TYPE::LASER_RAY:
+        return ITEM_TYPE::WEAPON_LASER_RAY;
+    case WEAPON_TYPE::SNIPER:
+        return ITEM_TYPE::WEAPON_SNIPER;
+    case WEAPON_TYPE::WING:
+        return ITEM_TYPE::WEAPON_WING;
+    default:
+        return ITEM_TYPE::WEAPON_AXE; // Fallback
+    }
+}
+
+// Función helper para convertir ITEM_TYPE a WEAPON_TYPE
+inline WEAPON_TYPE ItemTypeToWeaponType(ITEM_TYPE itemType)
+{
+    switch (itemType)
+    {
+    case ITEM_TYPE::WEAPON_AXE:
+        return WEAPON_TYPE::AXE;
+    case ITEM_TYPE::WEAPON_SWORD:
+        return WEAPON_TYPE::SWORD;
+    case ITEM_TYPE::WEAPON_SCYTHE:
+        return WEAPON_TYPE::SCYTHE;
+    case ITEM_TYPE::WEAPON_WAND:
+        return WEAPON_TYPE::WAND;
+    case ITEM_TYPE::WEAPON_EGGPLOSIVE:
+        return WEAPON_TYPE::EGGPLOSIVE;
+    case ITEM_TYPE::WEAPON_LASER_RAY:
+        return WEAPON_TYPE::LASER_RAY;
+    case ITEM_TYPE::WEAPON_SNIPER:
+        return WEAPON_TYPE::SNIPER;
+    case ITEM_TYPE::WEAPON_WING:
+        return WEAPON_TYPE::WING;
+    default:
+        return WEAPON_TYPE::AXE; // Fallback
+    }
+}

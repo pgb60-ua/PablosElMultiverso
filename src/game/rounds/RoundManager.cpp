@@ -1,36 +1,39 @@
 #include "RoundManager.hpp"
+#include "ChemicalDestructor.hpp"
+#include "Darkin.hpp"
 #include "Zombie.hpp"
 #include <functional>
 #include <new>
 
-RoundManager::RoundManager(const ROUND_TYPE roundType, std::vector<AEnemy*>& enemiesOnMap, std::vector<Player*>& players)
-    : enemiesOnMap(enemiesOnMap), players(players), currentRound(0.0f, 0.0f, 0, std::vector<AEnemy*>(), enemiesOnMap)
+RoundManager::RoundManager(const ROUND_TYPE roundType, std::vector<AEnemy *> &enemiesOnMap,
+                           std::vector<Player *> &players)
+    : enemiesOnMap(enemiesOnMap), players(players), currentRound(0.0f, 0.0f, 0, std::vector<AEnemy *>(), enemiesOnMap)
 {
-    DataFileManager& dataManager = DataFileManager::GetInstance();
+    DataFileManager &dataManager = DataFileManager::GetInstance();
     this->roundInfos = dataManager.GetRounds(roundType);
 }
 
-std::vector<AEnemy*> RoundManager::CreateEnemiesForRound(const RoundInfo& roundInfo)
+std::vector<AEnemy *> RoundManager::CreateEnemiesForRound(const RoundInfo &roundInfo)
 {
-    std::vector<AEnemy*> enemies;
+    std::vector<AEnemy *> enemies;
     int totalEnemies = 0;
-    for (const auto& [_, count] : roundInfo.enemiesToSpawnCount)
+    for (const auto &[_, count] : roundInfo.enemiesToSpawnCount)
         totalEnemies += count;
 
     enemies.reserve(totalEnemies);
 
-    std::unordered_map<ENEMY_TYPE, std::function<AEnemy*()>> enemyFactories =
-    {
-        {ENEMY_TYPE::ZOMBIE,[&]() -> AEnemy*{return new Zombie(players);}},
-        //{ENEMY_TYPE::DARKIN,[&]() -> AEnemy*{return new Darkin(players);}},
-        //{ENEMY_TYPE::CHEMICAL_DESTRUCTOR,[&]() -> AEnemy*{return new ChemicalDestructor(players);}}
+    std::unordered_map<ENEMY_TYPE, std::function<AEnemy *()>> enemyFactories = {
+        {ENEMY_TYPE::ZOMBIE, [this]() -> AEnemy * { return new Zombie(players); }},
+        {ENEMY_TYPE::DARKIN, [this]() -> AEnemy * { return new Darkin(players); }},
+        {ENEMY_TYPE::CHEMICAL_DESTRUCTOR, [this]() -> AEnemy * { return new ChemicalDestructor(players); }}
 
     };
 
-    for (const auto& [enemyType, count] : roundInfo.enemiesToSpawnCount)
+    for (const auto &[enemyType, count] : roundInfo.enemiesToSpawnCount)
     {
         auto it = enemyFactories.find(enemyType);
-        if (it == enemyFactories.end()){
+        if (it == enemyFactories.end())
+        {
             continue;
         }
 
@@ -43,44 +46,30 @@ std::vector<AEnemy*> RoundManager::CreateEnemiesForRound(const RoundInfo& roundI
     return enemies;
 }
 
+void RoundManager::Update(float deltaTime) { currentRound.Update(deltaTime); }
 
-void RoundManager::Update(float deltaTime)
-{
-    currentRound.Update(deltaTime);
-}
+bool RoundManager::IsCurrentRoundOver() const { return currentRound.IsRoundOver(); }
 
-bool RoundManager::IsCurrentRoundOver() const
-{
-    return currentRound.IsRoundOver();
-}
-
-const Round& RoundManager::GetCurrentRound() const
-{
-    return currentRound;
-}
+const Round &RoundManager::GetCurrentRound() const { return currentRound; }
 
 bool RoundManager::MoveToNextRound()
 {
 
     int nextRoundNumber = currentRound.GetRoundNumber() + 1;
-    auto it = std::find_if(roundInfos.begin(), roundInfos.end(), 
-    [nextRoundNumber](const RoundInfo& info) {
-        return info.roundNumber == nextRoundNumber;
-    });
+    auto it = std::find_if(roundInfos.begin(), roundInfos.end(),
+                           [nextRoundNumber](const RoundInfo &info) { return info.roundNumber == nextRoundNumber; });
 
     if (it != roundInfos.end())
     {
-        RoundInfo& roundInfo = *it;
-        std::vector<AEnemy*> enemiesToSpawn = CreateEnemiesForRound(roundInfo);
+        RoundInfo &roundInfo = *it;
+        std::vector<AEnemy *> enemiesToSpawn = CreateEnemiesForRound(roundInfo);
         currentRound.~Round();
-        new (&currentRound) Round(roundInfo.duration, roundInfo.spawnRate, roundInfo.roundNumber, enemiesToSpawn, enemiesOnMap);
+        new (&currentRound)
+            Round(roundInfo.duration, roundInfo.spawnRate, roundInfo.roundNumber, enemiesToSpawn, enemiesOnMap);
 
         return true;
     }
     return false;
 }
 
-void RoundManager::Render()
-{
-    this->currentRound.Render();
-}
+void RoundManager::Render() { this->currentRound.Render(); }
