@@ -37,6 +37,7 @@ Todas las Pull Requests se integrarán en la rama principal mediante un **squash
     - Opción 1: Instalar via vcpkg: `vcpkg install gettext:x64-windows`
     - Opción 2: Descargar binarios desde [gnuwin32](http://gnuwin32.sourceforge.net/packages/gettext.htm)
     - Si no lo instalas, el proyecto debería compilarse igualmente, pero solo estará disponible el idioma por defecto configurado en el juego y no podrás gestionar archivos de traducción (`.po`/`.mo`).
+
 #### Compilación con CMake y Visual Studio
 
 Desde el directorio raíz del proyecto en PowerShell o CMD:
@@ -87,16 +88,22 @@ cmake ..
 make
 
 # Ejecutar el juego
+./pablos-el-multiverso
+```
+
+#### Compilación con Make (alternativa)
+
+Si prefieres usar el Makefile tradicional:
+
+```bash
+# Compilar
+make
+
+# Ejecutar el juego
 ./game-dev
 ```
 
-#### Compilación manual (alternativa)
-
-Si prefieres compilar manualmente sin CMake:
-
-```bash
-g++ -o game-dev $(find src -name "*.cpp") $(find include -type d -exec printf -- "-I %s " {} \;) -I vendor/include -L vendor/lib -lraylib -lGL -lm -lpthread -lrt -lX11
-```
+**Nota**: El Makefile genera un ejecutable llamado `game-dev`, mientras que CMake genera `pablos-el-multiverso`.
 
 ## Juego
 
