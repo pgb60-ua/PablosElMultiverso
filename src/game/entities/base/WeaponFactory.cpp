@@ -51,7 +51,7 @@ std::unique_ptr<AWeapon> WeaponFactory::CreateStartingWeapon(PLAYER_TYPE playerT
     switch (playerType)
     {
     case PLAYER_TYPE::WARRIOR:
-        weapon = std::make_unique<WingWeapon>(position, enemiesInRange, allEnemies);
+        weapon = std::make_unique<AxeWeapon>(position, enemiesInRange, allEnemies);
         break;
     case PLAYER_TYPE::MAGE:
         weapon = std::make_unique<LaserRayWeapon>(position, enemiesInRange, allEnemies);
