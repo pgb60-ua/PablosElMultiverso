@@ -3,10 +3,7 @@
 #include <random>
 #include <utility>
 
-bool AEntity::Attack()
-{
-    return false;
-}
+bool AEntity::Attack() { return false; }
 
 AEntity::AEntity(Stats stats, const Shape &hitbox) : stats(std::move(stats)), hitbox(hitbox)
 {
@@ -90,3 +87,15 @@ void AEntity::TakeDamage(const Stats &stats)
         animation.color = RED;
     this->stats.SetHealth(newHealth > 0 ? newHealth : 0);
 }
+
+void AEntity::Regeneration(int deltaTime)
+{
+    // Regeneración de vida
+    if (stats.GetHealthRegeneration() > 0 && IsAlive())
+    {
+        float newHealth = stats.GetHealth() + (stats.GetHealthRegeneration() * deltaTime);
+        if (newHealth > stats.GetMaxHealth())
+            newHealth = stats.GetMaxHealth();
+        stats.SetHealth(newHealth);
+    }
+};
