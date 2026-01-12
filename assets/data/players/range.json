@@ -1,5 +1,5 @@
 {
-	"name": "Ranger",
+	"name": "Pablo, the Duck",
 	"class": "Ranged Fighter",
 	"level": 1,
 	"health": 90,
@@ -16,7 +16,7 @@
 	"life_steal": 5,
 	"health_regeneration": 1.5,
 	"is_ranged": true,
-	"description": "A swift archer with high mobility and critical strikes",
+	"description": "An extension of the original Pablo, now with ranged combat abilities.",
 	"health_modifier": 1.0,
 	"movement_speed_modifier": 1.0,
 	"agility_modifier": 1.0,

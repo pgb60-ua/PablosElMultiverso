@@ -1,14 +1,11 @@
 #include <SpriteLoaderManager.hpp>
-#include <stdexcept>
+#include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include <filesystem>
-#include <cstdlib>
+#include <stdexcept>
 
-SpriteLoaderManager::~SpriteLoaderManager()
-{   
-    ClearCache();
-}   
+SpriteLoaderManager::~SpriteLoaderManager() { ClearCache(); }
 
 void SpriteLoaderManager::SetAssetsRoot(const std::string &assetsRoot)
 {
@@ -40,9 +37,10 @@ void SpriteLoaderManager::DetectAndSetAssetsPath()
         {
             SetAssetsRoot("/usr/share/pablos-el-multiverso/assets");
             return;
-        }     
+        }
     }
-    catch (...) {    
+    catch (...)
+    {
     }
 }
 
@@ -67,14 +65,56 @@ std::string SpriteLoaderManager::GetMetadataPath(ITEM_TYPE type) const
 {
     switch (type)
     {
-    case ITEM_TYPE::WEAPON:
-        return BASE_PATH_ITEM + "weapon.json";
-    case ITEM_TYPE::ITEM1:
-        return BASE_PATH_ITEM + "item1.json";
-    case ITEM_TYPE::ITEM2:
-        return BASE_PATH_ITEM + "item2.json";
-    case ITEM_TYPE::ITEM3:
-        return BASE_PATH_ITEM + "item3.json";
+    case ITEM_TYPE::FIREBALL:
+        return BASE_PATH_ITEM + "Fireball.json";
+    case ITEM_TYPE::SPINED_BREASTPLATE:
+        return BASE_PATH_ITEM + "SpinedBreastplate.json";
+    case ITEM_TYPE::PEARL_EGG:
+        return BASE_PATH_ITEM + "PearlEgg.json";
+    case ITEM_TYPE::RAVENS_FEATHER:
+        return BASE_PATH_ITEM + "Raven'sFeather.json";
+    case ITEM_TYPE::VOID_RING:
+        return BASE_PATH_ITEM + "VoidRing.json";
+    case ITEM_TYPE::SATCHEL:
+        return BASE_PATH_ITEM + "Satchel.json";
+    case ITEM_TYPE::SPIRIT_MASK:
+        return BASE_PATH_ITEM + "SpiritMask.json";
+    case ITEM_TYPE::CELESTIAL_SPARK:
+        return BASE_PATH_ITEM + "CelestialSpark.json";
+    case ITEM_TYPE::EXPLOSIVE_ARSENAL:
+        return BASE_PATH_ITEM + "ExplosiveArsenal.json";
+    case ITEM_TYPE::MAGICAL_MIRROR:
+        return BASE_PATH_ITEM + "MagicalMirror.json";
+    case ITEM_TYPE::ETHEREAL_DAGGER:
+        return BASE_PATH_ITEM + "EtherealDagger.json";
+    case ITEM_TYPE::SPOTLIGHT:
+        return BASE_PATH_ITEM + "Spotlight.json";
+    case ITEM_TYPE::CRIMSON_VIAL:
+        return BASE_PATH_ITEM + "CrimsonVial.json";
+    case ITEM_TYPE::RUBY_HEART:
+        return BASE_PATH_ITEM + "RubyHeart.json";
+    case ITEM_TYPE::RAW_MEAT:
+        return BASE_PATH_ITEM + "RawMeat.json";
+    case ITEM_TYPE::VENOMOUS_PLANT:
+        return BASE_PATH_ITEM + "VenomousPlant.json";
+    case ITEM_TYPE::COIN:
+        return BASE_PATH_ITEM + "Coin.json";
+    case ITEM_TYPE::WEAPON_AXE:
+        return BASE_PATH_WEAPON + "axe.json";
+    case ITEM_TYPE::WEAPON_SWORD:
+        return BASE_PATH_WEAPON + "sword.json";
+    case ITEM_TYPE::WEAPON_SCYTHE:
+        return BASE_PATH_WEAPON + "scythe.json";
+    case ITEM_TYPE::WEAPON_WAND:
+        return BASE_PATH_WEAPON + "wand.json";
+    case ITEM_TYPE::WEAPON_EGGPLOSIVE:
+        return BASE_PATH_WEAPON + "eggplosive.json";
+    case ITEM_TYPE::WEAPON_LASER_RAY:
+        return BASE_PATH_WEAPON + "laser_ray.json";
+    case ITEM_TYPE::WEAPON_SNIPER:
+        return BASE_PATH_WEAPON + "sniper.json";
+    case ITEM_TYPE::WEAPON_WING:
+        return BASE_PATH_WEAPON + "wing.json";
     default:
         throw std::runtime_error("Unknown ITEM type");
     }
@@ -86,12 +126,10 @@ std::string SpriteLoaderManager::GetMetadataPath(ENEMY_TYPE type) const
     {
     case ENEMY_TYPE::ZOMBIE:
         return BASE_PATH_ENEMY + "zombie.json";
-    case ENEMY_TYPE::ENEMY2:
-        return BASE_PATH_ENEMY + "enemy2.json";
-    case ENEMY_TYPE::ENEMY3:
-        return BASE_PATH_ENEMY + "enemy3.json";
-    case ENEMY_TYPE::ENEMY4:
-        return BASE_PATH_ENEMY + "enemy4.json";
+    case ENEMY_TYPE::DARKIN:
+        return BASE_PATH_ENEMY + "darkin.json";
+    case ENEMY_TYPE::CHEMICAL_DESTRUCTOR:
+        return BASE_PATH_ENEMY + "chemical_destructor.json";
     default:
         throw std::runtime_error("Unknown ENEMY type");
     }
@@ -113,6 +151,8 @@ std::string SpriteLoaderManager::GetMetadataPath(PROJECTILE_TYPE type) const
         return BASE_PATH_PROJECTILE + "sniper.json";
     case PROJECTILE_TYPE::WING:
         return BASE_PATH_PROJECTILE + "wing.json";
+    case PROJECTILE_TYPE::CHEMICAL_BULLET:
+        return BASE_PATH_PROJECTILE + "chemical_bullet.json";
     default:
         throw std::runtime_error("Unknown PROJECTILE type");
     }
@@ -149,6 +189,8 @@ std::string SpriteLoaderManager::GetMetadataPath(MAP_TYPE type) const
     {
     case MAP_TYPE::DEFAULT:
         return BASE_PATH_MAP + "default.json";
+    case MAP_TYPE::DEFAULT_UPPER:
+        return BASE_PATH_MAP + "default_upper.json";
     default:
         throw std::runtime_error("Unknown MAP type");
     }
@@ -226,7 +268,7 @@ Shape SpriteLoaderManager::GetSpriteHitbox(PLAYER_TYPE type, Vector2 position)
     const Rectangle &frame = spriteSheet.frames[0];
     Shape hitbox;
     hitbox.type = SHAPE_RECTANGLE;
-    hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
+    hitbox.data.rectangle = {position.x, position.y, frame.width, frame.height};
     return hitbox;
 }
 Shape SpriteLoaderManager::GetSpriteHitbox(ENEMY_TYPE type, Vector2 position)
@@ -235,7 +277,7 @@ Shape SpriteLoaderManager::GetSpriteHitbox(ENEMY_TYPE type, Vector2 position)
     const Rectangle &frame = spriteSheet.frames[0];
     Shape hitbox;
     hitbox.type = SHAPE_RECTANGLE;
-    hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
+    hitbox.data.rectangle = {position.x, position.y, frame.width, frame.height};
     return hitbox;
 }
 Shape SpriteLoaderManager::GetSpriteHitbox(PROJECTILE_TYPE type, Vector2 position)
@@ -244,7 +286,7 @@ Shape SpriteLoaderManager::GetSpriteHitbox(PROJECTILE_TYPE type, Vector2 positio
     const Rectangle &frame = spriteSheet.frames[0];
     Shape hitbox;
     hitbox.type = SHAPE_RECTANGLE;
-    hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
+    hitbox.data.rectangle = {position.x, position.y, frame.width, frame.height};
     return hitbox;
 }
 Shape SpriteLoaderManager::GetSpriteHitbox(WEAPON_TYPE type, Vector2 position)
@@ -253,7 +295,7 @@ Shape SpriteLoaderManager::GetSpriteHitbox(WEAPON_TYPE type, Vector2 position)
     const Rectangle &frame = spriteSheet.frames[0];
     Shape hitbox;
     hitbox.type = SHAPE_RECTANGLE;
-    hitbox.data.rectangle = { position.x, position.y, frame.width, frame.height };
+    hitbox.data.rectangle = {position.x, position.y, frame.width, frame.height};
     return hitbox;
 }
 void SpriteLoaderManager::ClearCache()
@@ -383,7 +425,7 @@ void SpriteLoaderManager::ClearCache(ITEM_TYPE type)
 SpriteSheet SpriteLoaderManager::LoadSpriteSheetFromMetadata(const std::string &metadataPath)
 {
     SpriteSheet spriteSheet;
-    
+
     // Abrir archivo de metadatos
     std::ifstream file(metadataPath);
     if (!file.is_open())
@@ -404,19 +446,17 @@ SpriteSheet SpriteLoaderManager::LoadSpriteSheetFromMetadata(const std::string &
         }
 
         std::string texturePath = j["texture"].get<std::string>();
-        
+
         // Si la ruta es relativa, construir la ruta completa
         // Obtener el directorio del archivo de metadatos
         size_t lastSlash = metadataPath.find_last_of("/\\");
-        std::string baseDir = (lastSlash != std::string::npos) 
-            ? metadataPath.substr(0, lastSlash + 1) 
-            : "";
-        
+        std::string baseDir = (lastSlash != std::string::npos) ? metadataPath.substr(0, lastSlash + 1) : "";
+
         std::string fullTexturePath = baseDir + texturePath;
 
         // Cargar la textura
         spriteSheet.texture = LoadTexture(fullTexturePath.c_str());
-        
+
         if (spriteSheet.texture.id == 0)
         {
             throw std::runtime_error("Failed to load texture: " + fullTexturePath);
@@ -437,20 +477,16 @@ SpriteSheet SpriteLoaderManager::LoadSpriteSheetFromMetadata(const std::string &
         // Parsear cada frame
         for (const auto &frameJson : framesJson)
         {
-            if (!frameJson.contains("x") || !frameJson.contains("y") || 
-                !frameJson.contains("width") || !frameJson.contains("height"))
+            if (!frameJson.contains("x") || !frameJson.contains("y") || !frameJson.contains("width") ||
+                !frameJson.contains("height"))
             {
                 // Limpiar y lanzar error
                 UnloadTexture(spriteSheet.texture);
                 throw std::runtime_error("Frame missing required fields (x, y, width, height) in: " + metadataPath);
             }
 
-            Rectangle frame = {
-                frameJson["x"].get<float>(),
-                frameJson["y"].get<float>(),
-                frameJson["width"].get<float>(),
-                frameJson["height"].get<float>()
-            };
+            Rectangle frame = {frameJson["x"].get<float>(), frameJson["y"].get<float>(),
+                               frameJson["width"].get<float>(), frameJson["height"].get<float>()};
 
             spriteSheet.frames.push_back(frame);
         }

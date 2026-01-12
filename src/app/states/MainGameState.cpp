@@ -5,20 +5,37 @@
 #include "WingWeapon.hpp"
 #include "LaserRayWeapon.hpp"
 #include "SniperWeapon.hpp"
+#include "AxeWeapon.hpp"
+#include "SwordWeapon.hpp"
 #include "EggplosiveWeapon.hpp"
 #include "GameOverState.hpp"
 #include "GameWonState.hpp"
+#include "LaserRayWeapon.hpp"
+#include "Player.hpp"
+#include "ShopState.hpp"
+#include "SniperWeapon.hpp"
+#include "SpriteLoaderManager.hpp"
 #include "StateMachine.hpp"
+#include "Types.hpp"
+#include "WeaponFactory.hpp"
+#include "WingWeapon.hpp"
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
-#include <iostream>
+#include <memory>
 
 extern "C"
 {
 #include <raylib.h>
 }
 
-MainGameState::MainGameState() : direction{0, 0} {}
+// Constructor que recibe el tipo de jugador
+MainGameState::MainGameState(PLAYER_TYPE playerType)
+    : selectedPlayerType(playerType), direction{0, 0}, roundManager(ROUND_TYPE::EASY, enemies, playerPointers)
+{
+}
+
+// Constructor por defecto con tipo de jugador por defecto (Mage)
+MainGameState::MainGameState() : MainGameState(PLAYER_TYPE::MAGE) {}
 
 void MainGameState::init()
 {
@@ -27,22 +44,19 @@ void MainGameState::init()
     
     // Crear el jugador en una posición inicial
     Vector2 initialPosition = {400.0f, 300.0f};
-    players.push_back(std::make_unique<Player>(PLAYER_TYPE::RANGE, initialPosition, enemies));
+    players.push_back(std::make_unique<Player>(selectedPlayerType, initialPosition, enemies));
 
-    int numZombies = 100;
-    enemies.reserve(numZombies);
-    for (int i = 0; i < numZombies; i++)
+    playerPointers.clear();
+    for (const auto &player : players)
     {
-        enemies.push_back(new Zombie(std::vector<Player *>{players[0].get()}));
+        playerPointers.push_back(player.get());
     }
 
-    // Crear el arma desde JSON automáticamente en el constructor
+    roundManager.MoveToNextRound();
 
-    players[0]->AddWeapon(std::make_unique<LaserRayWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<SniperWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<WingWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-    players[0]->AddWeapon(std::make_unique<EggplosiveWeapon>(Vector2{400.0f, 300.0f}, enemies, enemies));
-
+    // No le pongo move porque como devuelve un unique_ptr temporal automaticamente cambia de owner
+    players[0]->AddWeapon(
+        WeaponFactory::CreateStartingWeapon(players[0]->GetPlayerType(), Vector2{400.0f, 300.0f}, enemies, enemies));
 }
 
 void MainGameState::handleInput()
@@ -111,29 +125,51 @@ void MainGameState::update(float deltaTime)
         {
             numero_vivo++;
         }
+    }
 
-    }
-    // Actualizar todos los enemigos
-    for (auto &enemy : enemies)
-    {
-        enemy->Update(deltaTime);
-    }
     if (numero_vivo == (int)players.size())
     {
         // Todos los jugadores están muertos, reiniciar el estado del juego
         state_machine->add_state(std::make_unique<GameOverState>(), true);
     }
-    else if (enemies.empty())
+    else if (roundManager.IsCurrentRoundOver())
     {
-        state_machine->add_state(std::make_unique<GameWonState>(), true);
+        if (!roundManager.MoveToNextRound())
+        {
+            state_machine->add_state(std::make_unique<GameWonState>(), true);
+        }
+        else
+        {
+            // Lo pongo en false para no eliminar el MainGameState
+            state_machine->add_state(std::make_unique<ShopState>(players[0].get()), false);
+        }
     }
+
+    roundManager.Update(deltaTime);
 }
 
 void MainGameState::render()
 {
     BeginDrawing();
     ClearBackground(DARKGRAY);
+
+    const SpriteSheet &mapSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT);
+    DrawTextureRec(mapSprite.texture, mapSprite.frames[0], {0, 0}, WHITE);
+
     DrawText("Pablos El Multiverso", 10, 10, 20, LIGHTGRAY);
+
+    // Mostrar monedas del jugador 0
+    const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+    std::string coinsText = "Jugador: " + std::to_string(players[0]->GetPabloCoins());
+    int fontSize = 20;
+    int yBase = 35;
+    float iconH = coinSheet.frames[0].height;
+    float rowH = std::max((float)fontSize, iconH);
+    float textY = yBase + (rowH - fontSize) / 2.0f;
+    float iconY = yBase + (rowH - iconH) / 2.0f;
+    int textWidth = MeasureText(coinsText.c_str(), fontSize);
+    DrawText(coinsText.c_str(), 10, (int)textY, fontSize, YELLOW);
+    DrawTextureRec(coinSheet.texture, coinSheet.frames[0], {10.0f + textWidth + 6, iconY}, WHITE);
 
     // Renderizar todos los jugadores
     for (auto &player : players)
@@ -143,12 +179,11 @@ void MainGameState::render()
         DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
                  static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }
-    // Renderizar todos los enemigos
-    for (auto &enemy : enemies)
-    {
-        enemy->Render();
-    }
+    roundManager.Render();
     DrawFPS(GetScreenWidth() - 100, 10);
+
+    const SpriteSheet &mapUpperSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
+    DrawTextureRec(mapUpperSprite.texture, mapUpperSprite.frames[0], {0, 0}, WHITE);
     EndDrawing();
 }
 

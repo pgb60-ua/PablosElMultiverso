@@ -1,0 +1,11 @@
+{
+  "texture": "Sword-Sheet.png",
+  "frames": [
+    {
+      "x": 0,
+      "y": 2,
+      "width": 72,
+      "height": 60
+    }
+  ]
+}
