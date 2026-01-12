@@ -148,7 +148,7 @@ void MainGameState::render()
 
     // Mostrar monedas del jugador 0
     const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
-    std::string coinsText = "Jugador: " + std::to_string(players[0]->GetPabloCoins());
+    std::string coinsText = std::to_string(players[0]->GetPabloCoins());
     int fontSize = 20;
     int yBase = 35;
     float iconH = coinSheet.frames[0].height;
