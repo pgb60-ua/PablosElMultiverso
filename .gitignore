@@ -17,6 +17,9 @@
 # Debugger Files
 *.pdb
 
+# Translation files
+*.mo
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
