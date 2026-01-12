@@ -26,5 +26,10 @@ private:
     /// @brief Genera un nivel aleatorio para un arma según las probabilidades definidas
     /// @param item El item para el cual generar el nivel
     /// @return El nivel del arma (1-4), o 1 si no es un arma
-    int GenerateWeaponLevel(const Item *item);
+    static int GenerateWeaponLevel(const Item *item);
+
+    /// @brief Valida si un índice está dentro del rango válido
+    /// @param index El índice a validar
+    /// @return true si el índice es válido, false en caso contrario
+    bool IsValidIndex(int index) const;
 };

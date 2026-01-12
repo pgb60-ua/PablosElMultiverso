@@ -264,6 +264,22 @@ void Player::CheckCollisions(float deltaTime)
     }
 }
 
+int Player::FindMatchingWeapon(WEAPON_TYPE weaponType, int weaponLevel, int excludeIndex) const
+{
+    for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
+    {
+        if (i == excludeIndex)
+        {
+            continue;
+        }
+        if (weapons[i]->GetWeaponType() == weaponType && weapons[i]->GetLevel() == weaponLevel)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 void Player::RemoveWeapon(int index)
 {
     if (index < 0 || static_cast<std::size_t>(index) >= weapons.size())
@@ -290,18 +306,15 @@ void Player::RemoveWeapon(int index)
 void Player::UpgradeWeapons(std::unique_ptr<AWeapon> newWeapon)
 {
     WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
-    int newWeaponPrice = newWeapon->GetPrice(); // Obtener precio antes de que se destruya
+    int newWeaponPrice = newWeapon->GetPrice();
     int newWeaponLevel = newWeapon->GetLevel();
 
-    for (auto &weapon : weapons)
+    int matchingIndex = FindMatchingWeapon(newWeaponType, newWeaponLevel);
+
+    if (matchingIndex != -1 && weapons[matchingIndex]->GetLevel() < weapons[matchingIndex]->GetMaxLevel())
     {
-        if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() == newWeaponLevel &&
-            weapon->GetLevel() < weapon->GetMaxLevel())
-        {
-            // Acumular el precio del arma comprada al precio del arma existente
-            weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats(), newWeaponPrice);
-            break;
-        }
+        // Acumular el precio del arma comprada al precio del arma existente
+        weapons[matchingIndex]->Upgrade(newWeapon->GetStats().GetOffensiveStats(), newWeaponPrice);
     }
 
     // Si no se pudo mejorar ninguna arma del mismo tipo, no hacer nada
@@ -310,54 +323,33 @@ void Player::UpgradeWeapons(std::unique_ptr<AWeapon> newWeapon)
 
 bool Player::CanFuse(int index)
 {
-    if (index >= 0 && static_cast<size_t>(index) < weapons.size())
+    if (index < 0 || static_cast<size_t>(index) >= weapons.size())
     {
-        WEAPON_TYPE indexType = weapons[index]->GetWeaponType();
-        int indexLevel = weapons[index]->GetLevel();
-        if (indexLevel >= weapons[index]->GetMaxLevel())
-        {
-            return false;
-        }
-        for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
-        {
-            if (i == index)
-            {
-                continue;
-            }
-            if (weapons[i]->GetWeaponType() == indexType && weapons[i]->GetLevel() == indexLevel)
-            {
-                return true;
-            }
-        }
+        return false;
     }
-    return false;
+
+    const auto &weapon = weapons[index];
+    if (weapon->GetLevel() >= weapon->GetMaxLevel())
+    {
+        return false;
+    }
+
+    return FindMatchingWeapon(weapon->GetWeaponType(), weapon->GetLevel(), index) != -1;
 }
 
 void Player::UpgradeWeapon(int index)
 {
-    if (index >= 0 && static_cast<size_t>(index) < weapons.size())
+    if (index < 0 || static_cast<size_t>(index) >= weapons.size())
     {
-        const auto &weapon = weapons[index];
-        int weaponToErase = -1;
-        WEAPON_TYPE indexType = weapon->GetWeaponType();
-        int indexLevel = weapon->GetLevel();
-        // Refactorizar
-        for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
-        {
-            if (i == index)
-            {
-                continue;
-            }
-            if (weapons[i]->GetWeaponType() == indexType && weapons[i]->GetLevel() == indexLevel)
-            {
-                weaponToErase = i;
-                break;
-            }
-        }
-        if (weaponToErase != -1)
-        {
-            weapon->Upgrade(weapons[weaponToErase]->GetStats().GetOffensiveStats(), weapons[weaponToErase]->GetPrice());
-            RemoveWeapon(weaponToErase);
-        }
+        return;
+    }
+
+    const auto &weapon = weapons[index];
+    int matchingIndex = FindMatchingWeapon(weapon->GetWeaponType(), weapon->GetLevel(), index);
+
+    if (matchingIndex != -1)
+    {
+        weapon->Upgrade(weapons[matchingIndex]->GetStats().GetOffensiveStats(), weapons[matchingIndex]->GetPrice());
+        RemoveWeapon(matchingIndex);
     }
 }
