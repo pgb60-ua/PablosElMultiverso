@@ -46,8 +46,8 @@ Desde el directorio raíz del proyecto en PowerShell o CMD:
 mkdir build
 cd build
 
-# Configurar el proyecto con Visual Studio
-cmake .. -G "Visual Studio 16 2019"
+# Configurar el proyecto con CMake (detectará automáticamente la versión de Visual Studio instalada)
+cmake ..
 
 # Compilar desde línea de comandos
 cmake --build . --config Release
