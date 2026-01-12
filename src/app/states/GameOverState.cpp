@@ -4,12 +4,12 @@
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
 #include "ChooseNPCMenuState.hpp"
+#include "I18N.hpp"
 extern "C" {
     #include <raylib.h>
 }
 
-static const char* MENU_OPTIONS[] = { "Volver a jugar", "Volver al menú principal" };
-static const int OPTION_COUNT = sizeof(MENU_OPTIONS) / sizeof(MENU_OPTIONS[0]);
+const char* GameOverState::MENU_OPTIONS[2] = { N_("Play again"), N_("Return to main menu") };
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {
     int startY = screenHeight / 2;
@@ -25,10 +25,10 @@ void GameOverState::init() {}
 void GameOverState::handleInput() {
 
     if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
-        selectedOption = (selectedOption + 1) % OPTION_COUNT;
+        selectedOption = (selectedOption + 1) % GameOverState::OPTION_COUNT;
     }
     if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) {
-        selectedOption = (selectedOption - 1 + OPTION_COUNT) % OPTION_COUNT;
+        selectedOption = (selectedOption - 1 + GameOverState::OPTION_COUNT) % GameOverState::OPTION_COUNT;
     }
 
     if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
@@ -43,7 +43,7 @@ void GameOverState::handleInput() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    for (int i = 0; i < OPTION_COUNT; i++) {
+    for (int i = 0; i < GameOverState::OPTION_COUNT; i++) {
         Rectangle btn = getButtonRect(i, screenWidth, screenHeight);
         if (CheckCollisionPointRec(mousePosition, btn)) {
             selectedOption = i;
@@ -67,13 +67,13 @@ void GameOverState::render() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
     
-    const char* title = "¡HAS PERDIDO!";
+    const char* title = _("YOU LOST!");
     int titleFontSize = 50;
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, 1);
     Vector2 titlePos = { (screenWidth - titleSize.x) / 2.0f, (float)screenHeight / 4.0f - titleSize.y / 2.0f };
     DrawTextEx(GetFontDefault(), title, titlePos, (float)titleFontSize, 1.0f, RAYWHITE);
 
-    for (int i = 0; i < OPTION_COUNT; i++) {
+    for (int i = 0; i < GameOverState::OPTION_COUNT; i++) {
         Rectangle btn = getButtonRect(i, screenWidth, screenHeight);
 
         Color boxColor = (selectedOption == i) ? SELECTED_BOX_COLOR : UNSELECTED_BOX_COLOR;
@@ -82,10 +82,10 @@ void GameOverState::render() {
 
         DrawRectangleRec(btn, boxColor);
         DrawRectangleLinesEx(btn, 2, outlineColor);
-        Vector2 textSize = MeasureTextEx(GetFontDefault(), MENU_OPTIONS[i], 30, 1);
+        Vector2 textSize = MeasureTextEx(GetFontDefault(), _(GameOverState::MENU_OPTIONS[i]), 30, 1);
         Vector2 textPos = { btn.x + (btn.width - textSize.x) / 2.0f,
                     btn.y + (btn.height - textSize.y) / 2.0f };
-        DrawTextEx(GetFontDefault(), MENU_OPTIONS[i], textPos, 30.0f, 1.0f, textColor);
+        DrawTextEx(GetFontDefault(), _(GameOverState::MENU_OPTIONS[i]), textPos, 30.0f, 1.0f, textColor);
     }
     
     EndDrawing();

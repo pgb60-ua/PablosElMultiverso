@@ -2,6 +2,7 @@
 #include "EggplosiveWeapon.hpp"
 #include "GameOverState.hpp"
 #include "GameWonState.hpp"
+#include "I18N.hpp"
 #include "LaserRayWeapon.hpp"
 #include "Player.hpp"
 #include "ShopState.hpp"
@@ -143,11 +144,11 @@ void MainGameState::render()
     const SpriteSheet &mapSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT);
     DrawTextureRec(mapSprite.texture, mapSprite.frames[0], {0, 0}, WHITE);
 
-    DrawText("Pablos El Multiverso", 10, 10, 20, LIGHTGRAY);
+    DrawText(_("PABLOS, THE MULTIVERSE"), 10, 10, 20, LIGHTGRAY);
 
     // Mostrar monedas del jugador 0
     const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
-    std::string coinsText = "Jugador: " + std::to_string(players[0]->GetPabloCoins());
+    std::string coinsText = std::to_string(players[0]->GetPabloCoins());
     int fontSize = 20;
     int yBase = 35;
     float iconH = coinSheet.frames[0].height;

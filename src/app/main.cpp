@@ -5,8 +5,11 @@
 #include <MainMenuState.hpp>
 #include <StateMachine.hpp>
 #include <memory>
+#include "I18N.hpp"
+
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 extern "C"
 {
 #include <raylib.h>
@@ -14,6 +17,15 @@ extern "C"
 
 int main()
 {
+    if (setlocale(LC_ALL, "") == nullptr)
+    {
+        std::cerr << "Warning: Failed to set locale from environment." << std::endl;
+    }
+    
+    // Configuración específica para la localización
+    bindtextdomain("pablos", GetLocalePath().c_str());
+    textdomain("pablos");
+
     // Crear ventana con el tamaño del monitor
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pablos, El Multiverso");
 

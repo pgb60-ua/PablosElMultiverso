@@ -1,0 +1,546 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-12 11:54+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
+msgid "Play again"
+msgstr ""
+
+#: src/app/states/GameOverState.cpp:12 src/app/states/GameWonState.cpp:12
+msgid "Return to main menu"
+msgstr ""
+
+#: src/app/states/GameOverState.cpp:70
+msgid "YOU LOST!"
+msgstr ""
+
+#: src/app/states/ChooseNPCMenuState.cpp:244
+msgid "SELECT YOUR CHARACTER"
+msgstr ""
+
+#: src/app/states/ChooseNPCMenuState.cpp:294
+msgid "Arrows: Change | ENTER: Confirm | Q: Back | ESC: Exit Game"
+msgstr ""
+
+#: src/app/states/LanguageMenuState.cpp:97
+msgid "SELECT LANGUAGE"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:12
+msgid "Play"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:12
+msgid "Change Language"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:12
+msgid "Exit"
+msgstr ""
+
+#: src/app/states/MainMenuState.cpp:92 src/app/states/MainGameState.cpp:147
+msgid "PABLOS, THE MULTIVERSE"
+msgstr ""
+
+#: src/app/states/GameWonState.cpp:69
+msgid "YOU WON!"
+msgstr ""
+
+#: src/app/states/MainGameState.cpp:166
+msgid "Health: "
+msgstr ""
+
+#: src/app/states/ShopState.cpp:272
+msgid "COMMON"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:276
+msgid "UNCOMMON"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:280
+msgid "RARE"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:284
+msgid "EPIC"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:288
+msgid "LEGENDARY"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:292
+msgid "UNKNOWN"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:303 src/app/states/ShopState.cpp:306
+msgid "WEAPON"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:325
+msgid "BLOCKED"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:360
+msgid "PHY"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:361
+msgid "MAG"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:362
+msgid "AS"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:363
+msgid "CC"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:364
+msgid "CD"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:365
+msgid "LS"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:371
+msgid "HP"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:372
+msgid "MHP"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:373
+msgid "MS"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:374
+msgid "AGI"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:375
+msgid "ARM"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:376
+msgid "RES"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:377
+msgid "HR"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:769
+msgid "SHOP"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:782
+msgid "PLAYER STATS"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:789
+msgid "Max Health:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:791
+msgid "Movement Speed:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:793
+msgid "Agility:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:795
+msgid "Attack Speed:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:797
+msgid "Physical Damage:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:799
+msgid "Magical Damage:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:801
+msgid "Resistance:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:803
+msgid "Armor:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:805
+msgid "Critical Chance:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:807
+msgid "Critical Damage:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:809
+msgid "Health Regen:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:811
+msgid "Life Steal:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:815
+msgid "WEAPONS"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:855
+msgid "EMPTY"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:897
+msgid "PHY DMG"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:898
+msgid "MAG DMG"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:899
+msgid "ATK SPD"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:915
+msgid "CRIT CH"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:916
+msgid "CRIT DMG"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:917
+msgid "LIFE STEAL"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:958
+msgid "MAX"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:958
+msgid "FUSE"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:968
+msgid "[ENTER]"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:994
+msgid "SELL"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:999
+msgid "[SPACE]"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:1005
+msgid "Sell Price:"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:1008
+msgid "Sell Price: "
+msgstr ""
+
+#: src/app/states/ShopState.cpp:1027
+msgid "AVAILABLE ITEMS"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:1076
+msgid "Reroll"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:1081
+msgid "Continue"
+msgstr ""
+
+#: src/app/states/ShopState.cpp:1089
+msgid ""
+"[W/S] Navigate  [ENTER/LEFT-CLICK] Buy  [SPACE/RIGHT-CLICK] Lock  [R] "
+"Reroll  [E] Continue"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:6
+msgid "Sniper"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:7
+msgid "A long-range rifle designed for precision shooting"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:8
+msgid "Wing"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:9
+msgid "A blade imbued with the power of the wind"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:10
+msgid "Chemical Destructor Weapon"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:11
+msgid ""
+"The Chemical Destructor Weapon is a powerful weapon that can destroy players "
+"with its chemical attacks."
+msgstr ""
+
+#: src/app/i18n_strings.cpp:12
+msgid "Eggplosive"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:13
+msgid ""
+"An explosive egg launcher that fires a single-shot projectile that explodes "
+"on impact, dealing area damage"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:14
+msgid "Laser Beam"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:15
+msgid ""
+"Single-shot laser that hits every enemy in the targeted row and then "
+"disappears"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:16
+msgid "Axe"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:17
+msgid "A heavy axe that 'calls' through enemies"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:18
+msgid "Sword"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:19
+msgid "A sharp blade for precise thrusts"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:22
+msgid "Spined Breastplate"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:23
+msgid "Heavy armor with spines that damage attackers"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:24
+msgid "Pearl Egg"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:25
+msgid "A mysterious egg that enhances regeneration"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:26
+msgid "Fireball"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:27
+msgid "A big ball of fire that burns enemies"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:28
+msgid "Ethereal Dagger"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:29
+msgid "A ghostly blade that strikes with deadly precision"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:30
+msgid "Celestial Spark"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:31
+msgid "A fragment of a star that enhances critical strikes"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:32
+msgid "Venomous Plant"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:33
+msgid "A mysterious plant that enhances magical power at the cost of vitality"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:34
+msgid "Raven's Feather"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:35
+msgid "Grants incredible speed but weakens defenses"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:36
+msgid "Magical Mirror"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:37
+msgid "Reflects magic and enhances magical resistance"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:38
+msgid "Spotlight"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:39
+msgid "Illuminates the battlefield, revealing weaknesses"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:40
+msgid "Ruby Heart"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:41
+msgid "A crystallized heart that grants vitality"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:42
+msgid "Spirit Mask"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:43
+msgid "A mystical mask that channels spiritual energy"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:44
+msgid "Crimson Vial"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:45
+msgid "A vial of blood that enhances life steal"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:46
+msgid "Explosive Arsenal"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:47
+msgid "Increases damage output but makes you more vulnerable"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:48
+msgid "Satchel"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:49
+msgid "A simple bag that provides minor benefits"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:50
+msgid "Void Ring"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:51
+msgid "Dark magic flows through this ring, draining life for power"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:52
+msgid "Raw Meat"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:53
+msgid "Fresh meat that restores health and strength"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:56
+msgid "Pablo, the Warrior"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:57
+msgid ""
+"Yes, you are seeing it right, it is a monkey with a phone that, as if that "
+"were not enough, is called Pablo"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:58
+msgid "Pablo, the Combat Egg"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:59
+msgid ""
+"An extension of the original Pablo, now with powerful magical abilities."
+msgstr ""
+
+#: src/app/i18n_strings.cpp:60
+msgid "Healer"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:61
+msgid "A holy warrior focused on sustain and healing"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:62
+msgid "Pablo, the Duck"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:63
+msgid "An extension of the original Pablo, now with ranged combat abilities."
+msgstr ""
+
+#: src/app/i18n_strings.cpp:66
+msgid "Chemical Destructor"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:67
+msgid ""
+"A powerful enemy that deals chemical damage and has a high attack speed."
+msgstr ""
+
+#: src/app/i18n_strings.cpp:68
+msgid "Zombie"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:69
+msgid "A slow but relentless undead creature"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:70
+msgid "Darkin"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:71
+msgid "A dark creature that lurks in the shadows"
+msgstr ""
+
+#: src/game/rounds/Round.cpp:54
+msgid "Round: "
+msgstr ""
+
+#: src/game/rounds/Round.cpp:55
+msgid "Time: "
+msgstr ""
+
+#: src/game/rounds/Round.cpp:56
+msgid "Enemies: "
+msgstr ""
