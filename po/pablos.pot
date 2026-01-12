@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-12 11:41+0100\n"
+"POT-Creation-Date: 2026-01-12 11:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: src/app/states/MainMenuState.cpp:92 src/app/states/MainGameState.cpp:146
+#: src/app/states/MainMenuState.cpp:92 src/app/states/MainGameState.cpp:147
 msgid "PABLOS, THE MULTIVERSE"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "YOU WON!"
 msgstr ""
 
-#: src/app/states/MainGameState.cpp:165
+#: src/app/states/MainGameState.cpp:166
 msgid "Health: "
 msgstr ""
 
@@ -284,7 +284,7 @@ msgid ""
 msgstr ""
 
 #: src/app/i18n_strings.cpp:6
-msgid "Sniper "
+msgid "Sniper"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:7
@@ -292,7 +292,7 @@ msgid "A long-range rifle designed for precision shooting"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:8
-msgid "Wing "
+msgid "Wing"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:9
@@ -337,191 +337,199 @@ msgstr ""
 msgid "A heavy axe that 'calls' through enemies"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:20
-msgid "Spined Breastplate"
+#: src/app/i18n_strings.cpp:18
+msgid "Sword"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:21
-msgid "Heavy armor with spines that damage attackers"
+#: src/app/i18n_strings.cpp:19
+msgid "A sharp blade for precise thrusts"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:22
-msgid "Pearl Egg"
+msgid "Spined Breastplate"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:23
-msgid "A mysterious egg that enhances regeneration"
+msgid "Heavy armor with spines that damage attackers"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:24
-msgid "Fireball"
+msgid "Pearl Egg"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:25
-msgid "A big ball of fire that burns enemies"
+msgid "A mysterious egg that enhances regeneration"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:26
-msgid "Ethereal Dagger"
+msgid "Fireball"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:27
-msgid "A ghostly blade that strikes with deadly precision"
+msgid "A big ball of fire that burns enemies"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:28
-msgid "Celestial Spark"
+msgid "Ethereal Dagger"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:29
-msgid "A fragment of a star that enhances critical strikes"
+msgid "A ghostly blade that strikes with deadly precision"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:30
-msgid "Venomous Plant"
+msgid "Celestial Spark"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:31
-msgid "A mysterious plant that enhances magical power at the cost of vitality"
+msgid "A fragment of a star that enhances critical strikes"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:32
-msgid "Raven's Feather"
+msgid "Venomous Plant"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:33
-msgid "Grants incredible speed but weakens defenses"
+msgid "A mysterious plant that enhances magical power at the cost of vitality"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:34
-msgid "Magical Mirror"
+msgid "Raven's Feather"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:35
-msgid "Reflects magic and enhances magical resistance"
+msgid "Grants incredible speed but weakens defenses"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:36
-msgid "Spotlight"
+msgid "Magical Mirror"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:37
-msgid "Illuminates the battlefield, revealing weaknesses"
+msgid "Reflects magic and enhances magical resistance"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:38
-msgid "Ruby Heart"
+msgid "Spotlight"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:39
-msgid "A crystallized heart that grants vitality"
+msgid "Illuminates the battlefield, revealing weaknesses"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:40
-msgid "Spirit Mask"
+msgid "Ruby Heart"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:41
-msgid "A mystical mask that channels spiritual energy"
+msgid "A crystallized heart that grants vitality"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:42
-msgid "Crimson Vial"
+msgid "Spirit Mask"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:43
-msgid "A vial of blood that enhances life steal"
+msgid "A mystical mask that channels spiritual energy"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:44
-msgid "Explosive Arsenal"
+msgid "Crimson Vial"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:45
-msgid "Increases damage output but makes you more vulnerable"
+msgid "A vial of blood that enhances life steal"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:46
-msgid "Satchel"
+msgid "Explosive Arsenal"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:47
-msgid "A simple bag that provides minor benefits"
+msgid "Increases damage output but makes you more vulnerable"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:48
-msgid "Void Ring"
+msgid "Satchel"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:49
-msgid "Dark magic flows through this ring, draining life for power"
+msgid "A simple bag that provides minor benefits"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:50
-msgid "Raw Meat"
+msgid "Void Ring"
 msgstr ""
 
 #: src/app/i18n_strings.cpp:51
+msgid "Dark magic flows through this ring, draining life for power"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:52
+msgid "Raw Meat"
+msgstr ""
+
+#: src/app/i18n_strings.cpp:53
 msgid "Fresh meat that restores health and strength"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:54
+#: src/app/i18n_strings.cpp:56
 msgid "Pablo, the Warrior"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:55
+#: src/app/i18n_strings.cpp:57
 msgid ""
 "Yes, you are seeing it right, it is a monkey with a phone that, as if that "
 "were not enough, is called Pablo"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:56
+#: src/app/i18n_strings.cpp:58
 msgid "Pablo, the Combat Egg"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:57
+#: src/app/i18n_strings.cpp:59
 msgid ""
 "An extension of the original Pablo, now with powerful magical abilities."
 msgstr ""
 
-#: src/app/i18n_strings.cpp:58
+#: src/app/i18n_strings.cpp:60
 msgid "Healer"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:59
+#: src/app/i18n_strings.cpp:61
 msgid "A holy warrior focused on sustain and healing"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:60
+#: src/app/i18n_strings.cpp:62
 msgid "Pablo, the Duck"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:61
+#: src/app/i18n_strings.cpp:63
 msgid "An extension of the original Pablo, now with ranged combat abilities."
 msgstr ""
 
-#: src/app/i18n_strings.cpp:64
+#: src/app/i18n_strings.cpp:66
 msgid "Chemical Destructor"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:65
+#: src/app/i18n_strings.cpp:67
 msgid ""
 "A powerful enemy that deals chemical damage and has a high attack speed."
 msgstr ""
 
-#: src/app/i18n_strings.cpp:66
+#: src/app/i18n_strings.cpp:68
 msgid "Zombie"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:67
+#: src/app/i18n_strings.cpp:69
 msgid "A slow but relentless undead creature"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:68
+#: src/app/i18n_strings.cpp:70
 msgid "Darkin"
 msgstr ""
 
-#: src/app/i18n_strings.cpp:69
+#: src/app/i18n_strings.cpp:71
 msgid "A dark creature that lurks in the shadows"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-12 11:41+0100\n"
+"POT-Creation-Date: 2026-01-12 11:54+0100\n"
 "PO-Revision-Date: 2026-01-11 11:34+0100\n"
 "Last-Translator:  <alejandro@asus-alejandro.localdomain>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -54,7 +54,7 @@ msgstr "Changer de langue"
 msgid "Exit"
 msgstr "Quitter"
 
-#: src/app/states/MainMenuState.cpp:92 src/app/states/MainGameState.cpp:146
+#: src/app/states/MainMenuState.cpp:92 src/app/states/MainGameState.cpp:147
 msgid "PABLOS, THE MULTIVERSE"
 msgstr "PABLOS, LE MULTIVERS"
 
@@ -62,7 +62,7 @@ msgstr "PABLOS, LE MULTIVERS"
 msgid "YOU WON!"
 msgstr "VOUS AVEZ GAGNÉ !"
 
-#: src/app/states/MainGameState.cpp:165
+#: src/app/states/MainGameState.cpp:166
 msgid "Health: "
 msgstr "Vie : "
 
@@ -346,142 +346,150 @@ msgstr "Hache"
 msgid "A heavy axe that 'calls' through enemies"
 msgstr "Une lourde hache qui traverse les ennemis"
 
-#: src/app/i18n_strings.cpp:20
+#: src/app/i18n_strings.cpp:18
+msgid "Sword"
+msgstr "Épée"
+
+#: src/app/i18n_strings.cpp:19
+msgid "A sharp blade for precise thrusts"
+msgstr "Une épée tranchante pour des coups précis"
+
+#: src/app/i18n_strings.cpp:22
 msgid "Spined Breastplate"
 msgstr "Plastron à Épines"
 
-#: src/app/i18n_strings.cpp:21
+#: src/app/i18n_strings.cpp:23
 msgid "Heavy armor with spines that damage attackers"
 msgstr "Armure lourde avec des épines qui blessent les attaquants"
 
-#: src/app/i18n_strings.cpp:22
+#: src/app/i18n_strings.cpp:24
 msgid "Pearl Egg"
 msgstr "Oeuf de Perle"
 
-#: src/app/i18n_strings.cpp:23
+#: src/app/i18n_strings.cpp:25
 msgid "A mysterious egg that enhances regeneration"
 msgstr "Un œuf mystérieux qui améliore la régénération"
 
-#: src/app/i18n_strings.cpp:24
+#: src/app/i18n_strings.cpp:26
 msgid "Fireball"
 msgstr "Boule de Feu"
 
-#: src/app/i18n_strings.cpp:25
+#: src/app/i18n_strings.cpp:27
 msgid "A big ball of fire that burns enemies"
 msgstr "Une grosse boule de feu qui brûle les ennemis"
 
-#: src/app/i18n_strings.cpp:26
+#: src/app/i18n_strings.cpp:28
 msgid "Ethereal Dagger"
 msgstr "Dague Éthérée"
 
-#: src/app/i18n_strings.cpp:27
+#: src/app/i18n_strings.cpp:29
 msgid "A ghostly blade that strikes with deadly precision"
 msgstr "Une lame fantomatique qui frappe avec une précision mortelle"
 
-#: src/app/i18n_strings.cpp:28
+#: src/app/i18n_strings.cpp:30
 msgid "Celestial Spark"
 msgstr "Étincelle Céleste"
 
-#: src/app/i18n_strings.cpp:29
+#: src/app/i18n_strings.cpp:31
 msgid "A fragment of a star that enhances critical strikes"
 msgstr "Un fragment d'étoile qui améliore les coups critiques"
 
-#: src/app/i18n_strings.cpp:30
+#: src/app/i18n_strings.cpp:32
 msgid "Venomous Plant"
 msgstr "Plante Vénéneuse"
 
-#: src/app/i18n_strings.cpp:31
+#: src/app/i18n_strings.cpp:33
 msgid "A mysterious plant that enhances magical power at the cost of vitality"
 msgstr ""
 "Une plante mystérieuse qui augmente la puissance magique au prix de la "
 "vitalité"
 
-#: src/app/i18n_strings.cpp:32
+#: src/app/i18n_strings.cpp:34
 msgid "Raven's Feather"
 msgstr "Plume de Corbeau"
 
-#: src/app/i18n_strings.cpp:33
+#: src/app/i18n_strings.cpp:35
 msgid "Grants incredible speed but weakens defenses"
 msgstr "Accorde une vitesse incroyable mais affaiblit les défenses"
 
-#: src/app/i18n_strings.cpp:34
+#: src/app/i18n_strings.cpp:36
 msgid "Magical Mirror"
 msgstr "Miroir Magique"
 
-#: src/app/i18n_strings.cpp:35
+#: src/app/i18n_strings.cpp:37
 msgid "Reflects magic and enhances magical resistance"
 msgstr "Reflète la magie et améliore la résistance magique"
 
-#: src/app/i18n_strings.cpp:36
+#: src/app/i18n_strings.cpp:38
 msgid "Spotlight"
 msgstr "Projecteur"
 
-#: src/app/i18n_strings.cpp:37
+#: src/app/i18n_strings.cpp:39
 msgid "Illuminates the battlefield, revealing weaknesses"
 msgstr "Illumine le champ de bataille, révélant les faiblesses"
 
-#: src/app/i18n_strings.cpp:38
+#: src/app/i18n_strings.cpp:40
 msgid "Ruby Heart"
 msgstr "Cœur de Rubis"
 
-#: src/app/i18n_strings.cpp:39
+#: src/app/i18n_strings.cpp:41
 msgid "A crystallized heart that grants vitality"
 msgstr "Un cœur cristallisé qui accorde de la vitalité"
 
-#: src/app/i18n_strings.cpp:40
+#: src/app/i18n_strings.cpp:42
 msgid "Spirit Mask"
 msgstr "Masque Spirituel"
 
-#: src/app/i18n_strings.cpp:41
+#: src/app/i18n_strings.cpp:43
 msgid "A mystical mask that channels spiritual energy"
 msgstr "Un masque mystique qui canalise l'énergie spirituelle"
 
-#: src/app/i18n_strings.cpp:42
+#: src/app/i18n_strings.cpp:44
 msgid "Crimson Vial"
 msgstr "Fiole Cramoisie"
 
-#: src/app/i18n_strings.cpp:43
+#: src/app/i18n_strings.cpp:45
 msgid "A vial of blood that enhances life steal"
 msgstr "Une fiole de sang qui améliore le vol de vie"
 
-#: src/app/i18n_strings.cpp:44
+#: src/app/i18n_strings.cpp:46
 msgid "Explosive Arsenal"
 msgstr "Arsenal Explosif"
 
-#: src/app/i18n_strings.cpp:45
+#: src/app/i18n_strings.cpp:47
 msgid "Increases damage output but makes you more vulnerable"
 msgstr "Augmente les dégâts infligés mais vous rend plus vulnérable"
 
-#: src/app/i18n_strings.cpp:46
+#: src/app/i18n_strings.cpp:48
 msgid "Satchel"
 msgstr "Besace"
 
-#: src/app/i18n_strings.cpp:47
+#: src/app/i18n_strings.cpp:49
 msgid "A simple bag that provides minor benefits"
 msgstr "Un simple sac qui offre des avantages mineurs"
 
-#: src/app/i18n_strings.cpp:48
+#: src/app/i18n_strings.cpp:50
 msgid "Void Ring"
 msgstr "Anneau du Vide"
 
-#: src/app/i18n_strings.cpp:49
+#: src/app/i18n_strings.cpp:51
 msgid "Dark magic flows through this ring, draining life for power"
 msgstr ""
 "La magie noire coule à travers cet anneau, drainant la vie pour la puissance"
 
-#: src/app/i18n_strings.cpp:50
+#: src/app/i18n_strings.cpp:52
 msgid "Raw Meat"
 msgstr "Viande Crue"
 
-#: src/app/i18n_strings.cpp:51
+#: src/app/i18n_strings.cpp:53
 msgid "Fresh meat that restores health and strength"
 msgstr "De la viande fraîche qui restaure la santé et la force"
 
-#: src/app/i18n_strings.cpp:54
+#: src/app/i18n_strings.cpp:56
 msgid "Pablo, the Warrior"
 msgstr "Pablo, le Guerrier"
 
-#: src/app/i18n_strings.cpp:55
+#: src/app/i18n_strings.cpp:57
 msgid ""
 "Yes, you are seeing it right, it is a monkey with a phone that, as if that "
 "were not enough, is called Pablo"
@@ -489,59 +497,59 @@ msgstr ""
 "Oui, vous voyez bien, c'est un singe avec un téléphone qui, comme si cela ne "
 "suffisait pas, s'appelle Pablo"
 
-#: src/app/i18n_strings.cpp:56
+#: src/app/i18n_strings.cpp:58
 msgid "Pablo, the Combat Egg"
 msgstr "Pablo, l'Oeuf de Combat"
 
-#: src/app/i18n_strings.cpp:57
+#: src/app/i18n_strings.cpp:59
 msgid ""
 "An extension of the original Pablo, now with powerful magical abilities."
 msgstr ""
 "Une extension du Pablo original, maintenant avec de puissantes capacités "
 "magiques."
 
-#: src/app/i18n_strings.cpp:58
+#: src/app/i18n_strings.cpp:60
 msgid "Healer"
 msgstr "Guérisseur"
 
-#: src/app/i18n_strings.cpp:59
+#: src/app/i18n_strings.cpp:61
 msgid "A holy warrior focused on sustain and healing"
 msgstr "Un guerrier saint concentré sur le soutien et la guérison"
 
-#: src/app/i18n_strings.cpp:60
+#: src/app/i18n_strings.cpp:62
 msgid "Pablo, the Duck"
 msgstr "Pablo, le Canard"
 
-#: src/app/i18n_strings.cpp:61
+#: src/app/i18n_strings.cpp:63
 msgid "An extension of the original Pablo, now with ranged combat abilities."
 msgstr ""
 "Une extension du Pablo original, maintenant avec des capacités de combat à "
 "distance."
 
-#: src/app/i18n_strings.cpp:64
+#: src/app/i18n_strings.cpp:66
 msgid "Chemical Destructor"
 msgstr "Destructeur Chimique"
 
-#: src/app/i18n_strings.cpp:65
+#: src/app/i18n_strings.cpp:67
 msgid ""
 "A powerful enemy that deals chemical damage and has a high attack speed."
 msgstr ""
 "Un ennemi puissant qui inflige des dégâts chimiques et a une grande vitesse "
 "d'attaque."
 
-#: src/app/i18n_strings.cpp:66
+#: src/app/i18n_strings.cpp:68
 msgid "Zombie"
 msgstr "Zombie"
 
-#: src/app/i18n_strings.cpp:67
+#: src/app/i18n_strings.cpp:69
 msgid "A slow but relentless undead creature"
 msgstr "Une créature morte-vivante lente mais implacable"
 
-#: src/app/i18n_strings.cpp:68
+#: src/app/i18n_strings.cpp:70
 msgid "Darkin"
 msgstr "Darkin"
 
-#: src/app/i18n_strings.cpp:69
+#: src/app/i18n_strings.cpp:71
 msgid "A dark creature that lurks in the shadows"
 msgstr "Une créature sombre qui rôde dans les ombres"
 

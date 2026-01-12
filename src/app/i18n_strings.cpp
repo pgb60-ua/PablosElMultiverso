@@ -15,6 +15,8 @@ void register_json_strings()
     N_("Single-shot laser that hits every enemy in the targeted row and then disappears");
     N_("Axe");
     N_("A heavy axe that 'calls' through enemies");
+    N_("Sword");
+    N_("A sharp blade for precise thrusts");
 
     // Items
     N_("Spined Breastplate");
