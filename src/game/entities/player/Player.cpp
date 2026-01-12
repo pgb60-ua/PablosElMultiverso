@@ -1,4 +1,6 @@
 #include "Player.hpp"
+#include "AEnemy.hpp"
+#include "AEntity.hpp"
 #include "Types.hpp"
 #include "raylib.h"
 #include <cstddef>
@@ -82,6 +84,8 @@ void Player::Update(float deltaTime)
     {
         weapons[i]->update(deltaTime, playerPos);
     }
+
+    AEntity::Update(deltaTime);
 }
 
 void Player::HandleInput(Vector2 newInputDirection)

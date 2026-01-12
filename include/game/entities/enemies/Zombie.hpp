@@ -15,19 +15,4 @@ public:
     /// @brief Constructor del Zombie
     /// @param objectives Referencia al vector de jugadores (objetivos)
     Zombie(std::vector<Player *> objectives);
-
-    /*--------------------------*/
-    // Métodos Heredados de AEntity
-    /*--------------------------*/
-
-    /// @brief Actualiza el estado del zombie
-    /// Se llama en cada frame para aplicar la IA y el movimiento
-    void Update(float deltaTime) override;
-
-    /*--------------------------*/
-    // Métodos Heredados de AEnemy
-    /*--------------------------*/
-
-    /// @brief Renderiza el zombie
-    void Render() override;
 };

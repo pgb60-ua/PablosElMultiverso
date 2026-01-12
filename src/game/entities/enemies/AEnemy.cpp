@@ -1,11 +1,14 @@
 #include "AEnemy.hpp"
+#include "AEntity.hpp"
+#include "Types.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
 #include <raymath.h>
 
-AEnemy::AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath)
-    : AEntity(stats, hitbox), objectives(objectives), pabloCoinsAtDeath(pabloCoinsAtDeath)
+AEnemy::AEnemy(Stats stats, const Shape &hitbox, ENEMY_TYPE type, std::vector<Player *> objectives,
+               int pabloCoinsAtDeath)
+    : AEntity(stats, hitbox), objectives(objectives), pabloCoinsAtDeath(pabloCoinsAtDeath), type(type)
 {
     s_allEnemies.push_back(this);
 
@@ -81,8 +84,6 @@ void AEnemy::UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType)
         animation.frameIndex %= SpriteLoaderManager::GetInstance().GetSpriteSheet(enemyType).spriteFrameCount;
     }
 }
-
-void AEnemy::CheckCollisions(float deltaTime) {}
 
 Vector2 AEnemy::CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed)
 {
@@ -184,4 +185,32 @@ void AEnemy::Move(float deltaTime)
 
     Vector2 newPos = Vector2Add(enemyPos, Vector2Scale(velocity, deltaTime));
     SetPosition(newPos);
+}
+
+void AEnemy::Update(float deltaTime)
+{
+    currentAttackCooldownTime += deltaTime;
+    Move(deltaTime);
+    AEntity::Update(deltaTime);
+    UpdateEnemyAnimation(deltaTime, type);
+}
+
+void AEnemy::Render()
+{
+    if (!IsAlive())
+        return;
+    const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(type);
+    if (sheet.frames.empty())
+        return;
+    animation.frameIndex %= sheet.spriteFrameCount;
+
+    Rectangle src = sheet.frames[animation.frameIndex];
+
+    Vector2 origin = {src.width * 0.5f, src.height * 0.5f};
+
+    Rectangle dest = {hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
+                      hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f, src.width, src.height};
+
+    DrawTexturePro(sheet.texture, src, dest, origin, 0, animation.color);
+    animation.color = WHITE;
 }
