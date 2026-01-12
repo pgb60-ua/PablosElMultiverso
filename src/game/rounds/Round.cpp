@@ -1,4 +1,5 @@
 #include "Round.hpp"
+#include <algorithm>
 #include <cstdlib>
 Round::Round(float duration, float spawnRate, int roundNumber, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*>& enemiesOnMap)
     : enemiesToSpawn(enemiesToSpawn), enemiesOnMap(enemiesOnMap), roundNumber(roundNumber), duration(duration), spawnRate(spawnRate)
@@ -32,6 +33,21 @@ void Round::Update(float deltaTime)
     for (auto &enemy : enemiesOnMap)
     {
         enemy->Update(deltaTime);
+    }
+
+    auto it = std::remove_if(enemiesOnMap.begin(), enemiesOnMap.end(), [](AEnemy *enemy) {
+        if (!enemy->IsAlive())
+        {
+            enemy->DropLoot();
+            delete enemy;
+            return true;
+        }
+        return false;
+    });
+
+    if (it != enemiesOnMap.end())
+    {
+        enemiesOnMap.erase(it, enemiesOnMap.end());
     }
 
 }
