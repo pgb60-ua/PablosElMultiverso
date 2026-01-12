@@ -34,7 +34,8 @@ void AxeWeapon::Attack(float deltaTime)
 
     if (isSwinging)
     {
-        float totalDuration = ONE_WAY_DURATION * 2.0f;
+        float ONE_WAY_DURATION = attackInterval / 2.0f;
+        float totalDuration = attackInterval;
 
         if (timeSinceLastAttack <= ONE_WAY_DURATION)
         {

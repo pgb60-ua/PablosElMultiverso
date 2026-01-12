@@ -9,7 +9,7 @@
 	"max_health": 0,
 	"movement_speed": 0,
 	"agility": 0,
-	"attack_speed": 0.5,
+	"attack_speed": 1.0,
 	"physical_damage": 35,
 	"magical_damage": 0,
 	"resistance": 0,
