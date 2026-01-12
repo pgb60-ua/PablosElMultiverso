@@ -16,6 +16,8 @@ public:
     const std::string BASE_PATH_ENEMY_SOUNDS = "assets/sounds/enemies/";
     const std::string BASE_PATH_MUSIC = "assets/sounds/music/";
 
+    static const int MAX_DIRECTORY_DEPTH = 255;
+
     static AudioManager &GetInstance()
     {
         static AudioManager instance;

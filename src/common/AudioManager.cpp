@@ -80,6 +80,15 @@ void AudioManager::ClearCache()
 
 void AudioManager::ClearCacheWeapons()
 {
+    for (auto &pair : weaponAliasPools)
+    {
+        for (auto &alias : pair.second.aliases)
+        {
+            UnloadSoundAlias(alias);
+        }
+    }
+    weaponAliasPools.clear();
+
     for (auto &pair : weaponSoundsCache)
     {
         UnloadSound(pair.second);
@@ -89,6 +98,15 @@ void AudioManager::ClearCacheWeapons()
 
 void AudioManager::ClearCacheEnemies()
 {
+    for (auto &pair : enemyAliasPools)
+    {
+        for (auto &alias : pair.second.aliases)
+        {
+            UnloadSoundAlias(alias);
+        }
+    }
+    enemyAliasPools.clear();
+
     for (auto &pair : enemySoundsCache)
     {
         UnloadSound(pair.second);
@@ -99,6 +117,16 @@ void AudioManager::ClearCacheEnemies()
 void AudioManager::ClearCache(WEAPON_TYPE type)
 {
     int typeKey = static_cast<int>(type);
+
+    if (weaponAliasPools.find(typeKey) != weaponAliasPools.end())
+    {
+        for (auto &alias : weaponAliasPools[typeKey].aliases)
+        {
+            UnloadSoundAlias(alias);
+        }
+        weaponAliasPools.erase(typeKey);
+    }
+
     if (weaponSoundsCache.find(typeKey) != weaponSoundsCache.end())
     {
         UnloadSound(weaponSoundsCache[typeKey]);
@@ -109,6 +137,16 @@ void AudioManager::ClearCache(WEAPON_TYPE type)
 void AudioManager::ClearCache(ENEMY_TYPE type)
 {
     int typeKey = static_cast<int>(type);
+
+    if (enemyAliasPools.find(typeKey) != enemyAliasPools.end())
+    {
+        for (auto &alias : enemyAliasPools[typeKey].aliases)
+        {
+            UnloadSoundAlias(alias);
+        }
+        enemyAliasPools.erase(typeKey);
+    }
+
     if (enemySoundsCache.find(typeKey) != enemySoundsCache.end())
     {
         UnloadSound(enemySoundsCache[typeKey]);
@@ -132,7 +170,7 @@ void AudioManager::DetectAndSetAssetsPath()
     std::string currentDir = ".";
 
     // Intentar encontrar la carpeta de assets en diferentes ubicaciones
-    while (currentDir.length() < 255)
+    while (currentDir.length() < MAX_DIRECTORY_DEPTH)
     {
         std::string assetsPath = currentDir + "/assets";
         if (fs::exists(assetsPath) && fs::is_directory(assetsPath))
@@ -239,6 +277,11 @@ void AudioManager::PlayEnemySound()
 
 void AudioManager::PlayBackgroundMusic(const std::string &musicFile)
 {
+    if (IsMusicValid(currentMusic))
+    {
+        UnloadMusicStream(currentMusic);
+    }
+
     // Cargar nueva música
     std::string filePath = assetsRoot.empty() ? BASE_PATH_MUSIC + musicFile : assetsRoot + BASE_PATH_MUSIC + musicFile;
     currentMusic = LoadMusicStream(filePath.c_str());

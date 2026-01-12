@@ -43,9 +43,7 @@ void WingWeapon::Attack(const Vector2 &position, float deltaTime)
             direction.x * cosA + direction.y * sinA,
             direction.x * -sinA + direction.y * cosA};
 
-        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::WING);
         ShootProjectile(position, dirPlus, allEnemies);
-        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::WING);
         ShootProjectile(position, dirMinus, allEnemies);
 
         timeSinceLastAttack -= attackInterval;
