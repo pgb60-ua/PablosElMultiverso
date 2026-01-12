@@ -1,5 +1,7 @@
 #include "Darkin.hpp"
+#include "AEnemy.hpp"
 #include "ScreenConstants.hpp"
+#include "Types.hpp"
 Darkin::Darkin(std::vector<Player *> players)
     : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::DARKIN),
              SpriteLoaderManager::GetInstance().GetSpriteHitbox(
@@ -9,17 +11,7 @@ Darkin::Darkin(std::vector<Player *> players)
 {
 }
 
-void Darkin::Update(float deltaTime)
-{
-    // Actualiza el cooldown de ataque
-    currentAttackCooldownTime += deltaTime;
-
-    Move(deltaTime);
-
-    Regeneration(deltaTime);
-
-    UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::DARKIN);
-}
+void Darkin::Update(float deltaTime) { AEnemy::Update(deltaTime, ENEMY_TYPE::DARKIN); }
 
 void Darkin::Render()
 {

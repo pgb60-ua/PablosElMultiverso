@@ -62,6 +62,7 @@ public:
 
     /// @brief Actualiza el estado del enemigo (animación, cooldowns, etc.)
     virtual void Update(float deltaTime) override = 0;
+    virtual void Update(float deltaTime, ENEMY_TYPE type);
 
     /// @brief Mueve el enemigo hacia su objetivo usando algoritmo de Boids
     /// @param deltaTime Tiempo transcurrido desde el último frame

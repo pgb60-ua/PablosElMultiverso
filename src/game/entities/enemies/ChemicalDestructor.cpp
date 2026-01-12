@@ -26,19 +26,12 @@ bool ChemicalDestructor::Attack()
 
 void ChemicalDestructor::Update(float deltaTime)
 {
-    // Actualiza el cooldown de ataque
-    currentAttackCooldownTime += deltaTime;
+    AEnemy::Update(deltaTime, ENEMY_TYPE::CHEMICAL_DESTRUCTOR);
     if (weapon)
     {
         Vector2 enemyCenter = GetCenterPosition();
         weapon->update(deltaTime, enemyCenter);
     }
-
-    Move(deltaTime);
-
-    Regeneration(deltaTime);
-
-    UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::CHEMICAL_DESTRUCTOR);
 }
 
 Vector2 ChemicalDestructor::GetCenterPosition() const

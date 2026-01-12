@@ -1,5 +1,7 @@
 #include "Zombie.hpp"
+#include "AEnemy.hpp"
 #include "ScreenConstants.hpp"
+#include "Types.hpp"
 #include <cmath>
 #include <raymath.h>
 
@@ -33,14 +35,4 @@ void Zombie::Render()
     animation.color = WHITE;
 }
 
-void Zombie::Update(float deltaTime)
-{
-    // Actualiza el cooldown de ataque
-    currentAttackCooldownTime += deltaTime;
-
-    Move(deltaTime);
-
-    Regeneration(deltaTime);
-
-    UpdateEnemyAnimation(deltaTime, ENEMY_TYPE::ZOMBIE);
-}
+void Zombie::Update(float deltaTime) { AEnemy::Update(deltaTime, ENEMY_TYPE::ZOMBIE); }

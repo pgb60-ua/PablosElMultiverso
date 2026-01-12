@@ -1,4 +1,6 @@
 #include "AEnemy.hpp"
+#include "AEntity.hpp"
+#include "Types.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -185,3 +187,11 @@ void AEnemy::Move(float deltaTime)
     Vector2 newPos = Vector2Add(enemyPos, Vector2Scale(velocity, deltaTime));
     SetPosition(newPos);
 }
+
+void AEnemy::Update(float deltaTime, ENEMY_TYPE type)
+{
+    currentAttackCooldownTime += deltaTime;
+    Move(deltaTime);
+    AEntity::Update(deltaTime);
+    UpdateEnemyAnimation(deltaTime, type);
+};
