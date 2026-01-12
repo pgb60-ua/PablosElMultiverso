@@ -25,7 +25,7 @@ Las Pull Requests (PR) se nombrarán siguiendo el formato `PEM-X | descripcion-c
 
 Todas las Pull Requests se integrarán en la rama principal mediante un **squash merge**.
 
-## Instalación y Compilación
+## Installation and Compilation
 
 ### Windows
 
