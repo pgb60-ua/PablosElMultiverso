@@ -762,8 +762,22 @@ void ShopState::update(float deltaTime)
 }
 void ShopState::render()
 {
+    // Constantes de layout calculadas una sola vez
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
+    int headerHeight = 80;
+    int statsX = 40;
+    int statsY = headerHeight + 20;
+    int statsWidth = screenWidth * 0.35f;
+    int statsHeight = screenHeight - headerHeight - 60;
+    int itemsX = statsX + statsWidth + 30;
+    int itemsY = headerHeight + 20;
+    int itemsWidth = screenWidth - itemsX - 40;
+    int itemsHeight = statsHeight;
+
+    // Obtener sprite de moneda una sola vez
+    const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+    Rectangle coinFrame = coinSheet.frames[0];
 
     BeginDrawing();
 
@@ -771,7 +785,6 @@ void ShopState::render()
     DrawRectangle(0, 0, screenWidth, screenHeight, Color{20, 20, 30, 255});
 
     // Header de la tienda
-    int headerHeight = 80;
     DrawRectangle(0, 0, screenWidth, headerHeight, Color{40, 40, 60, 255});
     DrawRectangle(0, headerHeight - 3, screenWidth, 3, Color{255, 200, 0, 255});
 
@@ -779,19 +792,9 @@ void ShopState::render()
 
     // Pablo Coins con icono
     int coinsX = screenWidth - 250;
-    const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
-    Rectangle coinFrame = coinSheet.frames[0];
-
-    // Centrar verticalmente la moneda con el texto (25 es el tamaño de la fuente, 30 es la Y del texto)
     int coinYHeader = 30 + (25 - (int)coinFrame.height) / 2;
     DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)coinsX - 20, (float)coinYHeader}, WHITE);
     DrawText(TextFormat("%d", player->GetPabloCoins()), coinsX + 30, 30, 25, Color{255, 255, 255, 255});
-
-    // Panel de stats del jugador (izquierda)
-    int statsX = 40;
-    int statsY = headerHeight + 20;
-    int statsWidth = screenWidth * 0.35f;
-    int statsHeight = screenHeight - headerHeight - 60;
 
     // Fondo del panel de stats
     DrawRectangle(statsX - 5, statsY - 5, statsWidth + 10, statsHeight + 10, Color{255, 200, 0, 255});
@@ -1041,12 +1044,6 @@ void ShopState::render()
                      Color{255, 200, 0, 255});
         }
     }
-
-    // Panel de items (derecha)
-    int itemsX = statsX + statsWidth + 30;
-    int itemsY = headerHeight + 20;
-    int itemsWidth = screenWidth - itemsX - 40;
-    int itemsHeight = statsHeight;
 
     // Fondo del panel de items
     DrawRectangle(itemsX - 5, itemsY - 5, itemsWidth + 10, itemsHeight + 10, Color{255, 200, 0, 255});
