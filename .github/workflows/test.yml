@@ -1,0 +1,40 @@
+name: C++ Tests
+
+on:
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake build-essential libboost-test-dev \
+          libgl1-mesa-dev libx11-dev xorg-dev \
+          libwayland-dev libxkbcommon-dev
+    
+    - name: Configure CMake
+      run: |
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+    
+    - name: Build
+      run: |
+        cmake --build build --config Debug
+    
+    - name: Run tests with CTest
+      working-directory: build
+      run: |
+        ctest --output-on-failure --verbose
+    
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: build/Testing/Temporary/LastTest.log
