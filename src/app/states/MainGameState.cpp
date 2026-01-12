@@ -1,5 +1,4 @@
 #include "AxeWeapon.hpp"
-#include "SwordWeapon.hpp"
 #include "EggplosiveWeapon.hpp"
 #include "GameOverState.hpp"
 #include "GameWonState.hpp"
@@ -9,6 +8,7 @@
 #include "SniperWeapon.hpp"
 #include "SpriteLoaderManager.hpp"
 #include "StateMachine.hpp"
+#include "SwordWeapon.hpp"
 #include "Types.hpp"
 #include "WeaponFactory.hpp"
 #include "WingWeapon.hpp"
@@ -162,15 +162,19 @@ void MainGameState::render()
     for (auto &player : players)
     {
         player->Render();
-        std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
-        DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
-                 static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
+        std::string healthText = "Vida: " + std::to_string(static_cast<int>(player->GetHealth()));
+        DrawText(healthText.c_str(), 10, textY + 30, fontSize, GREEN);
     }
     roundManager.Render();
     DrawFPS(GetScreenWidth() - 100, 10);
 
     const SpriteSheet &mapUpperSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
     DrawTextureRec(mapUpperSprite.texture, mapUpperSprite.frames[0], {0, 0}, WHITE);
+    for (auto &player : players)
+    {
+        std::string healthText = "Vida: " + std::to_string(static_cast<int>(player->GetHealth()));
+        DrawText(healthText.c_str(), 10, textY + 30, fontSize, GREEN);
+    }
     EndDrawing();
 }
 
