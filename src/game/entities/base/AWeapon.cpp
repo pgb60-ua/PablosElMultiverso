@@ -1,8 +1,8 @@
 #include "AWeapon.hpp"
 #include "SpriteLoaderManager.hpp"
+#include "raymath.h"
 #include <SpriteSheet.hpp>
 #include <cmath>
-#include "raymath.h"
 
 class AEnemy;
 
@@ -69,12 +69,37 @@ ItemRarity AWeapon::GetRarityFromJSON(WEAPON_TYPE type)
     return ItemRarity::Common;
 }
 
-bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats)
+void AWeapon::SetLevel(int newLevel)
+{
+    if (newLevel < 1 || newLevel > MAXLEVEL)
+    {
+        return;
+    }
+
+    // Las stats actuales son las stats base (nivel 1)
+    // Multiplicar por 2^(newLevel-1) para obtener las stats del nivel deseado
+    // Nivel 1: multiplier = 1, Nivel 2: multiplier = 2, Nivel 3: multiplier = 4, Nivel 4: multiplier = 8
+    int multiplier = static_cast<int>(std::pow(2, newLevel - 1));
+
+    OffensiveStats baseStats = stats.GetOffensiveStats();
+    OffensiveStats scaledStats = {baseStats.physicalDamage * multiplier,
+                                  baseStats.magicDamage * multiplier,
+                                  baseStats.attackSpeed * multiplier,
+                                  std::min(baseStats.criticalChance * multiplier, MAX_CRITICAL_CHANCE),
+                                  std::min(baseStats.criticalDamage * multiplier, MAX_CRITICAL_DAMAGE),
+                                  std::min(baseStats.lifeSteal * multiplier, MAX_LIFE_STEAL)};
+
+    stats.SetOffensiveStats(scaledStats);
+    level = newLevel;
+}
+
+bool AWeapon::Upgrade(const OffensiveStats &newOffensiveStats, int addPrice)
 {
     if (level >= MAXLEVEL)
     {
         return false;
     }
+    SetPrice(GetPrice() + addPrice);
     level++;
 
     OffensiveStats currentStats = stats.GetOffensiveStats();
@@ -142,15 +167,17 @@ Vector2 AWeapon::CalculateDirection()
 void AWeapon::update(float deltaTime, const Vector2 &position)
 {
     currentOrbitAngle += ORBIT_SPEED * deltaTime;
-    if (currentOrbitAngle >= 360.0f) currentOrbitAngle -= 360.0f;
+    if (currentOrbitAngle >= 360.0f)
+        currentOrbitAngle -= 360.0f;
 
     float rad = currentOrbitAngle * DEG2RAD;
-    Vector2 offset = { cosf(rad) * ORBIT_RADIUS, sinf(rad) * ORBIT_RADIUS };
-    
+    Vector2 offset = {cosf(rad) * ORBIT_RADIUS, sinf(rad) * ORBIT_RADIUS};
+
     Vector2 finalPos = Vector2Add(position, offset);
-    
+
     SetPosition(finalPos);
-    if(!enemiesInRange.empty()) {
+    if (!enemiesInRange.empty())
+    {
         SetDirection(CalculateDirection());
     }
 }

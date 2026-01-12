@@ -14,20 +14,23 @@ public:
     /// @param position La posición inicial del arma
     /// @param enemiesInRange Referencia a la lista de enemigos en rango
     /// @param allEnemies Referencia a la lista de todos los enemigos
+    /// @param price Precio del arma (por defecto 0)
+    /// @param level Nivel inicial del arma (por defecto 1)
     /// @return Un unique_ptr al arma creada, o nullptr si el tipo no es válido
     static std::unique_ptr<AWeapon> CreateWeapon(ITEM_TYPE itemType, const Vector2 &position,
                                                  std::vector<AEnemy *> &enemiesInRange,
-                                                 std::vector<AEnemy *> &allEnemies);
+                                                 std::vector<AEnemy *> &allEnemies, int price = 0, int level = 1);
 
     /// @brief Crea el arma inicial según el tipo de jugador
     /// @param playerType El tipo de jugador
     /// @param position La posición inicial del arma
     /// @param enemiesInRange Referencia a la lista de enemigos en rango
     /// @param allEnemies Referencia a la lista de todos los enemigos
+    /// @param price Precio del arma (por defecto 0 para armas iniciales)
     /// @return Un unique_ptr al arma inicial del jugador
     static std::unique_ptr<AWeapon> CreateStartingWeapon(PLAYER_TYPE playerType, const Vector2 &position,
                                                          std::vector<AEnemy *> &enemiesInRange,
-                                                         std::vector<AEnemy *> &allEnemies);
+                                                         std::vector<AEnemy *> &allEnemies, int price = 0);
 
 private:
     WeaponFactory() = delete; // Clase con solo métodos estáticos

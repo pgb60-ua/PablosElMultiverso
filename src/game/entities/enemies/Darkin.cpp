@@ -1,11 +1,11 @@
 #include "Darkin.hpp"
 #include "ScreenConstants.hpp"
 Darkin::Darkin(std::vector<Player *> players)
-    : AEnemy(
-          DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::DARKIN),
-          SpriteLoaderManager::GetInstance().GetSpriteHitbox(
-              ENEMY_TYPE::DARKIN, Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
-          players, 75)
+    : AEnemy(DataFileManager::GetInstance().GetEnemyStats(ENEMY_TYPE::DARKIN),
+             SpriteLoaderManager::GetInstance().GetSpriteHitbox(
+                 ENEMY_TYPE::DARKIN,
+                 Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
+             players, 30)
 {
 }
 

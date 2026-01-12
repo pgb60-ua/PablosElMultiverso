@@ -15,7 +15,7 @@ ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
     targetWeight = 3.5f;
     static std::vector<AEnemy *> emptyVector;
     Vector2 enemyCenter = GetCenterPosition();
-    this->weapon = std::make_unique<ChemicalDestructorWeapon>(enemyCenter, emptyVector, players);
+    this->weapon = std::make_unique<ChemicalDestructorWeapon>(enemyCenter, emptyVector, this->objectives);
 }
 
 bool ChemicalDestructor::Attack()
@@ -49,10 +49,8 @@ void ChemicalDestructor::Update(float deltaTime)
 
 Vector2 ChemicalDestructor::GetCenterPosition() const
 {
-    return Vector2{
-        hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
-        hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f
-    };
+    return Vector2{hitbox.data.rectangle.x + hitbox.data.rectangle.width * 0.5f,
+                   hitbox.data.rectangle.y + hitbox.data.rectangle.height * 0.5f};
 }
 
 Vector2 ChemicalDestructor::CalculateTargetForce(const Vector2 &enemyPos, const Vector2 &playerPos, float baseSpeed)
@@ -60,17 +58,17 @@ Vector2 ChemicalDestructor::CalculateTargetForce(const Vector2 &enemyPos, const 
     // Mantener distancia del jugador en lugar de acercarse infinitamente
     Vector2 toPlayer = Vector2Subtract(playerPos, enemyPos);
     float distance = Vector2Length(toPlayer);
-    
+
     if (distance <= 0.0f)
         return Vector2Zero();
-    
+
     Vector2 directionToPlayer = Vector2Normalize(toPlayer);
     float distanceDifference = distance - TARGET_DISTANCE;
-    
+
     // Si está muy cerca, alejarse; si está muy lejos, acercarse
     // Usar un factor de suavizado para evitar movimientos bruscos
     float forceMultiplier = (distanceDifference / TARGET_DISTANCE) * targetWeight;
-    
+
     return Vector2Scale(directionToPlayer, baseSpeed * forceMultiplier);
 }
 

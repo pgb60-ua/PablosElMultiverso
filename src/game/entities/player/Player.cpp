@@ -1,8 +1,6 @@
 #include "Player.hpp"
 #include "Types.hpp"
-#include "AMeleeWeapon.hpp"
 #include "raylib.h"
-#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <raymath.h>
@@ -110,37 +108,24 @@ void Player::AddWeapon(std::unique_ptr<AWeapon> newWeapon)
     {
         weapons.push_back(std::move(newWeapon)); // std::move transfiere ownership
 
-        float initialAngle = 0.0f;
-        size_t currentWeaponIndex = weapons.size() - 1;
-        switch (currentWeaponIndex)
+        // Redistribuir todas las armas equitativamente en el círculo
+        size_t totalWeapons = weapons.size();
+        float angleStep = 360.0f / totalWeapons; // Separación uniforme
+
+        for (size_t i = 0; i < totalWeapons; i++)
         {
-            case 0: initialAngle = 225.0f; break; //Arriba-Izquierda
-            case 1: initialAngle = 315.0f; break; //Arriba-Derecha
-            case 2: initialAngle = 135.0f; break; //Abajo-Izquierda
-            case 3: initialAngle = 45.0f;  break; //Abajo-Derecha
+            float angle = i * angleStep; // 0°, angleStep°, 2*angleStep°, ...
+            weapons[i]->SetOrbitAngle(angle);
         }
-        weapons.back()->SetOrbitAngle(initialAngle);
     }
-    // Si tengo 4, buscar un arma del mismo tipo que no esté al máximo
+    // Si tengo 4, buscar un arma del mismo tipo que tenga el mismo nivel
     else
     {
-        WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
-
-        for (auto &weapon : weapons)
-        {
-            if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() < weapon->GetMaxLevel())
-            {
-                weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats());
-                break;
-            }
-        }
-
-        // Si no se pudo mejorar ninguna arma del mismo tipo, no hacer nada
-        // (esto no debería suceder si CanAcceptWeapon se usa correctamente)
+        UpgradeWeapons(std::move(newWeapon));
     }
 }
 
-bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType) const
+bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType, int weaponLevel) const
 {
     // Si tengo menos de 4 armas, siempre puedo aceptar
     if (weapons.size() < WEAPON_MAX)
@@ -148,10 +133,12 @@ bool Player::CanAcceptWeapon(WEAPON_TYPE weaponType) const
         return true;
     }
 
-    // Si tengo 4 armas, verificar si hay al menos una del mismo tipo que no esté al máximo
+    // Si tengo 4 armas, verificar si hay al menos una del mismo tipo y mismo nivel que el arma entrante
     for (const auto &weapon : weapons)
     {
-        if (weapon->GetWeaponType() == weaponType && weapon->GetLevel() < weapon->GetMaxLevel())
+        // Si un arma es del mismo tipo y mismo nivel y no es nivel maximo
+        if (weapon->GetWeaponType() == weaponType && weapon->GetLevel() == weaponLevel &&
+            weapon->GetLevel() < weapon->GetMaxLevel())
         {
             return true;
         }
@@ -273,6 +260,104 @@ void Player::CheckCollisions(float deltaTime)
         {
             TakeDamage(enemy->GetStats());
             return;
+        }
+    }
+}
+
+void Player::RemoveWeapon(int index)
+{
+    if (index < 0 || static_cast<std::size_t>(index) >= weapons.size())
+    {
+        return; // Índice inválido, no hacer nada
+    }
+
+    // Eliminar el arma
+    weapons.erase(weapons.begin() + index);
+
+    // Redistribuir ángulos de las armas restantes
+    size_t totalWeapons = weapons.size();
+    if (totalWeapons > 0)
+    {
+        float angleStep = 360.0f / totalWeapons;
+        for (size_t i = 0; i < totalWeapons; i++)
+        {
+            float angle = i * angleStep;
+            weapons[i]->SetOrbitAngle(angle);
+        }
+    }
+}
+
+void Player::UpgradeWeapons(std::unique_ptr<AWeapon> newWeapon)
+{
+    WEAPON_TYPE newWeaponType = newWeapon->GetWeaponType();
+    int newWeaponPrice = newWeapon->GetPrice(); // Obtener precio antes de que se destruya
+    int newWeaponLevel = newWeapon->GetLevel();
+
+    for (auto &weapon : weapons)
+    {
+        if (weapon->GetWeaponType() == newWeaponType && weapon->GetLevel() == newWeaponLevel &&
+            weapon->GetLevel() < weapon->GetMaxLevel())
+        {
+            // Acumular el precio del arma comprada al precio del arma existente
+            weapon->Upgrade(newWeapon->GetStats().GetOffensiveStats(), newWeaponPrice);
+            break;
+        }
+    }
+
+    // Si no se pudo mejorar ninguna arma del mismo tipo, no hacer nada
+    // (esto no debería suceder si CanAcceptWeapon se usa correctamente)
+}
+
+bool Player::CanFuse(int index)
+{
+    if (index >= 0 && static_cast<size_t>(index) < weapons.size())
+    {
+        WEAPON_TYPE indexType = weapons[index]->GetWeaponType();
+        int indexLevel = weapons[index]->GetLevel();
+        if (indexLevel >= weapons[index]->GetMaxLevel())
+        {
+            return false;
+        }
+        for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
+        {
+            if (i == index)
+            {
+                continue;
+            }
+            if (weapons[i]->GetWeaponType() == indexType && weapons[i]->GetLevel() == indexLevel)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void Player::UpgradeWeapon(int index)
+{
+    if (index >= 0 && static_cast<size_t>(index) < weapons.size())
+    {
+        const auto &weapon = weapons[index];
+        int weaponToErase = -1;
+        WEAPON_TYPE indexType = weapon->GetWeaponType();
+        int indexLevel = weapon->GetLevel();
+        // Refactorizar
+        for (int i = 0; static_cast<size_t>(i) < weapons.size(); i++)
+        {
+            if (i == index)
+            {
+                continue;
+            }
+            if (weapons[i]->GetWeaponType() == indexType && weapons[i]->GetLevel() == indexLevel)
+            {
+                weaponToErase = i;
+                break;
+            }
+        }
+        if (weaponToErase != -1)
+        {
+            weapon->Upgrade(weapons[weaponToErase]->GetStats().GetOffensiveStats(), weapons[weaponToErase]->GetPrice());
+            RemoveWeapon(weaponToErase);
         }
     }
 }

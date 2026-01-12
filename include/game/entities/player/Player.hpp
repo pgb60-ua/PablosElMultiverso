@@ -24,13 +24,13 @@ public:
     std::vector<AEnemy *> enemiesInRange;
     std::vector<AEnemy *> &allEnemies;
     const std::vector<std::unique_ptr<AWeapon>> &GetWeapons() const { return weapons; }
+    static constexpr int WEAPON_MAX = 4;
 
 private:
     void ImportModifiers(PLAYER_TYPE player);
     static constexpr float BASE_MULTIPLIER = 1.0f;
     std::vector<const Item *> inventory;
     std::vector<std::unique_ptr<AWeapon>> weapons;
-    static constexpr int WEAPON_MAX = 4;
     Vector2 inputDirection{0, 0};
     PLAYER_TYPE player;
     void UpdatePlayerAnimation(float deltaTime);
@@ -264,11 +264,15 @@ public:
     void HandleInput(Vector2 inputDirection);
     void AddItem(const Item *item);
     void AddWeapon(std::unique_ptr<AWeapon> newWeapon);
+    void UpgradeWeapons(std::unique_ptr<AWeapon> newWeapon);
+    bool CanFuse(int index);
+    void UpgradeWeapon(int index);
+    void RemoveWeapon(int index);
 
     /// @brief Verifica si el jugador puede aceptar un arma del tipo especificado
     /// @param weaponType El tipo de arma a verificar
     /// @return true si puede aceptar (tiene espacio o tiene armas del mismo tipo no maximizadas), false si no
-    bool CanAcceptWeapon(WEAPON_TYPE weaponType) const;
+    bool CanAcceptWeapon(WEAPON_TYPE weaponType, int weaponLevel) const;
 
     void CheckCollisions(float deltaTime) override;
     void Render() override;
