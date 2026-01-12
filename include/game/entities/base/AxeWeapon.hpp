@@ -7,9 +7,7 @@ class AxeWeapon : public AMeleeWeapon {
 private:
     bool isSwinging = false;
     float swingAngle = 0.0f;
-    static constexpr float SWING_SPEED = 180.0f; 
     static constexpr float SWING_RANGE = 120.0f; 
-    static constexpr float ONE_WAY_DURATION = SWING_RANGE / SWING_SPEED;
     static constexpr float DEFAULT_ATTACK_RANGE = 50.0f;
 
     std::vector<AEnemy*> hitEnemies;

@@ -10,7 +10,6 @@ private:
     float thrustTimer = 0.0f;
     float currentThrustAmount = 0.0f;
     
-    static constexpr float THRUST_DURATION = 0.3f;
     static constexpr float THRUST_DISTANCE = 40.0f;
     
     static constexpr float DEFAULT_ATTACK_SIZE = 30.0f;

@@ -36,7 +36,7 @@ void SwordWeapon::Attack(float deltaTime)
     {
         thrustTimer += deltaTime;
         
-        float progress = thrustTimer / THRUST_DURATION;
+        float progress = thrustTimer / attackInterval;
         
         if (progress >= 1.0f)
         {
