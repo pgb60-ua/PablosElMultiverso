@@ -10,13 +10,14 @@ extern "C"
 
 class AudioManager
 {
-public:
-    const std::string BASE_PATH_SOUNDS = "assets/sounds/";
-    const std::string BASE_PATH_WEAPON_SOUNDS = "assets/sounds/weapons/";
-    const std::string BASE_PATH_ENEMY_SOUNDS = "assets/sounds/enemies/";
-    const std::string BASE_PATH_MUSIC = "assets/sounds/music/";
+private:
+    std::string BASE_PATH_WEAPON_SOUNDS = "assets/sounds/weapons/";
+    std::string BASE_PATH_ENEMY_SOUNDS = "assets/sounds/enemies/";
+    std::string BASE_PATH_MUSIC = "assets/sounds/music/";
 
     static const int MAX_DIRECTORY_DEPTH = 255;
+
+public:
 
     static AudioManager &GetInstance()
     {
@@ -89,6 +90,4 @@ private:
     
     Music currentMusic = {};
     std::string currentMusicFile = "";
-
-    std::string assetsRoot = "";
 };

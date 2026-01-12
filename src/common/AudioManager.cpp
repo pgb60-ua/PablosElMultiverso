@@ -156,57 +156,59 @@ void AudioManager::ClearCache(ENEMY_TYPE type)
 
 void AudioManager::SetAssetsRoot(const std::string &assetsRoot)
 {
-    this->assetsRoot = assetsRoot;
-    if (!this->assetsRoot.empty() && this->assetsRoot.back() != '/')
+    std::string root = assetsRoot;
+    if (!root.empty() && root.back() != '/' && root.back() != '\\')
     {
-        this->assetsRoot += '/';
+        root.push_back('/');
     }
+
+    BASE_PATH_WEAPON_SOUNDS = root + "sounds/weapons/";
+    BASE_PATH_ENEMY_SOUNDS = root + "sounds/enemies/";
+    BASE_PATH_MUSIC = root + "sounds/music/";
+
     ClearCache();
 }
 
 void AudioManager::DetectAndSetAssetsPath()
 {
-    // Buscar la carpeta de assets
-    std::string currentDir = ".";
-
-    // Intentar encontrar la carpeta de assets en diferentes ubicaciones
-    while (currentDir.length() < MAX_DIRECTORY_DEPTH)
+    try
     {
-        std::string assetsPath = currentDir + "/assets";
-        if (fs::exists(assetsPath) && fs::is_directory(assetsPath))
+        if (fs::is_directory("assets"))
         {
-            SetAssetsRoot(currentDir);
-            TraceLog(LOG_INFO, "Assets encontrados en: %s", assetsPath.c_str());
+            SetAssetsRoot("assets");
             return;
         }
-        currentDir += "/..";
+        if (fs::is_directory("/usr/share/PablosElMultiverso/assets"))
+        {
+            SetAssetsRoot("/usr/share/PablosElMultiverso/assets");
+            return;
+        }
     }
-
-    TraceLog(LOG_WARNING, "No se encontró carpeta de assets, usando ruta por defecto");
+    catch (...)
+    {
+    }
 }
 
 std::string AudioManager::GetFilePath(WEAPON_TYPE type) const
 {
-    std::string basePath = assetsRoot.empty() ? BASE_PATH_WEAPON_SOUNDS : assetsRoot + BASE_PATH_WEAPON_SOUNDS;
-
     switch (type)
     {
     case WEAPON_TYPE::AXE:
-        return basePath + "axe.wav";
+        return BASE_PATH_WEAPON_SOUNDS + "axe.wav";
     case WEAPON_TYPE::SWORD:
-        return basePath + "sword.wav";
+        return BASE_PATH_WEAPON_SOUNDS + "sword.wav";
     case WEAPON_TYPE::SCYTHE:
-        return basePath + "scythe.wav";
+        return BASE_PATH_WEAPON_SOUNDS + "scythe.wav";
     case WEAPON_TYPE::WAND:
-        return basePath + "wand.wav";
+        return BASE_PATH_WEAPON_SOUNDS + "wand.wav";
     case WEAPON_TYPE::EGGPLOSIVE:
-        return basePath + "chicken.wav";
+        return BASE_PATH_WEAPON_SOUNDS + "chicken.wav";
     case WEAPON_TYPE::LASER_RAY:
-        return basePath + "laser_ray.wav";
+        return BASE_PATH_WEAPON_SOUNDS + "laser_ray.wav";
     case WEAPON_TYPE::SNIPER:
-        return basePath + "sniper.wav";
+        return BASE_PATH_WEAPON_SOUNDS + "sniper.wav";
     case WEAPON_TYPE::WING:
-        return basePath + "wing.wav";
+        return BASE_PATH_WEAPON_SOUNDS + "wing.wav";
     default:
         throw std::runtime_error("Tipo de arma desconocida");
     }
@@ -283,7 +285,7 @@ void AudioManager::PlayBackgroundMusic(const std::string &musicFile)
     }
 
     // Cargar nueva música
-    std::string filePath = assetsRoot.empty() ? BASE_PATH_MUSIC + musicFile : assetsRoot + BASE_PATH_MUSIC + musicFile;
+    std::string filePath = BASE_PATH_MUSIC + musicFile;
     currentMusic = LoadMusicStream(filePath.c_str());
 
     if (!IsMusicValid(currentMusic))
@@ -308,6 +310,5 @@ void AudioManager::UpdateMusic()
 
 std::string AudioManager::GetFilePathEnemy() const
 {
-    std::string basePath = assetsRoot.empty() ? BASE_PATH_ENEMY_SOUNDS : assetsRoot + BASE_PATH_ENEMY_SOUNDS;
-    return basePath + "enemy.wav";
+    return BASE_PATH_ENEMY_SOUNDS + "enemy.wav";
 }
