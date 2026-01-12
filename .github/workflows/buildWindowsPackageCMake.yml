@@ -60,13 +60,12 @@ jobs:
         run: choco install nsis -y
 
       - name: Compile locale files
-        shell: bash
+        shell: pwsh
         run: |
-          export PATH="/c/Program Files/Git/usr/bin:$PATH"
-          mkdir -p locale/es_ES/LC_MESSAGES
-          mkdir -p locale/fr_FR/LC_MESSAGES
-          msgfmt po/es_ES.po -o locale/es_ES/LC_MESSAGES/pablos.mo
-          msgfmt po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
+          New-Item -ItemType Directory -Force -Path locale/es_ES/LC_MESSAGES
+          New-Item -ItemType Directory -Force -Path locale/fr_FR/LC_MESSAGES
+          & "C:\Program Files\Git\usr\bin\msgfmt.exe" po/es_ES.po -o locale/es_ES/LC_MESSAGES/pablos.mo
+          & "C:\Program Files\Git\usr\bin\msgfmt.exe" po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
 
       - name: Configure CMake
         run: cmake -S . -B build -DBUILD_TESTS=OFF
