@@ -29,6 +29,8 @@ protected:
     /// @brief Velocidad actual acumulada del enemigo para suavizar el movimiento
     Vector2 velocity;
 
+    ENEMY_TYPE type;
+
     /*--------------------------*/
     // Parámetros de Boids (personalizables por cada enemigo)
     /*--------------------------*/
@@ -49,7 +51,7 @@ protected:
     float maxForceMultiplier = 1.6f;
 
     /// @brief Constructor protegido para clases derivadas
-    AEnemy(Stats stats, const Shape &hitbox, std::vector<Player *> objectives, int pabloCoinsAtDeath);
+    AEnemy(Stats stats, const Shape &hitbox, ENEMY_TYPE type, std::vector<Player *> objectives, int pabloCoinsAtDeath);
     /// @brief Actualiza la animación del enemigo
     void UpdateEnemyAnimation(float deltaTime, ENEMY_TYPE enemyType);
 
@@ -62,7 +64,7 @@ public:
     /*--------------------------*/
 
     /// @brief Actualiza el estado del enemigo (animación, cooldowns, etc.)
-    virtual void Update(float deltaTime) override = 0;
+    virtual void Update(float deltaTime) override;
 
     /// @brief Mueve el enemigo hacia su objetivo usando algoritmo de Boids
     /// @param deltaTime Tiempo transcurrido desde el último frame
@@ -97,10 +99,12 @@ public:
     /// @return Puntero al jugador más cercano, nullptr si no hay jugadores
     Player *GetClosestPlayer();
 
+    virtual void CheckCollisions(float deltaTime) override {};
+
     Stats GetStats() const { return stats; }
+
+    void Render() override;
 
     /// @brief Destructor virtual
     virtual ~AEnemy();
-
-    virtual void CheckCollisions(float deltaTime) override;
 };

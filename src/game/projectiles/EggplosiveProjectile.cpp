@@ -93,13 +93,6 @@ void EggplosiveProjectile::Explode(float deltaTime)
             Stats copia = getStats();
             copia.SetMagicDamage(copia.GetMagicDamage() * deltaTime); 
             enemy->TakeDamage(copia);
-            
-            if (!enemy->IsAlive())
-            {
-                delete enemy;
-                enemiesInScene.erase(enemiesInScene.begin() + i);
-                continue; 
-            }
         }
         
         i++;

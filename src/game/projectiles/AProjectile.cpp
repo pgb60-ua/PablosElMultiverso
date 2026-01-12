@@ -21,7 +21,9 @@ void AProjectile::setRadius(float radius)
 void AProjectile::update(float deltaTime)
 {
     if (!active)
+    {
         return;
+    }
 
     Vector2 position = getShapePosition(shape);
     position.x += direction.x * stats.GetMovementSpeed() * deltaTime;
@@ -38,12 +40,7 @@ void AProjectile::update(float deltaTime)
         if (enemy->IsAlive() && checkCollisionShapes(shape, enemy->GetHitbox()))
         {
             enemy->TakeDamage(stats);
-            if (!enemy->IsAlive())
-            {
-                enemy->DropLoot();
-                delete enemy;
-                enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));
-            }
+            // La limpieza de enemigos muertos es responsabilidad de Round::Update
             deactivate();
             break;
         }
