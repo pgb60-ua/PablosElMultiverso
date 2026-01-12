@@ -25,13 +25,85 @@ Las Pull Requests (PR) se nombrarán siguiendo el formato `PEM-X | descripcion-c
 
 Todas las Pull Requests se integrarán en la rama principal mediante un **squash merge**.
 
-## Comando para instalar en Ubuntu
+## Installation and Compilation
 
-`sudo apt install xorg-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev`
+### Windows
 
-## Como compilar
+#### Requisitos previos
 
-`g++ -o game-dev $(find src -name "*.cpp") $(find include -type d -exec printf -- "-I %s " {} \;) -I vendor/include -L vendor/lib -lraylib -lGL -lm -lpthread -lrt -lX11`
+- **CMake** (versión 3.15 o superior): [Descargar CMake](https://cmake.org/download/)
+- **Visual Studio** (2019 o superior) con herramientas de desarrollo de C++
+- **Gettext** para internacionalización (opcional, solo necesario si quieres generar/actualizar traducciones y ejecutar el juego en varios idiomas):
+    - Opción 1: Instalar via vcpkg: `vcpkg install gettext:x64-windows`
+    - Opción 2: Descargar binarios desde [gnuwin32](http://gnuwin32.sourceforge.net/packages/gettext.htm)
+    - Si no lo instalas, el proyecto debería compilarse igualmente, pero solo estará disponible el idioma por defecto configurado en el juego y no podrás gestionar archivos de traducción (`.po`/`.mo`).
+
+#### Compilación con CMake y Visual Studio
+
+Desde el directorio raíz del proyecto en PowerShell o CMD:
+
+```bash
+# Crear directorio de compilación
+mkdir build
+cd build
+
+# Configurar el proyecto con CMake (detectará automáticamente la versión de Visual Studio instalada)
+cmake ..
+
+# Compilar desde línea de comandos
+cmake --build . --config Release
+
+# O abrir la solución en Visual Studio
+start pablos-el-multiverso.sln
+
+# Ejecutar el juego
+Release\pablos-el-multiverso.exe
+```
+
+**Nota**: El proyecto está configurado específicamente para MSVC (Microsoft Visual C++). No es compatible con MinGW debido a flags de compilación y linkado específicos de MSVC.
+
+### Linux (Ubuntu/Debian)
+
+#### Requisitos previos
+
+Instalar las dependencias necesarias:
+
+```bash
+sudo apt install xorg-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev cmake build-essential
+```
+
+#### Compilación con CMake
+
+Desde el directorio raíz del proyecto:
+
+```bash
+# Crear directorio de compilación
+mkdir -p build
+cd build
+
+# Configurar el proyecto
+cmake ..
+
+# Compilar
+make
+
+# Ejecutar el juego
+./pablos-el-multiverso
+```
+
+#### Compilación con Make (alternativa)
+
+Si prefieres usar el Makefile tradicional:
+
+```bash
+# Compilar
+make
+
+# Ejecutar el juego
+./game-dev
+```
+
+**Nota**: El Makefile genera un ejecutable llamado `game-dev`, mientras que CMake genera `pablos-el-multiverso`.
 
 ## Juego
 
