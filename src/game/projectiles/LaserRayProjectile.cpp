@@ -35,12 +35,7 @@ void LaserRayProjectile::update(float deltaTime)
             Stats copia = getStats();
             copia.SetMagicDamage(copia.GetMagicDamage() * deltaTime); // Daño por segundo
             enemy->TakeDamage(copia);
-            if (!enemy->IsAlive())
-            {
-                enemy->DropLoot();
-                delete enemy;
-                enemiesInScene.erase(std::find(enemiesInScene.begin(), enemiesInScene.end(), enemy));
-            }
+            // La limpieza de enemigos muertos es responsabilidad de Round::Update
         }
     }
     timeAlive -= deltaTime;

@@ -33,6 +33,7 @@ protected:
     SpriteAnimation animation;
 
     AEntity(Stats stats, const Shape &hitbox);
+    void Regeneration(float deltaTime);
 
 public:
     /// @brief Establece la estadistica de attackSpeed con logica previa
@@ -101,6 +102,6 @@ public:
     /// @brief Comprueba las colisiones de la entidad
     virtual void CheckCollisions(float deltaTime) = 0;
 
-    virtual void Update(float deltaTime) = 0;
+    virtual void Update(float deltaTime);
     virtual ~AEntity() {};
 };

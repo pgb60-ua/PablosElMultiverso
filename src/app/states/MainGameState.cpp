@@ -22,6 +22,7 @@
 #include "Zombie.hpp"
 #include <MainGameState.hpp>
 #include <memory>
+#include "I18N.hpp"
 
 extern "C"
 {
@@ -156,11 +157,11 @@ void MainGameState::render()
     const SpriteSheet &mapSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT);
     DrawTextureRec(mapSprite.texture, mapSprite.frames[0], {0, 0}, WHITE);
 
-    DrawText("Pablos El Multiverso", 10, 10, 20, LIGHTGRAY);
+    DrawText(_("PABLOS, THE MULTIVERSE"), 10, 10, 20, LIGHTGRAY);
 
     // Mostrar monedas del jugador 0
     const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
-    std::string coinsText = "Jugador: " + std::to_string(players[0]->GetPabloCoins());
+    std::string coinsText = std::to_string(players[0]->GetPabloCoins());
     int fontSize = 20;
     int yBase = 35;
     float iconH = coinSheet.frames[0].height;
@@ -175,7 +176,7 @@ void MainGameState::render()
     for (auto &player : players)
     {
         player->Render();
-        std::string healthText = "Health: " + std::to_string(static_cast<int>(player->GetHealth()));
+        std::string healthText = _("Health: ") + std::to_string(static_cast<int>(player->GetHealth()));
         DrawText(healthText.c_str(), static_cast<int>(player->GetPosition().x),
                  static_cast<int>(player->GetPosition().y) + 64, 10, GREEN);
     }

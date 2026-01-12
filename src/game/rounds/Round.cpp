@@ -1,5 +1,8 @@
 #include "Round.hpp"
+#include "I18N.hpp"
+#include <algorithm>
 #include <cstdlib>
+#include <string>
 Round::Round(float duration, float spawnRate, int roundNumber, std::vector<AEnemy*> enemiesToSpawn, std::vector<AEnemy*>& enemiesOnMap)
     : enemiesToSpawn(enemiesToSpawn), enemiesOnMap(enemiesOnMap), roundNumber(roundNumber), duration(duration), spawnRate(spawnRate)
 {
@@ -34,6 +37,21 @@ void Round::Update(float deltaTime)
         enemy->Update(deltaTime);
     }
 
+    auto it = std::remove_if(enemiesOnMap.begin(), enemiesOnMap.end(), [](AEnemy *enemy) {
+        if (!enemy->IsAlive())
+        {
+            enemy->DropLoot();
+            delete enemy;
+            return true;
+        }
+        return false;
+    });
+
+    if (it != enemiesOnMap.end())
+    {
+        enemiesOnMap.erase(it, enemiesOnMap.end());
+    }
+
 }
 void Round::Render()
 {
@@ -49,9 +67,9 @@ void Round::Render()
     int seconds = static_cast<int>(remainingTime) % 60;
     int totalEnemies = enemiesToSpawn.size() + enemiesOnMap.size();
     
-    std::string roundText = "Round: " + std::to_string(roundNumber);
-    std::string timeText = "Time: " + std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds);
-    std::string enemiesText = "Enemies: " + std::to_string(totalEnemies);
+    std::string roundText = _("Round: ") + std::to_string(roundNumber);
+    std::string timeText = _("Time: ") + std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds);
+    std::string enemiesText = _("Enemies: ") + std::to_string(totalEnemies);
     
     // Calcular anchos
     int roundWidth = MeasureText(roundText.c_str(), fontSize);

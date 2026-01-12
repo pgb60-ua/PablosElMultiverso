@@ -34,7 +34,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential cmake \
             libgl1-mesa-dev libx11-dev xorg-dev \
-            libwayland-dev libxkbcommon-dev
+            libwayland-dev libxkbcommon-dev gettext locales
+          sudo locale-gen es_ES.UTF-8
+          sudo locale-gen fr_FR.UTF-8
 
       - name: Extract version from tag
         id: version
@@ -62,9 +64,16 @@ jobs:
           echo "Updated CMakeLists.txt with version $VERSION"
           grep "VERSION" CMakeLists.txt
 
+      - name: Compile locale files
+        run: |
+          mkdir -p locale/es_ES/LC_MESSAGES
+          mkdir -p locale/fr_FR/LC_MESSAGES
+          msgfmt po/es_ES.po -o locale/es_ES/LC_MESSAGES/pablos.mo
+          msgfmt po/fr_FR.po -o locale/fr_FR/LC_MESSAGES/pablos.mo
+
       - name: Configure CMake
         run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF
 
       - name: Build
         run: |
