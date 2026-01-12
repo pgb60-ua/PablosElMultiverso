@@ -66,6 +66,88 @@ void ShopState::DrawItemSprite(const RenderableItem &item, int x, int y, int max
     }
 }
 
+void ShopState::DrawButton(Rectangle rect, const char *text, bool isEnabled, Color enabledBg, Color disabledBg,
+                           Color enabledBorder, Color disabledBorder, const char *keyHint, int price)
+{
+    Vector2 mousePos = GetMousePosition();
+    bool isHovering = CheckCollisionPointRec(mousePos, rect);
+
+    Color bgColor = isEnabled ? enabledBg : disabledBg;
+    Color borderColor = isEnabled ? enabledBorder : disabledBorder;
+
+    // Borde negro si está en hover y está habilitado
+    if (isHovering && isEnabled)
+    {
+        borderColor = Color{0, 0, 0, 255};
+    }
+
+    // Dibujar borde y fondo
+    DrawRectangle(rect.x - 3, rect.y - 3, rect.width + 6, rect.height + 6, borderColor);
+    DrawRectangle(rect.x, rect.y, rect.width, rect.height, bgColor);
+
+    Color textColor = isEnabled ? WHITE : Color{120, 120, 130, 255};
+    int textY = keyHint != nullptr ? rect.y + 8 : rect.y + (rect.height - 16) / 2;
+
+    // Si hay precio, dibujar texto + sprite + precio en la misma línea
+    if (price >= 0)
+    {
+        const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
+        Rectangle coinFrame = coinSheet.frames[0];
+        const char *priceText = TextFormat("%d", price);
+        int textWidth = MeasureText(text, 16);
+        int priceTextWidth = MeasureText(priceText, 16);
+
+        // Calcular ancho total (texto + espacio + moneda + espacio + precio)
+        int totalWidth = textWidth + 5 + (int)coinFrame.width + 3 + priceTextWidth;
+        int startX = rect.x + (rect.width - totalWidth) / 2;
+
+        // Dibujar texto principal
+        DrawText(text, startX, textY, 16, textColor);
+
+        // Dibujar sprite de moneda (centrado verticalmente con el texto)
+        int coinX = startX + textWidth + 5;
+        int coinY = textY + (16 - (int)coinFrame.height) / 2;
+        DrawTextureRec(coinSheet.texture, coinFrame, Vector2{(float)coinX, (float)coinY}, WHITE);
+
+        // Dibujar precio
+        int priceX = coinX + (int)coinFrame.width + 3;
+        DrawText(priceText, priceX, textY, 16, Color{255, 200, 0, 255});
+    }
+    else
+    {
+        // Sin precio, solo centrar el texto
+        int textWidth = MeasureText(text, 16);
+        DrawText(text, rect.x + (rect.width - textWidth) / 2, textY, 16, textColor);
+    }
+
+    // Dibujar hint de tecla si existe
+    if (keyHint != nullptr && isEnabled)
+    {
+        int hintWidth = MeasureText(keyHint, 10);
+        DrawText(keyHint, rect.x + (rect.width - hintWidth) / 2, rect.y + 26, 10, Color{120, 120, 120, 255});
+    }
+}
+
+void ShopState::DrawStatWithMultiplier(const char *name, float value, float multiplier, int &y, int x, int spacing)
+{
+    Color multColor;
+    if (multiplier < 1.0f)
+        multColor = Color{255, 100, 100, 255}; // Rojo
+    else if (multiplier > 1.0f)
+        multColor = Color{100, 255, 100, 255}; // Verde
+    else
+        multColor = Color{150, 150, 150, 255}; // Gris
+
+    Color statColor = Color{200, 200, 220, 255};
+    Color valueColor = Color{255, 255, 255, 255};
+
+    DrawText(TextFormat("x%.2f", multiplier), x + 20, y, 12, multColor);
+    DrawText(name, x + 75, y, 14, statColor);
+    int statsWidth = GetScreenWidth() * 0.35f;
+    DrawText(TextFormat("%.1f", value), x + statsWidth - 80, y, 14, valueColor);
+    y += spacing;
+}
+
 void ShopState::RenderItemSlot(const RenderableItem &item, Rectangle slotRect, bool showFullInfo)
 {
     // Determinar colores del slot según estado
@@ -690,40 +772,30 @@ void ShopState::render()
 
     // Stats con mejor formato
     int statY = statsY + 60;
-    int statSpacing = 25; // Espaciado fijo más compacto
+    int statSpacing = 25;
 
-    Color statColor = Color{200, 200, 220, 255};
-    Color valueColor = Color{255, 255, 255, 255};
-
-    // Helper para dibujar stat con multiplicador
-    auto drawStatWithMultiplier = [&](const char *name, float value, float multiplier)
-    {
-        Color multColor;
-        if (multiplier < 1.0f)
-            multColor = Color{255, 100, 100, 255}; // Rojo
-        else if (multiplier > 1.0f)
-            multColor = Color{100, 255, 100, 255}; // Verde
-        else
-            multColor = Color{150, 150, 150, 255}; // Gris
-
-        DrawText(TextFormat("x%.2f", multiplier), statsX + 20, statY, 12, multColor);
-        DrawText(name, statsX + 75, statY, 14, statColor);
-        DrawText(TextFormat("%.1f", value), statsX + statsWidth - 80, statY, 14, valueColor);
-        statY += statSpacing;
-    };
-
-    drawStatWithMultiplier("Max Health:", player->GetMaxHealth(), player->GetHealthModifier());
-    drawStatWithMultiplier("Movement Speed:", player->GetMovementSpeed(), player->GetMovementSpeedModifier());
-    drawStatWithMultiplier("Agility:", player->GetAgility(), player->GetAgilityModifier());
-    drawStatWithMultiplier("Attack Speed:", player->GetAttackSpeed(), player->GetAttackSpeedModifier());
-    drawStatWithMultiplier("Physical Damage:", player->GetPhysicalDamage(), player->GetPhysicalDamageModifier());
-    drawStatWithMultiplier("Magical Damage:", player->GetMagicDamage(), player->GetMagicDamageModifier());
-    drawStatWithMultiplier("Resistance:", player->GetResistance(), player->GetResistanceModifier());
-    drawStatWithMultiplier("Armor:", player->GetArmor(), player->GetArmorModifier());
-    drawStatWithMultiplier("Critical Chance:", player->GetCriticalChance(), player->GetCriticalChanceModifier());
-    drawStatWithMultiplier("Critical Damage:", player->GetCriticalDamage(), player->GetCriticalDamageModifier());
-    drawStatWithMultiplier("Health Regen:", player->GetHealthRegeneration(), player->GetHealthRegenerationModifier());
-    drawStatWithMultiplier("Life Steal:", player->GetLifeSteal(), player->GetLifeStealModifier());
+    DrawStatWithMultiplier("Max Health:", player->GetMaxHealth(), player->GetHealthModifier(), statY, statsX,
+                           statSpacing);
+    DrawStatWithMultiplier("Movement Speed:", player->GetMovementSpeed(), player->GetMovementSpeedModifier(), statY,
+                           statsX, statSpacing);
+    DrawStatWithMultiplier("Agility:", player->GetAgility(), player->GetAgilityModifier(), statY, statsX, statSpacing);
+    DrawStatWithMultiplier("Attack Speed:", player->GetAttackSpeed(), player->GetAttackSpeedModifier(), statY, statsX,
+                           statSpacing);
+    DrawStatWithMultiplier("Physical Damage:", player->GetPhysicalDamage(), player->GetPhysicalDamageModifier(), statY,
+                           statsX, statSpacing);
+    DrawStatWithMultiplier("Magical Damage:", player->GetMagicDamage(), player->GetMagicDamageModifier(), statY, statsX,
+                           statSpacing);
+    DrawStatWithMultiplier("Resistance:", player->GetResistance(), player->GetResistanceModifier(), statY, statsX,
+                           statSpacing);
+    DrawStatWithMultiplier("Armor:", player->GetArmor(), player->GetArmorModifier(), statY, statsX, statSpacing);
+    DrawStatWithMultiplier("Critical Chance:", player->GetCriticalChance(), player->GetCriticalChanceModifier(), statY,
+                           statsX, statSpacing);
+    DrawStatWithMultiplier("Critical Damage:", player->GetCriticalDamage(), player->GetCriticalDamageModifier(), statY,
+                           statsX, statSpacing);
+    DrawStatWithMultiplier("Health Regen:", player->GetHealthRegeneration(), player->GetHealthRegenerationModifier(),
+                           statY, statsX, statSpacing);
+    DrawStatWithMultiplier("Life Steal:", player->GetLifeSteal(), player->GetLifeStealModifier(), statY, statsX,
+                           statSpacing);
 
     // Panel de armas del jugador (debajo del panel de stats)
     int weaponsY = statY + 20;
@@ -1008,60 +1080,17 @@ void ShopState::render()
         RenderItemSlot(item, slotRect, true); // true = renderizado completo con toda la info
     }
 
-    // Botón de reroll (posicionado en el header, al lado izquierdo)
-    int rerollButtonWidth = 150;
-    int rerollButtonHeight = 40;
+    // Botones de header
     int rerollButtonX = 50;
     int rerollButtonY = 20;
+    Rectangle rerollButtonRect = {(float)rerollButtonX, (float)rerollButtonY, 150, 40};
+    DrawButton(rerollButtonRect, "Reroll", player->GetPabloCoins() >= REROLL_COST, Color{60, 100, 60, 255},
+               Color{80, 40, 40, 255}, Color{100, 200, 100, 255}, Color{180, 60, 60, 255}, "[R]", REROLL_COST);
 
-    Rectangle rerollButtonRect = {(float)rerollButtonX, (float)rerollButtonY, (float)rerollButtonWidth,
-                                  (float)rerollButtonHeight};
-    bool isHoveringReroll = CheckCollisionPointRec(GetMousePosition(), rerollButtonRect);
-
-    Color rerollBgColor = player->GetPabloCoins() >= REROLL_COST ? Color{60, 100, 60, 255} : Color{80, 40, 40, 255};
-    Color rerollBorderColor =
-        player->GetPabloCoins() >= REROLL_COST ? Color{100, 200, 100, 255} : Color{180, 60, 60, 255};
-
-    // Borde negro si está en hover
-    if (isHoveringReroll)
-    {
-        rerollBorderColor = Color{0, 0, 0, 255};
-    }
-
-    DrawRectangle(rerollButtonX - 3, rerollButtonY - 3, rerollButtonWidth + 6, rerollButtonHeight + 6,
-                  rerollBorderColor);
-    DrawRectangle(rerollButtonX, rerollButtonY, rerollButtonWidth, rerollButtonHeight, rerollBgColor);
-
-    const char *rerollText = TextFormat("[R] Reroll $%d", REROLL_COST);
-    DrawText(rerollText, rerollButtonX + rerollButtonWidth / 2 - MeasureText(rerollText, 16) / 2, rerollButtonY + 12,
-             16, WHITE);
-
-    // Botón de Continue (posicionado en el header, al lado del reroll)
-    int continueButtonWidth = 150;
-    int continueButtonHeight = 40;
-    int continueButtonX = rerollButtonX + rerollButtonWidth + 20;
-    int continueButtonY = 20;
-
-    Rectangle continueButtonRect = {(float)continueButtonX, (float)continueButtonY, (float)continueButtonWidth,
-                                    (float)continueButtonHeight};
-    bool isHoveringContinue = CheckCollisionPointRec(GetMousePosition(), continueButtonRect);
-
-    Color continueBgColor = Color{60, 80, 120, 255};
-    Color continueBorderColor = Color{100, 150, 255, 255};
-
-    // Borde negro si está en hover
-    if (isHoveringContinue)
-    {
-        continueBorderColor = Color{0, 0, 0, 255};
-    }
-
-    DrawRectangle(continueButtonX - 3, continueButtonY - 3, continueButtonWidth + 6, continueButtonHeight + 6,
-                  continueBorderColor);
-    DrawRectangle(continueButtonX, continueButtonY, continueButtonWidth, continueButtonHeight, continueBgColor);
-
-    const char *continueText = "[E] Continue";
-    DrawText(continueText, continueButtonX + continueButtonWidth / 2 - MeasureText(continueText, 16) / 2,
-             continueButtonY + 12, 16, WHITE);
+    int continueButtonX = rerollButtonX + 150 + 20;
+    Rectangle continueButtonRect = {(float)continueButtonX, (float)rerollButtonY, 150, 40};
+    DrawButton(continueButtonRect, "Continue", true, Color{60, 80, 120, 255}, Color{60, 80, 120, 255},
+               Color{100, 150, 255, 255}, Color{100, 150, 255, 255}, "[E]");
 
     // Controles en la parte inferior
     int controlsY = screenHeight - 40;

@@ -57,6 +57,9 @@ private:
     TWeaponColor GetColorBasedOnWeaponLevel(int level);
     void RenderItemSlot(const RenderableItem &item, Rectangle slotRect, bool showFullInfo);
     void DrawItemSprite(const RenderableItem &item, int x, int y, int maxSize);
+    void DrawButton(Rectangle rect, const char *text, bool isEnabled, Color enabledBg, Color disabledBg,
+                    Color enabledBorder, Color disabledBorder, const char *keyHint = nullptr, int price = -1);
+    void DrawStatWithMultiplier(const char *name, float value, float multiplier, int &y, int x, int spacing);
 
 public:
     ShopState(Player *player);
