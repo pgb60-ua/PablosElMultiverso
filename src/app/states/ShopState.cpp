@@ -48,7 +48,24 @@ TWeaponColor ShopState::GetColorBasedOnWeaponLevel(int level)
 
 void ShopState::DrawItemSprite(const RenderableItem &item, int x, int y, int maxSize)
 {
-    Rectangle sourceRec = item.spriteFrame;
+    const SpriteSheet *sheetPtr = nullptr;
+
+    if (item.isWeapon)
+    {
+        // Para armas, convertir ITEM_TYPE a WEAPON_TYPE
+        WEAPON_TYPE weaponType = ItemTypeToWeaponType(item.itemType);
+        sheetPtr = &SpriteLoaderManager::GetInstance().GetSpriteSheet(weaponType);
+    }
+    else
+    {
+        // Para items normales, usar ITEM_TYPE directamente
+        sheetPtr = &SpriteLoaderManager::GetInstance().GetSpriteSheet(item.itemType);
+    }
+
+    if (sheetPtr->frames.empty())
+        return;
+
+    Rectangle sourceRec = sheetPtr->frames[0];
 
     if (item.isWeapon)
     {
@@ -57,12 +74,12 @@ void ShopState::DrawItemSprite(const RenderableItem &item, int x, int y, int max
         float scale = (float)maxSize / maxAxis;
 
         Rectangle destRec = {(float)x, (float)y, sourceRec.width * scale, sourceRec.height * scale};
-        DrawTexturePro(item.texture, sourceRec, destRec, Vector2{0, 0}, 0.0f, WHITE);
+        DrawTexturePro(sheetPtr->texture, sourceRec, destRec, Vector2{0, 0}, 0.0f, WHITE);
     }
     else
     {
         // Items normales sin escalar
-        DrawTextureRec(item.texture, sourceRec, Vector2{(float)x, (float)y}, WHITE);
+        DrawTextureRec(sheetPtr->texture, sourceRec, Vector2{(float)x, (float)y}, WHITE);
     }
 }
 
@@ -348,12 +365,26 @@ void ShopState::RenderItemSlot(const RenderableItem &item, Rectangle slotRect, b
         DrawRectangle(slotRect.x, slotRect.y, slotRect.width, slotRect.height, weaponColor.tintColor);
 
         // Sprite del item centrado
-        Rectangle sourceRec = item.spriteFrame;
-        float scale = (slotRect.width - 10) / std::max(sourceRec.width, sourceRec.height);
-        Rectangle destRec = {slotRect.x + slotRect.width / 2, slotRect.y + slotRect.height / 2, sourceRec.width * scale,
-                             sourceRec.height * scale};
-        Vector2 origin = {destRec.width / 2, destRec.height / 2};
-        DrawTexturePro(item.texture, sourceRec, destRec, origin, 0.0f, WHITE);
+        const SpriteSheet *sheetPtr = nullptr;
+        if (item.isWeapon)
+        {
+            WEAPON_TYPE weaponType = ItemTypeToWeaponType(item.itemType);
+            sheetPtr = &SpriteLoaderManager::GetInstance().GetSpriteSheet(weaponType);
+        }
+        else
+        {
+            sheetPtr = &SpriteLoaderManager::GetInstance().GetSpriteSheet(item.itemType);
+        }
+
+        if (!sheetPtr->frames.empty())
+        {
+            Rectangle sourceRec = sheetPtr->frames[0];
+            float scale = (slotRect.width - 10) / std::max(sourceRec.width, sourceRec.height);
+            Rectangle destRec = {slotRect.x + slotRect.width / 2, slotRect.y + slotRect.height / 2,
+                                 sourceRec.width * scale, sourceRec.height * scale};
+            Vector2 origin = {destRec.width / 2, destRec.height / 2};
+            DrawTexturePro(sheetPtr->texture, sourceRec, destRec, origin, 0.0f, WHITE);
+        }
 
         // Nivel del arma con el color del borde
         const char *levelText = TextFormat("Lv%d", item.level);
@@ -818,28 +849,22 @@ void ShopState::render()
         {
             // Dibujar arma existente usando el struct unificado
             const auto &weapon = weapons[i];
-            const SpriteSheet &weaponSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(weapon->GetWeaponType());
 
-            if (!weaponSheet.frames.empty())
-            {
-                RenderableItem item = {
-                    weapon->GetType(),                          // itemType
-                    weapon->GetName(),                          // name
-                    weaponSheet.frames[0],                      // spriteFrame
-                    weaponSheet.texture,                        // texture
-                    weapon->GetLevel(),                         // level
-                    true,                                       // isWeapon
-                    (i + Shop::MAX_ITEMS_SHOP == selectedItem), // isSelected
-                    false,                                      // isBlocked
-                    0,                                          // price
-                    nullptr,                                    // stats
-                    "",                                         // description
-                    ItemRarity::Common                          // rarity
-                };
+            RenderableItem item = {
+                WeaponTypeToItemType(weapon->GetWeaponType()), // itemType (convertir WEAPON_TYPE a ITEM_TYPE)
+                weapon->GetName(),                             // name
+                weapon->GetLevel(),                            // level
+                true,                                          // isWeapon
+                (i + Shop::MAX_ITEMS_SHOP == selectedItem),    // isSelected
+                false,                                         // isBlocked
+                0,                                             // price
+                nullptr,                                       // stats
+                "",                                            // description
+                ItemRarity::Common                             // rarity
+            };
 
-                Rectangle slotRect = {(float)weaponX, (float)weaponY, (float)weaponSlotSize, (float)weaponSlotSize};
-                RenderItemSlot(item, slotRect, false); // false = renderizado compacto
-            }
+            Rectangle slotRect = {(float)weaponX, (float)weaponY, (float)weaponSlotSize, (float)weaponSlotSize};
+            RenderItemSlot(item, slotRect, false); // false = renderizado compacto
         }
         else
         {
@@ -1002,7 +1027,6 @@ void ShopState::render()
             DrawText("Sell Price:", tooltipX + 10, tooltipY + tooltipHeight - 25, 14, Color{200, 200, 220, 255});
 
             // Dibujar sprite de moneda
-            const SpriteSheet &coinSheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(ITEM_TYPE::COIN);
             int coinTextX = tooltipX + 10 + MeasureText("Sell Price: ", 14);
             Rectangle coinFrame = coinSheet.frames[0];
 
@@ -1058,14 +1082,11 @@ void ShopState::render()
         }
 
         // Crear item renderizable usando el struct unificado
-        const SpriteSheet &sheet = SpriteLoaderManager::GetInstance().GetSpriteSheet(slot.item->GetType());
         const Stats &itemStats = slot.item->GetStats();
 
         RenderableItem item = {
             itemType,                        // itemType
             slot.item->GetName(),            // name
-            sheet.frames[0],                 // spriteFrame
-            sheet.texture,                   // texture
             isWeapon ? slot.weaponLevel : 0, // level
             isWeapon,                        // isWeapon
             (i == selectedItem),             // isSelected

@@ -20,8 +20,6 @@ struct RenderableItem
 {
     ITEM_TYPE itemType;
     std::string name;
-    Rectangle spriteFrame;
-    Texture2D texture;
     int level; // Para armas (0 si no es arma)
     bool isWeapon;
     bool isSelected;

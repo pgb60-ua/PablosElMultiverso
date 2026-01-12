@@ -83,6 +83,32 @@ enum class ROUND_TYPE
 // Función helper para verificar si un ITEM_TYPE es un arma
 inline bool IsWeaponType(ITEM_TYPE type) { return (type >= ITEM_TYPE::WEAPON_AXE && type <= ITEM_TYPE::WEAPON_WING); }
 
+// Función helper para convertir WEAPON_TYPE a ITEM_TYPE
+inline ITEM_TYPE WeaponTypeToItemType(WEAPON_TYPE weaponType)
+{
+    switch (weaponType)
+    {
+    case WEAPON_TYPE::AXE:
+        return ITEM_TYPE::WEAPON_AXE;
+    case WEAPON_TYPE::SWORD:
+        return ITEM_TYPE::WEAPON_SWORD;
+    case WEAPON_TYPE::SCYTHE:
+        return ITEM_TYPE::WEAPON_SCYTHE;
+    case WEAPON_TYPE::WAND:
+        return ITEM_TYPE::WEAPON_WAND;
+    case WEAPON_TYPE::EGGPLOSIVE:
+        return ITEM_TYPE::WEAPON_EGGPLOSIVE;
+    case WEAPON_TYPE::LASER_RAY:
+        return ITEM_TYPE::WEAPON_LASER_RAY;
+    case WEAPON_TYPE::SNIPER:
+        return ITEM_TYPE::WEAPON_SNIPER;
+    case WEAPON_TYPE::WING:
+        return ITEM_TYPE::WEAPON_WING;
+    default:
+        return ITEM_TYPE::WEAPON_AXE; // Fallback
+    }
+}
+
 // Función helper para convertir ITEM_TYPE a WEAPON_TYPE
 inline WEAPON_TYPE ItemTypeToWeaponType(ITEM_TYPE itemType)
 {
