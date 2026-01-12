@@ -1,10 +1,12 @@
 {
 	"name": "Ruby Heart",
 	"description": "A crystallized heart that grants vitality",
-	"price": 210,
+	"price": 230,
 	"rarity": "Epic",
-	"max_health": 50,
-	"health_regeneration": 6.0,
-	"armor": 20,
-	"agility": -5
+	"max_health": 60,
+	"health_regeneration": 7.0,
+	"armor": 22,
+	"resistance": 10,
+	"agility": -8,
+	"movement_speed": -5
 }

@@ -1,10 +1,12 @@
 {
 	"name": "Spined Breastplate",
 	"description": "Heavy armor with spines that damage attackers",
-	"price": 200,
+	"price": 220,
 	"rarity": "Epic",
-	"armor": 40,
-	"resistance": 15,
-	"max_health": 30,
-	"movement_speed": -5
+	"armor": 45,
+	"resistance": 18,
+	"max_health": 35,
+	"physical_damage": 12,
+	"movement_speed": -8,
+	"agility": -5
 }

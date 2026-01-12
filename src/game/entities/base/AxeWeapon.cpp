@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "SpriteLoaderManager.hpp"
+#include "AudioManager.hpp"
 
 AxeWeapon::AxeWeapon(const Vector2 &position, std::vector<AEnemy *> &enemiesInRange, std::vector<AEnemy *> &allEnemies)
     : AMeleeWeapon(
@@ -34,7 +35,8 @@ void AxeWeapon::Attack(float deltaTime)
 
     if (isSwinging)
     {
-        float totalDuration = ONE_WAY_DURATION * 2.0f;
+        float ONE_WAY_DURATION = attackInterval / 2.0f;
+        float totalDuration = attackInterval;
 
         if (timeSinceLastAttack <= ONE_WAY_DURATION)
         {
@@ -113,6 +115,7 @@ void AxeWeapon::Attack(float deltaTime)
         swingAngle = 0.0f; 
         timeSinceLastAttack -= attackInterval;
         hitEnemies.clear();
+        AudioManager::GetInstance().PlaySound(WEAPON_TYPE::AXE);
     }
 
     float currentDirAngle = atan2(direction.y, direction.x);

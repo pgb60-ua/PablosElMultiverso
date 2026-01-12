@@ -93,7 +93,7 @@ void AEntity::Regeneration(float deltaTime)
     // Regeneración de vida
     if (stats.GetHealthRegeneration() > 0 && IsAlive())
     {
-        float newHealth = stats.GetHealth() + (stats.GetHealthRegeneration() * deltaTime);
+        float newHealth = stats.GetHealth() + ((stats.GetHealthRegeneration() * deltaTime) * 0.2f); // Regeneración cada 5 segundos
         if (newHealth > stats.GetMaxHealth())
             newHealth = stats.GetMaxHealth();
         stats.SetHealth(newHealth);

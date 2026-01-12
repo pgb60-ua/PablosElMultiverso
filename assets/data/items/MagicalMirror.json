@@ -1,9 +1,10 @@
 {
 	"name": "Magical Mirror",
 	"description": "Reflects magic and enhances magical resistance",
-	"price": 170,
+	"price": 175,
 	"rarity": "Rare",
-	"resistance": 35,
-	"magical_damage": 15,
-	"movement_speed": -8
+	"resistance": 40,
+	"magical_damage": 18,
+	"armor": 10,
+	"movement_speed": -10
 }

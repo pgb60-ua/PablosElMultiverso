@@ -1,5 +1,6 @@
 #include "Round.hpp"
 #include "I18N.hpp"
+#include "AudioManager.hpp"
 #include <algorithm>
 #include <cstdlib>
 #include <string>
@@ -40,6 +41,7 @@ void Round::Update(float deltaTime)
     auto it = std::remove_if(enemiesOnMap.begin(), enemiesOnMap.end(), [](AEnemy *enemy) {
         if (!enemy->IsAlive())
         {
+            AudioManager::GetInstance().PlayEnemySound();
             enemy->DropLoot();
             delete enemy;
             return true;

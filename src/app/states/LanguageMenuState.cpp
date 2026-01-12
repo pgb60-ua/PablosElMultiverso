@@ -13,23 +13,32 @@ extern "C" {
 const char *LanguageMenuState::LANG_OPTIONS[3] = { "English", "Español", "Français" };
 
 static void changeLanguage(const std::string& language) {
-    if (language == "en") {
-        SetEnvironmentVariable("LANGUAGE", "en_US");
-        SetEnvironmentVariable("LANG", "en_US.UTF-8");
-    } else if (language == "es") {
-        SetEnvironmentVariable("LANGUAGE", "es_ES");
-        SetEnvironmentVariable("LANG", "es_ES.UTF-8");
-    } else if (language == "fr") {
-        SetEnvironmentVariable("LANGUAGE", "fr_FR");
-        SetEnvironmentVariable("LANG", "fr_FR.UTF-8");
+    // Configurar EXCLUSIVAMENTE el idioma deseado en LANGUAGE. 
+    // Sin fallbacks a inglés en la variable, para forzar el uso del .mo específico.
+    std::string langEnv;
+    if (language == "fr") langEnv = "fr_FR:fr";
+    else if (language == "es") langEnv = "es_ES:es";
+    else langEnv = "en_US:en";
+    
+    SetEnvironmentVariable("LANGUAGE", langEnv);
+
+    // Intentar activar el locale nativo (ej: fr_FR.UTF-8).
+    std::string target = (language == "fr" ? "fr_FR.UTF-8" : (language == "es" ? "es_ES.UTF-8" : "en_US.UTF-8"));
+    
+    // Si el locale nativo no está instalado en el sistema, gettext ignorará LANGUAGE
+    // a menos que salgamos del modo "C" (ASCII).
+    // Usamos en_US.UTF-8 como locale "puente" porque suele estar instalado siempre.
+    // Esto permite que el sistema funcione en modo UTF-8 (necesario) y gettext
+    // inyecte las traducciones de LANGUAGE (francés) sobre ese entorno técnico.
+    if (setlocale(LC_ALL, target.c_str()) == nullptr) {
+        if (setlocale(LC_ALL, "en_US.UTF-8") == nullptr) {
+             setlocale(LC_ALL, ""); 
+        }
     }
 
-    std::string locale_str = language + "_" + (language == "en" ? "US" : (language == "fr" ? "FR" : "ES")) + ".UTF-8";
-    setlocale(LC_ALL, locale_str.c_str());
-
     bindtextdomain("pablos", GetLocalePath().c_str());
-    textdomain("pablos");
     bind_textdomain_codeset("pablos", "UTF-8");
+    textdomain("pablos");
 }
 
 static Rectangle getButtonRect(int index, int screenWidth, int screenHeight) {

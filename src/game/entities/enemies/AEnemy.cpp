@@ -184,6 +184,22 @@ void AEnemy::Move(float deltaTime)
     }
 
     Vector2 newPos = Vector2Add(enemyPos, Vector2Scale(velocity, deltaTime));
+    if (newPos.x + hitbox.data.rectangle.width > GetScreenWidth())
+    {
+        newPos.x = GetScreenWidth() - hitbox.data.rectangle.width;
+    }
+    if (newPos.y + hitbox.data.rectangle.height > GetScreenHeight())
+    {
+        newPos.y = GetScreenHeight() - hitbox.data.rectangle.height;
+    }
+    if (newPos.x < 0)
+    {
+        newPos.x = 0;
+    }
+    if (newPos.y < 0)
+    {
+        newPos.y = 0;
+    }
     SetPosition(newPos);
 }
 

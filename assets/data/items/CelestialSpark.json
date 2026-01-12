@@ -1,10 +1,13 @@
 {
 	"name": "Celestial Spark",
 	"description": "A fragment of a star that enhances critical strikes",
-	"price": 300,
+	"price": 350,
 	"rarity": "Legendary",
-	"critical_chance": 20,
-	"critical_damage": 40,
-	"attack_speed": 0.2,
-	"max_health": -15
+	"critical_chance": 25,
+	"critical_damage": 0.50,
+	"attack_speed": 0.25,
+	"physical_damage": 20,
+	"magical_damage": 15,
+	"max_health": -18,
+	"armor": -5
 }

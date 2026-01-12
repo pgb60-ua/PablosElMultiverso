@@ -61,8 +61,25 @@ void Player::Move(Vector2 newDirection, float deltaTime)
 {
     float speed = GetMovementSpeed();
     Vector2 position = GetPosition();
-    SetPosition(
-        Vector2{position.x + newDirection.x * deltaTime * speed, position.y + newDirection.y * deltaTime * speed});
+    Vector2 newPosition =
+        Vector2{position.x + newDirection.x * deltaTime * speed, position.y + newDirection.y * deltaTime * speed};
+    if (newPosition.x + hitbox.data.rectangle.width > GetScreenWidth())
+    {
+        newPosition.x = GetScreenWidth() - hitbox.data.rectangle.width;
+    }
+    if (newPosition.y + hitbox.data.rectangle.height > GetScreenHeight())
+    {
+        newPosition.y = GetScreenHeight() - hitbox.data.rectangle.height;
+    }
+    if (newPosition.x < 0)
+    {
+        newPosition.x = 0;
+    }
+    if (newPosition.y < 0)
+    {
+        newPosition.y = 0;
+    }
+    SetPosition(newPosition);
 }
 
 void Player::Update(float deltaTime)

@@ -2,7 +2,7 @@
     "rounds": [
         {
             "roundNumber": 1,
-            "duration": 60.0,
+            "duration": 120.0,
             "spawnRate": 1,
             "enemiesToSpawn": {
                 "ZOMBIE": 10
@@ -10,7 +10,7 @@
         },
         {
             "roundNumber": 2,
-            "duration": 60.0,
+            "duration": 120.0,
             "spawnRate": 0.6,
             "enemiesToSpawn": {
                 "ZOMBIE": 20,
@@ -19,7 +19,7 @@
         },
         {
             "roundNumber": 3,
-            "duration": 60.0,
+            "duration": 120.0,
             "spawnRate": 0.5,
             "enemiesToSpawn": {
                 "ZOMBIE": 30,
@@ -28,7 +28,7 @@
         },
         {
             "roundNumber": 4,
-            "duration": 60.0,
+            "duration": 120.0,
             "spawnRate": 0.5,
             "enemiesToSpawn": {
                 "ZOMBIE": 25,
@@ -37,12 +37,104 @@
         },
         {
             "roundNumber": 5,
-            "duration": 60.0,
+            "duration": 180.0,
             "spawnRate": 0.3,
             "enemiesToSpawn": {
                 "ZOMBIE": 30,
                 "DARKIN": 30,
+                "CHEMICAL_DESTRUCTOR": 1
+            }
+        },
+        {
+            "roundNumber": 6,
+            "duration": 120.0,
+            "spawnRate": 0.4,
+            "enemiesToSpawn": {
+                "ZOMBIE": 40,
+                "DARKIN": 30
+            }
+        },
+        {
+            "roundNumber": 7,
+            "duration": 120.0,
+            "spawnRate": 0.4,
+            "enemiesToSpawn": {
+                "ZOMBIE": 45,
+                "DARKIN": 35
+            }
+        },
+        {
+            "roundNumber": 8,
+            "duration": 120.0,
+            "spawnRate": 0.35,
+            "enemiesToSpawn": {
+                "ZOMBIE": 50,
+                "DARKIN": 40
+            }
+        },
+        {
+            "roundNumber": 9,
+            "duration": 120.0,
+            "spawnRate": 0.35,
+            "enemiesToSpawn": {
+                "ZOMBIE": 55,
+                "DARKIN": 45
+            }
+        },
+        {
+            "roundNumber": 10,
+            "duration": 180.0,
+            "spawnRate": 0.3,
+            "enemiesToSpawn": {
+                "ZOMBIE": 60,
+                "DARKIN": 50,
                 "CHEMICAL_DESTRUCTOR": 5
+            }
+        },
+        {
+            "roundNumber": 11,
+            "duration": 120.0,
+            "spawnRate": 0.3,
+            "enemiesToSpawn": {
+                "ZOMBIE": 70,
+                "DARKIN": 60
+            }
+        },
+        {
+            "roundNumber": 12,
+            "duration": 120.0,
+            "spawnRate": 0.25,
+            "enemiesToSpawn": {
+                "ZOMBIE": 80,
+                "DARKIN": 70
+            }
+        },
+        {
+            "roundNumber": 13,
+            "duration": 120.0,
+            "spawnRate": 0.25,
+            "enemiesToSpawn": {
+                "ZOMBIE": 90,
+                "DARKIN": 80
+            }
+        },
+        {
+            "roundNumber": 14,
+            "duration": 120.0,
+            "spawnRate": 0.2,
+            "enemiesToSpawn": {
+                "ZOMBIE": 100,
+                "DARKIN": 90
+            }
+        },
+        {
+            "roundNumber": 15,
+            "duration": 180.0,
+            "spawnRate": 0.2,
+            "enemiesToSpawn": {
+                "ZOMBIE": 120,
+                "DARKIN": 100,
+                "CHEMICAL_DESTRUCTOR": 25
             }
         }
     ]
