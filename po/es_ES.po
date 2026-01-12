@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 12:24+0100\n"
+"POT-Creation-Date: 2026-01-12 11:37+0100\n"
 "PO-Revision-Date: 2026-01-11 10:59+0100\n"
 "Last-Translator:  <alejandro@asus-alejandro.localdomain>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -61,172 +61,223 @@ msgstr "PABLOS, EL MULTIVERSO"
 msgid "YOU WON!"
 msgstr "HAS GANADO!"
 
-#: src/app/states/MainGameState.cpp:152
+#: src/app/states/MainGameState.cpp:165
 msgid "Health: "
 msgstr "Salud: "
 
-#: src/app/states/ShopState.cpp:244
-msgid "SHOP"
-msgstr "TIENDA"
-
-#: src/app/states/ShopState.cpp:263
-msgid "PLAYER STATS"
-msgstr "ESTADÍSTICAS"
-
-#: src/app/states/ShopState.cpp:290
-msgid "Max Health:"
-msgstr "Salud Máx:"
-
-#: src/app/states/ShopState.cpp:291
-msgid "Movement Speed:"
-msgstr "Velocidad Mov:"
-
-#: src/app/states/ShopState.cpp:292
-msgid "Agility:"
-msgstr "Agilidad:"
-
-#: src/app/states/ShopState.cpp:293
-msgid "Attack Speed:"
-msgstr "Velocidad Atq:"
-
-#: src/app/states/ShopState.cpp:294
-msgid "Physical Damage:"
-msgstr "Daño Físico:"
-
-#: src/app/states/ShopState.cpp:295
-msgid "Magical Damage:"
-msgstr "Daño Mágico:"
-
-#: src/app/states/ShopState.cpp:296
-msgid "Resistance:"
-msgstr "Resistencia:"
-
-#: src/app/states/ShopState.cpp:297
-msgid "Armor:"
-msgstr "Armadura:"
-
-#: src/app/states/ShopState.cpp:298
-msgid "Critical Chance:"
-msgstr "Prob. Crítico:"
-
-#: src/app/states/ShopState.cpp:299
-msgid "Critical Damage:"
-msgstr "Daño Crítico:"
-
-#: src/app/states/ShopState.cpp:300
-msgid "Health Regen:"
-msgstr "Regen. Salud:"
-
-#: src/app/states/ShopState.cpp:301
-msgid "Life Steal:"
-msgstr "Robo de Vida:"
-
-#: src/app/states/ShopState.cpp:305
-msgid "WEAPONS"
-msgstr "ARMAS"
-
-#: src/app/states/ShopState.cpp:370
-msgid "EMPTY"
-msgstr "VACÍO"
-
-#: src/app/states/ShopState.cpp:385
-msgid "AVAILABLE ITEMS"
-msgstr "OBJETOS DISPONIBLES"
-
-#: src/app/states/ShopState.cpp:479
+#: src/app/states/ShopState.cpp:272
 msgid "COMMON"
 msgstr "COMÚN"
 
-#: src/app/states/ShopState.cpp:483
+#: src/app/states/ShopState.cpp:276
 msgid "UNCOMMON"
 msgstr "POCO COMÚN"
 
-#: src/app/states/ShopState.cpp:487
+#: src/app/states/ShopState.cpp:280
 msgid "RARE"
 msgstr "RARO"
 
-#: src/app/states/ShopState.cpp:491
+#: src/app/states/ShopState.cpp:284
 msgid "EPIC"
 msgstr "ÉPICO"
 
-#: src/app/states/ShopState.cpp:495
+#: src/app/states/ShopState.cpp:288
 msgid "LEGENDARY"
 msgstr "LEGENDARIO"
 
-#: src/app/states/ShopState.cpp:499
+#: src/app/states/ShopState.cpp:292
 msgid "UNKNOWN"
 msgstr "DESCONOCIDO"
 
-#: src/app/states/ShopState.cpp:510
+#: src/app/states/ShopState.cpp:303 src/app/states/ShopState.cpp:306
 msgid "WEAPON"
 msgstr "ARMA"
 
-#: src/app/states/ShopState.cpp:522
+#: src/app/states/ShopState.cpp:325
 msgid "BLOCKED"
 msgstr "BLOQUEADO"
 
-#: src/app/states/ShopState.cpp:550
+#: src/app/states/ShopState.cpp:360
 msgid "PHY"
-msgstr "FIS"
+msgstr "FÍS"
 
-#: src/app/states/ShopState.cpp:551
+#: src/app/states/ShopState.cpp:361
 msgid "MAG"
-msgstr "MAG"
+msgstr "MÁG"
 
-#: src/app/states/ShopState.cpp:552
+#: src/app/states/ShopState.cpp:362
 msgid "AS"
 msgstr "VA"
 
-#: src/app/states/ShopState.cpp:553
+#: src/app/states/ShopState.cpp:363
 msgid "CC"
 msgstr "PC"
 
-#: src/app/states/ShopState.cpp:554
+#: src/app/states/ShopState.cpp:364
 msgid "CD"
 msgstr "DC"
 
-#: src/app/states/ShopState.cpp:555
+#: src/app/states/ShopState.cpp:365
 msgid "LS"
 msgstr "RV"
 
-#: src/app/states/ShopState.cpp:561
+#: src/app/states/ShopState.cpp:371
 msgid "HP"
 msgstr "PV"
 
-#: src/app/states/ShopState.cpp:562
+#: src/app/states/ShopState.cpp:372
 msgid "MHP"
-msgstr "PV Max"
+msgstr "PVM"
 
-#: src/app/states/ShopState.cpp:563
+#: src/app/states/ShopState.cpp:373
 msgid "MS"
 msgstr "VM"
 
-#: src/app/states/ShopState.cpp:564
+#: src/app/states/ShopState.cpp:374
 msgid "AGI"
 msgstr "AGI"
 
-#: src/app/states/ShopState.cpp:565
+#: src/app/states/ShopState.cpp:375
 msgid "ARM"
 msgstr "ARM"
 
-#: src/app/states/ShopState.cpp:566
+#: src/app/states/ShopState.cpp:376
 msgid "RES"
 msgstr "RES"
 
-#: src/app/states/ShopState.cpp:567
+#: src/app/states/ShopState.cpp:377
 msgid "HR"
 msgstr "RS"
 
-#: src/app/states/ShopState.cpp:585
-#, c-format
-msgid "[R] Reroll $%d"
-msgstr "[R] Renovar $%d"
+#: src/app/states/ShopState.cpp:769
+msgid "SHOP"
+msgstr "TIENDA"
 
-#: src/app/states/ShopState.cpp:602
-msgid "[E] Continue"
-msgstr "[E] Continuar"
+#: src/app/states/ShopState.cpp:782
+msgid "PLAYER STATS"
+msgstr "ESTADÍSTICAS"
 
-#: src/app/states/ShopState.cpp:611
+#: src/app/states/ShopState.cpp:789
+msgid "Max Health:"
+msgstr "Salud Máx:"
+
+#: src/app/states/ShopState.cpp:791
+msgid "Movement Speed:"
+msgstr "Velocidad Mov:"
+
+#: src/app/states/ShopState.cpp:793
+msgid "Agility:"
+msgstr "Agilidad:"
+
+#: src/app/states/ShopState.cpp:795
+msgid "Attack Speed:"
+msgstr "Velocidad Atq:"
+
+#: src/app/states/ShopState.cpp:797
+msgid "Physical Damage:"
+msgstr "Daño Físico:"
+
+#: src/app/states/ShopState.cpp:799
+msgid "Magical Damage:"
+msgstr "Daño Mágico:"
+
+#: src/app/states/ShopState.cpp:801
+msgid "Resistance:"
+msgstr "Resistencia:"
+
+#: src/app/states/ShopState.cpp:803
+msgid "Armor:"
+msgstr "Armadura:"
+
+#: src/app/states/ShopState.cpp:805
+msgid "Critical Chance:"
+msgstr "Prob. Crítico:"
+
+#: src/app/states/ShopState.cpp:807
+msgid "Critical Damage:"
+msgstr "Daño Crítico:"
+
+#: src/app/states/ShopState.cpp:809
+msgid "Health Regen:"
+msgstr "Regen. Salud:"
+
+#: src/app/states/ShopState.cpp:811
+msgid "Life Steal:"
+msgstr "Robo de Vida:"
+
+#: src/app/states/ShopState.cpp:815
+msgid "WEAPONS"
+msgstr "ARMAS"
+
+#: src/app/states/ShopState.cpp:855
+msgid "EMPTY"
+msgstr "VACÍO"
+
+#: src/app/states/ShopState.cpp:897
+msgid "PHY DMG"
+msgstr "DAÑO FÍS"
+
+#: src/app/states/ShopState.cpp:898
+msgid "MAG DMG"
+msgstr "DAÑO MÁG"
+
+#: src/app/states/ShopState.cpp:899
+msgid "ATK SPD"
+msgstr "VEL ATQ"
+
+#: src/app/states/ShopState.cpp:915
+msgid "CRIT CH"
+msgstr "PROB CRIT"
+
+#: src/app/states/ShopState.cpp:916
+msgid "CRIT DMG"
+msgstr "DAÑO CRIT"
+
+#: src/app/states/ShopState.cpp:917
+msgid "LIFE STEAL"
+msgstr "ROBO VIDA"
+
+#: src/app/states/ShopState.cpp:958
+msgid "MAX"
+msgstr "MAX"
+
+#: src/app/states/ShopState.cpp:958
+msgid "FUSE"
+msgstr "FUSIONAR"
+
+#: src/app/states/ShopState.cpp:968
+msgid "[ENTER]"
+msgstr "[INTRO]"
+
+#: src/app/states/ShopState.cpp:994
+msgid "SELL"
+msgstr "VENDER"
+
+#: src/app/states/ShopState.cpp:999
+msgid "[SPACE]"
+msgstr "[ESPACIO]"
+
+#: src/app/states/ShopState.cpp:1005
+msgid "Sell Price:"
+msgstr "Precio Venta:"
+
+#: src/app/states/ShopState.cpp:1008
+msgid "Sell Price: "
+msgstr "Precio Venta: "
+
+#: src/app/states/ShopState.cpp:1027
+msgid "AVAILABLE ITEMS"
+msgstr "OBJETOS DISPONIBLES"
+
+#: src/app/states/ShopState.cpp:1076
+msgid "Reroll"
+msgstr "Actualizar"
+
+#: src/app/states/ShopState.cpp:1081
+msgid "Continue"
+msgstr "Continuar"
+
+#: src/app/states/ShopState.cpp:1089
 msgid ""
 "[W/S] Navigate  [ENTER/LEFT-CLICK] Buy  [SPACE/RIGHT-CLICK] Lock  [R] "
 "Reroll  [E] Continue"
