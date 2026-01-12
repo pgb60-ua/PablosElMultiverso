@@ -59,13 +59,19 @@ jobs:
       - name: Install NSIS
         run: choco install nsis -y
 
+      - name: Setup vcpkg and install gettext
+        run: |
+          git clone https://github.com/Microsoft/vcpkg.git
+          .\vcpkg\bootstrap-vcpkg.bat
+          .\vcpkg\vcpkg install gettext:x64-windows
+
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
-          update: true
+          update: false
           install: gettext
       
-      - name: Create locale directories and compile translations
+      - name: Compile locale files
         shell: msys2 {0}
         run: |
           mkdir -p locale/es_ES/LC_MESSAGES
