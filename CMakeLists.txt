@@ -69,6 +69,7 @@ if(WIN32 AND MSVC)
     set_target_properties(pablos-el-multiverso PROPERTIES
         LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
     )
+    target_compile_definitions(pablos-el-multiverso PRIVATE NOGDI NOUSER)     # Evitar conflictos entre raylib y Windows API
 endif()
 
 add_custom_command(TARGET pablos-el-multiverso POST_BUILD
@@ -126,7 +127,8 @@ set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt")
 
 if(WIN32)
     install(TARGETS pablos-el-multiverso RUNTIME DESTINATION .)
-    install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets DESTINATION .)
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets DESTINATION .
+        PATTERN "*.aseprite" EXCLUDE)
     install(FILES
         ${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt
         ${PROJECT_SOURCE_DIR}/NOTICES.md
@@ -144,7 +146,8 @@ endif()
 if(UNIX AND NOT APPLE)
     install(TARGETS pablos-el-multiverso DESTINATION bin)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/assets
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}
+        PATTERN "*.aseprite" EXCLUDE)
     install(FILES
         ${PROJECT_SOURCE_DIR}/LICENSE_COMBINED.txt
         ${PROJECT_SOURCE_DIR}/NOTICES.md
@@ -162,5 +165,9 @@ include(CPack)
 # Testing
 # ============================================================================
 
-enable_testing()
-add_subdirectory(tests)
+option(BUILD_TESTS "Build tests" ON)
+
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
