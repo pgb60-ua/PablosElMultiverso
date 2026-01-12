@@ -193,7 +193,7 @@ void AEnemy::Update(float deltaTime)
     Move(deltaTime);
     AEntity::Update(deltaTime);
     UpdateEnemyAnimation(deltaTime, type);
-};
+}
 
 void AEnemy::Render()
 {
