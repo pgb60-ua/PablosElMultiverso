@@ -11,10 +11,10 @@ extern "C"
 class AudioManager
 {
 public:
-    std::string BASE_PATH_SOUNDS = "assets/sounds/";
-    std::string BASE_PATH_WEAPON_SOUNDS = "assets/sounds/weapons/";
-    std::string BASE_PATH_ENEMY_SOUNDS = "assets/sounds/enemies/";
-    std::string BASE_PATH_MUSIC = "assets/sounds/music/";
+    const std::string BASE_PATH_SOUNDS = "assets/sounds/";
+    const std::string BASE_PATH_WEAPON_SOUNDS = "assets/sounds/weapons/";
+    const std::string BASE_PATH_ENEMY_SOUNDS = "assets/sounds/enemies/";
+    const std::string BASE_PATH_MUSIC = "assets/sounds/music/";
 
     static AudioManager &GetInstance()
     {
