@@ -831,7 +831,7 @@ void ShopState::render()
 
             RenderableItem item = {
                 WeaponTypeToItemType(weapon->GetWeaponType()), // itemType (convertir WEAPON_TYPE a ITEM_TYPE)
-                _(weapon->GetName().c_str()),                             // name
+                weapon->GetName(),                             // name
                 weapon->GetLevel(),                            // level
                 true,                                          // isWeapon
                 (i + Shop::MAX_ITEMS_SHOP == selectedItem),    // isSelected
@@ -875,7 +875,7 @@ void ShopState::render()
             DrawRectangle(tooltipX, tooltipY, tooltipWidth, tooltipHeight, BG_TOOLTIP);
 
             // Título
-            DrawText(weapon->GetName().c_str(), tooltipX + 10, tooltipY + 5, 16, TEXT_ACCENT);
+            DrawText(_(weapon->GetName().c_str()), tooltipX + 10, tooltipY + 5, 16, TEXT_ACCENT);
 
             // Stats del arma
             int statsY = tooltipY + 30;

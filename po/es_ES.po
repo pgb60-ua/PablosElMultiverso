@@ -286,16 +286,16 @@ msgstr ""
 "Renovar  [E] Continuar"
 
 #: src/app/i18n_strings.cpp:6
-msgid "Sniper "
-msgstr "Francotirador "
+msgid "Sniper"
+msgstr "Francotirador"
 
 #: src/app/i18n_strings.cpp:7
 msgid "A long-range rifle designed for precision shooting"
 msgstr "Un rifle de largo alcance diseñado para disparos de precisión"
 
 #: src/app/i18n_strings.cpp:8
-msgid "Wing "
-msgstr "Ala "
+msgid "Wing"
+msgstr "Ala"
 
 #: src/app/i18n_strings.cpp:9
 msgid "A blade imbued with the power of the wind"

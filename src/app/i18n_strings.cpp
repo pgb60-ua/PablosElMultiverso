@@ -3,9 +3,9 @@
 void register_json_strings()
 {
     // Weapons
-    N_("Sniper ");
+    N_("Sniper");
     N_("A long-range rifle designed for precision shooting");
-    N_("Wing ");
+    N_("Wing");
     N_("A blade imbued with the power of the wind");
     N_("Chemical Destructor Weapon");
     N_("The Chemical Destructor Weapon is a powerful weapon that can destroy players with its chemical attacks.");
