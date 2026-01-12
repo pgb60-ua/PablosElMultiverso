@@ -1,9 +1,9 @@
 {
 	"name": "Raw Meat",
 	"description": "Fresh meat that restores health and strength",
-	"price": 80,
+	"price": 90,
 	"rarity": "Common",
-	"max_health": 25,
-	"physical_damage": 10,
-	"health_regeneration": 2.0
+	"max_health": 30,
+	"physical_damage": 12,
+	"health_regeneration": 2.5
 }

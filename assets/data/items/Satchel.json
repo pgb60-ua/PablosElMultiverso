@@ -1,8 +1,9 @@
 {
 	"name": "Satchel",
 	"description": "A simple bag that provides minor benefits",
-	"price": 50,
+	"price": 60,
 	"rarity": "Common",
-	"max_health": 15,
-	"movement_speed": 5
+	"max_health": 20,
+	"movement_speed": 8,
+	"armor": 5
 }

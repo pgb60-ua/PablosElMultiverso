@@ -10,7 +10,7 @@ ChemicalDestructor::ChemicalDestructor(std::vector<Player *> players)
              SpriteLoaderManager::GetInstance().GetSpriteHitbox(
                  ENEMY_TYPE::CHEMICAL_DESTRUCTOR,
                  Vector2{(float)(std::rand() % ENEMY_SCREEN_WIDTH), (float)(std::rand() % ENEMY_SCREEN_HEIGHT)}),
-             ENEMY_TYPE::CHEMICAL_DESTRUCTOR, players, 75)
+             ENEMY_TYPE::CHEMICAL_DESTRUCTOR, players, 50)
 {
     targetWeight = 3.5f;
     static std::vector<AEnemy *> emptyVector;

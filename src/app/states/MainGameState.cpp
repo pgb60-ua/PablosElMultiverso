@@ -158,8 +158,7 @@ void MainGameState::render()
     int textWidth = MeasureText(coinsText.c_str(), fontSize);
 
     // Renderizar todos los jugadores
-    const SpriteSheet &mapUpperSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
-    DrawTextureRec(mapUpperSprite.texture, mapUpperSprite.frames[0], {0, 0}, WHITE);
+
     for (auto &player : players)
     {
         player->Render();
@@ -170,6 +169,8 @@ void MainGameState::render()
     DrawTextureRec(coinSheet.texture, coinSheet.frames[0], {10.0f + textWidth + 6, iconY}, WHITE);
     roundManager.Render();
     DrawFPS(GetScreenWidth() - 100, 10);
+    const SpriteSheet &mapUpperSprite = SpriteLoaderManager::GetInstance().GetSpriteSheet(MAP_TYPE::DEFAULT_UPPER);
+    DrawTextureRec(mapUpperSprite.texture, mapUpperSprite.frames[0], {0, 0}, WHITE);
     EndDrawing();
 }
 

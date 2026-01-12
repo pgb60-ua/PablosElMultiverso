@@ -3,7 +3,8 @@
 	"description": "Illuminates the battlefield, revealing weaknesses",
 	"price": 140,
 	"rarity": "Uncommon",
-	"critical_chance": 12,
-	"agility": 8,
-	"attack_speed": 0.15
+	"critical_chance": 15,
+	"agility": 10,
+	"attack_speed": 0.2,
+	"physical_damage": 8
 }
