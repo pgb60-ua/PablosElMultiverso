@@ -13,37 +13,29 @@ extern "C" {
 const char *LanguageMenuState::LANG_OPTIONS[3] = { "English", "Español", "Français" };
 
 static void changeLanguage(const std::string& language) {
-    // 1. Configurar la variable de entorno LANGUAGE.
-    // Esto es lo que GNU gettext mira para decidir qué archivo .mo cargar.
-    // Tiene prioridad sobre el locale configurado (LC_MESSAGES), SIEMPRE que el locale no sea "C".
-    std::string langCode = language;
-    std::string countryCode = (language == "en" ? "US" : (language == "fr" ? "FR" : "ES"));
-    std::string fullCode = langCode + "_" + countryCode; // ej: es_ES
+    // Configurar EXCLUSIVAMENTE el idioma deseado en LANGUAGE. 
+    // Sin fallbacks a inglés en la variable, para forzar el uso del .mo específico.
+    std::string langEnv;
+    if (language == "fr") langEnv = "fr_FR:fr";
+    else if (language == "es") langEnv = "es_ES:es";
+    else langEnv = "en_US:en";
     
-    // Prioridad: idioma_PAIS -> idioma -> fallback inglés
-    std::string langPriority = fullCode + ":" + langCode + ":en_US:en";
-    SetEnvironmentVariable("LANGUAGE", langPriority);
+    SetEnvironmentVariable("LANGUAGE", langEnv);
 
-    // 2. Intentar establecer un locale UTF-8 válido.
-    // Es CRÍTICO salir del locale "C", porque en "C", gettext ignora la variable LANGUAGE.
+    // Intentar activar el locale nativo (ej: fr_FR.UTF-8).
+    std::string target = (language == "fr" ? "fr_FR.UTF-8" : (language == "es" ? "es_ES.UTF-8" : "en_US.UTF-8"));
     
-    // Opción A: Intentar el idioma nativo (ej: fr_FR.UTF-8)
-    std::string targetLocale = fullCode + ".UTF-8";
-    char* res = setlocale(LC_ALL, targetLocale.c_str());
-    
-    if (res == nullptr) {
-        // Opción B: Si el nativo falta, usar C.UTF-8 (existente en la mayoría de Linux modernos)
-        // Esto permite manejar caracteres especiales y activa gettext.
-        if (setlocale(LC_ALL, "C.UTF-8") == nullptr) {
-            // Opción C: Usar en_US.UTF-8 (muy común)
-            if (setlocale(LC_ALL, "en_US.UTF-8") == nullptr) {
-                // Opción D: Lo que tenga el sistema por defecto
-                setlocale(LC_ALL, "");
-            }
+    // Si el locale nativo no está instalado en el sistema, gettext ignorará LANGUAGE
+    // a menos que salgamos del modo "C" (ASCII).
+    // Usamos en_US.UTF-8 como locale "puente" porque suele estar instalado siempre.
+    // Esto permite que el sistema funcione en modo UTF-8 (necesario) y gettext
+    // inyecte las traducciones de LANGUAGE (francés) sobre ese entorno técnico.
+    if (setlocale(LC_ALL, target.c_str()) == nullptr) {
+        if (setlocale(LC_ALL, "en_US.UTF-8") == nullptr) {
+             setlocale(LC_ALL, ""); 
         }
     }
 
-    // 3. Recargar dominios
     bindtextdomain("pablos", GetLocalePath().c_str());
     bind_textdomain_codeset("pablos", "UTF-8");
     textdomain("pablos");
