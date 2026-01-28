@@ -10,7 +10,7 @@
 	"movement_speed": 800,
 	"agility": 0,
 	"attack_speed": 1.0,
-	"physical_damage": 25,
+	"physical_damage": 50,
 	"magical_damage": 0,
 	"resistance": 0,
 	"armor": 0,

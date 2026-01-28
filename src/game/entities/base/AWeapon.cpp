@@ -77,9 +77,10 @@ void AWeapon::SetLevel(int newLevel)
     }
 
     // Las stats actuales son las stats base (nivel 1)
-    // Multiplicar por 2^(newLevel-1)*0.4 para obtener las stats del nivel deseado
-    // Nivel 1: multiplier = 0.4, Nivel 2: multiplier = 0.8, Nivel 3: multiplier = 1.6, Nivel 4: multiplier = 3.2
-    int multiplier = static_cast<int>(std::pow(2, (newLevel - 1))* 0.4f);
+    // Las estadisticas de las armas de la tienda son ligeramente superiores a las de fusión
+    // Multiplicar linealmente: multiplier = 1 + (newLevel - 1) * 1.1
+    // Nivel 1: multiplier = 1.0, Nivel 2: multiplier = 2.1, Nivel 3: multiplier = 3.2, Nivel 4: multiplier = 4.3
+    float multiplier = 1.0f + (newLevel - 1) * 1.1f;
 
     OffensiveStats baseStats = stats.GetOffensiveStats();
     OffensiveStats scaledStats = {baseStats.physicalDamage * multiplier,
